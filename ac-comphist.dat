@@ -1,108 +1,108 @@
-((("package" .
-   [0 0 0 0 0 0 1])
-  ("enable-paredit-mode" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("clojure-mode" .
-   [0 0 0 0 0 0 0 1 0 0 0 0])
-  ("clojure.core" .
-   [0 0 0 0 0 0 0 0 0 0 0 1])
-  ("clojure" .
-   [0 0 0 0 0 0 1])
-  ("helloworld" .
-   [0 0 0 0 0 1 0 0 0 0])
-  ("in-ns" .
-   [0 0 0 0 1])
-  ("ac-nrepl" .
-   [0 0 0 0 0 0 0 1])
-  ("ac-sources" .
-   [0 0 0 0 0 0 0 0 0 2])
-  ("ac-source-nrepl-static-methods" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("ac-source-nrepl-java-methods" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("ac-source-nrepl-all-classes" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("ac-source-nrepl-ns-classes" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("ac-source-nrepl-vars" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("ac-source-nrepl-ns" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("ac-source-" .
-   [0 0 0 0 0 0 0 0 0 1])
-  ("clojure-mode-hook" .
-   [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1])
-  ("Clojure" .
-   [0 0 0 0 0 0 1])
-  ("ac-source-nrepl-" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7])
-  ("ac-source" .
-   [0 0 0 0 0 0 0 0 6])
-  ("ReadADC" .
-   [0 0 1 0 0 0 0])
-  ("iom128" .
-   [2 0 0 0 0 4])
-  ("include" .
-   [0 0 0 0 0 0 2])
-  ("defun" .
-   [0 0 1 1 0])
-  ("nil" .
-   [0 0 1])
-  ("custom-set-variables" .
-   [1 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1])
-  ("jabber-show-offline-contacts" .
-   [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
-  ("jabber-" .
-   [0 0 0 0 0 0 2])
-  ("jabber-avatar-" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("jabber-avatar-verbose" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
-  ("require" .
-   [0 0 0 0 0 0 5])
-  ("add-" .
-   [0 0 0 1])
-  ("add-to-" .
-   [0 0 0 0 0 0 1])
-  ("add-to-list" .
-   [0 0 0 0 0 1 4 1 0 0 1])
-  ("customize-option" .
-   [1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0])
-  ("auto-complete-mode" .
-   [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0])
-  ("auto-mode-alist" .
-   [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
-  ("class" .
-   [0 0 0 0 1])
-  ("But_print" .
-   [3 0 0 1 0 0 0 0 0])
-  ("printer" .
-   [0 0 0 0 0 1 0])
-  ("defmacro" .
-   [0 0 0 1 0 0 0 0])
-  ("in" .
-   [1 0])
-  ("add-hook" .
-   [0 0 0 0 1 0 0 1])
-  ("auto-complete" .
-   [0 0 0 0 0 0 0 0 1 0 0 0 0])
-  ("auto-complete-clang-get-system-includes" .
-   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
-  ("nlinum-mode" .
-   [1 0 0 0 0 0 0 0 0 0 0])
-  ("nrepl-mode-hook" .
-   [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])
-  ("ido-vertical-mode" .
-   [0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 1])
-  ("lambda" .
-   [0 0 0 0 0 1])
-  ("ido-vertical-mode-autoloads" .
-   [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
-  ("nrepl" .
-   [0 0 0 0 1])
-  ("first" .
-   [0 0 0 0 1])
+((("interface" .
+   [0 0 0 0 0 0 0 0 1])
   ("str-splitter" .
    [0 0 0 0 0 0 0 0 0 0 0 1])
-  ("interface" .
-   [0 0 0 0 0 0 0 0 1])))
+  ("first" .
+   [0 0 0 0 1])
+  ("nrepl" .
+   [0 0 0 0 1])
+  ("ido-vertical-mode-autoloads" .
+   [0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("lambda" .
+   [0 0 0 0 0 1])
+  ("ido-vertical-mode" .
+   [0 0 0 0 0 2 0 0 0 0 0 0 0 0 0 0 1])
+  ("nrepl-mode-hook" .
+   [0 0 0 0 0 0 0 0 1 0 0 0 0 0 0])
+  ("nlinum-mode" .
+   [1 0 0 0 0 0 0 0 0 0 0])
+  ("auto-complete-clang-get-system-includes" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("auto-complete" .
+   [0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("add-hook" .
+   [0 0 0 0 1 0 0 1])
+  ("in" .
+   [1 0])
+  ("defmacro" .
+   [0 0 0 1 0 0 0 0])
+  ("printer" .
+   [0 0 0 0 0 1 0])
+  ("But_print" .
+   [3 0 0 1 0 0 0 0 0])
+  ("class" .
+   [0 0 0 0 1])
+  ("auto-mode-alist" .
+   [0 0 0 0 0 0 0 0 0 0 1 0 0 0 0])
+  ("auto-complete-mode" .
+   [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0])
+  ("customize-option" .
+   [1 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0])
+  ("add-to-list" .
+   [0 0 0 0 0 1 4 1 0 0 1])
+  ("add-to-" .
+   [0 0 0 0 0 0 1])
+  ("add-" .
+   [0 0 0 1])
+  ("require" .
+   [0 0 0 0 0 0 5])
+  ("jabber-avatar-verbose" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("jabber-avatar-" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("jabber-" .
+   [0 0 0 0 0 0 2])
+  ("jabber-show-offline-contacts" .
+   [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0])
+  ("custom-set-variables" .
+   [1 0 0 0 0 0 0 0 1 0 0 1 0 0 0 0 0 0 0 1])
+  ("nil" .
+   [0 0 1])
+  ("defun" .
+   [0 0 1 1 0])
+  ("include" .
+   [0 0 0 0 0 0 2])
+  ("iom128" .
+   [2 0 0 0 0 4])
+  ("ReadADC" .
+   [0 0 1 0 0 0 0])
+  ("ac-source" .
+   [0 0 0 0 0 0 0 0 6])
+  ("ac-source-nrepl-" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 7])
+  ("Clojure" .
+   [0 0 0 0 0 0 1])
+  ("clojure-mode-hook" .
+   [0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 1])
+  ("ac-source-" .
+   [0 0 0 0 0 0 0 0 0 1])
+  ("ac-source-nrepl-ns" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("ac-source-nrepl-vars" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("ac-source-nrepl-ns-classes" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("ac-source-nrepl-all-classes" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("ac-source-nrepl-java-methods" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("ac-source-nrepl-static-methods" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("ac-sources" .
+   [0 0 0 0 0 0 0 0 0 2])
+  ("ac-nrepl" .
+   [0 0 0 0 0 0 0 1])
+  ("in-ns" .
+   [0 0 0 0 1])
+  ("helloworld" .
+   [0 0 0 0 0 1 0 0 0 0])
+  ("clojure" .
+   [0 0 0 0 0 0 1])
+  ("clojure.core" .
+   [0 0 0 0 0 0 0 0 0 0 0 1])
+  ("clojure-mode" .
+   [0 0 0 0 0 0 0 1 0 0 0 0])
+  ("enable-paredit-mode" .
+   [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1])
+  ("package" .
+   [0 0 0 0 0 0 1])))
