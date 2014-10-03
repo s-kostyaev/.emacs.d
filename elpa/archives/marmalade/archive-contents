@@ -1,4 +1,7 @@
 (1
+ (buffer-file-utils .
+		    [(1 0)
+		     nil "utilities operating on a buffer and the associated file" single])
  (zone-matrix .
 	      [(0 0 1)
 	       nil "Matrix themed Zone mode" tar])
@@ -195,7 +198,7 @@
 	 (1 5 0)))
        "useful HTTP client" single])
  (weather-metno .
-		[(20140121)
+		[(20140909)
 		 ((emacs
 		   (24))
 		  (cl-lib
@@ -257,6 +260,9 @@
  (vcard .
 	[(0 1)
 	 nil "vcard parsing and display routines" single])
+ (vc-tfs .
+	 [(0 1 2)
+	  nil "Support for TFS version control system" single])
  (vc-darcs .
 	   [(1 12)
 	    nil "a VC backend for darcs" single])
@@ -393,7 +399,7 @@
 	    (0 4 2)))
 	  "Test the content of a value" single])
  (tronesque-theme .
-		  [(1 3)
+		  [(1 5)
 		   nil "Color Theme based on Tron universe." single])
  (troncle .
 	  [(0 1 2)
@@ -404,7 +410,7 @@
 	     [(12)
 	      nil "A theme loosely based on Tron: Legacy colors" single])
  (tracking .
-	   [(1 4)
+	   [(1 5)
 	    ((shorten
 	      (0 3)))
 	    "Buffer modification tracking" single])
@@ -539,6 +545,9 @@
  (sumatra-forward .
 		  [(2008 10 8)
 		   nil "Provides Sumatra Forward search" single])
+ (sudo-edit .
+	    [(0 0 1)
+	     nil "Utilities for opening files with sudo" single])
  (sudden-death .
 	       [(0 1)
 		nil "Totsuzen-no-Shi" single])
@@ -895,7 +904,7 @@
 	  [(20110708)
 	   nil "Mode-specific scratch buffers" single])
  (scpaste .
-	  [(0 6 1)
+	  [(0 6 2)
 	   ((htmlize
 	     (1 39)))
 	   "Paste to the web via scp." single])
@@ -1108,7 +1117,7 @@
 	       [(1 1)
 		nil "Python Pyvirtualenv support" single])
  (pyvenv .
-	 [(1 2)
+	 [(1 4)
 	  nil "Python virtual environment interface" single])
  (python-pylint .
 		[(1 1)
@@ -1457,18 +1466,18 @@
 	      (1 6 8)))
 	    "Blog from Org mode to wordpress" tar])
  (org-trello .
-	     [(0 5 9)
-	      ((emacs
-		(24))
-	       (dash
-		(2 8 0))
-	       (s
-		(1 9 0))
+	     [(0 6 1)
+	      ((request-deferred
+		(0 1 0))
 	       (deferred
 		   (0 3 2))
-	       (request-deferred
-		(0 1 0)))
-	      "Minor mode to synchronize org-mode buffer and trello board" single])
+	       (s
+		(1 9 0))
+	       (dash
+		(2 8 0))
+	       (emacs
+		(24)))
+	      "Minor mode to synchronize org-mode buffer and trello board" tar])
  (org-table-comment .
 		    [(0 2)
 		     nil "Org table comment modes." single])
@@ -1483,6 +1492,9 @@
 	       (lib-requires
 		(21 0)))
 	      "Integrates Readme.org and Commentary/Change-logs." single])
+ (org-publish-agenda .
+		     [(1 2)
+		      nil "Publish org agenda with links to other files" single])
  (org-protocol-jekyll .
 		      [(0 1)
 		       nil "Jekyll's handler for org-protocol" single])
@@ -1509,7 +1521,7 @@
 	       (6 1)))
 	     "basic support for magit links" single])
  (org-journal .
-	      [(1 5 2)
+	      [(1 5 3)
 	       nil "a simple org-mode based journaling mode" single])
  (org-gnome .
 	    [(0 1)
@@ -1550,6 +1562,9 @@
  (openstack-cgit-browse-file .
 			     [(0 2)
 			      nil "Browse the current file in OpenStack cgit" single])
+ (om-mode .
+	  [(0 5 20140916)
+	   nil "Insert Om component template with life cycle." single])
  (offlineimap .
 	      [(0 1)
 	       nil "Run OfflineIMAP from Emacs" single])
@@ -1582,6 +1597,9 @@
  (ntcmd .
 	[(1 0)
 	 nil "major mode for editing cmd scripts" single])
+ (nssh-n .
+	 [(0 9 8)
+	  nil "SSH mode for Emacs" single])
  (nsis-mode .
 	    [(0 44)
 	     nil "NSIS-mode" single])
@@ -1695,6 +1713,9 @@
  (move-text .
 	    [(1 0)
 	     nil "Move current line or region with M-up or M-down." single])
+ (move-line .
+	    [(0 0 1)
+	     nil "utilities for moving lines in file" single])
  (mote-mode .
 	    [(1 0 0)
 	     ((ruby-mode
@@ -1779,6 +1800,9 @@
  (maxframe .
 	   [(0 5 1)
 	    nil "maximize the emacs frame based on display size" single])
+ (math-at-point .
+		[(0 0 1)
+		 nil "Utilities for modifying numbers at point" single])
  (master-mode .
 	      [(0 1)
 	       nil "Become an Emacs master" single])
@@ -1927,9 +1951,9 @@
       [(0 0 2)
        nil "lxc integration with Emacs" single])
  (lui .
-      [(1 3)
+      [(1 4)
        ((tracking
-	 (1 4)))
+	 (1 5)))
        "Linewise User Interface" tar])
  (lua-mode .
 	   [(20110428)
@@ -2524,7 +2548,7 @@
 	   [(1 6)
 	    nil "goto last change" single])
  (google-translate .
-		   [(0 8 2)
+		   [(0 10 2)
 		    nil "Emacs interface to Google Translate." tar])
  (god-mode .
 	   [(2 12 0)
@@ -2913,7 +2937,7 @@
 	    (0)))
 	  "Quickly navigate to FIXME notices in code" single])
  (fixme-mode .
-	     [(1 0 1)
+	     [(1 0 2)
 	      nil "fixme minor mode to highlight warning words" single])
  (fit-frame .
 	    [(0)
@@ -2980,6 +3004,11 @@
       (dash
        (2 2 0)))
      "Modern API for working with files and directories" single])
+ (eyebrowse .
+	    [(0 3 2)
+	     ((dash
+	       (2 7 0)))
+	     "Easy window config switching" single])
  (extend-dnd .
 	     [(0 5)
 	      nil "R drag and Drop" single])
@@ -3158,23 +3187,17 @@
 	   [(1 4 6)
 	    nil "Screen for Emacsen" single])
  (elpy .
-       [(1 4 1)
-	((auto-complete
-	  (1 4))
+       [(1 5 1)
+	((company
+	  (0 8 2))
 	 (find-file-in-project
-	  (3 2))
-	 (fuzzy
-	  (0 1))
+	  (3 3))
 	 (highlight-indentation
 	  (0 5 0))
 	 (idomenu
 	  (0 1))
-	 (iedit
-	  (0 97))
-	 (nose
-	  (0 1 1))
 	 (pyvenv
-	  (1 0))
+	  (1 3))
 	 (yasnippet
 	  (0 8 0)))
 	"Emacs Python Development Environment" tar])
@@ -3407,6 +3430,9 @@
  (discord .
 	  [(0 5)
 	   nil "Discordian dates for calendar" single])
+ (dirtrack-buffer-name-track-mode .
+				  [(1 0 0)
+				   nil "minor mode to cause shell buffers to reflect the working directory" single])
  (dired-single .
 	       [(1 7)
 		nil "reuse the current dired buffer to visit another directory" single])
@@ -3819,9 +3845,9 @@
 	      [(0 0 2)
 	       nil "Major mode for editing Citrus files" single])
  (circe .
-	[(1 3)
+	[(1 4)
 	 ((lui
-	   (1 3))
+	   (1 4))
 	  (lcs
 	   (1 1)))
 	 "Client for IRC in Emacs" tar])
@@ -3840,7 +3866,7 @@
 	   [(0 2 2)
 	    nil "View CHM file." single])
  (chicken-scheme .
-		 [(1 1 0)
+		 [(1 3 0)
 		  nil "Scheme-mode extensions for Chicken Scheme" single])
  (charmap .
 	  [(0 0 1)
