@@ -1,16 +1,0 @@
-;; Emacs-W3 HTTP cookies file
-;; Automatically generated file!!! DO NOT EDIT!!!
-
-(setq url-cookie-storage
- '(("bash.im"
-  [url-cookie "ls_index" "%7B%22ts%22%3A1414007999%2C%22cnt%22%3A48547%2C%22id%22%3A430666%7D" "06-Nov-2014 07:19:21.00 GMT" "/" "bash.im" nil]
-  [url-cookie "ls_comics" "%7B%22ts%22%3A1414007999%2C%22cnt%22%3A1130%2C%22id%22%3A20141022%7D" "06-Nov-2014 07:19:21.00 GMT" "/" "bash.im" nil]
-  [url-cookie "ls_abyssbest" "%7B%22ts%22%3A1414007999%2C%22cnt%22%3A15925%2C%22id%22%3A277785%7D" "06-Nov-2014 07:19:21.00 GMT" "/" "bash.im" nil]))
-)
-(setq url-cookie-secure-storage
- 'nil)
-
-;; Local Variables:
-;; version-control: never
-;; no-byte-compile: t
-;; End:
