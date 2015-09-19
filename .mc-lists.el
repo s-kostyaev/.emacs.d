@@ -20,4 +20,14 @@
         hydra-multiple-cursors/mc/unmark-previous-like-this
         hydra-multiple-cursors/nil
         kmacro-end-macro
+        multiple-cursors-hydra/mc/edit-lines-and-exit
+        multiple-cursors-hydra/mc/mark-all-like-this-and-exit
+        multiple-cursors-hydra/mc/mark-next-like-this
+        multiple-cursors-hydra/mc/mark-next-word-like-this
+        multiple-cursors-hydra/mc/mark-previous-like-this
+        multiple-cursors-hydra/mc/mark-previous-word-like-this
+        multiple-cursors-hydra/mc/skip-to-next-like-this
+        multiple-cursors-hydra/mc/skip-to-previous-like-this
+        multiple-cursors-hydra/mc/unmark-next-like-this
+        multiple-cursors-hydra/nil
         ))
