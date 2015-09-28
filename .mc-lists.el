@@ -22,6 +22,7 @@
         kmacro-end-macro
         multiple-cursors-hydra/mc/edit-lines-and-exit
         multiple-cursors-hydra/mc/mark-all-like-this-and-exit
+        multiple-cursors-hydra/mc/mark-all-words-like-this-and-exit
         multiple-cursors-hydra/mc/mark-next-like-this
         multiple-cursors-hydra/mc/mark-next-word-like-this
         multiple-cursors-hydra/mc/mark-previous-like-this
