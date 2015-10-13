@@ -3,10 +3,12 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        go-mode-insert-and-indent
         ))
 
 (setq mc/cmds-to-run-once
       '(
+        beginning-of-buffer
         electrify-return-if-match
         helm-M-x
         hydra-multiple-cursors/body
@@ -31,4 +33,5 @@
         multiple-cursors-hydra/mc/skip-to-previous-like-this
         multiple-cursors-hydra/mc/unmark-next-like-this
         multiple-cursors-hydra/nil
+        save-buffers-kill-terminal
         ))
