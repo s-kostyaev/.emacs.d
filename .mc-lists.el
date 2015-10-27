@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         go-mode-insert-and-indent
+        kill-region
         ))
 
 (setq mc/cmds-to-run-once
@@ -22,6 +23,7 @@
         hydra-multiple-cursors/mc/unmark-previous-like-this
         hydra-multiple-cursors/nil
         kmacro-end-macro
+        multiple-cursors-hydra/mc-hide-unmatched-lines-mode
         multiple-cursors-hydra/mc/edit-lines-and-exit
         multiple-cursors-hydra/mc/mark-all-like-this-and-exit
         multiple-cursors-hydra/mc/mark-all-words-like-this-and-exit
