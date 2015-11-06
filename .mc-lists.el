@@ -25,6 +25,7 @@
         kmacro-end-macro
         multiple-cursors-hydra/mc-hide-unmatched-lines-mode
         multiple-cursors-hydra/mc/edit-lines-and-exit
+        multiple-cursors-hydra/mc/mark-all-in-region-regexp-and-exit
         multiple-cursors-hydra/mc/mark-all-like-this-and-exit
         multiple-cursors-hydra/mc/mark-all-words-like-this-and-exit
         multiple-cursors-hydra/mc/mark-next-like-this
