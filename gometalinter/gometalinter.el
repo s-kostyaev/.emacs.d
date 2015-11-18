@@ -23,7 +23,7 @@
   (interactive)
   (compilation-start
    (mapconcat #'shell-quote-argument
-	      (list "gometalinter") " ")
+	      (list "gometalinter" "--cyclo-over=15") " ")
    'gometalinter-mode))
 
 (provide 'gometalinter)
