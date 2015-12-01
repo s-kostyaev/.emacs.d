@@ -23,6 +23,7 @@
         hydra-multiple-cursors/mc/unmark-previous-like-this
         hydra-multiple-cursors/nil
         kmacro-end-macro
+        multiple-cursors-hydra/body
         multiple-cursors-hydra/mc-hide-unmatched-lines-mode
         multiple-cursors-hydra/mc/edit-lines-and-exit
         multiple-cursors-hydra/mc/mark-all-in-region-regexp-and-exit
