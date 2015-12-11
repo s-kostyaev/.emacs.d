@@ -3,16 +3,25 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        complete-symbol
+        completion-at-point
+        dabbrev-completion
         electric-newline-and-maybe-indent
         go-mode-insert-and-indent
         kill-region
+        yas-expand
         ))
 
 (setq mc/cmds-to-run-once
       '(
         beginning-of-buffer
         electrify-return-if-match
+        find-tag
         helm-M-x
+        helm-browse-project
+        helm-buffers-list
+        helm-swoop-back-to-last-point
+        help
         hydra-multiple-cursors/body
         hydra-multiple-cursors/mc-hide-unmatched-lines-mode
         hydra-multiple-cursors/mc/mark-all-like-this
