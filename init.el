@@ -1,3 +1,9 @@
+;;; init.el --- Emacs init file.
+
+;;; Commentary:
+
+;;; Code:
+
 (add-to-list 'load-path "~/.emacs.d")
 (progn (cd "~/.emacs.d")
        (normal-top-level-add-subdirs-to-load-path))
@@ -66,7 +72,9 @@ re-downloaded in order to locate PACKAGE."
 
 
 (defun require-package (package &optional min-version no-refresh)
-  "Load package (download if need)"
+  "Load PACKAGE at least MIN-VERSION (download if need).
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
   (need-package package min-version no-refresh)
   (require 'package))
 
@@ -98,7 +106,7 @@ re-downloaded in order to locate PACKAGE."
 (sml/setup t)
 ;; (sml/apply-theme "powerline")
 (sml/apply-theme 'respectful)
-(powerline-default-theme)
+;; (powerline-default-theme)
 
 ;; to setup tabs
 (setq c-basic-indent 4)
@@ -112,13 +120,13 @@ re-downloaded in order to locate PACKAGE."
 
 ;; Text and the such
 ;; Use colors to highlight commands, etc.
-(global-font-lock-mode t) 
+(global-font-lock-mode t)
 ;; Disable the welcome message
 (setq inhibit-startup-message t)
 ;; Format the title-bar to always include the buffer name
 (setq frame-title-format "emacs - %b")
 ;; Display time
-(display-time)
+;(display-time)
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
 ;; Always end a file with a newline
@@ -159,6 +167,7 @@ re-downloaded in order to locate PACKAGE."
 
 
 (defun toggle-window-split ()
+  "Toggle window split vertically or horizontally."
   (interactive)
   (if (= (count-windows) 2)
       (let* ((this-win-buffer (window-buffer))
@@ -194,7 +203,7 @@ re-downloaded in order to locate PACKAGE."
 (require 'go-mode-autoloads)
 (add-hook 'before-save-hook 'gofmt-before-save)
 (defun goimports ()
-  "Running goimports on go files"
+  "Running goimports on go files."
   (interactive)
   (if (equalp mode-name "Go")
       (progn
@@ -208,7 +217,7 @@ re-downloaded in order to locate PACKAGE."
 ;; gobuild
 (require 'gobuild)
 (add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c C-c") (lambda () 
+                          (local-set-key (kbd "C-c C-c") (lambda ()
                                                            (interactive)
                                                            (gobuild)))))
 (add-hook 'go-mode-hook (lambda ()
@@ -288,7 +297,7 @@ re-downloaded in order to locate PACKAGE."
 
 ; http://emacsblog.org/2007/01/17/indent-whole-buffer/
 (defun iwb ()
-    "indent whole buffer"
+    "Indent whole buffer."
     (interactive)
     (delete-trailing-whitespace)
     (indent-region (point-min) (point-max) nil)
@@ -321,7 +330,7 @@ re-downloaded in order to locate PACKAGE."
 ;;           ;(setq auto-mode-alist
 ;;           ;      (cons '("\\.m$" . octave-mode) auto-mode-alist))
 ;; (add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
-;; ;; to turn on the abbrevs, auto-fill and font-lock features automatically  
+;; ;; to turn on the abbrevs, auto-fill and font-lock features automatically
 ;;        (add-hook 'octave-mode-hook
 ;;          (lambda ()
 ;;          (abbrev-mode 1)
@@ -329,9 +338,9 @@ re-downloaded in order to locate PACKAGE."
 ;;          (if (eq window-system 'x)
 ;;           (font-lock-mode 1))))
 
-;; ;; And finally, inferior-octave-mode-hook is run after starting the process 
-;;     ;; and putting its buffer into Inferior Octave mode. Hence, if you like 
-;;     ;; the up and down arrow keys to behave in the interaction buffer as in 
+;; ;; And finally, inferior-octave-mode-hook is run after starting the process
+;;     ;; and putting its buffer into Inferior Octave mode. Hence, if you like
+;;     ;; the up and down arrow keys to behave in the interaction buffer as in
 ;;     ;; the shell, and you want this buffer to use nice colors:
     
 ;;        (add-hook 'inferior-octave-mode-hook
@@ -366,10 +375,10 @@ re-downloaded in order to locate PACKAGE."
 ;; Original idea from
 ;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
 (defun comment-dwim-line (&optional arg)
-        "Replacement for the comment-dwim command.
-        If no region is selected and current line is not blank and we are not at the end of the line,
-        then comment current line.
-        Replaces default behaviour of comment-dwim, when it inserts comment at the end of the line."
+        "Replacement for the `comment-dwim' command.  ARG is selected region.
+If no region is selected and current line is not blank and we are not at
+the end of the line, then comment current line.  Replaces default behaviour of
+`comment-dwim', when it inserts comment at the end of the line."
           (interactive "*P")
           (comment-normalize-vars)
           (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
@@ -412,6 +421,7 @@ re-downloaded in order to locate PACKAGE."
 ;; Stop SLIME's REPL from grabbing DEL,
 ;; which is annoying when backspacing over a '('
 (defun override-slime-repl-bindings-with-paredit ()
+  "Use paredit keys instead of slime."
   (define-key slime-repl-mode-map
     (read-kbd-macro paredit-backward-delete-key) nil))
 (add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
@@ -484,13 +494,13 @@ re-downloaded in order to locate PACKAGE."
           (lambda () (if (string= major-mode "web-mode")
                          (turn-off-fci-mode) (turn-on-fci-mode))))
 
-(setq eval-expression-debug-on-error t) 
+(setq eval-expression-debug-on-error t)
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil :family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
+ '(default ((t (:background nil :family "Iosevka" :foundry "unknown" :slant normal :weight normal :height 98 :width normal)))))
  ;; '(company-preview ((t (:foreground "darkgray" :underline t))))
  ;; '(company-preview-common ((t (:inherit company-preview))))
  ;; '(company-tooltip ((t (:background "lightgray" :foreground "black"))))
@@ -528,7 +538,7 @@ re-downloaded in order to locate PACKAGE."
 
 ;; adjust indents for web-mode to 2 spaces
 (defun my-web-mode-hook ()
-  "Hooks for Web mode. Adjust indents"
+  "Hooks for Web mode.  Adjust `indent's."
   ;; http://web-mode.org/
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
@@ -812,10 +822,10 @@ re-downloaded in order to locate PACKAGE."
 
 (make-variable-buffer-local 'indirect-mode-name)
 (defun indirect-region (start end)
-  "Edit the current region in another buffer.
-    If the buffer-local variable `indirect-mode-name' is not set, prompt
-    for mode name to choose for the indirect buffer interactively.
-    Otherwise, use the value of said variable as argument to a funcall."
+  "Edit the current region (between START & END) in another buffer.
+If the buffer-local variable `indirect-mode-name' is not set, prompt
+for mode name to choose for the indirect buffer interactively.
+Otherwise, use the value of said variable as argument to a funcall."
   (interactive "r")
   (let ((buffer-name (generate-new-buffer-name "*indirect*"))
         (mode
@@ -843,3 +853,6 @@ re-downloaded in order to locate PACKAGE."
 
 ;; helm flycheck
 (need-package 'helm-flycheck)
+
+(provide 'init)
+;;; init.el ends here
