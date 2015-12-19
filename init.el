@@ -37,6 +37,7 @@
  '(projectile-globally-ignored-directories
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "node_modules")))
+ '(scroll-bar-mode nil)
  '(starttls-extra-arguments (quote ("--insecure")))
  '(starttls-use-gnutls t)
  '(tab-width 4)
