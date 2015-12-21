@@ -363,7 +363,7 @@ re-downloaded in order to locate PACKAGE."
 (require-package 'company)
 (need-package 'helm-company)
 (global-company-mode)
-(global-set-key (kbd "M-:") 'helm-company)
+(global-set-key (kbd "C-:") 'helm-company)
 
 
 ;;; ElDoc
