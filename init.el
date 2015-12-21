@@ -806,7 +806,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require-package 'speed-type)
 
 ;; magit
-(require-package 'magit)
+(need-package 'magit)
+(require 'magit)
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
