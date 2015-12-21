@@ -273,7 +273,7 @@ re-downloaded in order to locate PACKAGE."
 (global-set-key "\C-t" 'kill-word);
 (global-set-key "\C-p" 'previous-line);
 (global-set-key "\C-o" 'forward-word);
-(global-set-key "\C-h" 'backward-delete-char-untabify);
+;(global-set-key "\C-h" 'backward-delete-char-untabify);
 (global-set-key "\C-x\C-m" 'not-modified);
 (setq make-backup-files 'nil);
 (setq default-major-mode 'text-mode)
@@ -669,7 +669,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;helm
 (need-package 'helm)
 (require 'helm-config)
-(global-set-key [(meta x)] 'helm-M-x)
+(global-set-key (kbd "C-x C-x") 'helm-M-x)
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -699,7 +699,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq x-select-enable-clipboard t)
 
 ;; rebind F1 for xterm
-(global-set-key (kbd "M-o p") 'help)
+;(global-set-key (kbd "M-o p") 'help)
 
 ;;
 ;; helm-swoop
