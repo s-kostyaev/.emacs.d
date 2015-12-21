@@ -14,6 +14,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(color-theme-sanityinc-solarized-rgb-is-srgb t)
+ '(column-number-mode t)
  '(company-gtags-modes (quote (prog-mode jde-mode web-mode js-mode js3-mode)))
  '(custom-enabled-themes (quote (sanityinc-solarized-light)))
  '(custom-safe-themes
