@@ -50,6 +50,8 @@
 ;; use C-\ for change language in emacs instead
 (setq default-input-method "cyrillic-jis-russian")
 
+(set-frame-font "-unknown-Iosevka-light-normal-normal-*-13-*-*-*-m-0-iso10646-1" nil t)
+
 ;; Melpa
 (require 'package) ;; You might already have this line
 ;; (add-to-list 'package-archives
@@ -279,7 +281,6 @@ re-downloaded in order to locate PACKAGE."
 (setq make-backup-files 'nil);
 (setq default-major-mode 'text-mode)
 (setq text-mode-hook 'turn-on-auto-fill)
-(set-default-font "-misc-fixed-medium-r-normal-*-13-140-*-*-c-*-*-1")
 (setq auto-mode-alist (cons '("\\.cxx$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.hpp$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.tex$" . latex-mode) auto-mode-alist))
@@ -497,18 +498,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
                          (turn-off-fci-mode) (turn-on-fci-mode))))
 
 (setq eval-expression-debug-on-error t)
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:background nil :family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
- ;; '(company-preview ((t (:foreground "darkgray" :underline t))))
- ;; '(company-preview-common ((t (:inherit company-preview))))
- ;; '(company-tooltip ((t (:background "lightgray" :foreground "black"))))
- ;; '(company-tooltip-common ((((type x)) (:inherit company-tooltip :weight bold)) (t (:inherit company-tooltip))))
- ;; '(company-tooltip-common-selection ((((type x)) (:inherit company-tooltip-selection :weight bold)) (t (:inherit company-tooltip-selection))))
- ;; '(company-tooltip-selection ((t (:background "steelblue" :foreground "white")))))
 
 ;;;; Web developement
 (need-package 'web-mode)
@@ -856,6 +845,13 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; helm flycheck
 (need-package 'helm-flycheck)
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:family "Iosevka" :foundry "unknown" :slant normal :weight light :height 98 :width normal)))))
 
 (provide 'init)
 ;;; init.el ends here
