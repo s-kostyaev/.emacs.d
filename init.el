@@ -853,5 +853,10 @@ Otherwise, use the value of said variable as argument to a funcall."
  ;; If there is more than one, they won't work right.
  '(default ((t (:family "Iosevka" :foundry "unknown" :slant normal :weight light :height 98 :width normal)))))
 
+;; pandoc
+(require-package 'pandoc-mode)
+(add-hook 'markdown-mode-hook 'pandoc-mode)
+(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+
 (provide 'init)
 ;;; init.el ends here
