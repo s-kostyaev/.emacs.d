@@ -858,5 +858,11 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'markdown-mode-hook 'pandoc-mode)
 (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
 
+;; guile support
+(need-package 'geiser)
+(require 'geiser-install)
+(add-hook 'geiser-repl-mode-hook 'paredit-mode)
+(add-hook 'geiser-mode-hook 'paredit-mode)
+
 (provide 'init)
 ;;; init.el ends here
