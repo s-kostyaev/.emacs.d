@@ -860,7 +860,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; guile support
 (need-package 'geiser)
-(require 'geiser-install)
 (add-hook 'geiser-repl-mode-hook 'paredit-mode)
 (add-hook 'geiser-mode-hook 'paredit-mode)
 
