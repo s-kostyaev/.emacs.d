@@ -419,16 +419,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
      'paredit-backward-delete
      'paredit-close-round)
 
-(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
-
-;; Stop SLIME's REPL from grabbing DEL,
-;; which is annoying when backspacing over a '('
-(defun override-slime-repl-bindings-with-paredit ()
-  "Use paredit keys instead of slime."
-  (define-key slime-repl-mode-map
-    (read-kbd-macro paredit-backward-delete-key) nil))
-(add-hook 'slime-repl-mode-hook 'override-slime-repl-bindings-with-paredit)
-
   (defun paredit-barf-all-the-way-backward ()
     (interactive)
     (paredit-split-sexp)
