@@ -853,5 +853,42 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'geiser-repl-mode-hook 'paredit-mode)
 (add-hook 'geiser-mode-hook 'paredit-mode)
 
+;; slime
+(need-package 'slime)
+(need-package 'slime-company)
+(setq slime-lisp-implementations
+      '((kawa
+         ("java"
+          ;; needed jar files
+          "-cp" "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160113.630/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
+          ;; channel for debugger
+          "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
+          ;; depending on JVM, compiler may need more stack
+          "-Xss2M"
+          ;; kawa without GUI
+          "kawa.repl" "-s")
+         :init kawa-slime-init)))
+
+(defun kawa-slime-init (file _)
+  "Init kawa-slime for `FILE'."
+  (setq slime-protocol-version 'ignore)
+  (format "%S\n"
+          `(begin (import (swank-kawa))
+                  (start-swank ,file)
+                  ;; Optionally add source paths of your code so
+                  ;; that M-. works better:
+                  ;; (set! swank-java-source-path
+                  ;;  (append
+                  ;;   '(,(expand-file-name "~/.emacs.d/elpa/slime-20160113.630/contrib/")
+                  ;;     "")
+                  ;;   swank-java-source-path))
+                  )))
+
+;; Optionally define a command to start it.
+(defun kawa ()
+  "Run kawa repl."
+  (interactive)
+  (slime 'kawa))
+
 (provide 'init)
 ;;; init.el ends here
