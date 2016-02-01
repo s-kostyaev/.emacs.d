@@ -860,7 +860,7 @@ Otherwise, use the value of said variable as argument to a funcall."
       '((kawa
          ("java"
           ;; needed jar files
-          "-cp" "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160113.630/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
+          "-cp" "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160129.1032/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
           ;; channel for debugger
           "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
           ;; depending on JVM, compiler may need more stack
