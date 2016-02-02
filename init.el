@@ -50,7 +50,7 @@
 ;; use C-\ for change language in emacs instead
 (setq default-input-method "cyrillic-jis-russian")
 
-(set-frame-font "-unknown-Iosevka-light-normal-normal-*-13-*-*-*-m-0-iso10646-1" nil t)
+(set-frame-font "-FontForge-Monaco-normal-normal-normal-*-12-*-*-*-*-60-iso10646-1" nil t)
 
 ;; Melpa
 (require 'package) ;; You might already have this line
@@ -841,7 +841,7 @@ Otherwise, use the value of said variable as argument to a funcall."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Iosevka" :foundry "unknown" :slant normal :weight light :height 98 :width normal)))))
+ '(default ((t (:family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
 
 ;; pandoc
 (require-package 'pandoc-mode)
