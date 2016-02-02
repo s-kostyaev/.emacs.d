@@ -856,11 +856,26 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; slime
 (need-package 'slime)
 (need-package 'slime-company)
+(add-hook 'slime-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'comint-mode-hook (lambda () (paredit-mode +1)))
+(defvar swank-kawa-jar "/home/feofan/.emacs.d/elpa/slime-20160129.1032/contrib/swank-kawa.jar"
+  "Path to swank for kawa.")
+(if (not (file-exists-p swank-kawa-jar))
+    (start-process-shell-command "swank-kawa compilation"
+                                 "*swank-kawa-compilation*"
+                                 (concat "cd `dirname " swank-kawa-jar
+                                         "` && java -cp /usr/share/java/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
+(defvar swank-kawa-cp (concat "/usr/share/java/kawa.jar:"
+                        swank-kawa-jar
+                        ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar")
+  "Swank kawa classpath.")
 (setq slime-lisp-implementations
       '((kawa
          ("java"
           ;; needed jar files
-          "-cp" "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160129.1032/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
+          "-cp"
+          ; (prin1-to-string swank-kawa-cp 't) ;; use eval-print-last-sexp on it
+          "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160129.1032/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
           ;; channel for debugger
           "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
           ;; depending on JVM, compiler may need more stack
