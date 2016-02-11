@@ -858,7 +858,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'slime-company)
 (add-hook 'slime-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'comint-mode-hook (lambda () (paredit-mode +1)))
-(defvar swank-kawa-jar "/home/feofan/.emacs.d/elpa/slime-20160129.1032/contrib/swank-kawa.jar"
+(defvar swank-kawa-jar "/home/feofan/.emacs.d/elpa/slime-20160210.458/contrib/swank-kawa.jar"
   "Path to swank for kawa.")
 (if (not (file-exists-p swank-kawa-jar))
     (start-process-shell-command "swank-kawa compilation"
@@ -874,8 +874,9 @@ Otherwise, use the value of said variable as argument to a funcall."
          ("java"
           ;; needed jar files
           "-cp"
-          ; (prin1-to-string swank-kawa-cp 't) ;; use eval-print-last-sexp on it
-          "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160129.1032/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
+           ;(prin1-to-string swank-kawa-cp 't)
+           "/usr/share/java/kawa.jar:/home/feofan/.emacs.d/elpa/slime-20160210.458/contrib/swank-kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar"
+           ;; use eval-print-last-sexp on it
           ;; channel for debugger
           "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
           ;; depending on JVM, compiler may need more stack
