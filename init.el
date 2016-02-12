@@ -858,6 +858,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; slime
 (need-package 'slime)
 (need-package 'slime-company)
+(slime-setup '(slime-company))
 (add-hook 'slime-mode-hook (lambda () (paredit-mode +1)))
 (add-hook 'comint-mode-hook (lambda () (paredit-mode +1)))
 (defvar swank-kawa-jar "/home/feofan/.emacs.d/elpa/slime-20160210.458/contrib/swank-kawa.jar"
