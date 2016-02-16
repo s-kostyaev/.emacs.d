@@ -51,7 +51,8 @@
 ;; use C-\ for change language in emacs instead
 (setq default-input-method "cyrillic-jis-russian")
 
-(set-frame-font "-FontForge-Monaco-normal-normal-normal-*-12-*-*-*-*-60-iso10646-1" nil t)
+(set-frame-font "-gnu-unifont-medium-r-normal-sans-16-*-75-75-c-80-iso10646-1" nil t)
+(add-hook 'after-change-major-mode-hook (lambda () (set-default-font "-gnu-unifont-medium-r-normal-sans-16-*-75-75-c-80-iso10646-1" nil t)))
 
 ;; Melpa
 (require 'package) ;; You might already have this line
@@ -838,12 +839,12 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; helm flycheck
 (need-package 'helm-flycheck)
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
+;; (custom-set-faces
+;;  ;; custom-set-faces was added by Custom.
+;;  ;; If you edit it by hand, you could mess it up, so be careful.
+;;  ;; Your init file should contain only one such instance.
+;;  ;; If there is more than one, they won't work right.
+;;  '(default ((t (:family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
 
 ;; pandoc
 (require-package 'pandoc-mode)
