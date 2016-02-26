@@ -52,7 +52,7 @@
 (setq default-input-method "cyrillic-jis-russian")
 
 (set-frame-font "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*" nil t)
-(add-hook 'after-change-major-mode-hook (lambda () (set-default-font "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*" nil t)))
+(add-hook 'after-change-major-mode-hook (lambda () (set-frame-font "-*-gohufont-medium-*-*-*-14-*-*-*-*-*-*-*" nil t)))
 
 ;; Melpa
 (require 'package) ;; You might already have this line
