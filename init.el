@@ -923,5 +923,8 @@ Otherwise, use the value of said variable as argument to a funcall."
   (interactive)
   (slime 'kawa))
 
+;;;; Erlang
+(need-package 'erlang)
+
 (provide 'init)
 ;;; init.el ends here
