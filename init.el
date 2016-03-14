@@ -946,6 +946,11 @@ Otherwise, use the value of said variable as argument to a funcall."
             (dolist (spec distel-shell-keys)
               (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
 
+(defun distel-start-local ()
+  "Start local erlang node for distel."
+  (interactive)
+  (start-process-shell-command
+   "erlang-local-node" "*erlang-local*" "erl -sname local"))
 
 (provide 'init)
 ;;; init.el ends here
