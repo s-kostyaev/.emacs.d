@@ -927,6 +927,25 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'erlang)
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
+;; distel
+(add-to-list 'load-path "/usr/share/distel/elisp")
+(require 'distel)
+(distel-setup)
+
+;; A number of the erlang-extended-mode key bindings are useful in the shell too
+(defconst distel-shell-keys
+  '(("\M-/"      erl-complete)
+    ("\M-."      erl-find-source-under-point)
+    ("\M-,"      erl-find-source-unwind)
+    )
+  "Additional keys to bind when in Erlang shell.")
+
+(add-hook 'erlang-shell-mode-hook
+          (lambda ()
+            ;; add some Distel bindings to the Erlang shell
+            (dolist (spec distel-shell-keys)
+              (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
+
 
 (provide 'init)
 ;;; init.el ends here
