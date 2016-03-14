@@ -925,6 +925,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;;;; Erlang
 (need-package 'erlang)
+(require 'rebar)
+(add-hook 'erlang-mode-hook 'rebar-mode)
 
 (provide 'init)
 ;;; init.el ends here
