@@ -953,5 +953,9 @@ Otherwise, use the value of said variable as argument to a funcall."
   (start-process-shell-command
    "erlang-local-node" "*erlang-local*" "erl -sname local"))
 
+
+;; fast open url
+(global-set-key (kbd "C-x u") 'browse-url)
+
 (provide 'init)
 ;;; init.el ends here
