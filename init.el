@@ -403,7 +403,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq cider-repl-history-size 1000) ; the default is 500
 (add-hook 'cider-repl-mode-hook 'paredit-mode)
 
-(setq browse-url-browser-function 'browse-url-chromium)
+(setq browse-url-browser-function 'browse-url-firefox)
+(setq browse-url-firefox-program "firefox-aurora")
 
 ;;;; Paredit
 (need-package 'paredit)
