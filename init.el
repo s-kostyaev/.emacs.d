@@ -956,6 +956,11 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; fast open url
 (global-set-key (kbd "C-x u") 'browse-url)
+(defun all-urls-in-buffer ()
+  "Find all links."
+  (interactive)
+  (helm-swoop :$query "https?://"))
+(global-set-key (kbd "C-x C-u") 'all-urls-in-buffer)
 
 (provide 'init)
 ;;; init.el ends here
