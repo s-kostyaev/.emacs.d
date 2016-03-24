@@ -517,9 +517,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq company-tern-meta-as-single-line t)
 (setq company-tooltip-align-annotations t)
 
-;; (add-hook 'js3-mode-hook (lambda () (tern-mode t)))
-;; (add-hook 'js-mode-hook (lambda () (tern-mode t)))
-;; (add-hook 'web-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js3-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js-mode-hook (lambda () (tern-mode t)))
+(add-hook 'web-mode-hook (lambda () (tern-mode t)))
 
 ;; adjust indents for web-mode to 2 spaces
 (defun my-web-mode-hook ()
