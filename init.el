@@ -51,8 +51,8 @@
 ;; use C-\ for change language in emacs instead
 (setq default-input-method "cyrillic-jis-russian")
 
-(set-frame-font "-gnu-unifont-medium-r-normal-sans-16-*-75-75-c-80-iso10646-1" nil t)
-(add-hook 'after-change-major-mode-hook (lambda () (set-frame-font "-gnu-unifont-medium-r-normal-sans-16-*-75-75-c-80-iso10646-1" nil t)))
+(set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)
+(add-hook 'after-change-major-mode-hook (lambda () (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)))
 
 ;; Melpa
 (require 'package) ;; You might already have this line
