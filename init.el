@@ -15,7 +15,12 @@
  ;; If there is more than one, they won't work right.
  '(color-theme-sanityinc-solarized-rgb-is-srgb t)
  '(column-number-mode t)
- '(company-gtags-modes (quote (prog-mode jde-mode web-mode js-mode js3-mode)))
+ '(company-dabbrev-code-modes
+   (quote
+    (prog-mode batch-file-mode csharp-mode css-mode haskell-mode jde-mode lua-mode python-mode)))
+ '(company-gtags-modes
+   (quote
+    (prog-mode jde-mode web-mode js-mode js3-mode erlang-mode)))
  '(custom-enabled-themes (quote (sanityinc-solarized-light)))
  '(custom-safe-themes
    (quote
@@ -771,6 +776,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'asm-mode-hook 'helm-gtags-mode)
 (add-hook 'web-mode-hook 'helm-gtags-mode)
 (add-hook 'js3-mode-hook 'helm-gtags-mode)
+(add-hook 'erlang-mode-hook 'helm-gtags-mode)
 
 ;; key bindings
 (eval-after-load "helm-gtags"
@@ -928,30 +934,31 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'erlang)
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
+(require 'nitrogen-mode)
 ;; distel
-(add-to-list 'load-path "/usr/share/distel/elisp")
-(require 'distel)
-(distel-setup)
+;; (add-to-list 'load-path "/usr/share/distel/elisp")
+;; (require 'distel)
+;; (distel-setup)
 
 ;; A number of the erlang-extended-mode key bindings are useful in the shell too
-(defconst distel-shell-keys
-  '(("\M-/"      erl-complete)
-    ("\M-."      erl-find-source-under-point)
-    ("\M-,"      erl-find-source-unwind)
-    )
-  "Additional keys to bind when in Erlang shell.")
+;; (defconst distel-shell-keys
+;;   '(("\M-/"      erl-complete)
+;;     ("\M-."      erl-find-source-under-point)
+;;     ("\M-,"      erl-find-source-unwind)
+;;     )
+;;   "Additional keys to bind when in Erlang shell.")
 
-(add-hook 'erlang-shell-mode-hook
-          (lambda ()
-            ;; add some Distel bindings to the Erlang shell
-            (dolist (spec distel-shell-keys)
-              (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
+;; (add-hook 'erlang-shell-mode-hook
+;;           (lambda ()
+;;             ;; add some Distel bindings to the Erlang shell
+;;             (dolist (spec distel-shell-keys)
+;;               (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
 
-(defun distel-start-local ()
-  "Start local erlang node for distel."
-  (interactive)
-  (start-process-shell-command
-   "erlang-local-node" "*erlang-local*" "erl -sname local"))
+;; (defun distel-start-local ()
+;;   "Start local erlang node for distel."
+;;   (interactive)
+;;   (start-process-shell-command
+;;    "erlang-local-node" "*erlang-local*" "erl -sname local"))
 
 
 ;; fast open url
