@@ -935,6 +935,26 @@ Otherwise, use the value of said variable as argument to a funcall."
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
 (require 'nitrogen-mode)
+(require 'esense-start)
+(setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
+(defun esense-create-index ()
+  "Create esense index for selected directory."
+  (interactive)
+  (let
+   ((dir
+     (expand-file-name (read-directory-name
+       "Select directory for indexing:" default-directory))))
+   (start-process "esense-indexing" "*esense-indexing*"
+                  esense-indexer-program dir))
+  (esense-initialize))
+(add-hook 'erlang-mode-hook
+          '(lambda ()
+             (define-key erlang-mode-map (kbd "C-:")
+               'esense-do-something-at-point)
+             (define-key erlang-mode-map (kbd "C-c C-e")
+               'esense-create-index)
+             (define-key erlang-mode-map (kbd "C-c C-d")
+               'esense-go-to-documentation)))
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
 ;; (require 'distel)
