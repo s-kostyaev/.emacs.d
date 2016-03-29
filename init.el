@@ -949,7 +949,7 @@ Otherwise, use the value of said variable as argument to a funcall."
   (esense-initialize))
 (add-hook 'erlang-mode-hook
           '(lambda ()
-             (define-key erlang-mode-map (kbd "C-:")
+             (define-key erlang-mode-map (kbd "C-c C-g")
                'esense-do-something-at-point)
              (define-key erlang-mode-map (kbd "C-c C-e")
                'esense-create-index)
