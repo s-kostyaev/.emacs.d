@@ -989,5 +989,8 @@ Otherwise, use the value of said variable as argument to a funcall."
   (helm-swoop :$query "https?://"))
 (global-set-key (kbd "C-x C-u") 'all-urls-in-buffer)
 
+;;;; Lua
+(require-package 'lua-mode)
+
 (provide 'init)
 ;;; init.el ends here
