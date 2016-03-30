@@ -934,7 +934,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'erlang)
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
-(require 'nitrogen-mode)
 (require 'esense-start)
 (setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
 (defun esense-create-index ()
@@ -947,6 +946,16 @@ Otherwise, use the value of said variable as argument to a funcall."
    (start-process "esense-indexing" "*esense-indexing*"
                   esense-indexer-program dir))
   (esense-initialize))
+
+(defun fix-erlang-project-includes ()
+  "Find erlang include paths for selected directory with project deps."
+  (interactive)
+  (let
+      ((dir
+        (expand-file-name (read-directory-name
+                           "Select project directory:" default-directory))))
+    (setq flycheck-erlang-include-path (list (concat dir "/include") (concat dir "/deps")))))
+
 (add-hook 'erlang-mode-hook
           '(lambda ()
              (define-key erlang-mode-map (kbd "C-c C-g")
@@ -954,7 +963,11 @@ Otherwise, use the value of said variable as argument to a funcall."
              (define-key erlang-mode-map (kbd "C-c C-e")
                'esense-create-index)
              (define-key erlang-mode-map (kbd "C-c C-d")
-               'esense-go-to-documentation)))
+               'esense-go-to-documentation)
+             (define-key erlang-mode-map (kbd "C-c i")
+               'fix-erlang-project-includes)))
+
+
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
 ;; (require 'distel)
