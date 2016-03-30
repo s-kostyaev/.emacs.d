@@ -947,6 +947,8 @@ Otherwise, use the value of said variable as argument to a funcall."
                   esense-indexer-program dir))
   (esense-initialize))
 
+(setq flycheck-erlang-include-path '("../include" "../deps"))
+
 (defun fix-erlang-project-includes ()
   "Find erlang include paths for selected directory with project deps."
   (interactive)
@@ -955,6 +957,19 @@ Otherwise, use the value of said variable as argument to a funcall."
         (expand-file-name (read-directory-name
                            "Select project directory:" default-directory))))
     (setq flycheck-erlang-include-path (list (concat dir "/include") (concat dir "/deps")))))
+
+(defun fix-erlang-project-code-path ()
+  "Find erlang include paths for selected directory with project deps."
+  (interactive)
+  (let ((code-path
+         (let
+             ((dir
+               (expand-file-name (read-directory-name
+                                  "Select project directory:" default-directory))))
+           (split-string (shell-command-to-string
+                        (concat "find " dir " -type d -name ebin"))))
+         ))
+    (setq flycheck-erlang-library-path code-path)))
 
 (add-hook 'erlang-mode-hook
           '(lambda ()
@@ -965,7 +980,9 @@ Otherwise, use the value of said variable as argument to a funcall."
              (define-key erlang-mode-map (kbd "C-c C-d")
                'esense-go-to-documentation)
              (define-key erlang-mode-map (kbd "C-c i")
-               'fix-erlang-project-includes)))
+               'fix-erlang-project-includes)
+             (define-key erlang-mode-map (kbd "C-c b")
+               'fix-erlang-project-code-path)))
 
 
 ;; distel
