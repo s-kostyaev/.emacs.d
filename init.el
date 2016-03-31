@@ -373,6 +373,9 @@ re-downloaded in order to locate PACKAGE."
 (need-package 'helm-company)
 (global-company-mode)
 (global-set-key (kbd "C-:") 'helm-company)
+(setq company-etags-ignore-case nil)
+(setq company-dabbrev-ignore-case nil)
+(setq company-dabbrev-code-ignore-case nil)
 
 
 ;;; ElDoc
