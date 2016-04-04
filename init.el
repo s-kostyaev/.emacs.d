@@ -1025,5 +1025,9 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;;;; Lua
 (require-package 'lua-mode)
 
+;; nXML mode customization
+(add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
+(add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
+
 (provide 'init)
 ;;; init.el ends here
