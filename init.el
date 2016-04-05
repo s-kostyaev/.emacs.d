@@ -938,17 +938,26 @@ Otherwise, use the value of said variable as argument to a funcall."
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
 (require 'esense-start)
-(setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
+(setq esense-indexer-program "/home/feofan/.emacs.d/esense-1.12/esense.sh")
+(defun esense--make-sentinel (action)
+  (lambda (process _event)
+    (when (eq (process-status process) 'exit)
+      (if (zerop (process-exit-status process))
+          (progn
+            (esense-initialize)
+            (message "Success: %s esense" action))
+        (message "Failed: %s esense(%d)" action (process-exit-status process))))))
 (defun esense-create-index ()
   "Create esense index for selected directory."
   (interactive)
-  (let
+  (let*
    ((dir
      (expand-file-name (read-directory-name
-       "Select directory for indexing:" default-directory))))
-   (start-process "esense-indexing" "*esense-indexing*"
-                  esense-indexer-program dir))
-  (esense-initialize))
+                        "Select directory for indexing:" default-directory)))
+    (proc
+     (start-process "esense-indexing" "*esense-indexing*" "find" dir "-iname"
+                    "*.[eh]rl" "-exec" esense-indexer-program "{}" ";")))
+   (set-process-sentinel proc (esense--make-sentinel 'create))))
 
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
