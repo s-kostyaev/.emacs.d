@@ -938,15 +938,16 @@ Otherwise, use the value of said variable as argument to a funcall."
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
 (require 'esense-start)
-(setq esense-indexer-program "/home/feofan/.emacs.d/esense-1.12/esense.sh")
-(defun esense--make-sentinel (action)
+(setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
+(defun esense--make-sentinel ()
+  "Make esense sentinel."
   (lambda (process _event)
     (when (eq (process-status process) 'exit)
       (if (zerop (process-exit-status process))
           (progn
             (esense-initialize)
-            (message "Success: %s esense" action))
-        (message "Failed: %s esense(%d)" action (process-exit-status process))))))
+            (message "Success: esense indexing"))
+        (message "Failed: esense indexing (%d)" (process-exit-status process))))))
 (defun esense-create-index ()
   "Create esense index for selected directory."
   (interactive)
@@ -955,9 +956,23 @@ Otherwise, use the value of said variable as argument to a funcall."
      (expand-file-name (read-directory-name
                         "Select directory for indexing:" default-directory)))
     (proc
-     (start-process "esense-indexing" "*esense-indexing*" "find" dir "-iname"
-                    "*.[eh]rl" "-exec" esense-indexer-program "{}" ";")))
-   (set-process-sentinel proc (esense--make-sentinel 'create))))
+     (start-process-shell-command
+      "esense-indexing" "*esense-indexing*"
+      (concat "find " dir " -iname '*.[eh]rl' -print0 | xargs -0 -P4 -n1 "
+              esense-indexer-program))))
+   (set-process-sentinel proc (esense--make-sentinel))))
+(defun esense-update-current-file ()
+  "Update esense index for current file."
+  (interactive)
+  (if (member 'esense-mode minor-mode-list)
+      (let
+          ((proc
+            (start-process
+             "esense-update" "*esense-update*"
+             esense-indexer-program (expand-file-name buffer-file-name))))
+        (set-process-sentinel proc (esense--make-sentinel)))))
+(add-hook 'after-save-hook 'esense-update-current-file)
+
 
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
