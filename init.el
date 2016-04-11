@@ -939,15 +939,16 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'erlang-mode-hook 'rebar-mode)
 (require 'esense-start)
 (setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
-(defun esense--make-sentinel ()
-  "Make esense sentinel."
-  (lambda (process _event)
-    (when (eq (process-status process) 'exit)
-      (if (zerop (process-exit-status process))
-          (progn
-            (esense-initialize)
-            (message "Success: esense indexing"))
-        (message "Failed: esense indexing (%d)" (process-exit-status process))))))
+(defun esense--make-sentinel (action)
+  "Make esense sentinel for `ACTION'."
+  (lexical-let ((action action))
+    #'(lambda (process event)
+        (when (eq (process-status process) 'exit)
+          (if (zerop (process-exit-status process))
+              (progn
+                (esense-initialize)
+                (message "Success: esense %s %s" action event))
+            (message "Failed: esense %s %s (%d)" action event (process-exit-status process)))))))
 (defun esense-create-index ()
   "Create esense index for selected directory."
   (interactive)
@@ -960,7 +961,7 @@ Otherwise, use the value of said variable as argument to a funcall."
       "esense-indexing" "*esense-indexing*"
       (concat "find " dir " -iname '*.[eh]rl' -print0 | xargs -0 -P4 -n1 "
               esense-indexer-program))))
-   (set-process-sentinel proc (esense--make-sentinel))))
+   (set-process-sentinel proc (esense--make-sentinel "create"))))
 (defun esense-update-current-file ()
   "Update esense index for current file."
   (interactive)
@@ -970,7 +971,7 @@ Otherwise, use the value of said variable as argument to a funcall."
             (start-process
              "esense-update" "*esense-update*"
              esense-indexer-program (expand-file-name buffer-file-name))))
-        (set-process-sentinel proc (esense--make-sentinel)))))
+        (set-process-sentinel proc (esense--make-sentinel "update")))))
 (add-hook 'after-save-hook 'esense-update-current-file)
 
 
