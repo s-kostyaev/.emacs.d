@@ -965,7 +965,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (defun esense-update-current-file ()
   "Update esense index for current file."
   (interactive)
-  (if esense-mode
+  (if (bound-and-true-p esense-mode)
       (let
           ((proc
             (start-process
