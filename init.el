@@ -1054,5 +1054,30 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
 
+
+;;;; C Development
+;; header completion
+(need-package 'company-c-headers)
+(add-to-list 'company-backends 'company-c-headers)
+(defun company-set-c-headers-user-path ()
+  "Set path for selected directory with project headers."
+  (interactive)
+  (let
+      ((dir
+        (expand-file-name (read-directory-name
+                           "Select project directory:" default-directory))))
+    (setq company-c-headers-path-user (list (concat dir "/include")))))
+
+;; Semantic
+(require 'cc-mode)
+(require 'semantic)
+
+(global-semanticdb-minor-mode 1)
+(global-semantic-idle-scheduler-mode 1)
+
+(semantic-mode 1)
+(global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
+(global-semantic-idle-summary-mode 1)
+
 (provide 'init)
 ;;; init.el ends here
