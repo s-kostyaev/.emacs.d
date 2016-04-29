@@ -236,9 +236,6 @@ re-downloaded in order to locate PACKAGE."
                                                            (interactive)
                                                            (shell-command "go test")))))
 (require-package 'company-go)                                ; load company mode go backend
-;(setq company-tooltip-limit 20)                      ; bigger popup window
-(setq company-idle-delay nil)                         ; decrease delay before autocompletion popup shows
-;(setq company-echo-delay 0)                          ; remove annoying blinking
 (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
 (add-hook 'go-mode-hook (lambda ()
                           (set (make-local-variable 'company-backends) '(company-go))
@@ -376,6 +373,45 @@ re-downloaded in order to locate PACKAGE."
 (setq company-etags-ignore-case nil)
 (setq company-dabbrev-ignore-case nil)
 (setq company-dabbrev-code-ignore-case nil)
+;; Disable fci if needed.
+(add-hook 'company-completion-started-hook (lambda (&rest ignore)
+                                             (when (boundp 'fci-mode)
+                                               (setq company-fci-mode-on-p fci-mode)
+                                               (when fci-mode (fci-mode -1)))))
+;; Re-enable fci if needed.
+(add-hook 'company-completion-finished-hook (lambda (&rest ignore)
+                                              (when company-fci-mode-on-p (fci-mode 1))))
+;; Re-enable fci if needed.
+(add-hook 'company-completion-cancelled-hook (lambda (&rest ignore)
+                                               (when company-fci-mode-on-p (fci-mode 1))))
+(setq company-tooltip-limit 20)                      ; bigger popup window
+(setq company-idle-delay 0.1)                         ; decrease delay before autocompletion popup shows
+(setq company-echo-delay 0)                          ; remove annoying blinking
+(setq company-minimum-prefix-length 3)
+(defun check-expansion ()
+  (save-excursion
+    (if (looking-at "\\_>") t
+      (backward-char 1)
+      (if (looking-at "\\.") t
+        (backward-char 1)
+        (if (looking-at "->") t nil)))))
+
+(defun do-yas-expand ()
+  (let ((yas/fallback-behavior 'return-nil))
+    (yas/expand)))
+
+(defun tab-indent-or-complete ()
+  (interactive)
+  (if (minibufferp)
+      (minibuffer-complete)
+    (if (or (not yas/minor-mode)
+            (null (do-yas-expand)))
+        (if (check-expansion)
+            (company-complete-common)
+          (indent-for-tab-command)))))
+
+(global-set-key [tab] 'tab-indent-or-complete)
+
 
 
 ;;; ElDoc
