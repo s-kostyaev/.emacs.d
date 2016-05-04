@@ -817,8 +817,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;;; Gnu global
 (need-package 'helm-gtags)
 ;;; Enable helm-gtags-mode
-(add-hook 'c-mode-hook 'helm-gtags-mode)
-(add-hook 'c++-mode-hook 'helm-gtags-mode)
+;; (add-hook 'c-mode-hook 'helm-gtags-mode)
+;; (add-hook 'c++-mode-hook 'helm-gtags-mode)
 (add-hook 'asm-mode-hook 'helm-gtags-mode)
 (add-hook 'web-mode-hook 'helm-gtags-mode)
 (add-hook 'js3-mode-hook 'helm-gtags-mode)
@@ -1099,11 +1099,9 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 
 ;;;; C, C++ Development
-
 ;; Rtags
 (require-package 'rtags)
-(setq rtags-completions-enabled t)
-(push 'company-rtags company-backends)
+(setq rtags-completions-enabled nil)
 (add-hook 'c++-mode-hook (lambda ()
                            (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
                            (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
