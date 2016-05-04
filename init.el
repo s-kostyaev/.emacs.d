@@ -213,6 +213,7 @@ re-downloaded in order to locate PACKAGE."
 ;; Flycheck
 (require-package 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
+(global-set-key (kbd "C-c r") 'helm-flycheck)
 
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
@@ -1102,16 +1103,28 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; Rtags
 (require-package 'rtags)
 (setq rtags-completions-enabled nil)
+(setq rtags-use-helm t)
 (add-hook 'c++-mode-hook (lambda ()
                            (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
                            (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
                            (local-set-key (kbd "C-c C-j") 'rtags-find-symbol-at-point)
+                           (local-set-key (kbd "C-c C-r") 'rtags-find-references-at-point)
                            (rtags-start-process-unless-running)))
 (add-hook 'c-mode-hook (lambda ()
                          (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
                          (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
                          (local-set-key (kbd "C-c C-j") 'rtags-find-symbol-at-point)
+                         (local-set-key (kbd "C-c C-r") 'rtags-find-references-at-point)
                          (rtags-start-process-unless-running)))
+;; Semantic
+;; (require 'cc-mode)
+;; (require 'semantic)
+;; (global-semanticdb-minor-mode 1)
+;; (global-semantic-idle-scheduler-mode 1)
+;; (semantic-mode 1)
+;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
+;; (global-semantic-idle-summary-mode 1)
+
 (need-package 'cmake-ide)
 (cmake-ide-setup)
 

@@ -3,12 +3,14 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        c-electric-semi&comma
         complete-symbol
         completion-at-point
         dabbrev-completion
         electric-newline-and-maybe-indent
         go-mode-insert-and-indent
         kill-region
+        paredit-forward-delete
         yas-expand
         ))
 
