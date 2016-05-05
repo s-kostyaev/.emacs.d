@@ -586,6 +586,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; avy
 (need-package 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
+(key-chord-define-global "f'" 'avy-pop-mark)
 (add-hook 'isearch-mode-hook (lambda ()
                                (local-set-key (kbd "C-'") 'avy-isearch)))
 
