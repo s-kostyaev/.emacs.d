@@ -575,7 +575,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   "Emacs quick move minor mode"
   t)
 ;; you can select the key you prefer to
-(key-chord-define-global "fj"
+(key-chord-define-global "fk"
                          (defhydra hydra-ace-jump (:exit t) "Ace jump mode"
                            ("j" ace-jump-mode "jump")
                            ("l" ace-jump-line-mode "line")
@@ -583,6 +583,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
                            ("c" ace-jump-char-mode "char")
                            ("p" ace-jump-mode-pop-mark "pop mark")
                            ("q" nil "quit")))
+;; avy
+(need-package 'avy)
+(key-chord-define-global "fj" 'avy-goto-word-1)
+(add-hook 'isearch-mode-hook (lambda ()
+                               (local-set-key (kbd "C-'") 'avy-isearch)))
 
 ;; 
 ;; enable a more powerful jump back function from ace jump mode
@@ -1159,7 +1164,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(projectile-globally-ignored-directories
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "node_modules")))
