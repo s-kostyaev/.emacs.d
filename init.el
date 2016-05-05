@@ -1071,18 +1071,25 @@ Otherwise, use the value of said variable as argument to a funcall."
 (require-package 'rtags)
 (setq rtags-completions-enabled nil)
 (setq rtags-use-helm t)
-(add-hook 'c++-mode-hook (lambda ()
-                           (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
-                           (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
-                           (local-set-key (kbd "C-c C-j") 'rtags-find-symbol-at-point)
-                           (local-set-key (kbd "C-c C-r") 'rtags-find-references-at-point)
-                           (rtags-start-process-unless-running)))
-(add-hook 'c-mode-hook (lambda ()
-                         (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
-                         (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
-                         (local-set-key (kbd "C-c C-j") 'rtags-find-symbol-at-point)
-                         (local-set-key (kbd "C-c C-r") 'rtags-find-references-at-point)
-                         (rtags-start-process-unless-running)))
+;; completion
+(need-package 'irony)
+(need-package 'company-irony)
+(need-package 'company-irony-c-headers)
+;; (need-package 'company-c-headers)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+
+(defun my-cc-mode-hook ()
+  "My hook for c & c++ modes."
+  (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
+  (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
+  (local-set-key (kbd "C-c C-j") 'rtags-find-symbol-at-point)
+  (local-set-key (kbd "C-c C-r") 'rtags-find-references-at-point)
+  (local-set-key (kbd "C-'") 'company-irony-c-headers)
+  (rtags-start-process-unless-running)
+  (irony-mode)
+  (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
+(add-hook 'c++-mode-hook 'my-cc-mode-hook)
+(add-hook 'c-mode-hook 'my-cc-mode-hook)
 ;; Semantic
 ;; (require 'cc-mode)
 ;; (require 'semantic)
@@ -1095,9 +1102,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'cmake-ide)
 (cmake-ide-setup)
 
-;; header completion
-(need-package 'company-c-headers)
-(add-to-list 'company-backends 'company-c-headers)
 (defun company-set-c-headers-user-path ()
   "Set path for selected directory with project headers."
   (interactive)
