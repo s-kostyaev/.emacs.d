@@ -16,6 +16,11 @@
 
 (setq mc/cmds-to-run-once
       '(
+        ace-jump-move
+        ace-mc-add-char
+        ace-mc-add-multiple-cursors
+        ace-mc-add-single-cursor
+        ace-mc-do-keyboard-reset
         beginning-of-buffer
         electrify-return-if-match
         find-tag
@@ -24,6 +29,7 @@
         helm-buffers-list
         helm-swoop-back-to-last-point
         help
+        hydra-cycle-windows/body
         hydra-multiple-cursors/body
         hydra-multiple-cursors/mc-hide-unmatched-lines-mode
         hydra-multiple-cursors/mc/mark-all-like-this
@@ -35,10 +41,12 @@
         hydra-multiple-cursors/mc/unmark-previous-like-this
         hydra-multiple-cursors/nil
         kmacro-end-macro
+        multiple-cursors-hydra/ace-mc-add-multiple-cursors-and-exit
         multiple-cursors-hydra/body
         multiple-cursors-hydra/mc-hide-unmatched-lines-mode
         multiple-cursors-hydra/mc/edit-lines-and-exit
         multiple-cursors-hydra/mc/mark-all-in-region-regexp-and-exit
+        multiple-cursors-hydra/mc/mark-all-like-this
         multiple-cursors-hydra/mc/mark-all-like-this-and-exit
         multiple-cursors-hydra/mc/mark-all-words-like-this-and-exit
         multiple-cursors-hydra/mc/mark-next-like-this

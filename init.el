@@ -609,6 +609,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; multiple cursors
 ;;
 (require-package 'multiple-cursors)
+(need-package 'ace-mc)
 
 (key-chord-define-global "fm"
                          (defhydra multiple-cursors-hydra (:hint nil)
@@ -621,10 +622,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 [_W_]   Up word   [_w_]   Down word [_r_] Mark
  ^ ^               ^ ^              [_q_] Quit
  ^ ^               ^ ^              [_h_] Toggle hide unmatched
+ ^ ^               ^ ^              [_j_] Jump for add or remove cursors
+ ^ ^               ^ ^              [_k_] Jump for single cursor
 "
   ("l" mc/edit-lines :exit t)
-  ("a" mc/mark-all-like-this :exit t)
-  ("A" mc/mark-all-words-like-this :exit t)
+  ("a" mc/mark-all-like-this)
+  ("A" mc/mark-all-words-like-this)
   ("n" mc/mark-next-like-this)
   ("N" mc/skip-to-next-like-this)
   ("M-n" mc/unmark-next-like-this)
@@ -635,6 +638,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   ("W" mc/mark-previous-word-like-this)
   ("w" mc/mark-next-word-like-this)
   ("h" mc-hide-unmatched-lines-mode)
+  ("j" ace-mc-add-multiple-cursors :exit t)
+  ("k" ace-mc-add-single-cursor :exit t)
   ("q" nil)))
 
 ;;
@@ -1154,7 +1159,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(projectile-globally-ignored-directories
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "node_modules")))
