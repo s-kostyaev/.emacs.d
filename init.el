@@ -706,6 +706,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key "\C-s" 'swiper)
 (global-set-key (kbd "C-c s k") 'ivy-resume)
 (need-package 'counsel)
+(global-set-key (kbd "s-x") 'counsel-M-x)
+(global-set-key (kbd "C-c C-s") 'counsel-ag)
 (need-package 'counsel-projectile)
 
 (require-package 'helm-descbinds)
