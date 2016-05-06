@@ -161,7 +161,7 @@ re-downloaded in order to locate PACKAGE."
                   ("n" split-window-below "New window")
                   ("c" delete-window "Close window")
                   ("q" nil "quit")))
-
+(windmove-default-keybindings)
 
 (defun toggle-window-split ()
   "Toggle window split vertically or horizontally."
