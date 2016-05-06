@@ -696,8 +696,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'helm)
 (require 'helm-config)
 (global-set-key (kbd "C-x C-x") 'helm-M-x)
-(global-set-key (kbd "C-x b") 'helm-buffers-list)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
+;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 ;; ivy
 (need-package 'ivy)
@@ -707,7 +707,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "C-c s k") 'ivy-resume)
 (need-package 'counsel)
 (global-set-key (kbd "s-x") 'counsel-M-x)
+(global-set-key (kbd "s-y") 'counsel-yank-pop)
+(global-set-key (kbd "s-w") 'kill-ring-save)
 (global-set-key (kbd "C-c C-s") 'counsel-ag)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (need-package 'counsel-projectile)
 
 (require-package 'helm-descbinds)
