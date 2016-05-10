@@ -710,6 +710,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "s-y") 'counsel-yank-pop)
 (global-set-key (kbd "s-w") 'kill-ring-save)
 (global-set-key (kbd "s-v") 'scroll-down-command)
+(global-set-key (kbd "s-;") 'comment-dwim-line)
+(global-set-key (kbd "s-g") 'goto-line)
 (global-set-key (kbd "C-c C-s") 'counsel-ag)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
 (need-package 'counsel-projectile)
