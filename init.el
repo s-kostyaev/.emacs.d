@@ -706,6 +706,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key "\C-s" 'swiper)
 (global-set-key (kbd "C-c s k") 'ivy-resume)
 (need-package 'counsel)
+(need-package 'smex)
 (global-set-key (kbd "s-x") 'counsel-M-x)
 (global-set-key (kbd "s-y") 'counsel-yank-pop)
 (global-set-key (kbd "s-w") 'kill-ring-save)
@@ -1194,7 +1195,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (smart-mode-line s projectile hydra dash monokai-theme counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(projectile-globally-ignored-directories
    (quote
     (".idea" ".eunit" ".git" ".hg" ".fslckout" ".bzr" "_darcs" ".tox" ".svn" ".stack-work" "node_modules")))
