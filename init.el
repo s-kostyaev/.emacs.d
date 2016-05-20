@@ -127,6 +127,8 @@ re-downloaded in order to locate PACKAGE."
 (global-set-key [(control up)]   (lambda () (interactive) (scroll-down-1 4)))
 (global-set-key (kbd "C-v") (lambda () (interactive) (smooth-scroll/orig-scroll-up)))
 (global-set-key (kbd "M-v") (lambda () (interactive) (smooth-scroll/orig-scroll-down)))
+(global-set-key (kbd "<next>") (lambda () (interactive) (smooth-scroll/orig-scroll-up)))
+(global-set-key (kbd "<prior>") (lambda () (interactive) (smooth-scroll/orig-scroll-down)))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
