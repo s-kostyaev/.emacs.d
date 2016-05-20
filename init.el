@@ -125,6 +125,8 @@ re-downloaded in order to locate PACKAGE."
 (setq gc-cons-threshold 100000000)
 (global-set-key [(control down)] (lambda () (interactive) (scroll-up-1 4)))
 (global-set-key [(control up)]   (lambda () (interactive) (scroll-down-1 4)))
+(global-set-key (kbd "C-v") (lambda () (interactive) (smooth-scroll/orig-scroll-up)))
+(global-set-key (kbd "M-v") (lambda () (interactive) (smooth-scroll/orig-scroll-down)))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
