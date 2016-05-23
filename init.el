@@ -1019,7 +1019,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      (start-process-shell-command
       "esense-indexing" "*esense-indexing*"
       (concat "find " dir " -iname '*.[eh]rl' -print0 | xargs -0 -P4 -n1 "
-              esense-indexer-program))))
+              esense-indexer-program " -debug"))))
    (set-process-sentinel proc (esense--make-sentinel "create"))))
 (defun esense-update-current-file ()
   "Update esense index for current file."
