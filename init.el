@@ -723,6 +723,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-;") 'comment-dwim-line)
 (global-set-key (kbd "C-c C-s") 'counsel-ag)
 (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "C-x l") 'counsel-locate)
 (need-package 'counsel-projectile)
 
 (require-package 'helm-descbinds)
