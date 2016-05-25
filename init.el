@@ -743,7 +743,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require-package 'helm-ls-git)
 (global-set-key (kbd "C-c C-f") 'helm-browse-project)
 
-(defun counsel-company ()
+(defun my-counsel-company ()
   "Complete using `company-candidates'."
   (interactive)
   (unless company-candidates
@@ -754,17 +754,22 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (setq ivy-completion-beg (match-beginning 0))
       (setq ivy-completion-end (match-end 0)))
     (ivy-read "company cand: " (mapcar (lambda (x)
-                                         (concat
-                                          x
-                                          "\t\t"
-                                          (company-call-backend 'annotation x)))
+                                         (let ((annotation
+                                                (company-call-backend 'annotation x)))
+                                           (if (> (length annotation) 0)
+                                               (progn
+                                                 (set-text-properties
+                                                  0 (length annotation)
+                                                  '(face success) annotation)
+                                                 (concat x "\t\t" annotation))
+                                             x)))
                                        company-candidates)
               :action (lambda (x)
                         (ivy-completion-in-region-action
                          (replace-regexp-in-string "\t\t\.*" "" x))
                         (run-at-time 0.01 nil 'company-pseudo-tooltip-hide)))))
 
-(global-set-key (kbd "C-:") 'counsel-company)
+(global-set-key (kbd "C-:") 'my-counsel-company)
 
 ;;
 ;; ash integration
@@ -1260,7 +1265,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(projectile-globally-ignored-directories
