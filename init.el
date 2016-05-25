@@ -743,6 +743,29 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require-package 'helm-ls-git)
 (global-set-key (kbd "C-c C-f") 'helm-browse-project)
 
+(defun counsel-company ()
+  "Complete using `company-candidates'."
+  (interactive)
+  (unless company-candidates
+    (company-complete))
+  (when company-point
+    (company-complete-common)
+    (when (looking-back company-common (line-beginning-position))
+      (setq ivy-completion-beg (match-beginning 0))
+      (setq ivy-completion-end (match-end 0)))
+    (ivy-read "company cand: " (mapcar (lambda (x)
+                                         (concat
+                                          x
+                                          "\t\t"
+                                          (company-call-backend 'annotation x)))
+                                       company-candidates)
+              :action (lambda (x)
+                        (ivy-completion-in-region-action
+                         (replace-regexp-in-string "\t\t\.*" "" x))
+                        (run-at-time 0.01 nil 'company-pseudo-tooltip-hide)))))
+
+(global-set-key (kbd "C-:") 'counsel-company)
+
 ;;
 ;; ash integration
 ;;
