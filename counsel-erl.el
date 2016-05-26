@@ -1,6 +1,12 @@
 ;;; counsel-erl --- Erlang completion at point using ivy.
 
 ;;; Commentary:
+;; Deps:
+;;  - coreutils
+;;  - findutils
+;;  - grep
+;;  - sed
+
 
 ;;; Code:
 (require 'counsel)
