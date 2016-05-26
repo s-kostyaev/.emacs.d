@@ -4,6 +4,7 @@
 
 ;;; Code:
 (require 'counsel)
+(require 'subr-x)
 
 (defvar counsel-erl-erlang-root "/usr/lib/erlang"
   "Path to erlang root.")
@@ -40,7 +41,7 @@
 
 (defun counsel-erl-at-point ()
   "Return the erlang thing at point, or nil if none is found."
-  (when (thing-at-point-looking-at "[^=^+^-^ ^(^)^,^.]+")
+  (when (thing-at-point-looking-at "[^=^+^-^ ^(^)^,^.^\n]+")
     (match-string-no-properties 0)))
 
 ;;;###autoload
@@ -53,30 +54,33 @@
                            "Select project directory:" default-directory))))
     (setq counsel-erl-project-root dir)))
 
+(defun counsel-erl--insert-candidate (candidate)
+  "Insert CANDIDATE at point."
+  (ivy-completion-in-region-action
+   (replace-regexp-in-string "/[0-9]" "" candidate)))
 
 ;;;###autoload
 (defun counsel-erl ()
   "Erlang completion at point."
   (interactive)
   (let ((thing (counsel-erl-at-point)))
-   (if (string-match "\\([^\:]+\\)\:\\([^\:]+\\)" thing)
-       (progn
-         (setq-local counsel-erl-candidates
-                     (counsel-erl--find-functions
-                      (substring thing (match-beginning 1) (match-end 1))))
-         (setq-local counsel-erl-predicate
-                     (substring thing (match-beginning 2) (match-end 2))))
+   (if (and thing (string-match "\\([^\:]+\\)\:\\([^\:]*\\)" thing))
+       (let ((erl-prefix (substring thing (match-beginning 1) (match-end 1))))
+         (progn
+           (setq counsel-erl-candidates
+                 (counsel-erl--find-functions
+                  erl-prefix))
+           (setq counsel-erl-predicate
+                 (string-remove-prefix (concat erl-prefix ":") thing))))
      (progn
-       (setq-local counsel-erl-candidates (counsel-erl--find-modules))
-       (setq-local counsel-erl-predicate thing))))
+       (setq counsel-erl-candidates (counsel-erl--find-modules))
+       (setq counsel-erl-predicate thing))))
   (when (looking-back counsel-erl-predicate (line-beginning-position))
     (setq ivy-completion-beg (match-beginning 0))
     (setq ivy-completion-end (match-end 0)))
   (ivy-read "Counsel-erl cand:" (split-string counsel-erl-candidates "\n")
             :initial-input counsel-erl-predicate
-            :action (lambda (x)
-                        (ivy-completion-in-region-action
-                         (replace-regexp-in-string "/[0-9]" "" x)))))
+            :action #'counsel-erl--insert-candidate))
 
 
 
