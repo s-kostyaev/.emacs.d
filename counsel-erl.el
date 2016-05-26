@@ -56,8 +56,17 @@
 
 (defun counsel-erl--insert-candidate (candidate)
   "Insert CANDIDATE at point."
-  (ivy-completion-in-region-action
-   (replace-regexp-in-string "/[0-9]" "" candidate)))
+  (if (string-match "\\([^/]+\\)/\\([0-9]+\\)" candidate)
+      (let ((arity (string-to-number
+                    (substring candidate
+                               (match-beginning 2) (match-end 2)))))
+        (ivy-completion-in-region-action
+         (concat (replace-regexp-in-string "/[0-9]+" "" candidate)
+                 "("
+                 (make-string (if (= 0 arity) arity (- arity 1)) ?,)
+                 ")"))
+        (goto-char (- (point) arity)))
+    (ivy-completion-in-region-action (concat candidate ":"))))
 
 ;;;###autoload
 (defun counsel-erl ()
