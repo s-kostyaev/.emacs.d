@@ -1108,9 +1108,11 @@ Otherwise, use the value of said variable as argument to a funcall."
                         (concat "find " dir " -type d -name ebin"))))
          ))
     (setq flycheck-erlang-library-path code-path)))
-
+(require 'counsel-erl)
 (add-hook 'erlang-mode-hook
           '(lambda ()
+             (define-key erlang-mode-map (kbd "C-:")
+               'counsel-erl)
              (define-key erlang-mode-map (kbd "C-c C-g")
                'esense-do-something-at-point)
              (define-key erlang-mode-map (kbd "C-c C-e")
