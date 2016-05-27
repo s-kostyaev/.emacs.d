@@ -12,6 +12,7 @@
 (require 'ivy)
 (require 'subr-x)
 (require 'dash)
+(require 's)
 
 (defvar ivy-erlang-complete-erlang-root "/usr/lib/erlang"
   "Path to erlang root.")
@@ -26,58 +27,67 @@
 
 (defun ivy-erlang-complete--find-functions (module)
   "Find functions in MODULE."
-  (-remove #'string-empty-p
-   (split-string
-    (shell-command-to-string
-     (concat
-      "find "
-      ivy-erlang-complete-project-root
-      " "
-      ivy-erlang-complete-erlang-root
-      " -name "
-      module
-      ".erl | xargs sed -n '/-export(/,/)./p' | sed -e '/%/d' | sed -e 's/ //g' | sed -e 's/\\t//g' | sed -e 's/-export.*(\\\[//g' | sed -e 's/\\\]).//g' | sed 's/\\\,/\\\n/g' | sed '/^$/d'"))
-    "\n")))
+  (s-split "\n"
+   (shell-command-to-string
+    (s-join " "
+     (list ;(setq module "chronica_parser")
+      "find" ivy-erlang-complete-project-root ivy-erlang-complete-erlang-root
+      "-name" (concat module ".erl") "| xargs sed -n '/-export(/,/)./p'"
+      "| sed -e '/%/d' | sed -e 's/ //g' | sed -e 's/\\t//g'"
+      "| sed -e '/^$/d' | sed -e '/-export(\\[.*\\])./{ n ; d }'"
+      "| sed -e 's/-export.*(\\\[//g' | sed -e 's/\\\]).//g'"
+      "| sed 's/\\\,/\\\n/g' | sed '/^$/d'")))
+    t))
 
 (defun ivy-erlang-complete--find-modules ()
   "Find functions in MODULE."
-  (-remove #'string-empty-p
-   (split-string
+  (s-split "\n"
     (shell-command-to-string
-     (concat
-      "find "
-      ivy-erlang-complete-project-root
-      " "
-      ivy-erlang-complete-erlang-root
-      " -iname '*.erl' | xargs basename -a | sed -e 's/\\.erl//g'"))
-    "\n")))
+     (s-join " "
+      (list
+       "find" ivy-erlang-complete-project-root ivy-erlang-complete-erlang-root
+       "-iname '*.erl' | xargs basename -a | sed -e 's/\\.erl//g'")))
+    t))
+
+(defun ivy-erlang-complete--extract-records (file)
+  "Extract all records from FILE."
+  (s-split
+   "\\."
+   (shell-command-to-string
+    (s-join " "
+     (list "find" ivy-erlang-complete-project-root "-name" file "|" "xargs"
+           "sed" "-n" "'/-record(/,/})./p'")))
+   t))
 
 (defun ivy-erlang-complete--extract-functions (file)
   "Extract all functions from FILE."
-  (-remove #'string-empty-p
-   (split-string
+  (s-split "\n"
     (shell-command-to-string
-     (concat
-      "sed -n '/^[a-z][a-zA-Z0-9_]*(.*)/,/[[:space:]]*->/p' "
-      file
-      " | sed -e '/%/d' | sed -e '/^\\\-/d' | sed -e '/^[[:space:]]/d' | sed '/^$/d' | sed -e 's/).*/)/g'"))
-    "\n")))
+     (s-join " "
+      (list
+       "sed -n '/^[a-z][a-zA-Z0-9_]*(.*)/,/[[:space:]]*->/p' " file
+       " | sed -e '/%/d' | sed -e '/^\\\-/d' | sed -e '/^[[:space:]]/d'"
+       "| sed '/^$/d' | sed -e 's/).*/)/g'")))
+    t))
 
 (defun ivy-erlang-complete--set-arity (erl-function)
   "Set arity to ERL-FUNCTION instead of arglist."
   (let ((arity
-         (string-trim
+         (s-trim
           (shell-command-to-string
-           (concat
-            "echo '" erl-function
-            "' | sed -e 's/.*(//g' | sed -e 's/)//g' | sed -e 's/,/\\n/g' | sed -e '/^$/d' | wc -l")))))
+           (s-join " "
+            (list
+             "echo" (concat "'" erl-function "'") "| sed -e 's/.*(//g'"
+             "| sed -e 's/)//g' | sed -e 's/,/\\n/g' | sed -e '/^$/d'"
+             "| wc -l"))))))
     (when
         (string-match "[^(]+" erl-function)
-        (concat (substring erl-function (match-beginning 0) (match-end 0)) "/" arity))))
+      (concat (substring erl-function (match-beginning 0) (match-end 0))
+              "/" arity))))
 
 (defun ivy-erlang-complete--find-local-functions ()
   "Find all local functions."
-  (mapcar #'ivy-erlang-complete--set-arity
+  (-map #'ivy-erlang-complete--set-arity
           (ivy-erlang-complete--extract-functions (buffer-file-name))))
 
 (defun ivy-erlang-complete-at-point ()
