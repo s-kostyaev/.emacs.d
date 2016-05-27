@@ -894,6 +894,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
      (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
      (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
 
+;;;; OpenGrok
+(need-package 'eopengrok)
+(setq eopengrok-jar
+      (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
+(setq eopengrok-ctags "/usr/bin/ctags")
+(require 'eopengrok)
+(add-hook 'eopengrok-mode-hook
+          (lambda ()
+            (local-set-key (kbd "o") (lambda ()
+                                       (interactive)
+                                       (other-window 1)))))
+
 ;; speed-typing
 (require-package 'speed-type)
 
