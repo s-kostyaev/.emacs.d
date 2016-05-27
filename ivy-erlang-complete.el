@@ -25,12 +25,16 @@
 (defvar-local ivy-erlang-complete-predicate nil
   "Completion predicate.")
 
+(defvar-local ivy-erlang-complete-records
+  (make-hash-table)
+  "Records accessible in current buffer.")
+
 (defun ivy-erlang-complete--find-functions (module)
   "Find functions in MODULE."
   (s-split "\n"
    (shell-command-to-string
     (s-join " "
-     (list ;(setq module "chronica_parser")
+     (list
       "find" ivy-erlang-complete-project-root ivy-erlang-complete-erlang-root
       "-name" (concat module ".erl") "| xargs sed -n '/-export(/,/)./p'"
       "| sed -e '/%/d' | sed -e 's/ //g' | sed -e 's/\\t//g'"
@@ -51,13 +55,28 @@
 
 (defun ivy-erlang-complete--extract-records (file)
   "Extract all records from FILE."
-  (s-split
-   "\\."
-   (shell-command-to-string
-    (s-join " "
-     (list "find" ivy-erlang-complete-project-root "-name" file "|" "xargs"
-           "sed" "-n" "'/-record(/,/})./p'")))
-   t))
+  (-map (lambda (s) (concat s "})."))
+   (s-split
+    "})\\."
+    (shell-command-to-string
+     (s-join " "
+             (list "find" ivy-erlang-complete-project-root "-name" file "|" "xargs"
+                   "sed" "-n" "'/-record(/,/})./p'" "|" "sed -e 's/%.*//g'"
+                   "|" "sed -e 's/::.*/,/g'" "|" "sed -e 's/=.*/,/g'")))
+    t)))
+
+(defun ivy-erlang-complete--parse-record (record)
+  "Parse RECORD and set it accessible in current buffer."
+  (if (not ivy-erlang-complete-records)
+      (setq ivy-erlang-complete-records (make-hash-table :test 'equal)))
+  (let ((matched
+         (-map 's-trim
+               (-drop 1 (s-match "-record(\\([^,]+\\),[^{]*{\\(.*\\)}."
+                                 (s-replace "\n" "" record))))))
+    (if matched
+        (puthash (car matched) (-map 's-trim (s-split "," (car (cdr matched))))
+                   ivy-erlang-complete-records)
+        )))
 
 (defun ivy-erlang-complete--extract-functions (file)
   "Extract all functions from FILE."
