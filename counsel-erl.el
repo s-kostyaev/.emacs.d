@@ -11,6 +11,7 @@
 ;;; Code:
 (require 'counsel)
 (require 'subr-x)
+(require 'dash)
 
 (defvar counsel-erl-erlang-root "/usr/lib/erlang"
   "Path to erlang root.")
@@ -25,25 +26,59 @@
 
 (defun counsel-erl--find-functions (module)
   "Find functions in MODULE."
-  (shell-command-to-string
-   (concat
-    "find "
-    counsel-erl-project-root
-    " "
-    counsel-erl-erlang-root
-    " -name "
-    module
-    ".erl | xargs sed -n '/-export(/,/)./p' | sed -e '/%/d' | sed -e 's/ //g' | sed -e 's/\\t//g' | sed -e 's/-export.*(\\\[//g' | sed -e 's/\\\]).//g' | sed 's/\\\,/\\\n/g' | sed '/^$/d'")))
+  (-remove #'string-empty-p
+   (split-string
+    (shell-command-to-string
+     (concat
+      "find "
+      counsel-erl-project-root
+      " "
+      counsel-erl-erlang-root
+      " -name "
+      module
+      ".erl | xargs sed -n '/-export(/,/)./p' | sed -e '/%/d' | sed -e 's/ //g' | sed -e 's/\\t//g' | sed -e 's/-export.*(\\\[//g' | sed -e 's/\\\]).//g' | sed 's/\\\,/\\\n/g' | sed '/^$/d'"))
+    "\n")))
 
 (defun counsel-erl--find-modules ()
   "Find functions in MODULE."
-  (shell-command-to-string
-   (concat
-    "find "
-    counsel-erl-project-root
-    " "
-    counsel-erl-erlang-root
-    " -iname '*.erl' | xargs basename -a | sed -e 's/\\.erl//g'")))
+  (-remove #'string-empty-p
+   (split-string
+    (shell-command-to-string
+     (concat
+      "find "
+      counsel-erl-project-root
+      " "
+      counsel-erl-erlang-root
+      " -iname '*.erl' | xargs basename -a | sed -e 's/\\.erl//g'"))
+    "\n")))
+
+(defun counsel-erl--extract-functions (file)
+  "Extract all functions from FILE."
+  (-remove #'string-empty-p
+   (split-string
+    (shell-command-to-string
+     (concat
+      "sed -n '/^[a-z][a-zA-Z0-9_]*(.*)/,/[[:space:]]*->/p' "
+      file
+      " | sed -e '/%/d' | sed -e '/^\\\-/d' | sed -e '/^[[:space:]]/d' | sed '/^$/d' | sed -e 's/).*/)/g'"))
+    "\n")))
+
+(defun counsel-erl--set-arity (erl-function)
+  "Set arity to ERL-FUNCTION instead of arglist."
+  (let ((arity
+         (string-trim
+          (shell-command-to-string
+           (concat
+            "echo '" erl-function
+            "' | sed -e 's/.*(//g' | sed -e 's/)//g' | sed -e 's/,/\\n/g' | sed -e '/^$/d' | wc -l")))))
+    (when
+        (string-match "[^(]+" erl-function)
+        (concat (substring erl-function (match-beginning 0) (match-end 0)) "/" arity))))
+
+(defun counsel-erl--find-local-functions ()
+  "Find all local functions."
+  (mapcar #'counsel-erl--set-arity
+          (counsel-erl--extract-functions (buffer-file-name))))
 
 (defun counsel-erl-at-point ()
   "Return the erlang thing at point, or nil if none is found."
@@ -88,12 +123,14 @@
            (setq counsel-erl-predicate
                  (string-remove-prefix (concat erl-prefix ":") thing))))
      (progn
-       (setq counsel-erl-candidates (counsel-erl--find-modules))
+       (setq counsel-erl-candidates (append (counsel-erl--find-local-functions)
+                                            (counsel-erl--find-modules)
+                                            (counsel-erl--find-functions "erlang")))
        (setq counsel-erl-predicate thing))))
   (when (looking-back counsel-erl-predicate (line-beginning-position))
     (setq ivy-completion-beg (match-beginning 0))
     (setq ivy-completion-end (match-end 0)))
-  (ivy-read "Counsel-erl cand:" (split-string counsel-erl-candidates "\n")
+  (ivy-read "Counsel-erl cand:" counsel-erl-candidates
             :initial-input counsel-erl-predicate
             :action #'counsel-erl--insert-candidate))
 
