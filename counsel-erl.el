@@ -82,7 +82,7 @@
 
 (defun counsel-erl-at-point ()
   "Return the erlang thing at point, or nil if none is found."
-  (when (thing-at-point-looking-at "[^=^+^-^ ^(^)^,^.^\n^{^}]+")
+  (when (thing-at-point-looking-at "[A-Za-z0-9_#?:]+")
     (match-string-no-properties 0)))
 
 ;;;###autoload
