@@ -878,7 +878,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'asm-mode-hook 'helm-gtags-mode)
 (add-hook 'web-mode-hook 'helm-gtags-mode)
 (add-hook 'js3-mode-hook 'helm-gtags-mode)
-(add-hook 'erlang-mode-hook 'helm-gtags-mode)
+;; (add-hook 'erlang-mode-hook 'helm-gtags-mode)
 
 ;; key bindings
 (eval-after-load "helm-gtags"
@@ -1048,42 +1048,42 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'erlang)
 (require 'rebar)
 (add-hook 'erlang-mode-hook 'rebar-mode)
-(require 'esense-start)
-(setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
-(defun esense--make-sentinel (action)
-  "Make esense sentinel for `ACTION'."
-  (lexical-let ((action action))
-    #'(lambda (process event)
-        (when (eq (process-status process) 'exit)
-          (if (zerop (process-exit-status process))
-              (progn
-                (esense-initialize)
-                (message "Success: esense %s %s" action event))
-            (message "Failed: esense %s %s (%d)" action event (process-exit-status process)))))))
-(defun esense-create-index ()
-  "Create esense index for selected directory."
-  (interactive)
-  (let*
-   ((dir
-     (expand-file-name (read-directory-name
-                        "Select directory for indexing:" default-directory)))
-    (proc
-     (start-process-shell-command
-      "esense-indexing" "*esense-indexing*"
-      (concat "find " dir " -iname '*.[eh]rl' -print0 | xargs -0 -P4 -n1 "
-              esense-indexer-program " -debug"))))
-   (set-process-sentinel proc (esense--make-sentinel "create"))))
-(defun esense-update-current-file ()
-  "Update esense index for current file."
-  (interactive)
-  (if (bound-and-true-p esense-mode)
-      (let
-          ((proc
-            (start-process
-             "esense-update" "*esense-update*"
-             esense-indexer-program (expand-file-name buffer-file-name))))
-        (set-process-sentinel proc (esense--make-sentinel "update")))))
-(add-hook 'after-save-hook 'esense-update-current-file)
+;; (require 'esense-start)
+;; (setq esense-indexer-program "~/.emacs.d/esense-1.12/esense.sh")
+;; (defun esense--make-sentinel (action)
+;;   "Make esense sentinel for `ACTION'."
+;;   (lexical-let ((action action))
+;;     #'(lambda (process event)
+;;         (when (eq (process-status process) 'exit)
+;;           (if (zerop (process-exit-status process))
+;;               (progn
+;;                 (esense-initialize)
+;;                 (message "Success: esense %s %s" action event))
+;;             (message "Failed: esense %s %s (%d)" action event (process-exit-status process)))))))
+;; (defun esense-create-index ()
+;;   "Create esense index for selected directory."
+;;   (interactive)
+;;   (let*
+;;    ((dir
+;;      (expand-file-name (read-directory-name
+;;                         "Select directory for indexing:" default-directory)))
+;;     (proc
+;;      (start-process-shell-command
+;;       "esense-indexing" "*esense-indexing*"
+;;       (concat "find " dir " -iname '*.[eh]rl' -print0 | xargs -0 -P4 -n1 "
+;;               esense-indexer-program " -debug"))))
+;;    (set-process-sentinel proc (esense--make-sentinel "create"))))
+;; (defun esense-update-current-file ()
+;;   "Update esense index for current file."
+;;   (interactive)
+;;   (if (bound-and-true-p esense-mode)
+;;       (let
+;;           ((proc
+;;             (start-process
+;;              "esense-update" "*esense-update*"
+;;              esense-indexer-program (expand-file-name buffer-file-name))))
+;;         (set-process-sentinel proc (esense--make-sentinel "update")))))
+;; (add-hook 'after-save-hook 'esense-update-current-file)
 
 
 (setq flycheck-erlang-include-path '("../include" "../deps"))
@@ -1125,12 +1125,22 @@ Otherwise, use the value of said variable as argument to a funcall."
           '(lambda ()
              (define-key erlang-mode-map (kbd "C-:")
                'counsel-erl)
-             (define-key erlang-mode-map (kbd "C-c C-g")
-               'esense-do-something-at-point)
+             ;; (define-key erlang-mode-map (kbd "C-c C-g")
+             ;;   'esense-do-something-at-point)
+             ;; (define-key erlang-mode-map (kbd "C-c C-e")
+             ;;   'esense-create-index)
+             ;; (define-key erlang-mode-map (kbd "C-c C-d")
+             ;;   'esense-go-to-documentation)
              (define-key erlang-mode-map (kbd "C-c C-e")
-               'esense-create-index)
+               'counsel-erl-set-project-root)
+             (define-key erlang-mode-map (kbd "C-c C-i")
+               'eopengrok-make-index-with-enable-projects)
              (define-key erlang-mode-map (kbd "C-c C-d")
-               'esense-go-to-documentation)
+               (lambda () (interactive)
+                 (eopengrok-find-definition (counsel-erl-at-point))))
+             (define-key erlang-mode-map (kbd "C-c C-r")
+               (lambda () (interactive)
+                 (eopengrok-find-reference (counsel-erl-at-point))))
              (define-key erlang-mode-map (kbd "C-c i")
                'fix-erlang-project-includes)
              (define-key erlang-mode-map (kbd "C-c b")
