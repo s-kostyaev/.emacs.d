@@ -1235,6 +1235,11 @@ Otherwise, use the value of said variable as argument to a funcall."
                            "Select project directory:" default-directory))))
     (setq company-c-headers-path-user (list (concat dir "/include")))))
 
+;;; Viking mode - Kill first, ask later
+(need-package 'viking-mode)
+(require 'viking-mode)
+(viking-global-mode)
+
 (provide 'init)
 ;;; init.el ends here
 (custom-set-faces
