@@ -1141,6 +1141,7 @@ Otherwise, use the value of said variable as argument to a funcall."
                'fix-erlang-project-includes)
              (define-key erlang-mode-map (kbd "C-c b")
                'fix-erlang-project-code-path)))
+(add-hook 'after-save-hook 'ivy-erlang-complete-reparse)
 
 
 ;; distel

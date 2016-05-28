@@ -145,22 +145,25 @@
 (defun ivy-erlang-complete-reparse ()
   "Reparse macros and recors for completion in current buffer."
   (interactive)
-  (setq ivy-erlang-complete-macros nil)
-  (ivy-erlang-complete--get-macros)
-  (setq ivy-erlang-complete-records nil)
-  (-map
-   'ivy-erlang-complete--parse-record
-   (-flatten
-    (-map 'ivy-erlang-complete--extract-records
-          (ivy-erlang-complete--get-included-files))))
-  (-map
-   'ivy-erlang-complete--parse-record
-   (ivy-erlang-complete--extract-records (concat
-                                          (file-name-base
-                                           (buffer-file-name))
-                                          "."
-                                          (file-name-extension
-                                           (buffer-file-name))))))
+  (if (s-equals? major-mode "erlang-mode")
+      (progn
+        (setq ivy-erlang-complete-macros nil)
+        (ivy-erlang-complete--get-macros)
+        (setq ivy-erlang-complete-records nil)
+        (-map
+         'ivy-erlang-complete--parse-record
+         (-flatten
+          (-map 'ivy-erlang-complete--extract-records
+                (ivy-erlang-complete--get-included-files))))
+        (-map
+         'ivy-erlang-complete--parse-record
+         (ivy-erlang-complete--extract-records (concat
+                                                (file-name-base
+                                                 (buffer-file-name))
+                                                "."
+                                                (file-name-extension
+                                                 (buffer-file-name)))))
+        (message "Erlang completions updated"))))
 
 (defun ivy-erlang-complete--get-record-names ()
   "Return list of acceptable record names."
