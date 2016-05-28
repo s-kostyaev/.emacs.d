@@ -4,7 +4,6 @@
 ;; Deps:
 ;;  - coreutils
 ;;  - findutils
-;;  - grep
 ;;  - sed
 
 
@@ -69,9 +68,7 @@
      (s-join " "
              (list "find" ivy-erlang-complete-project-root "-name" file "|"
                    "xargs" "sed" "-n" "'/-record(/,/})./p'" "|"
-                   "sed -e 's/%.*//g'"; "|" "sed -e 's/::.*/,/g'" "|"
-                   ;"sed -e 's/=.*/,/g'"
-                   )))
+                   "sed -e 's/%.*//g'")))
     t)))
 
 (defun ivy-erlang-complete--parse-record (record)
