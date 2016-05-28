@@ -101,13 +101,18 @@
 (defun ivy-erlang-complete--set-arity (erl-function)
   "Set arity to ERL-FUNCTION instead of arglist."
   (let ((arity
-         (s-trim
-          (shell-command-to-string
-           (s-join " "
-            (list
-             "echo" (concat "'" erl-function "'") "| sed -e 's/.*(//g'"
-             "| sed -e 's/)//g' | sed -e 's/,/\\n/g' | sed -e '/^$/d'"
-             "| wc -l"))))))
+         (format "%d"
+          (length
+           (-drop-while 'string-empty-p
+            (-map 's-trim
+                  (s-split
+                   ","
+                   (replace-regexp-in-string
+                    ")" ""
+                    (replace-regexp-in-string
+                     "[^(]+(" ""
+                     (s-collapse-whitespace erl-function)))
+                   t)))))))
     (when
         (string-match "[^(]+" erl-function)
       (concat (substring erl-function (match-beginning 0) (match-end 0))
@@ -221,12 +226,13 @@
                   (ivy-erlang-complete--find-local-functions)
                   (ivy-erlang-complete--get-record-names)
                   (ivy-erlang-complete--find-modules)
-                  (ivy-erlang-complete--find-functions "erlang")))
+                  ))
          (setq ivy-erlang-complete-candidates
-               (append (ivy-erlang-complete--find-local-functions)
-                       (ivy-erlang-complete--get-record-names)
-                       (ivy-erlang-complete--find-modules)
-                       (ivy-erlang-complete--find-functions "erlang"))))
+               (append
+                (ivy-erlang-complete--find-local-functions)
+                (ivy-erlang-complete--get-record-names)
+                (ivy-erlang-complete--find-modules)
+                )))
        (setq ivy-erlang-complete-predicate thing))))
   (when (looking-back ivy-erlang-complete-predicate (line-beginning-position))
     (setq ivy-completion-beg (match-beginning 0))
