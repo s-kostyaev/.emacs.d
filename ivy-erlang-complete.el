@@ -5,6 +5,7 @@
 ;;  - coreutils
 ;;  - findutils
 ;;  - sed
+;;  - grep
 
 
 ;;; Code:
