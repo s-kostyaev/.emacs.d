@@ -1126,7 +1126,7 @@ Otherwise, use the value of said variable as argument to a funcall."
              (define-key erlang-mode-map (kbd "C-:")
                'ivy-erlang-complete)
              (define-key erlang-mode-map (kbd "C-c C-h")
-               'ivy-erlang-complete-reparse-records)
+               'ivy-erlang-complete-reparse)
              (define-key erlang-mode-map (kbd "C-c C-e")
                'ivy-erlang-complete-set-project-root)
              (define-key erlang-mode-map (kbd "C-c C-i")

@@ -27,6 +27,9 @@
 (defvar-local ivy-erlang-complete-records nil
   "Records accessible in current buffer.")
 
+(defvar-local ivy-erlang-complete-macros nil
+  "Macros accessible in current buffer.")
+
 (defvar-local ivy-erlang-complete--record-names nil
   "Record names accessible in current buffer.")
 
@@ -138,9 +141,11 @@
           (buffer-substring-no-properties 1 (point-max)))))
 
 ;;;###autoload
-(defun ivy-erlang-complete-reparse-records ()
-  "Reparse recors for completion in current buffer."
+(defun ivy-erlang-complete-reparse ()
+  "Reparse macros and recors for completion in current buffer."
   (interactive)
+  (setq ivy-erlang-complete-macros nil)
+  (ivy-erlang-complete--get-macros)
   (setq ivy-erlang-complete-records nil)
   (-map
    'ivy-erlang-complete--parse-record
@@ -159,7 +164,7 @@
 (defun ivy-erlang-complete--get-record-names ()
   "Return list of acceptable record names."
   (if (not ivy-erlang-complete-records)
-      (ivy-erlang-complete-reparse-records))
+      (ivy-erlang-complete-reparse))
   (setq ivy-erlang-complete--record-names nil)
   (maphash (lambda (key _)
              (push (concat "#" key "{ }") ivy-erlang-complete--record-names))
@@ -170,6 +175,40 @@
   "Return list of RECORD fields."
   (-map (lambda (s) (concat s " = "))
         (gethash record ivy-erlang-complete-records)))
+
+(defun ivy-erlang-complete--extract-macros (file)
+  "Extract erlang macros from FILE."
+  (-uniq
+   (-map (lambda (s)
+           (concat "?"
+                   (car
+                    (s-split "("
+                             (car
+                              (s-split "," (s-chop-prefix "-define(" s)))))))
+         (s-split "\n"
+                  (s-trim
+                   (shell-command-to-string
+                    (s-join " "
+                            (list
+                             "find ~/chronica -name" file
+                             "| xargs grep -e 'define('"))))))))
+
+(defun ivy-erlang-complete--get-macros ()
+  "Return list of acceptable erlang macros."
+  (if (not ivy-erlang-complete-macros)
+      (setq ivy-erlang-complete-macros
+            (-uniq
+             (-flatten
+              (append
+               (list "?MODULE" "?MODULE_STRING" "?FILE" "?LINE" "?MACHINE")
+               (-map
+                'ivy-erlang-complete--extract-macros
+                (append
+                 (ivy-erlang-complete--get-included-files)
+                 (list (concat (file-name-base (buffer-file-name))
+                               "."
+                               (file-name-extension (buffer-file-name)))))))))))
+  ivy-erlang-complete-macros)
 
 ;;;###autoload
 (defun ivy-erlang-complete-set-project-root ()
@@ -223,12 +262,14 @@
                   (ivy-erlang-complete--find-local-functions)
                   (ivy-erlang-complete--get-record-names)
                   (ivy-erlang-complete--find-modules)
+                  (ivy-erlang-complete--get-macros)
                   ))
          (setq ivy-erlang-complete-candidates
                (append
                 (ivy-erlang-complete--find-local-functions)
                 (ivy-erlang-complete--get-record-names)
                 (ivy-erlang-complete--find-modules)
+                (ivy-erlang-complete--get-macros)
                 )))
        (setq ivy-erlang-complete-predicate thing))))
   (when (looking-back ivy-erlang-complete-predicate (line-beginning-position))
