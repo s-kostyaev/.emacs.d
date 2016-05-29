@@ -222,7 +222,8 @@
       ((dir
         (expand-file-name (read-directory-name
                            "Select project directory:" default-directory))))
-    (setq ivy-erlang-complete-project-root dir)))
+    (setq ivy-erlang-complete-project-root dir)
+    dir))
 
 (defun ivy-erlang-complete--insert-candidate (candidate)
   "Insert CANDIDATE at point."

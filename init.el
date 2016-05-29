@@ -1127,9 +1127,9 @@ Otherwise, use the value of said variable as argument to a funcall."
              (define-key erlang-mode-map (kbd "C-c C-h")
                'ivy-erlang-complete-reparse)
              (define-key erlang-mode-map (kbd "C-c C-e")
-               'ivy-erlang-complete-set-project-root)
-             (define-key erlang-mode-map (kbd "C-c C-i")
-               'eopengrok-make-index-with-enable-projects)
+               (lambda ()
+                 (eopengrok-make-index-with-enable-projects
+                  (ivy-erlang-complete-set-project-root))))
              (define-key erlang-mode-map (kbd "C-c C-d")
                (lambda () (interactive)
                  (eopengrok-find-definition (ivy-erlang-complete-thing-at-point))))
