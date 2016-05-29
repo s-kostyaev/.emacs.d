@@ -17,7 +17,8 @@
 (defvar ivy-erlang-complete-erlang-root "/usr/lib/erlang"
   "Path to erlang root.")
 
-(defvar ivy-erlang-complete-project-root)
+(defvar ivy-erlang-complete-project-root nil
+  "Path to erlang project root.")
 
 (defvar-local ivy-erlang-complete-candidates nil
   "Candidates for completion.")
@@ -36,6 +37,8 @@
 
 (defun ivy-erlang-complete--find-functions (module)
   "Find functions in MODULE."
+  (if (not ivy-erlang-complete-project-root)
+      (ivy-erlang-complete-set-project-root))
   (s-split "\n"
    (shell-command-to-string
     (s-join " "
@@ -50,6 +53,8 @@
 
 (defun ivy-erlang-complete--find-modules ()
   "Find functions in MODULE."
+  (if (not ivy-erlang-complete-project-root)
+      (ivy-erlang-complete-set-project-root))
   (-map (lambda (s) (concat s ":"))
    (s-split "\n"
             (shell-command-to-string
@@ -63,6 +68,8 @@
 
 (defun ivy-erlang-complete--extract-records (file)
   "Extract all records from FILE."
+  (if (not ivy-erlang-complete-project-root)
+      (ivy-erlang-complete-set-project-root))
   (-map (lambda (s) (concat (replace-regexp-in-string "=[^\n]+\n" ",\n"
                              (replace-regexp-in-string "::[^\n]+\n?" ",\n" s))
                             "})."))
