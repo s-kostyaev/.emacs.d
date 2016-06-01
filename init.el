@@ -52,12 +52,6 @@ re-downloaded in order to locate PACKAGE."
   (need-package package min-version no-refresh)
   (require 'package))
 
-;;
-;; for automatic install from emacswiki
-;;
-;; (require 'auto-install)
-;; (setq auto-install-save-confirm nil)
-
 ;; async
 (need-package 'async)
 (async-bytecomp-package-mode 1)
