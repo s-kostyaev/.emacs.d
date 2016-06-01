@@ -207,7 +207,7 @@ re-downloaded in order to locate PACKAGE."
 (defun goimports ()
   "Running goimports on go files."
   (interactive)
-  (if (equalp mode-name "Go")
+  (if (s-equals-p mode-name "Go")
       (progn
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
@@ -702,7 +702,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
 ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 ;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-M-r") (lambda () (interactive) (load-file "~/.emacs.d/init.el")))
+(global-set-key (kbd "C-M-r") (lambda () (interactive)
+                                (load-file "~/.emacs.d/init.el")
+                                (byte-recompile-file "~/.emacs.d/init.el")))
 (setq x-hyper-keysym 'meta)
 ;; ivy
 (need-package 'ivy)
