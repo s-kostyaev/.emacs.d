@@ -87,7 +87,9 @@ re-downloaded in order to locate PACKAGE."
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (sml/setup)
-  (load-theme 'solarized t)
+  (if (s-equals? "probook" (s-trim (shell-command-to-string "hostname")))
+    (load-theme 'monokai t)
+  (load-theme 'solarized t))
   (load-theme 'smart-mode-line-respectful t))
 
 (add-hook 'after-init-hook 'my-set-themes-hook)
