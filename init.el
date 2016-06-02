@@ -1210,6 +1210,36 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; (need-package 'company-c-headers)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 
+;; show docs at point
+(need-package 'xah-lookup)
+(require 'xah-lookup)
+;; Uncomment the below line to use eww (Emacs Web Wowser)
+;; (setq xah-lookup-browser-function 'eww)
+
+(defun xah-lookup-cppreference (&optional word)
+  "Lookup definition of current WORD or text selection in URL."
+  (interactive)
+  (xah-lookup-word-on-internet
+   word
+   ;; Use � as a placeholder in the query URL.
+   "http://en.cppreference.com/mwiki/index.php?search=�"
+   xah-lookup-browser-function))
+
+(require 'cc-mode)
+
+;; Add shortcut for c++-mode
+(define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference)
+
+;; Another example with http://www.boost.org
+(defun xah-lookup-boost (&optional word)
+  "Lookup definition of current WORD or text selection in URL."
+  (interactive)
+  (xah-lookup-word-on-internet
+   word
+   "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
+   xah-lookup-browser-function))
+(define-key c++-mode-map (kbd "C-c b") #'xah-lookup-boost)
+
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
   (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
