@@ -1116,7 +1116,7 @@ Otherwise, use the value of said variable as argument to a funcall."
              (define-key erlang-mode-map (kbd "C-c b")
                'fix-erlang-project-code-path)))
 (add-hook 'after-save-hook 'ivy-erlang-complete-reparse)
-
+(eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
 
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
