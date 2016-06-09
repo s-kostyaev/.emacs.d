@@ -974,6 +974,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'geiser-repl-mode-hook 'paredit-mode)
 (add-hook 'geiser-mode-hook 'paredit-mode)
 (setq geiser-chez-binary "chez-scheme")
+(require 'geiser-impl)
 (add-to-list 'geiser-active-implementations 'chez)
 
 ;; slime
