@@ -767,16 +767,16 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                              x)))
                                        company-candidates)
               :action (lambda (x)
+                        (company-cancel)
                         (ivy-completion-in-region-action
                          (replace-regexp-in-string "\t\t\.*" "" x))
                         (let
                             ((insertion (s-chop-prefix my-counsel-company-prefix
                                                        (replace-regexp-in-string "\t\t\.*" "" x))))
                           (mc/execute-command-for-all-fake-cursors
-                          (lambda ()
-                            (interactive)
-                            (insert insertion))))
-                        (company-cancel)))))
+                           (lambda ()
+                             (interactive)
+                             (insert insertion))))))))
 
 (global-set-key (kbd "C-:") 'my-counsel-company)
 

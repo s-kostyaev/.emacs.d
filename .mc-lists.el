@@ -4,6 +4,8 @@
 (setq mc/cmds-to-run-for-all
       '(
         c-electric-semi&comma
+        company-abort
+        company-select-next-or-abort
         complete-symbol
         completion-at-point
         dabbrev-completion
@@ -11,6 +13,7 @@
         go-mode-insert-and-indent
         kill-region
         paredit-forward-delete
+        paredit-open-round
         yas-expand
         ))
 
@@ -22,7 +25,9 @@
         ace-mc-add-single-cursor
         ace-mc-do-keyboard-reset
         beginning-of-buffer
+        company-complete-selection
         electrify-return-if-match
+        eval-last-sexp
         find-tag
         helm-M-x
         helm-browse-project
@@ -49,6 +54,7 @@
         multiple-cursors-hydra/mc/mark-all-in-region-regexp-and-exit
         multiple-cursors-hydra/mc/mark-all-like-this
         multiple-cursors-hydra/mc/mark-all-like-this-and-exit
+        multiple-cursors-hydra/mc/mark-all-words-like-this
         multiple-cursors-hydra/mc/mark-all-words-like-this-and-exit
         multiple-cursors-hydra/mc/mark-next-like-this
         multiple-cursors-hydra/mc/mark-next-word-like-this
@@ -58,5 +64,6 @@
         multiple-cursors-hydra/mc/skip-to-previous-like-this
         multiple-cursors-hydra/mc/unmark-next-like-this
         multiple-cursors-hydra/nil
+        my-counsel-company
         save-buffers-kill-terminal
         ))
