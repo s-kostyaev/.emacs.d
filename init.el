@@ -740,13 +740,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require-package 'helm-ls-git)
 (global-set-key (kbd "C-c C-f") 'helm-browse-project)
 
+(defvar-local my-counsel-company-prefix nil
+  "Company prefix for use counsel-company with multiple-cursors.")
 (defun my-counsel-company ()
   "Complete using `company-candidates'."
   (interactive)
+  (mc/enable-minor-mode 'company-mode)
+  (company-cancel)
   (unless company-candidates
     (company-complete))
   (when company-point
-    (company-complete-common)
+    (setq my-counsel-company-prefix company-prefix)
+    (company--fetch-candidates my-counsel-company-prefix)
     (when (looking-back company-common (line-beginning-position))
       (setq ivy-completion-beg (match-beginning 0))
       (setq ivy-completion-end (match-end 0)))
@@ -764,7 +769,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
               :action (lambda (x)
                         (ivy-completion-in-region-action
                          (replace-regexp-in-string "\t\t\.*" "" x))
-                        (run-at-time 0.01 nil 'company-pseudo-tooltip-hide)))))
+                        (mc/execute-command-for-all-fake-cursors
+                         (lambda ()
+                           (interactive)
+                           (let ((insertion (s-chop-prefix my-counsel-company-prefix
+                                                 (replace-regexp-in-string "\t\t\.*" "" x))))
+                            (insert insertion))))
+                        (company-cancel)))))
 
 (global-set-key (kbd "C-:") 'my-counsel-company)
 
