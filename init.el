@@ -769,11 +769,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
               :action (lambda (x)
                         (ivy-completion-in-region-action
                          (replace-regexp-in-string "\t\t\.*" "" x))
-                        (mc/execute-command-for-all-fake-cursors
-                         (lambda ()
-                           (interactive)
-                           (let ((insertion (s-chop-prefix my-counsel-company-prefix
-                                                 (replace-regexp-in-string "\t\t\.*" "" x))))
+                        (let
+                            ((insertion (s-chop-prefix my-counsel-company-prefix
+                                                       (replace-regexp-in-string "\t\t\.*" "" x))))
+                          (mc/execute-command-for-all-fake-cursors
+                          (lambda ()
+                            (interactive)
                             (insert insertion))))
                         (company-cancel)))))
 
