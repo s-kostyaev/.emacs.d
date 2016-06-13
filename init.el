@@ -699,8 +699,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 ;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-M-r") (lambda () (interactive)
-                                (load-file "~/.emacs.d/init.el")
-                                (byte-recompile-file "~/.emacs.d/init.el")))
+                                (progn
+                                  (load-file "~/.emacs.d/init.el")
+                                  (byte-recompile-file "~/.emacs.d/init.el"))))
 (setq x-hyper-keysym 'meta)
 ;; ivy
 (need-package 'ivy)
