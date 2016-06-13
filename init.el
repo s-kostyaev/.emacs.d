@@ -1259,6 +1259,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 (require 'viking-mode)
 (viking-global-mode)
 
+(show-paren-mode 1)
+
 (provide 'init)
 ;;; init.el ends here
 (custom-set-faces
