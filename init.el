@@ -768,10 +768,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
                           (let
                               ((insertion (s-chop-prefix my-counsel-company-prefix
                                                        (replace-regexp-in-string "\t\t\.*" "" x))))
-                            (mc/execute-command-for-all-fake-cursors
-                             #'(lambda ()
-                                 (interactive)
-                                 (insert insertion))))))))
+                            (ignore-errors
+                             (mc/execute-command-for-all-fake-cursors
+                              #'(lambda ()
+                                  (interactive)
+                                  (insert insertion)))))))))
 
 (global-set-key (kbd "C-:") #'my-counsel-company)
 
