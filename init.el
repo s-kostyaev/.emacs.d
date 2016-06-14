@@ -16,7 +16,8 @@
 (setq default-input-method "cyrillic-jis-russian")
 
 (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)
-(add-hook 'after-change-major-mode-hook (lambda () (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)))
+(add-hook 'after-change-major-mode-hook
+          #'(lambda () (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)))
 
 ;; Melpa
 (require 'package) ;; You might already have this line
@@ -92,7 +93,7 @@ re-downloaded in order to locate PACKAGE."
   (load-theme 'solarized t))
   (load-theme 'smart-mode-line-respectful t))
 
-(add-hook 'after-init-hook 'my-set-themes-hook)
+(add-hook 'after-init-hook #'my-set-themes-hook)
 ;; to setup tabs
 (setq c-basic-indent 4)
 (setq tab-width 4)
@@ -101,7 +102,7 @@ re-downloaded in order to locate PACKAGE."
 
 
 (add-hook 'text-mode-hook
-	        (lambda () (setq indent-line-function 'insert-tab)))
+	        #'(lambda () (setq indent-line-function 'insert-tab)))
 
 ;; Text and the such
 ;; Use colors to highlight commands, etc.
@@ -119,12 +120,12 @@ re-downloaded in order to locate PACKAGE."
 (smooth-scroll-mode t)
 (setq smooth-scroll/vscroll-step-size 4)
 (setq gc-cons-threshold 100000000)
-(global-set-key [(control down)] (lambda () (interactive) (scroll-up-1 4)))
-(global-set-key [(control up)]   (lambda () (interactive) (scroll-down-1 4)))
-(global-set-key (kbd "C-v") (lambda () (interactive) (smooth-scroll/orig-scroll-up)))
-(global-set-key (kbd "M-v") (lambda () (interactive) (smooth-scroll/orig-scroll-down)))
-(global-set-key (kbd "<next>") (lambda () (interactive) (smooth-scroll/orig-scroll-up)))
-(global-set-key (kbd "<prior>") (lambda () (interactive) (smooth-scroll/orig-scroll-down)))
+(global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
+(global-set-key [(control up)]   #'(lambda () (interactive) (scroll-down-1 4)))
+(global-set-key (kbd "C-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
+(global-set-key (kbd "M-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
+(global-set-key (kbd "<next>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
+(global-set-key (kbd "<prior>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
@@ -192,14 +193,14 @@ re-downloaded in order to locate PACKAGE."
 ;; Flycheck
 (require-package 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
-(global-set-key (kbd "C-c r") 'helm-flycheck)
+(global-set-key (kbd "C-c r") #'helm-flycheck)
 
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
 (setq exec-path (append exec-path '("~/go/bin")))
 (need-package 'go-mode)
 (require 'go-mode-autoloads)
-(add-hook 'before-save-hook 'gofmt-before-save)
+(add-hook 'before-save-hook #'gofmt-before-save)
 (defun goimports ()
   "Running goimports on go files."
   (interactive)
@@ -207,43 +208,43 @@ re-downloaded in order to locate PACKAGE."
       (progn
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
-(add-hook 'after-save-hook 'goimports)
-(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c C-r") 'go-remove-unused-imports)))
-(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c i") 'go-goto-imports)))
+(add-hook 'after-save-hook #'goimports)
+(add-hook 'go-mode-hook #'(lambda ()
+                            (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)))
+(add-hook 'go-mode-hook #'(lambda ()
+                            (local-set-key (kbd "C-c i") #'go-goto-imports)))
 ;; gobuild
 (require 'gobuild)
-(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c C-c") (lambda ()
-                                                           (interactive)
-                                                           (gobuild)))))
-(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c C-t") (lambda ()
-                                                           (interactive)
-                                                           (shell-command "go test")))))
+(add-hook 'go-mode-hook #'(lambda ()
+                            (local-set-key (kbd "C-c C-c") #'(lambda ()
+                                                               (interactive)
+                                                               (gobuild)))))
+(add-hook 'go-mode-hook #'(lambda ()
+                            (local-set-key (kbd "C-c C-t") #'(lambda ()
+                                                               (interactive)
+                                                               (setq shell-command "go test")))))
 (require-package 'company-go)                                ; load company mode go backend
 (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
-(add-hook 'go-mode-hook (lambda ()
-                          (set (make-local-variable 'company-backends) '(company-go))
-                          (company-mode)))
+(add-hook 'go-mode-hook #'(lambda ()
+                            (set (make-local-variable 'company-backends) '(company-go))
+                            (company-mode)))
 ;; (load "$GOPATH/src/code.google.com/p/go.tools/cmd/oracle/oracle.el")
 ;; (add-hook 'go-mode-hook 'go-oracle-mode)
 ;; go-impl
 (require 'go-impl)
 ;; gometalinter
 (require 'gometalinter)
-(add-hook 'go-mode-hook (lambda ()
-                          (local-set-key (kbd "C-c C-l") (lambda ()
-                                                           (interactive)
-                                                           (gometalinter)))))
+(add-hook 'go-mode-hook #'(lambda ()
+                            (local-set-key (kbd "C-c C-l") #'(lambda ()
+                                                               (interactive)
+                                                               (gometalinter)))))
 ;; Flycheck
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 (require 'go-flycheck)
 ;; doc
 (need-package 'go-eldoc) ;; Don't need to require, if you install by package.el
-(add-hook 'go-mode-hook 'go-eldoc-setup)
-(add-hook 'go-mode-hook '(lambda () (highlight-lines-matching-regexp ".\{81\}" "hi-green-b")))
+(add-hook 'go-mode-hook #'go-eldoc-setup)
+(add-hook 'go-mode-hook #'(lambda () (highlight-lines-matching-regexp ".\{81\}" "hi-green-b")))
 
 
 
@@ -251,24 +252,24 @@ re-downloaded in order to locate PACKAGE."
 
 ; for compiling C/C++
 (global-font-lock-mode t)
-(global-set-key "\C-xs" 'save-buffer)
-(global-set-key "\C-xv" 'quoted-insert)
-(global-set-key "\C-xg" 'goto-line)
-(global-set-key "\C-xf" 'search-forward)
-(global-set-key "\C-xc" 'compile)
-(global-set-key "\C-xt" 'text-mode);
-(global-set-key "\C-xr" 'replace-string);
-(global-set-key "\C-xa" 'repeat-complex-command);
-(global-set-key "\C-xm" 'manual-entry);
-(global-set-key "\C-xw" 'what-line);
-(global-set-key "\C-x\C-u" 'shell);
-(global-set-key "\C-x0" 'overwrite-mode);
-(global-set-key "\C-x\C-r" 'toggle-read-only);
-(global-set-key "\C-t" 'kill-word);
-(global-set-key "\C-p" 'previous-line);
-(global-set-key "\C-o" 'forward-word);
+(global-set-key "\C-xs" #'save-buffer)
+(global-set-key "\C-xv" #'quoted-insert)
+(global-set-key "\C-xg" #'goto-line)
+(global-set-key "\C-xf" #'search-forward)
+(global-set-key "\C-xc" #'compile)
+(global-set-key "\C-xt" #'text-mode);
+(global-set-key "\C-xr" #'replace-string);
+(global-set-key "\C-xa" #'repeat-complex-command);
+(global-set-key "\C-xm" #'manual-entry);
+(global-set-key "\C-xw" #'what-line);
+(global-set-key "\C-x\C-u" #'shell);
+(global-set-key "\C-x0" #'overwrite-mode);
+(global-set-key "\C-x\C-r" #'toggle-read-only);
+(global-set-key "\C-t" #'kill-word);
+(global-set-key "\C-p" #'previous-line);
+(global-set-key "\C-o" #'forward-word);
 ;(global-set-key "\C-h" 'backward-delete-char-untabify);
-(global-set-key "\C-x\C-m" 'not-modified);
+(global-set-key "\C-x\C-m" #'not-modified);
 (setq make-backup-files 'nil);
 (setq default-major-mode 'text-mode)
 (setq text-mode-hook 'turn-on-auto-fill)
@@ -277,15 +278,15 @@ re-downloaded in order to locate PACKAGE."
 (setq auto-mode-alist (cons '("\\.tex$" . latex-mode) auto-mode-alist))
 
 ; http://nex-3.com/posts/45-efficient-window-switching-in-emacs#comments
-(global-set-key [M-left] 'windmove-left)          ; move to left windnow
-(global-set-key [M-right] 'windmove-right)        ; move to right window
-(global-set-key [M-up] 'windmove-up)              ; move to upper window
-(global-set-key [M-down] 'windmove-down)          ; move to downer window
+(global-set-key [M-left] #'windmove-left)          ; move to left windnow
+(global-set-key [M-right] #'windmove-right)        ; move to right window
+(global-set-key [M-up] #'windmove-up)              ; move to upper window
+(global-set-key [M-down] #'windmove-down)          ; move to downer window
 
 
 ;; http://emacs-fu.blogspot.com/2008/12/cycling-through-your-buffers-with-ctrl.html
 ;; cycle through buffers with Ctrl-Tab (like Firefox)
-(global-set-key (kbd "<C-tab>") 'bury-buffer)
+(global-set-key (kbd "<C-tab>") #'bury-buffer)
 
 
 
@@ -301,8 +302,8 @@ re-downloaded in order to locate PACKAGE."
 
 ;;; Python mode
 (need-package 'anaconda-mode)
-(add-hook 'python-mode-hook 'anaconda-mode)
-(add-hook 'python-mode-hook 'eldoc-mode)
+(add-hook 'python-mode-hook #'anaconda-mode)
+(add-hook 'python-mode-hook #'eldoc-mode)
 (need-package 'company-anaconda)
 
 (setenv "PYMACS_PYTHON" "python2")
@@ -311,13 +312,13 @@ re-downloaded in order to locate PACKAGE."
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 (add-hook 'python-mode-hook
-          (lambda ()
+          #'(lambda ()
               (add-to-list 'company-backends 'company-anaconda)
               (setq indent-tabs-mode nil)
               (setq python-indent 4)
               (setq tab-width 8)
-              (local-set-key (kbd "<M-iso-lefttab>") 'py-shift-right)
-              (local-set-key (kbd "<backtab>") 'py-shift-left)))
+              (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
+              (local-set-key (kbd "<backtab>") #'py-shift-left)))
 
 ;;; Octave mode
 ;; (autoload 'octave-mode "octave-mod" nil t)
@@ -360,16 +361,16 @@ re-downloaded in order to locate PACKAGE."
 (setq company-dabbrev-ignore-case nil)
 (setq company-dabbrev-code-ignore-case nil)
 ;; Disable fci if needed.
-(add-hook 'company-completion-started-hook (lambda (&rest ignore)
-                                             (when (boundp 'fci-mode)
-                                               (setq company-fci-mode-on-p fci-mode)
-                                               (when fci-mode (fci-mode -1)))))
+(add-hook 'company-completion-started-hook #'(lambda (&rest ignore)
+                                               (when (boundp 'fci-mode)
+                                                 (setq company-fci-mode-on-p fci-mode)
+                                                 (when fci-mode (fci-mode -1)))))
 ;; Re-enable fci if needed.
-(add-hook 'company-completion-finished-hook (lambda (&rest ignore)
-                                              (when company-fci-mode-on-p (fci-mode 1))))
+(add-hook 'company-completion-finished-hook #'(lambda (&rest ignore)
+                                                (when company-fci-mode-on-p (fci-mode 1))))
 ;; Re-enable fci if needed.
-(add-hook 'company-completion-cancelled-hook (lambda (&rest ignore)
-                                               (when company-fci-mode-on-p (fci-mode 1))))
+(add-hook 'company-completion-cancelled-hook #'(lambda (&rest ignore)
+                                                 (when company-fci-mode-on-p (fci-mode 1))))
 (setq company-tooltip-limit 20)                      ; bigger popup window
 (setq company-idle-delay 0.1)                         ; decrease delay before autocompletion popup shows
 (setq company-echo-delay 0)                          ; remove annoying blinking
@@ -396,14 +397,14 @@ re-downloaded in order to locate PACKAGE."
             (company-complete-common)
           (indent-for-tab-command)))))
 
-(global-set-key [tab] 'tab-indent-or-complete)
+(global-set-key [tab] #'tab-indent-or-complete)
 
 
 
 ;;; ElDoc
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook 'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook #'turn-on-eldoc-mode)
+(add-hook 'ielm-mode-hook #'turn-on-eldoc-mode)
 
 
 ;;; Commenting
@@ -419,21 +420,21 @@ the end of the line, then comment current line.  Replaces default behaviour of
           (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
               (comment-or-uncomment-region (line-beginning-position) (line-end-position))
             (comment-dwim arg)))
-(global-set-key "\M-;" 'comment-dwim-line)
+(global-set-key "\M-;" #'comment-dwim-line)
 
 
 ;; Clojure
 
-(add-hook 'cider-mode-hook 'cider-turn-on-eldoc-mode)
+(add-hook 'cider-mode-hook #'cider-turn-on-eldoc-mode)
 (setq nrepl-hide-special-buffers t)
 (setq cider-repl-print-length 100) ; the default is nil, no limit
 ;; (set cider-repl-result-prefix ";; => ")
 ;; (set cider-interactive-eval-result-prefix ";; => ")
 (setq cider-repl-wrap-history t)
 (setq cider-repl-history-size 1000) ; the default is 500
-(add-hook 'cider-repl-mode-hook 'paredit-mode)
+(add-hook 'cider-repl-mode-hook #'paredit-mode)
 
-(setq browse-url-browser-function 'browse-url-chromium)
+(setq browse-url-browser-function #'browse-url-chromium)
 (setq browse-url-firefox-program "firefox-aurora")
 
 ;;;; Paredit
@@ -491,7 +492,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (kill-buffer "*Messages*")
 
 ;; Show only one active window when opening multiple files at the same time.
-(add-hook 'window-setup-hook 'delete-other-windows)
+(add-hook 'window-setup-hook #'delete-other-windows)
 
 ;; (setq scroll-margin 12)
 ;; (setq scroll-step 1)
@@ -518,15 +519,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-fci-mode 1)
 ; workaround for web-mode
 (add-hook 'after-change-major-mode-hook
-          (lambda () (if (string= major-mode "web-mode")
-                         (turn-off-fci-mode) (turn-on-fci-mode))))
+          #'(lambda () (if (string= major-mode "web-mode")
+                           (turn-off-fci-mode) (turn-on-fci-mode))))
 
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
 (need-package 'web-mode)
 (need-package 'js3-mode)
-(add-hook 'js-mode-hook 'js3-mode)
+(add-hook 'js-mode-hook #'js3-mode)
 (require-package 'react-snippets)
 
 ;; use web-mode for .jsx files
@@ -547,9 +548,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq company-tern-meta-as-single-line t)
 (setq company-tooltip-align-annotations t)
 
-(add-hook 'js3-mode-hook (lambda () (tern-mode t)))
-(add-hook 'js-mode-hook (lambda () (tern-mode t)))
-(add-hook 'web-mode-hook (lambda () (tern-mode t)))
+(add-hook 'js3-mode-hook #'(lambda () (tern-mode t)))
+(add-hook 'js-mode-hook #'(lambda () (tern-mode t)))
+(add-hook 'web-mode-hook #'(lambda () (tern-mode t)))
 
 ;; adjust indents for web-mode to 2 spaces
 (defun my-web-mode-hook ()
@@ -558,15 +559,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
-(add-hook 'web-mode-hook  'my-web-mode-hook)
+(add-hook 'web-mode-hook  #'my-web-mode-hook)
 
 ;;
 ;; emmet mode
 ;;
 (require-package 'emmet-mode)
-(add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'web-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
+(add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
+(add-hook 'web-mode-hook #'emmet-mode)
+(add-hook 'css-mode-hook #'emmet-mode) ;; enable Emmet's css abbreviation.
 (setq emmet-move-cursor-between-quotes t) ;; default nil
 
 
@@ -598,8 +599,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
-(add-hook 'isearch-mode-hook (lambda ()
-                               (local-set-key (kbd "C-'") 'avy-isearch)))
+(add-hook 'isearch-mode-hook #'(lambda ()
+                                 (local-set-key (kbd "C-'") #'avy-isearch)))
 
 ;; 
 ;; enable a more powerful jump back function from ace jump mode
@@ -667,7 +668,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   '(progn
      (require 'tagedit)
      (tagedit-add-paredit-like-keybindings)
-     (add-hook 'html-mode-hook (lambda () (tagedit-mode 1)))))
+     (add-hook 'html-mode-hook #'(lambda () (tagedit-mode 1)))))
 
 ;;
 ;; yasnippet
@@ -683,25 +684,25 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; C-w like in readline
 ;;
-(global-set-key (kbd "C-w") 'backward-kill-word)
-(global-set-key (kbd "C-c C-w") 'kill-region)
+(global-set-key (kbd "C-w") #'backward-kill-word)
+(global-set-key (kbd "C-c C-w") #'kill-region)
 
-(global-set-key (kbd "C-c C-n") 'goto-line)
+(global-set-key (kbd "C-c C-n") #'goto-line)
 
 ;;for faste toggle key-chord-mode
-(global-set-key [f9] 'key-chord-mode)
+(global-set-key [f9] #'key-chord-mode)
 
 ;helm
 (need-package 'helm)
 (require 'helm-config)
-(global-set-key (kbd "C-x C-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-x") #'helm-M-x)
 ;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
 ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 ;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-(global-set-key (kbd "C-M-r") (lambda () (interactive)
-                                (progn
-                                  (load-file "~/.emacs.d/init.el")
-                                  (byte-recompile-file "~/.emacs.d/init.el"))))
+(global-set-key (kbd "C-M-r") #'(lambda () (interactive)
+                                  (progn
+                                    (load-file "~/.emacs.d/init.el")
+                                    (byte-recompile-file "~/.emacs.d/init.el"))))
 (setq x-hyper-keysym 'meta)
 ;; ivy
 (need-package 'ivy)
@@ -715,8 +716,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
         ))
 (setq completion-in-region-function 'ivy-completion-in-region)
 (need-package 'swiper)
-(global-set-key "\C-s" 'swiper)
-(global-set-key (kbd "C-c s k") 'ivy-resume)
+(global-set-key "\C-s" #'swiper)
+(global-set-key (kbd "C-c s k") #'ivy-resume)
 (need-package 'counsel)
 (need-package 'smex)
 (need-package 'flx)
@@ -724,23 +725,25 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require 'wgrep)
 (setq wgrep-auto-save-buffer t)
 (counsel-mode t)
-(global-set-key "\C-s" 'counsel-grep-or-swiper)
-(global-set-key (kbd "s-x") 'counsel-M-x)
-(global-set-key (kbd "s-y") 'counsel-yank-pop)
-(global-set-key (kbd "s-w") 'kill-ring-save)
-(global-set-key (kbd "s-v") 'scroll-down-command)
-(global-set-key (kbd "s-;") 'comment-dwim-line)
-(global-set-key (kbd "M-;") 'comment-dwim-line)
-(global-set-key (kbd "C-c C-s") 'counsel-ag)
-(global-set-key (kbd "C-x l") 'counsel-locate)
+(global-set-key "\C-s" #'counsel-grep-or-swiper)
+(global-set-key (kbd "s-x") #'counsel-M-x)
+(global-set-key (kbd "s-y") #'counsel-yank-pop)
+(global-set-key (kbd "s-w") #'kill-ring-save)
+(global-set-key (kbd "s-v") #'scroll-down-command)
+(global-set-key (kbd "s-;") #'comment-dwim-line)
+(global-set-key (kbd "M-;") #'comment-dwim-line)
+(global-set-key (kbd "C-c C-s") #'counsel-ag)
+(global-set-key (kbd "C-x l") #'counsel-locate)
 (need-package 'counsel-projectile)
 
 (require-package 'helm-descbinds)
 (helm-descbinds-mode 1)
 
 (require-package 'helm-ls-git)
-(global-set-key (kbd "C-c C-f") 'helm-browse-project)
+(global-set-key (kbd "C-c C-f") #'helm-browse-project)
 
+(require 'multiple-cursors-core)
+(declare-function mc/enable-minor-mode "ext:multiple-cursors-core")
 (defvar-local my-counsel-company-prefix nil
   "Company prefix for use counsel-company with multiple-cursors.")
 (defun my-counsel-company ()
@@ -756,30 +759,30 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (when (looking-back company-common (line-beginning-position))
       (setq ivy-completion-beg (match-beginning 0))
       (setq ivy-completion-end (match-end 0)))
-    (ivy-read "company cand: " (mapcar (lambda (x)
-                                         (let ((annotation
-                                                (company-call-backend 'annotation x)))
-                                           (if (> (length annotation) 0)
-                                               (progn
-                                                 (set-text-properties
-                                                  0 (length annotation)
-                                                  '(face success) annotation)
-                                                 (concat x "\t\t" annotation))
-                                             x)))
+    (ivy-read "company cand: " (mapcar #'(lambda (x)
+                                           (let ((annotation
+                                                  (company-call-backend 'annotation x)))
+                                             (if (> (length annotation) 0)
+                                                 (progn
+                                                   (set-text-properties
+                                                    0 (length annotation)
+                                                    '(face success) annotation)
+                                                   (concat x "\t\t" annotation))
+                                               x)))
                                        company-candidates)
-              :action (lambda (x)
-                        (company-cancel)
-                        (ivy-completion-in-region-action
-                         (replace-regexp-in-string "\t\t\.*" "" x))
-                        (let
-                            ((insertion (s-chop-prefix my-counsel-company-prefix
+              :action #'(lambda (x)
+                          (company-cancel)
+                          (ivy-completion-in-region-action
+                           (replace-regexp-in-string "\t\t\.*" "" x))
+                          (let
+                              ((insertion (s-chop-prefix my-counsel-company-prefix
                                                        (replace-regexp-in-string "\t\t\.*" "" x))))
-                          (mc/execute-command-for-all-fake-cursors
-                           (lambda ()
-                             (interactive)
-                             (insert insertion))))))))
+                            (mc/execute-command-for-all-fake-cursors
+                             #'(lambda ()
+                                 (interactive)
+                                 (insert insertion))))))))
 
-(global-set-key (kbd "C-:") 'my-counsel-company)
+(global-set-key (kbd "C-:") #'my-counsel-company)
 
 ;;
 ;; ash integration
@@ -789,8 +792,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; disable italic
 (mapc
- (lambda (face)
-   (set-face-attribute face nil :slant 'normal))
+ #'(lambda (face)
+     (set-face-attribute face nil :slant 'normal))
  (face-list))
 
 ;;
@@ -811,15 +814,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require 'helm-swoop)
 
 ;; Change the keybinds to whatever you like :)
-(global-set-key (kbd "M-i") 'helm-swoop)
-(global-set-key (kbd "M-I") 'helm-swoop-back-to-last-point)
-(global-set-key (kbd "C-c M-i") 'helm-multi-swoop)
-(global-set-key (kbd "C-x M-i") 'helm-multi-swoop-all)
+(global-set-key (kbd "M-i") #'helm-swoop)
+(global-set-key (kbd "M-I") #'helm-swoop-back-to-last-point)
+(global-set-key (kbd "C-c M-i") #'helm-multi-swoop)
+(global-set-key (kbd "C-x M-i") #'helm-multi-swoop-all)
 
 ;; When doing isearch, hand the word over to helm-swoop
-(define-key isearch-mode-map (kbd "M-i") 'helm-swoop-from-isearch)
+(define-key isearch-mode-map (kbd "M-i") #'helm-swoop-from-isearch)
 ;; From helm-swoop to helm-multi-swoop-all
-(define-key helm-swoop-map (kbd "M-i") 'helm-multi-swoop-all-from-helm-swoop)
+(define-key helm-swoop-map (kbd "M-i") #'helm-multi-swoop-all-from-helm-swoop)
 ;; When doing evil-search, hand the word over to helm-swoop
 ;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
 
@@ -827,10 +830,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
 
 ;; Move up and down like isearch
-(define-key helm-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") 'helm-next-line)
-(define-key helm-multi-swoop-map (kbd "C-r") 'helm-previous-line)
-(define-key helm-multi-swoop-map (kbd "C-s") 'helm-next-line)
+(define-key helm-swoop-map (kbd "C-r") #'helm-previous-line)
+(define-key helm-swoop-map (kbd "C-s") #'helm-next-line)
+(define-key helm-multi-swoop-map (kbd "C-r") #'helm-previous-line)
+(define-key helm-multi-swoop-map (kbd "C-s") #'helm-next-line)
 
 ;; Save buffer when helm-multi-swoop-edit complete
 (setq helm-multi-swoop-edit-save t)
@@ -885,24 +888,24 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;; Enable helm-gtags-mode
 ;; (add-hook 'c-mode-hook 'helm-gtags-mode)
 ;; (add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook 'helm-gtags-mode)
-(add-hook 'web-mode-hook 'helm-gtags-mode)
-(add-hook 'js3-mode-hook 'helm-gtags-mode)
+(add-hook 'asm-mode-hook #'helm-gtags-mode)
+(add-hook 'web-mode-hook #'helm-gtags-mode)
+(add-hook 'js3-mode-hook #'helm-gtags-mode)
 ;; (add-hook 'erlang-mode-hook 'helm-gtags-mode)
 
 ;; key bindings
 (eval-after-load "helm-gtags"
   '(progn
-     (define-key helm-gtags-mode-map (kbd "M-t d") 'helm-gtags-dwim)
-     (define-key helm-gtags-mode-map (kbd "M-t t") 'helm-gtags-find-tag)
-     (define-key helm-gtags-mode-map (kbd "M-t r") 'helm-gtags-find-rtag)
-     (define-key helm-gtags-mode-map (kbd "M-t s") 'helm-gtags-find-symbol)
-     (define-key helm-gtags-mode-map (kbd "M-t u") 'helm-gtags-update-tags)
-     (define-key helm-gtags-mode-map (kbd "M-t c") 'helm-gtags-create-tags)
-     (define-key helm-gtags-mode-map (kbd "M-g M-p") 'helm-gtags-parse-file)
-     (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
-     (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
-     (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)))
+     (define-key helm-gtags-mode-map (kbd "M-t d") #'helm-gtags-dwim)
+     (define-key helm-gtags-mode-map (kbd "M-t t") #'helm-gtags-find-tag)
+     (define-key helm-gtags-mode-map (kbd "M-t r") #'helm-gtags-find-rtag)
+     (define-key helm-gtags-mode-map (kbd "M-t s") #'helm-gtags-find-symbol)
+     (define-key helm-gtags-mode-map (kbd "M-t u") #'helm-gtags-update-tags)
+     (define-key helm-gtags-mode-map (kbd "M-t c") #'helm-gtags-create-tags)
+     (define-key helm-gtags-mode-map (kbd "M-g M-p") #'helm-gtags-parse-file)
+     (define-key helm-gtags-mode-map (kbd "C-c <") #'helm-gtags-previous-history)
+     (define-key helm-gtags-mode-map (kbd "C-c >") #'helm-gtags-next-history)
+     (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
 
 ;;;; OpenGrok
 (need-package 'eopengrok)
@@ -911,10 +914,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq eopengrok-ctags "/usr/bin/ctags")
 (require 'eopengrok)
 (add-hook 'eopengrok-mode-hook
-          (lambda ()
-            (local-set-key (kbd "o") (lambda ()
-                                       (interactive)
-                                       (other-window 1)))))
+          #'(lambda ()
+              (local-set-key (kbd "o") #'(lambda ()
+                                           (interactive)
+                                           (other-window 1)))))
 
 ;; speed-typing
 (require-package 'speed-type)
@@ -950,8 +953,8 @@ Otherwise, use the value of said variable as argument to a funcall."
                    (intern
                     (completing-read
                      "Mode: "
-                     (mapcar (lambda (e)
-                               (list (symbol-name e)))
+                     (mapcar #'(lambda (e)
+                                 (list (symbol-name e)))
                              (apropos-internal "-mode$" 'commandp))
                      nil t)))
            indirect-mode-name)))
@@ -979,13 +982,13 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; pandoc
 (require-package 'pandoc-mode)
-(add-hook 'markdown-mode-hook 'pandoc-mode)
-(add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+(add-hook 'markdown-mode-hook #'pandoc-mode)
+(add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
 ;; guile support
 (need-package 'geiser)
-(add-hook 'geiser-repl-mode-hook 'paredit-mode)
-(add-hook 'geiser-mode-hook 'paredit-mode)
+(add-hook 'geiser-repl-mode-hook #'paredit-mode)
+(add-hook 'geiser-mode-hook #'paredit-mode)
 (setq geiser-chez-binary "chez-scheme")
 (require 'geiser-impl)
 (add-to-list 'geiser-active-implementations 'chez)
@@ -994,9 +997,9 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'slime)
 (need-package 'slime-company)
 (slime-setup '(slime-repl slime-company))
-(add-hook 'slime-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'slime-repl-mode-hook (lambda () (paredit-mode +1)))
-(add-hook 'comint-mode-hook (lambda () (paredit-mode +1)))
+(add-hook 'slime-mode-hook #'(lambda () (paredit-mode +1)))
+(add-hook 'slime-repl-mode-hook #'(lambda () (paredit-mode +1)))
+(add-hook 'comint-mode-hook #'(lambda () (paredit-mode +1)))
 
 
 (defvar swank-kawa-jar (concat
@@ -1060,7 +1063,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;;;; Erlang
 (need-package 'erlang)
 (require 'rebar)
-(add-hook 'erlang-mode-hook 'rebar-mode)
+(add-hook 'erlang-mode-hook #'rebar-mode)
 
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
@@ -1107,33 +1110,33 @@ Otherwise, use the value of said variable as argument to a funcall."
     (setq flycheck-erlang-library-path code-path)))
 (require 'ivy-erlang-complete)
 (add-hook 'erlang-mode-hook
-          '(lambda ()
-             (define-key erlang-mode-map (kbd "C-:")
-               'ivy-erlang-complete)
-             (define-key erlang-mode-map (kbd "C-c C-h")
-               'ivy-erlang-complete-show-doc-at-point)
-             (define-key erlang-mode-map (kbd "C-c C-e")
-               (lambda ()
-                 (interactive)
-                 (eopengrok-make-index-with-enable-projects
-                  (ivy-erlang-complete-set-project-root))))
-             (define-key erlang-mode-map (kbd "C-c C-d")
-               (lambda () (interactive)
-                 (if (ivy-erlang-complete-record-at-point)
-                     (eopengrok-find-text
-                      (concat "\""
-                              (s-replace "#" "record("
-                                         (ivy-erlang-complete-thing-at-point))
-                              "\""))
-                  (eopengrok-find-definition (ivy-erlang-complete-thing-at-point)))))
-             (define-key erlang-mode-map (kbd "C-c C-r")
-               (lambda () (interactive)
-                 (eopengrok-find-reference (ivy-erlang-complete-thing-at-point))))
-             (define-key erlang-mode-map (kbd "C-c i")
-               'fix-erlang-project-includes)
-             (define-key erlang-mode-map (kbd "C-c b")
-               'fix-erlang-project-code-path)))
-(add-hook 'after-save-hook 'ivy-erlang-complete-reparse)
+          #'(lambda ()
+              (define-key erlang-mode-map (kbd "C-:")
+                'ivy-erlang-complete)
+              (define-key erlang-mode-map (kbd "C-c C-h")
+                'ivy-erlang-complete-show-doc-at-point)
+              (define-key erlang-mode-map (kbd "C-c C-e")
+                #'(lambda ()
+                    (interactive)
+                    (eopengrok-make-index-with-enable-projects
+                     (ivy-erlang-complete-set-project-root))))
+              (define-key erlang-mode-map (kbd "C-c C-d")
+                #'(lambda () (interactive)
+                    (if (ivy-erlang-complete-record-at-point)
+                        (eopengrok-find-text
+                         (concat "\""
+                                 (s-replace "#" "record("
+                                            (ivy-erlang-complete-thing-at-point))
+                                 "\""))
+                      (eopengrok-find-definition (ivy-erlang-complete-thing-at-point)))))
+              (define-key erlang-mode-map (kbd "C-c C-r")
+                #'(lambda () (interactive)
+                    (eopengrok-find-reference (ivy-erlang-complete-thing-at-point))))
+              (define-key erlang-mode-map (kbd "C-c i")
+                'fix-erlang-project-includes)
+              (define-key erlang-mode-map (kbd "C-c b")
+                'fix-erlang-project-code-path)))
+(add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
 
 ;; distel
@@ -1164,12 +1167,12 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; fast open url
 (need-package 'link-hint)
-(global-set-key (kbd "C-x u") 'link-hint-open-multiple-links)
+(global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
 (defun all-urls-in-buffer ()
   "Find all links."
   (interactive)
   (helm-swoop :$query "https?://"))
-(global-set-key (kbd "C-x C-u") 'all-urls-in-buffer)
+(global-set-key (kbd "C-x C-u") #'all-urls-in-buffer)
 
 ;;;; Lua
 (require-package 'lua-mode)
@@ -1189,7 +1192,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'company-irony)
 (need-package 'company-irony-c-headers)
 ;; (need-package 'company-c-headers)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
 ;; show docs at point
 (need-package 'xah-lookup)
@@ -1223,16 +1226,16 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
-  (local-set-key (kbd "C-c C-t") 'rtags-symbol-type)
-  (local-set-key (kbd "C-c C-d") 'rtags-print-symbol-info)
-  (local-set-key (kbd "C-c C-j") 'rtags-find-symbol-at-point)
-  (local-set-key (kbd "C-c C-r") 'rtags-find-references-at-point)
-  (local-set-key (kbd "C-'") 'company-irony-c-headers)
+  (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
+  (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
+  (local-set-key (kbd "C-c C-j") #'rtags-find-symbol-at-point)
+  (local-set-key (kbd "C-c C-r") #'rtags-find-references-at-point)
+  (local-set-key (kbd "C-'") #'company-irony-c-headers)
   (rtags-start-process-unless-running)
   (irony-mode)
   (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
-(add-hook 'c++-mode-hook 'my-cc-mode-hook)
-(add-hook 'c-mode-hook 'my-cc-mode-hook)
+(add-hook 'c++-mode-hook #'my-cc-mode-hook)
+(add-hook 'c-mode-hook #'my-cc-mode-hook)
 ;; Semantic
 ;; (require 'cc-mode)
 ;; (require 'semantic)
