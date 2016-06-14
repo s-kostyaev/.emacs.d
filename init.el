@@ -227,7 +227,7 @@ re-downloaded in order to locate PACKAGE."
                                        (gobuild)))
     (local-set-key (kbd "C-c C-t") #'(lambda ()
                                        (interactive)
-                                       (setq shell-command "go test")))
+                                       (shell-command "go test")))
     (set (make-local-variable 'company-backends) '(company-go))
     (company-mode)
     (local-set-key (kbd "C-c C-l") #'(lambda ()
@@ -257,14 +257,14 @@ re-downloaded in order to locate PACKAGE."
 (global-set-key "\C-xw" #'what-line);
 (global-set-key "\C-x\C-u" #'shell);
 (global-set-key "\C-x0" #'overwrite-mode);
-(global-set-key "\C-x\C-r" #'toggle-read-only);
+(global-set-key "\C-x\C-r" #'read-only-mode);
 (global-set-key "\C-t" #'kill-word);
 (global-set-key "\C-p" #'previous-line);
 (global-set-key "\C-o" #'forward-word);
 ;(global-set-key "\C-h" 'backward-delete-char-untabify);
 (global-set-key "\C-x\C-m" #'not-modified);
 (setq make-backup-files 'nil);
-(setq default-major-mode 'text-mode)
+(setq major-mode 'text-mode)
 (setq text-mode-hook 'turn-on-auto-fill)
 (setq auto-mode-alist (cons '("\\.cxx$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.hpp$" . c++-mode) auto-mode-alist))
@@ -304,6 +304,9 @@ re-downloaded in order to locate PACKAGE."
 (autoload 'python-mode "python-mode.el" "Python Mode." t)
 (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
 (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+(defvar python-indent)
+(declare-function py-shift-right "ext:python-mode")
+(declare-function py-shift-left "ext:python-mode")
 (add-hook 'python-mode-hook
           #'(lambda ()
               (add-to-list 'company-backends 'company-anaconda)
@@ -378,14 +381,14 @@ re-downloaded in order to locate PACKAGE."
         (if (looking-at "->") t nil)))))
 
 (defun do-yas-expand ()
-  (let ((yas/fallback-behavior 'return-nil))
-    (yas/expand)))
+  (let ((yas-fallback-behavior 'return-nil))
+    (yas-expand)))
 
 (defun tab-indent-or-complete ()
   (interactive)
   (if (minibufferp)
       (minibuffer-complete)
-    (if (or (not yas/minor-mode)
+    (if (or (not yas-minor-mode)
             (null (do-yas-expand)))
         (if (check-expansion)
             (company-complete-common)
@@ -396,9 +399,9 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;; ElDoc
-(add-hook 'emacs-lisp-mode-hook #'turn-on-eldoc-mode)
-(add-hook 'lisp-interaction-mode-hook #'turn-on-eldoc-mode)
-(add-hook 'ielm-mode-hook #'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
+(add-hook 'lisp-interaction-mode-hook #'eldoc-mode)
+(add-hook 'ielm-mode-hook #'eldoc-mode)
 
 
 ;;; Commenting
@@ -419,6 +422,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; Clojure
 
+(declare-function cider-turn-on-eldoc-mode "ext:cider")
 (add-hook 'cider-mode-hook #'cider-turn-on-eldoc-mode)
 (setq nrepl-hide-special-buffers t)
 (setq cider-repl-print-length 100) ; the default is nil, no limit
@@ -547,6 +551,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'web-mode-hook #'tern-mode)
 
 ;; adjust indents for web-mode to 2 spaces
+(defvar web-mode-markup-indent-offset)
+(defvar web-mode-css-indent-offset)
+(defvar web-mode-code-indent-offset)
 (defun my-web-mode-hook ()
   "Hooks for Web mode.  Adjust `indent's."
   ;; http://web-mode.org/
@@ -574,21 +581,21 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; ace jump mode major function
 ;; 
-(need-package 'ace-jump-mode)
-(autoload
-  'ace-jump-mode
-  "ace-jump-mode"
-  "Emacs quick move minor mode"
-  t)
-;; you can select the key you prefer to
-(key-chord-define-global "fk"
-                         (defhydra hydra-ace-jump (:exit t) "Ace jump mode"
-                           ("j" ace-jump-mode "jump")
-                           ("l" ace-jump-line-mode "line")
-                           ("w" ace-jump-word-mode "word")
-                           ("c" ace-jump-char-mode "char")
-                           ("p" ace-jump-mode-pop-mark "pop mark")
-                           ("q" nil "quit")))
+;; (need-package 'ace-jump-mode)
+;; (autoload
+;;   'ace-jump-mode
+;;   "ace-jump-mode"
+;;   "Emacs quick move minor mode"
+;;   t)
+;; ;; you can select the key you prefer to
+;; (key-chord-define-global "fk"
+;;                          (defhydra hydra-ace-jump (:exit t) "Ace jump mode"
+;;                            ("j" ace-jump-mode "jump")
+;;                            ("l" ace-jump-line-mode "line")
+;;                            ("w" ace-jump-word-mode "word")
+;;                            ("c" ace-jump-char-mode "char")
+;;                            ("p" ace-jump-mode-pop-mark "pop mark")
+;;                            ("q" nil "quit")))
 ;; avy
 (need-package 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
@@ -603,8 +610,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
   "ace-jump-mode"
   "Ace jump back:-)"
   t)
-(eval-after-load "ace-jump-mode"
-  '(ace-jump-mode-enable-mark-sync))
+;; (declare-function ace-jump-mode-enable-mark-sync "ext:ace-jump-mode")
+;; (eval-after-load "ace-jump-mode"
+;;   '(ace-jump-mode-enable-mark-sync))
 
 
 
@@ -656,12 +664,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; tagedit
 ;;
-(need-package 'tagedit)
-(eval-after-load "sgml-mode"
-  '(progn
-     (require 'tagedit)
-     (tagedit-add-paredit-like-keybindings)
-     (add-hook 'html-mode-hook #'tagedit-mode)))
+;; (need-package 'tagedit)
+;; (eval-after-load "sgml-mode"
+;;   '(progn
+;;      (require 'tagedit)
+;;      (tagedit-add-paredit-like-keybindings)
+;;      (add-hook 'html-mode-hook #'tagedit-mode)))
 
 ;;
 ;; yasnippet
@@ -886,6 +894,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'erlang-mode-hook 'helm-gtags-mode)
 
 ;; key bindings
+(defvar helm-gtags-mode-map)
 (eval-after-load "helm-gtags"
   '(progn
      (define-key helm-gtags-mode-map (kbd "M-t d") #'helm-gtags-dwim)
@@ -975,6 +984,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; pandoc
 (require-package 'pandoc-mode)
 (add-hook 'markdown-mode-hook #'pandoc-mode)
+(declare-function pandoc-load-default-settings "ext:pandoc")
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
 ;; guile support
@@ -1236,6 +1246,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'cmake-ide)
 (cmake-ide-setup)
 
+(defvar company-c-headers-path-user)
 (defun company-set-c-headers-user-path ()
   "Set path for selected directory with project headers."
   (interactive)
