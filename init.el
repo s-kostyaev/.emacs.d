@@ -266,7 +266,6 @@ re-downloaded in order to locate PACKAGE."
 ;(global-set-key "\C-h" 'backward-delete-char-untabify);
 (global-set-key "\C-x\C-m" #'not-modified);
 (setq make-backup-files 'nil);
-(setq major-mode 'text-mode)
 (setq text-mode-hook 'turn-on-auto-fill)
 (setq auto-mode-alist (cons '("\\.cxx$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.hpp$" . c++-mode) auto-mode-alist))
