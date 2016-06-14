@@ -742,14 +742,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require-package 'helm-ls-git)
 (global-set-key (kbd "C-c C-f") #'helm-browse-project)
 
-(require 'multiple-cursors-core)
-(declare-function mc/enable-minor-mode "ext:multiple-cursors-core")
 (defvar-local my-counsel-company-prefix nil
   "Company prefix for use counsel-company with multiple-cursors.")
 (defun my-counsel-company ()
   "Complete using `company-candidates'."
   (interactive)
-  (mc/enable-minor-mode 'company-mode)
+  (company-mode 1)
   (company-cancel)
   (unless company-candidates
     (company-complete))
