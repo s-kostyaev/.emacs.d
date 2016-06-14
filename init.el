@@ -1261,6 +1261,12 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (show-paren-mode 1)
 
+;;; Smartparens
+(need-package 'smartparens)
+(require 'smartparens-config)
+(add-hook 'prog-mode-hook #'smartparens-mode)
+(add-hook 'erlang-mode-hook #'smartparens-mode)
+
 (provide 'init)
 ;;; init.el ends here
 (custom-set-faces
