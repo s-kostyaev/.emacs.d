@@ -15,9 +15,11 @@
 ;; use C-\ for change language in emacs instead
 (setq default-input-method "cyrillic-jis-russian")
 
-(set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)
-(add-hook 'after-change-major-mode-hook
-          #'(lambda () (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)))
+(defun my-set-font ()
+  "Set my font."
+  (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t))
+(my-set-font)
+(add-hook 'after-change-major-mode-hook #'my-set-font)
 
 ;; Melpa
 (require 'package) ;; You might already have this line
@@ -93,9 +95,10 @@ re-downloaded in order to locate PACKAGE."
 (setq tab-stop-list (number-sequence 4 200 4))
 (setq-default indent-tabs-mode nil)
 
-
-(add-hook 'text-mode-hook
-	        #'(lambda () (setq indent-line-function 'insert-tab)))
+(defun my-insert-tabs ()
+    "Insert tab for [tab] in text mode."
+  (setq indent-line-function 'insert-tab))
+(add-hook 'text-mode-hook #'my-insert-tabs)
 
 ;; Text and the such
 ;; Use colors to highlight commands, etc.
@@ -306,14 +309,15 @@ re-downloaded in order to locate PACKAGE."
 (defvar python-indent)
 (declare-function py-shift-right "ext:python-mode")
 (declare-function py-shift-left "ext:python-mode")
-(add-hook 'python-mode-hook
-          #'(lambda ()
-              (add-to-list 'company-backends 'company-anaconda)
-              (setq indent-tabs-mode nil)
-              (setq python-indent 4)
-              (setq tab-width 8)
-              (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
-              (local-set-key (kbd "<backtab>") #'py-shift-left)))
+(defun my-python-hook ()
+    (progn
+      (add-to-list 'company-backends 'company-anaconda)
+      (setq indent-tabs-mode nil)
+      (setq python-indent 4)
+      (setq tab-width 8)
+      (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
+      (local-set-key (kbd "<backtab>") #'py-shift-left)))
+(add-hook 'python-mode-hook #'my-python-hook)
 
 ;;; Octave mode
 ;; (autoload 'octave-mode "octave-mod" nil t)
@@ -481,9 +485,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (global-fci-mode 1)
 ; workaround for web-mode
-(add-hook 'after-change-major-mode-hook
-          #'(lambda () (if (string= major-mode "web-mode")
-                           (turn-off-fci-mode) (turn-on-fci-mode))))
+(defun my-web-mode-hook ()
+  "Workaround for web-mode."
+  (if (string= major-mode "web-mode")
+                           (turn-off-fci-mode) (turn-on-fci-mode)))
+(add-hook 'after-change-major-mode-hook #'my-web-mode-hook)
 
 (setq eval-expression-debug-on-error t)
 
@@ -884,11 +890,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
 (setq eopengrok-ctags "/usr/bin/ctags")
 (require 'eopengrok)
-(add-hook 'eopengrok-mode-hook
-          #'(lambda ()
-              (local-set-key (kbd "o") #'(lambda ()
-                                           (interactive)
-                                           (other-window 1)))))
+(defun my-opengrok-hook ()
+  (local-set-key (kbd "o") #'(lambda ()
+                               (interactive)
+                               (other-window 1))))
+(add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
 
 ;; speed-typing
 (need-package 'speed-type)
@@ -1079,8 +1085,7 @@ Otherwise, use the value of said variable as argument to a funcall."
          ))
     (setq flycheck-erlang-library-path code-path)))
 (require 'ivy-erlang-complete)
-(add-hook 'erlang-mode-hook
-          #'(lambda ()
+(defun my-erlang-hook ()
               (define-key erlang-mode-map (kbd "C-:")
                 'ivy-erlang-complete)
               (define-key erlang-mode-map (kbd "C-c C-h")
@@ -1105,7 +1110,8 @@ Otherwise, use the value of said variable as argument to a funcall."
               (define-key erlang-mode-map (kbd "C-c i")
                 'fix-erlang-project-includes)
               (define-key erlang-mode-map (kbd "C-c b")
-                'fix-erlang-project-code-path)))
+                'fix-erlang-project-code-path))
+(add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
 
