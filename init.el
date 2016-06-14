@@ -485,7 +485,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (global-fci-mode 1)
 ; workaround for web-mode
-(defun my-web-mode-hook ()
+(defun my-web-mode-workaround ()
   "Workaround for web-mode."
   (if (string= major-mode "web-mode")
                            (turn-off-fci-mode) (turn-on-fci-mode)))
