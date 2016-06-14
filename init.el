@@ -43,15 +43,7 @@ re-downloaded in order to locate PACKAGE."
 		 (package-install package)
 	   (progn
 		 (package-refresh-contents)
-		 (require-package package min-version t)))))
-
-
-(defun require-package (package &optional min-version no-refresh)
-  "Load PACKAGE at least MIN-VERSION (download if need).
-If NO-REFRESH is non-nil, the available package lists will not be
-re-downloaded in order to locate PACKAGE."
-  (need-package package min-version no-refresh)
-  (require 'package))
+		 (need-package package min-version t)))))
 
 ;; async
 (need-package 'async)
@@ -64,7 +56,8 @@ re-downloaded in order to locate PACKAGE."
 (color-theme-initialize)
 (need-package 'color-theme-solarized)
 
-;; (require-package 'color-theme-sanityinc-solarized)
+;; (need-package 'color-theme-sanityinc-solarized)
+;; (require 'color-theme-sanityinc-solarized)
 ;; (color-theme-sanityinc-solarized-light)
 ;; (need-package 'zenburn-theme)
 ;; (load-theme 'zenburn t)
@@ -73,7 +66,8 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;; powerline
-(require-package 'smart-mode-line)
+(need-package 'smart-mode-line)
+(require 'smart-mode-line)
 ;; (need-package 'smart-mode-line-powerline-theme)
 
 ;; (sml/apply-theme "powerline")
@@ -85,6 +79,7 @@ re-downloaded in order to locate PACKAGE."
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (sml/setup)
+  (require 's)
   (if (s-equals? "probook" (s-trim (shell-command-to-string "hostname")))
     (load-theme 'monokai t)
   (load-theme 'solarized t))
@@ -92,6 +87,7 @@ re-downloaded in order to locate PACKAGE."
 
 (add-hook 'after-init-hook #'my-set-themes-hook)
 ;; to setup tabs
+(defvar c-basic-indent)
 (setq c-basic-indent 4)
 (setq tab-width 4)
 (setq tab-stop-list (number-sequence 4 200 4))
@@ -188,7 +184,8 @@ re-downloaded in order to locate PACKAGE."
 	  (if this-win-2nd (other-window 1))))))
 
 ;; Flycheck
-(require-package 'flycheck)
+(need-package 'flycheck)
+(require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (global-set-key (kbd "C-c r") #'helm-flycheck)
 
@@ -197,7 +194,6 @@ re-downloaded in order to locate PACKAGE."
 (setq exec-path (append exec-path '("~/go/bin")))
 (need-package 'go-mode)
 (require 'go-mode-autoloads)
-(add-hook 'before-save-hook #'gofmt-before-save)
 (defun goimports ()
   "Running goimports on go files."
   (interactive)
@@ -205,21 +201,25 @@ re-downloaded in order to locate PACKAGE."
       (progn
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
-(add-hook 'after-save-hook #'goimports)
 
-;; gobuild
-(require 'gobuild)
+(need-package 'company-go)
 
-(require-package 'company-go)                                ; load company mode go backend
-(setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
-
-;; go-impl
-(require 'go-impl)
-;; gometalinter
-(require 'gometalinter)
+(declare-function go-remove-unused-imports "ext:go-mode")
+(declare-function go-goto-imports "ext:go-mode")
+(declare-function gobuild "ext:gobuild")
+(declare-function gometalinter "ext:gometalinter")
 
 (defun my-go-mode-hook ()
   (progn
+    (require 'gobuild)
+    (require 'company-go)
+    (require 'go-impl)
+    (require 'gometalinter)
+    (require 'go-flycheck)
+    ; start autocompletion only after typing
+    (setq company-begin-commands '(self-insert-command))
+    (add-hook 'before-save-hook #'gofmt-before-save)
+    (add-hook 'after-save-hook #'goimports)
     (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)
     (local-set-key (kbd "C-c i") #'go-goto-imports)
     (local-set-key (kbd "C-c C-c") #'(lambda ()
@@ -237,7 +237,6 @@ re-downloaded in order to locate PACKAGE."
 (add-hook 'go-mode-hook #'my-go-mode-hook)
 ;; Flycheck
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
-(require 'go-flycheck)
 ;; doc
 (need-package 'go-eldoc) ;; Don't need to require, if you install by package.el
 (add-hook 'go-mode-hook #'go-eldoc-setup)
@@ -350,7 +349,8 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;; Auto-complete
-(require-package 'company)
+(need-package 'company)
+(require 'company)
 (global-company-mode)
 (setq company-global-modes '(not erlang-mode))
 (setq company-etags-ignore-case nil)
@@ -384,6 +384,7 @@ re-downloaded in order to locate PACKAGE."
   (let ((yas-fallback-behavior 'return-nil))
     (yas-expand)))
 
+(defvar yas-minor-mode)
 (defun tab-indent-or-complete ()
   (interactive)
   (if (minibufferp)
@@ -447,43 +448,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'clojure-mode-hook          #'enable-paredit-mode)
 
 (require 'eldoc) ; if not already loaded
-    (eldoc-add-command
-     'paredit-backward-delete
-     'paredit-close-round)
-
-  (defun paredit-barf-all-the-way-backward ()
-    (interactive)
-    (paredit-split-sexp)
-    (paredit-backward-down)
-    (paredit-splice-sexp))
-  (defun paredit-barf-all-the-way-forward ()
-    (interactive)
-    (paredit-split-sexp)
-    (paredit-forward-down)
-    (paredit-splice-sexp)
-    (if (eolp) (delete-horizontal-space)))
-  (defun paredit-slurp-all-the-way-backward ()
-    (interactive)
-    (catch 'done
-      (while (not (bobp))
-        (save-excursion
-          (paredit-backward-up)
-          (if (eq (char-before) ?\()
-              (throw 'done t)))
-        (paredit-backward-slurp-sexp))))
-  (defun paredit-slurp-all-the-way-forward ()
-    (interactive)
-    (catch 'done
-      (while (not (eobp))
-        (save-excursion
-          (paredit-forward-up)
-          (if (eq (char-after) ?\))
-              (throw 'done t)))
-        (paredit-forward-slurp-sexp))))
-
-(eval-after-load "paredit.el"
-   '(require-package 'paredit-menu))
-
 
 ;; Forces the messages to 0, and kills the *Messages* buffer - thus disabling it on startup.
 ;(setq-default message-log-max nil)
@@ -511,7 +475,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; for over-80-chars line highlightning
 ;; (need-package 'column-enforce-mode)
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
-(require-package 'fill-column-indicator)
+(need-package 'fill-column-indicator)
+(require 'fill-column-indicator)
 (set 'fci-rule-column 80)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (global-fci-mode 1)
@@ -526,13 +491,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'web-mode)
 (need-package 'js3-mode)
 (add-hook 'js-mode-hook #'js3-mode)
-(require-package 'react-snippets)
+;; (need-package 'react-snippets)
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 
 ;; disable jshint since we prefer eslint checking
-(setq-default flycheck-disabled-checkers
+(setq flycheck-disabled-checkers
               (append flycheck-disabled-checkers
                       '(javascript-jshint)))
 
@@ -543,7 +508,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'tern)
 (need-package 'company-tern)
 (add-to-list 'company-backends 'company-tern)
+(defvar company-tern-meta-as-single-line)
 (setq company-tern-meta-as-single-line t)
+(defvar company-tooltip-align-annotations)
 (setq company-tooltip-align-annotations t)
 
 (add-hook 'js3-mode-hook #'tern-mode)
@@ -565,7 +532,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; emmet mode
 ;;
-(require-package 'emmet-mode)
+(need-package 'emmet-mode)
+(require 'emmet-mode)
 (add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'web-mode-hook #'emmet-mode)
 (add-hook 'css-mode-hook #'emmet-mode) ;; enable Emmet's css abbreviation.
@@ -575,7 +543,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; key chord
 ;;
-(require-package 'key-chord)
+(need-package 'key-chord)
+(require 'key-chord)
 (key-chord-mode 1)
 
 ;;
@@ -619,7 +588,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; expand region
 ;;
-(require-package 'expand-region)
+(need-package 'expand-region)
+(require 'expand-region)
 (key-chord-define-global "zj" 'er/expand-region)
 (key-chord-define-global "zk" 'er/contract-region)
 (delete-selection-mode)
@@ -627,7 +597,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; multiple cursors
 ;;
-(require-package 'multiple-cursors)
+(need-package 'multiple-cursors)
+(require 'multiple-cursors)
 (need-package 'ace-mc)
 
 (key-chord-define-global "fm"
@@ -674,7 +645,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; yasnippet
 ;;
-(require-package 'yasnippet)
+(need-package 'yasnippet)
+(require 'yasnippet)
 (yas-global-mode 1)
 
 ;;
@@ -737,11 +709,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "C-x l") #'counsel-locate)
 (need-package 'counsel-projectile)
 
-(require-package 'helm-descbinds)
+(need-package 'helm-descbinds)
+(require 'helm-descbinds)
 (helm-descbinds-mode 1)
-
-(require-package 'helm-ls-git)
-(global-set-key (kbd "C-c C-f") #'helm-browse-project)
 
 (defvar-local my-counsel-company-prefix nil
   "Company prefix for use counsel-company with multiple-cursors.")
@@ -872,7 +842,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (helm-migemo-mode 1)
 
 ;; restclient-mode
-(require-package 'restclient)
+;; (require 'restclient)
 
 
 ;;;; Projectile
@@ -921,7 +891,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                            (other-window 1)))))
 
 ;; speed-typing
-(require-package 'speed-type)
+(need-package 'speed-type)
+(require 'speed-type)
 
 ;; magit
 (need-package 'magit)
@@ -967,10 +938,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (key-chord-define-global (kbd ";r") 'indirect-region)
 
-;; helm themes
-(require 'helm-config)
-(require-package 'helm-themes)
-
 ;; helm flycheck
 (need-package 'helm-flycheck)
 
@@ -982,7 +949,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;;  '(default ((t (:family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
 
 ;; pandoc
-(require-package 'pandoc-mode)
+(need-package 'pandoc-mode)
+(require 'pandoc-mode)
 (add-hook 'markdown-mode-hook #'pandoc-mode)
 (declare-function pandoc-load-default-settings "ext:pandoc")
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
@@ -1035,7 +1003,11 @@ Otherwise, use the value of said variable as argument to a funcall."
             "kawa.repl" "-s")
            :init kawa-slime-init))))
 
-(setup-slime-implementations)
+(defun setup-slime-implementations-function ()
+  "Use function for hooks."
+  (setup-slime-implementations))
+
+(add-hook 'after-init-hook #'setup-slime-implementations-function)
 
 (defun kawa-slime-init (file _)
   "Init kawa-slime for `FILE'."
@@ -1173,7 +1145,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 (global-set-key (kbd "C-x C-u") #'all-urls-in-buffer)
 
 ;;;; Lua
-(require-package 'lua-mode)
+(need-package 'lua-mode)
+(require 'lua-mode)
 
 ;; nXML mode customization
 (add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
@@ -1182,7 +1155,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;;;; C, C++ Development
 ;; Rtags
-(require-package 'rtags)
+(need-package 'rtags)
+(require 'rtags)
 (setq rtags-completions-enabled nil)
 (setq rtags-use-helm t)
 ;; completion

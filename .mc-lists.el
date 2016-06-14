@@ -14,6 +14,7 @@
         kill-region
         paredit-forward-delete
         paredit-open-round
+        wgrep-finish-edit
         yas-expand
         ))
 
@@ -48,6 +49,7 @@
         ivy-wgrep-change-to-wgrep-mode
         kmacro-end-macro
         multiple-cursors-hydra/ace-mc-add-multiple-cursors-and-exit
+        multiple-cursors-hydra/ace-mc-add-single-cursor-and-exit
         multiple-cursors-hydra/body
         multiple-cursors-hydra/mc-hide-unmatched-lines-mode
         multiple-cursors-hydra/mc/edit-lines-and-exit
