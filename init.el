@@ -96,7 +96,7 @@ re-downloaded in order to locate PACKAGE."
 (setq-default indent-tabs-mode nil)
 
 (defun my-insert-tabs ()
-    "Insert tab for [tab] in text mode."
+    "Insert tab for `tab' in text mode."
   (setq indent-line-function 'insert-tab))
 (add-hook 'text-mode-hook #'my-insert-tabs)
 
@@ -361,6 +361,7 @@ re-downloaded in order to locate PACKAGE."
 (setq company-dabbrev-ignore-case nil)
 (setq company-dabbrev-code-ignore-case nil)
 ;; Disable fci if needed.
+(defvar company-fci-mode-on-p)
 (defun disable-fci (&rest ignore)
   (when (boundp 'fci-mode)
     (setq company-fci-mode-on-p fci-mode)
@@ -441,15 +442,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq browse-url-firefox-program "firefox-aurora")
 
 ;;;; Paredit
-(need-package 'paredit)
-(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-(add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-(add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-(add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-(add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-(add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-(add-hook 'clojure-mode-hook          #'enable-paredit-mode)
+;; (need-package 'paredit)
+;; (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+;; (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
+;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
+;; (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
+;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
+;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
+;; (add-hook 'clojure-mode-hook          #'enable-paredit-mode)
 
 (require 'eldoc) ; if not already loaded
 
@@ -963,8 +964,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; guile support
 (need-package 'geiser)
-(add-hook 'geiser-repl-mode-hook #'paredit-mode)
-(add-hook 'geiser-mode-hook #'paredit-mode)
+;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
+;; (add-hook 'geiser-mode-hook #'paredit-mode)
 (setq geiser-chez-binary "chez-scheme")
 (require 'geiser-impl)
 (add-to-list 'geiser-active-implementations 'chez)
@@ -1249,8 +1250,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
-(provide 'init)
-;;; init.el ends here
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -1319,3 +1318,6 @@ Otherwise, use the value of said variable as argument to a funcall."
  '(warning-suppress-types (quote ((undo discard-info))))
  '(weechat-color-list
    (unspecified "#272822" "#49483E" "#F70057" "#F92672" "#86C30D" "#A6E22E" "#BEB244" "#E6DB74" "#40CAE4" "#66D9EF" "#FB35EA" "#FD5FF0" "#74DBCD" "#A1EFE4" "#F8F8F2" "#F8F8F0")))
+
+(provide 'init)
+;;; init.el ends here
