@@ -593,7 +593,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
-(bind-key (kbd "C-'") #'avy-isearch isearch-mode-map)
+(define-key isearch-mode-map (kbd "C-'") #'avy-isearch)
 
 ;; 
 ;; enable a more powerful jump back function from ace jump mode
