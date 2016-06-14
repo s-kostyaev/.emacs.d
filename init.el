@@ -8,7 +8,7 @@
 (progn (cd "~/.emacs.d")
        (normal-top-level-add-subdirs-to-load-path))
 
-
+(defvar personal-keybindings nil)
 
 ;; all keybindings must work with russian (key-chord still doesn't work)
 ;; system language must be set to en
@@ -71,11 +71,8 @@ re-downloaded in order to locate PACKAGE."
 
 (need-package 'sublime-themes)
 
-;; (need-package 'nlinum)
-;(nlinum-mode 1)
-;(add-hook 'find-file-hook (lambda () (nlinum-mode 1)))
 
-										;; powerline
+;; powerline
 (require-package 'smart-mode-line)
 ;; (need-package 'smart-mode-line-powerline-theme)
 
@@ -209,45 +206,41 @@ re-downloaded in order to locate PACKAGE."
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
 (add-hook 'after-save-hook #'goimports)
-(add-hook 'go-mode-hook #'(lambda ()
-                            (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)))
-(add-hook 'go-mode-hook #'(lambda ()
-                            (local-set-key (kbd "C-c i") #'go-goto-imports)))
+
 ;; gobuild
 (require 'gobuild)
-(add-hook 'go-mode-hook #'(lambda ()
-                            (local-set-key (kbd "C-c C-c") #'(lambda ()
-                                                               (interactive)
-                                                               (gobuild)))))
-(add-hook 'go-mode-hook #'(lambda ()
-                            (local-set-key (kbd "C-c C-t") #'(lambda ()
-                                                               (interactive)
-                                                               (setq shell-command "go test")))))
+
 (require-package 'company-go)                                ; load company mode go backend
 (setq company-begin-commands '(self-insert-command)) ; start autocompletion only after typing
-(add-hook 'go-mode-hook #'(lambda ()
-                            (set (make-local-variable 'company-backends) '(company-go))
-                            (company-mode)))
-;; (load "$GOPATH/src/code.google.com/p/go.tools/cmd/oracle/oracle.el")
-;; (add-hook 'go-mode-hook 'go-oracle-mode)
+
 ;; go-impl
 (require 'go-impl)
 ;; gometalinter
 (require 'gometalinter)
-(add-hook 'go-mode-hook #'(lambda ()
-                            (local-set-key (kbd "C-c C-l") #'(lambda ()
-                                                               (interactive)
-                                                               (gometalinter)))))
+
+(defun my-go-mode-hook ()
+  (progn
+    (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)
+    (local-set-key (kbd "C-c i") #'go-goto-imports)
+    (local-set-key (kbd "C-c C-c") #'(lambda ()
+                                       (interactive)
+                                       (gobuild)))
+    (local-set-key (kbd "C-c C-t") #'(lambda ()
+                                       (interactive)
+                                       (setq shell-command "go test")))
+    (set (make-local-variable 'company-backends) '(company-go))
+    (company-mode)
+    (local-set-key (kbd "C-c C-l") #'(lambda ()
+                                       (interactive)
+                                       (gometalinter)))))
+
+(add-hook 'go-mode-hook #'my-go-mode-hook)
 ;; Flycheck
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 (require 'go-flycheck)
 ;; doc
 (need-package 'go-eldoc) ;; Don't need to require, if you install by package.el
 (add-hook 'go-mode-hook #'go-eldoc-setup)
-(add-hook 'go-mode-hook #'(lambda () (highlight-lines-matching-regexp ".\{81\}" "hi-green-b")))
-
-
-
 
 
 ; for compiling C/C++
@@ -361,16 +354,17 @@ re-downloaded in order to locate PACKAGE."
 (setq company-dabbrev-ignore-case nil)
 (setq company-dabbrev-code-ignore-case nil)
 ;; Disable fci if needed.
-(add-hook 'company-completion-started-hook #'(lambda (&rest ignore)
-                                               (when (boundp 'fci-mode)
-                                                 (setq company-fci-mode-on-p fci-mode)
-                                                 (when fci-mode (fci-mode -1)))))
+(defun disable-fci (&rest ignore)
+  (when (boundp 'fci-mode)
+    (setq company-fci-mode-on-p fci-mode)
+    (when fci-mode (fci-mode -1))))
+(add-hook 'company-completion-started-hook #'disable-fci)
 ;; Re-enable fci if needed.
-(add-hook 'company-completion-finished-hook #'(lambda (&rest ignore)
-                                                (when company-fci-mode-on-p (fci-mode 1))))
+(defun reenable-fci (&rest ignore)
+  (when company-fci-mode-on-p (fci-mode 1)))
+(add-hook 'company-completion-finished-hook #'reenable-fci)
 ;; Re-enable fci if needed.
-(add-hook 'company-completion-cancelled-hook #'(lambda (&rest ignore)
-                                                 (when company-fci-mode-on-p (fci-mode 1))))
+(add-hook 'company-completion-cancelled-hook #'reenable-fci)
 (setq company-tooltip-limit 20)                      ; bigger popup window
 (setq company-idle-delay 0.1)                         ; decrease delay before autocompletion popup shows
 (setq company-echo-delay 0)                          ; remove annoying blinking
@@ -548,9 +542,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq company-tern-meta-as-single-line t)
 (setq company-tooltip-align-annotations t)
 
-(add-hook 'js3-mode-hook #'(lambda () (tern-mode t)))
-(add-hook 'js-mode-hook #'(lambda () (tern-mode t)))
-(add-hook 'web-mode-hook #'(lambda () (tern-mode t)))
+(add-hook 'js3-mode-hook #'tern-mode)
+(add-hook 'js-mode-hook #'tern-mode)
+(add-hook 'web-mode-hook #'tern-mode)
 
 ;; adjust indents for web-mode to 2 spaces
 (defun my-web-mode-hook ()
@@ -599,8 +593,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
-(add-hook 'isearch-mode-hook #'(lambda ()
-                                 (local-set-key (kbd "C-'") #'avy-isearch)))
+(bind-key (kbd "C-'") #'avy-isearch isearch-mode-map)
 
 ;; 
 ;; enable a more powerful jump back function from ace jump mode
@@ -668,7 +661,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   '(progn
      (require 'tagedit)
      (tagedit-add-paredit-like-keybindings)
-     (add-hook 'html-mode-hook #'(lambda () (tagedit-mode 1)))))
+     (add-hook 'html-mode-hook #'tagedit-mode)))
 
 ;;
 ;; yasnippet
@@ -995,10 +988,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'slime)
 (need-package 'slime-company)
 (slime-setup '(slime-repl slime-company))
-(add-hook 'slime-mode-hook #'(lambda () (paredit-mode +1)))
-(add-hook 'slime-repl-mode-hook #'(lambda () (paredit-mode +1)))
-(add-hook 'comint-mode-hook #'(lambda () (paredit-mode +1)))
-
 
 (defvar swank-kawa-jar (concat
                         (string-trim
