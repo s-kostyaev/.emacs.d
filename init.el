@@ -1016,8 +1016,8 @@ Otherwise, use the value of said variable as argument to a funcall."
                         ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
 
 (defvar slime-lisp-implementations)
-(defmacro setup-slime-implementations (swank-kawa-cp)
-  "Setup slime Lisp implementations with SWANK-KAWA-CP classpath."
+(defmacro setup-slime-implementations ()
+  "Setup slime Lisp implementations."
   `(setq slime-lisp-implementations
         '((kawa
            ("java"
@@ -1033,7 +1033,7 @@ Otherwise, use the value of said variable as argument to a funcall."
             "kawa.repl" "-s")
            :init kawa-slime-init))))
 
-(setup-slime-implementations swank-kawa-cp)
+(setup-slime-implementations)
 
 (defvar slime-protocol-version)
 (defun kawa-slime-init (file ignore)
