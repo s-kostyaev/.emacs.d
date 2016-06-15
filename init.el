@@ -211,31 +211,33 @@ re-downloaded in order to locate PACKAGE."
 (declare-function go-goto-imports "ext:go-mode")
 (declare-function gobuild "ext:gobuild")
 (declare-function gometalinter "ext:gometalinter")
+(defvar company-begin-commands)
+(defvar company-backends)
 
 (defun my-go-mode-hook ()
-  (progn
-    (require 'gobuild)
-    (require 'company-go)
-    (require 'go-impl)
-    (require 'gometalinter)
-    (require 'go-flycheck)
-    ; start autocompletion only after typing
-    (setq company-begin-commands '(self-insert-command))
-    (add-hook 'before-save-hook #'gofmt-before-save)
-    (add-hook 'after-save-hook #'goimports)
-    (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)
-    (local-set-key (kbd "C-c i") #'go-goto-imports)
-    (local-set-key (kbd "C-c C-c") #'(lambda ()
-                                       (interactive)
-                                       (gobuild)))
-    (local-set-key (kbd "C-c C-t") #'(lambda ()
-                                       (interactive)
-                                       (shell-command "go test")))
-    (set (make-local-variable 'company-backends) '(company-go))
-    (company-mode)
-    (local-set-key (kbd "C-c C-l") #'(lambda ()
-                                       (interactive)
-                                       (gometalinter)))))
+  "Setup for go."
+  (require 'gobuild)
+  (require 'company-go)
+  (require 'go-impl)
+  (require 'gometalinter)
+  (require 'go-flycheck)
+  ; start autocompletion only after typing
+  (setq company-begin-commands '(self-insert-command))
+  (add-hook 'before-save-hook #'gofmt-before-save)
+  (add-hook 'after-save-hook #'goimports)
+  (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)
+  (local-set-key (kbd "C-c i") #'go-goto-imports)
+  (local-set-key (kbd "C-c C-c") #'(lambda ()
+                                     (interactive)
+                                     (gobuild)))
+  (local-set-key (kbd "C-c C-t") #'(lambda ()
+                                     (interactive)
+                                     (shell-command "go test")))
+  (set (make-local-variable 'company-backends) '(company-go))
+  (company-mode)
+  (local-set-key (kbd "C-c C-l") #'(lambda ()
+                                     (interactive)
+                                     (gometalinter))))
 
 (add-hook 'go-mode-hook #'my-go-mode-hook)
 ;; Flycheck
@@ -309,13 +311,13 @@ re-downloaded in order to locate PACKAGE."
 (declare-function py-shift-right "ext:python-mode")
 (declare-function py-shift-left "ext:python-mode")
 (defun my-python-hook ()
-    (progn
-      (add-to-list 'company-backends 'company-anaconda)
-      (setq indent-tabs-mode nil)
-      (setq python-indent 4)
-      (setq tab-width 8)
-      (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
-      (local-set-key (kbd "<backtab>") #'py-shift-left)))
+  "Setup for python."
+  (add-to-list 'company-backends 'company-anaconda)
+  (setq indent-tabs-mode nil)
+  (setq python-indent 4)
+  (setq tab-width 8)
+  (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
+  (local-set-key (kbd "<backtab>") #'py-shift-left))
 (add-hook 'python-mode-hook #'my-python-hook)
 
 ;;; Octave mode
@@ -347,7 +349,7 @@ re-downloaded in order to locate PACKAGE."
 ;;        (autoload 'run-octave "octave-inf" nil t)
 
 
-
+(defvar fsm-debug)
 (setq fsm-debug nil)
 
 
@@ -356,18 +358,23 @@ re-downloaded in order to locate PACKAGE."
 (require 'company)
 (global-company-mode)
 (setq company-global-modes '(not erlang-mode))
+(defvar company-etags-ignore-case)
 (setq company-etags-ignore-case nil)
+(defvar company-dabbrev-ignore-case)
 (setq company-dabbrev-ignore-case nil)
+(defvar company-dabbrev-code-ignore-case)
 (setq company-dabbrev-code-ignore-case nil)
 ;; Disable fci if needed.
 (defvar company-fci-mode-on-p)
 (defun disable-fci (&rest ignore)
+  "Disable fci with IGNORE arg."
   (when (boundp 'fci-mode)
     (setq company-fci-mode-on-p fci-mode)
     (when fci-mode (fci-mode -1))))
 (add-hook 'company-completion-started-hook #'disable-fci)
 ;; Re-enable fci if needed.
 (defun reenable-fci (&rest ignore)
+  "Reenable fci with IGNORE arg."
   (when company-fci-mode-on-p (fci-mode 1)))
 (add-hook 'company-completion-finished-hook #'reenable-fci)
 ;; Re-enable fci if needed.
@@ -377,6 +384,7 @@ re-downloaded in order to locate PACKAGE."
 (setq company-echo-delay 0)                          ; remove annoying blinking
 (setq company-minimum-prefix-length 3)
 (defun check-expansion ()
+  "Check yasnippet expansion."
   (save-excursion
     (if (looking-at "\\_>") t
       (backward-char 1)
@@ -385,11 +393,13 @@ re-downloaded in order to locate PACKAGE."
         (if (looking-at "->") t nil)))))
 
 (defun do-yas-expand ()
+  "Do yasnippet expansion."
   (let ((yas-fallback-behavior 'return-nil))
     (yas-expand)))
 
 (defvar yas-minor-mode)
 (defun tab-indent-or-complete ()
+  "Smart tab function."
   (interactive)
   (if (minibufferp)
       (minibuffer-complete)
@@ -429,16 +439,19 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (declare-function cider-turn-on-eldoc-mode "ext:cider")
 (add-hook 'cider-mode-hook #'cider-turn-on-eldoc-mode)
+(defvar nrepl-hide-special-buffers)
 (setq nrepl-hide-special-buffers t)
+(defvar cider-repl-print-length)
 (setq cider-repl-print-length 100) ; the default is nil, no limit
 ;; (set cider-repl-result-prefix ";; => ")
 ;; (set cider-interactive-eval-result-prefix ";; => ")
+(defvar cider-repl-wrap-history)
 (setq cider-repl-wrap-history t)
+(defvar cider-repl-history-size)
 (setq cider-repl-history-size 1000) ; the default is 500
 (add-hook 'cider-repl-mode-hook #'paredit-mode)
 
 (setq browse-url-browser-function #'browse-url-chromium)
-(setq browse-url-firefox-program "firefox-aurora")
 
 ;;;; Paredit
 ;; (need-package 'paredit)
@@ -687,7 +700,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'ivy)
 (need-package 'ivy-hydra)
 (ivy-mode 1)
+(defvar ivy-initial-inputs-alist)
 (setq ivy-initial-inputs-alist nil)
+(defvar ivy-re-builders-alist)
 (setq ivy-re-builders-alist
       '((counsel-M-x . ivy--regex-fuzzy)
         ;; (t . ivy--regex-ignore-order)
@@ -721,6 +736,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (defvar-local my-counsel-company-prefix nil
   "Company prefix for use counsel-company with multiple-cursors.")
+(defvar ivy-completion-beg)
+(defvar ivy-completion-end)
 (defun my-counsel-company ()
   "Complete using `company-candidates'."
   (interactive)
@@ -855,7 +872,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (need-package 'projectile)
 (need-package 'helm-projectile)
 (projectile-global-mode)
-(setq projectile-completion-system 'helm)
+(defvar projectile-completion-system)
+(setq projectile-completion-system 'ivy)
 (helm-projectile-on)
 
 
@@ -886,11 +904,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; OpenGrok
 (need-package 'eopengrok)
+(defvar eopengrok-jar)
 (setq eopengrok-jar
       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
+(defvar eopengrok-ctags)
 (setq eopengrok-ctags "/usr/bin/ctags")
 (require 'eopengrok)
 (defun my-opengrok-hook ()
+  "Hook for eopengrok."
   (local-set-key (kbd "o") #'(lambda ()
                                (interactive)
                                (other-window 1))))
@@ -907,6 +928,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
 (define-key global-map "\C-ca" 'org-agenda)
+(defvar org-log-done)
 (setq org-log-done t)
 ; ditaa
 (org-babel-do-load-languages
@@ -965,6 +987,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'geiser)
 ;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
 ;; (add-hook 'geiser-mode-hook #'paredit-mode)
+(defvar geiser-chez-binary)
 (setq geiser-chez-binary "chez-scheme")
 (require 'geiser-impl)
 (add-to-list 'geiser-active-implementations 'chez)
@@ -974,12 +997,13 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'slime-company)
 (slime-setup '(slime-repl slime-company))
 
-(defvar swank-kawa-jar (concat
+(defvar swank-kawa-jar "")
+(defvar swank-kawa-cp "")
+(setq swank-kawa-jar (concat
                         (string-trim
                          (shell-command-to-string
                           (concat "dirname " (locate-library "slime.el"))))
-                        "/contrib/swank-kawa.jar")
-  "Path to swank for kawa.")
+                        "/contrib/swank-kawa.jar"))
 
 (if (not (file-exists-p swank-kawa-jar))
     (start-process-shell-command "swank-kawa compilation"
@@ -987,13 +1011,13 @@ Otherwise, use the value of said variable as argument to a funcall."
                                  (concat "cd `dirname " swank-kawa-jar
                                          "` && java -cp /usr/share/java/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
 
-(defvar swank-kawa-cp (concat "/usr/share/java/kawa.jar:"
+(setq swank-kawa-cp (concat "/usr/share/java/kawa.jar:"
                         swank-kawa-jar
-                        ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar")
-  "Swank kawa classpath.")
+                        ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
 
-(defmacro setup-slime-implementations ()
-  "Setup slime Lisp implementations."
+(defvar slime-lisp-implementations)
+(defmacro setup-slime-implementations (swank-kawa-cp)
+  "Setup slime Lisp implementations with SWANK-KAWA-CP classpath."
   `(setq slime-lisp-implementations
         '((kawa
            ("java"
@@ -1009,14 +1033,11 @@ Otherwise, use the value of said variable as argument to a funcall."
             "kawa.repl" "-s")
            :init kawa-slime-init))))
 
-(defun setup-slime-implementations-function ()
-  "Use function for hooks."
-  (setup-slime-implementations))
+(setup-slime-implementations swank-kawa-cp)
 
-(add-hook 'after-init-hook #'setup-slime-implementations-function)
-
-(defun kawa-slime-init (file _)
-  "Init kawa-slime for `FILE'."
+(defvar slime-protocol-version)
+(defun kawa-slime-init (file ignore)
+  "Init kawa-slime for `FILE' and IGNORE second arg."
   (setq slime-protocol-version 'ignore)
   (format "%S\n"
           `(begin (import (swank-kawa))
@@ -1038,9 +1059,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;;;; Erlang
 (need-package 'erlang)
-(require 'rebar)
-(add-hook 'erlang-mode-hook #'rebar-mode)
-
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
 (defun fix-erlang-project-includes ()
@@ -1084,33 +1102,36 @@ Otherwise, use the value of said variable as argument to a funcall."
                         (concat "find " dir " -type d -name ebin"))))
          ))
     (setq flycheck-erlang-library-path code-path)))
+(need-package 'ivy-erlang-complete)
 (require 'ivy-erlang-complete)
+(defvar erlang-mode-map)
 (defun my-erlang-hook ()
-              (define-key erlang-mode-map (kbd "C-:")
-                'ivy-erlang-complete)
-              (define-key erlang-mode-map (kbd "C-c C-h")
-                'ivy-erlang-complete-show-doc-at-point)
-              (define-key erlang-mode-map (kbd "C-c C-e")
-                #'(lambda ()
-                    (interactive)
-                    (eopengrok-make-index-with-enable-projects
-                     (ivy-erlang-complete-set-project-root))))
-              (define-key erlang-mode-map (kbd "C-c C-d")
-                #'(lambda () (interactive)
-                    (if (ivy-erlang-complete-record-at-point)
-                        (eopengrok-find-text
-                         (concat "\""
-                                 (s-replace "#" "record("
-                                            (ivy-erlang-complete-thing-at-point))
-                                 "\""))
-                      (eopengrok-find-definition (ivy-erlang-complete-thing-at-point)))))
-              (define-key erlang-mode-map (kbd "C-c C-r")
-                #'(lambda () (interactive)
-                    (eopengrok-find-reference (ivy-erlang-complete-thing-at-point))))
-              (define-key erlang-mode-map (kbd "C-c i")
-                'fix-erlang-project-includes)
-              (define-key erlang-mode-map (kbd "C-c b")
-                'fix-erlang-project-code-path))
+  "Setup for erlang."
+  (define-key erlang-mode-map (kbd "C-:")
+    'ivy-erlang-complete)
+  (define-key erlang-mode-map (kbd "C-c C-h")
+    'ivy-erlang-complete-show-doc-at-point)
+  (define-key erlang-mode-map (kbd "C-c C-e")
+    #'(lambda ()
+        (interactive)
+        (eopengrok-make-index-with-enable-projects
+         (ivy-erlang-complete-set-project-root))))
+  (define-key erlang-mode-map (kbd "C-c C-d")
+    #'(lambda () (interactive)
+        (if (ivy-erlang-complete-record-at-point)
+            (eopengrok-find-text
+             (concat "\""
+                     (s-replace "#" "record("
+                                (ivy-erlang-complete-thing-at-point))
+                     "\""))
+          (eopengrok-find-definition (ivy-erlang-complete-thing-at-point)))))
+  (define-key erlang-mode-map (kbd "C-c C-r")
+    #'(lambda () (interactive)
+        (eopengrok-find-reference (ivy-erlang-complete-thing-at-point))))
+  (define-key erlang-mode-map (kbd "C-c i")
+    'fix-erlang-project-includes)
+  (define-key erlang-mode-map (kbd "C-c b")
+    'fix-erlang-project-code-path))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
@@ -1246,6 +1267,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;;; Smartparens
 (need-package 'smartparens)
 (require 'smartparens-config)
+
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
