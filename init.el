@@ -502,39 +502,59 @@ the end of the line, then comment current line.  Replaces default behaviour of
   "Workaround for web-mode."
   (if (string= major-mode "web-mode")
                            (turn-off-fci-mode) (turn-on-fci-mode)))
-(add-hook 'after-change-major-mode-hook #'my-web-mode-hook)
+(add-hook 'after-change-major-mode-hook #'my-set-font)
 
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
 (need-package 'web-mode)
-(need-package 'js3-mode)
-(add-hook 'js-mode-hook #'js3-mode)
+(need-package 'js2-mode)
+(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+
 ;; (need-package 'react-snippets)
+(defvar js2-highlight-level)
+(setq js2-highlight-level 3)
+(defvar js2-idle-timer-delay)
+(setq js2-idle-timer-delay 2)
+(setq blink-matching-paren nil)
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 
-;; disable jshint since we prefer eslint checking
-(setq flycheck-disabled-checkers
-              (append flycheck-disabled-checkers
-                      '(javascript-jshint)))
+(need-package 'ac-js2)
+(require 'ac-js2)
+(add-hook 'js2-mode-hook #'ac-js2-mode)
+(defvar ac-js2-evaluate-calls)
+(setq ac-js2-evaluate-calls t)
+(defvar ac-js2-add-browser-externs)
+(setq ac-js2-add-browser-externs t)
+(defvar ac-js2-add-prototype-completions)
+(setq ac-js2-add-prototype-completions t)
+(add-hook 'ac-js2-mode-hook #'skewer-run-phantomjs)
 
-;; use eslint with web-mode for jsx files
-(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+
 
 ;; tern
-(need-package 'tern)
-(need-package 'company-tern)
-(add-to-list 'company-backends 'company-tern)
-(defvar company-tern-meta-as-single-line)
-(setq company-tern-meta-as-single-line t)
-(defvar company-tooltip-align-annotations)
-(setq company-tooltip-align-annotations t)
+;; (need-package 'tern)
+;; (need-package 'company-tern)
+;; (add-to-list 'company-backends 'company-tern)
+;; (defvar company-tern-meta-as-single-line)
+;; (setq company-tern-meta-as-single-line t)
+;; (defvar company-tooltip-align-annotations)
+;; (setq company-tooltip-align-annotations t)
 
-(add-hook 'js3-mode-hook #'tern-mode)
-(add-hook 'js-mode-hook #'tern-mode)
-(add-hook 'web-mode-hook #'tern-mode)
+;; (add-hook 'js2-mode-hook #'tern-mode)
+;; (add-hook 'js-mode-hook #'tern-mode)
+;; (add-hook 'web-mode-hook #'tern-mode)
+
+(need-package 'js2-refactor)
+(require 'js2-refactor)
+(add-hook 'js2-mode-hook #'js2-refactor-mode)
+
+(need-package 'skewer-mode)
+(require 'skewer-mode)
+(skewer-setup)
 
 ;; adjust indents for web-mode to 2 spaces
 (defvar web-mode-markup-indent-offset)
@@ -879,13 +899,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; Gnu global
 (need-package 'helm-gtags)
-;;; Enable helm-gtags-mode
-;; (add-hook 'c-mode-hook 'helm-gtags-mode)
-;; (add-hook 'c++-mode-hook 'helm-gtags-mode)
-(add-hook 'asm-mode-hook #'helm-gtags-mode)
-(add-hook 'web-mode-hook #'helm-gtags-mode)
-(add-hook 'js3-mode-hook #'helm-gtags-mode)
-;; (add-hook 'erlang-mode-hook 'helm-gtags-mode)
 
 ;; key bindings
 (defvar helm-gtags-mode-map)
