@@ -1278,6 +1278,25 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
+;;;; Java development
+(need-package 'emacs-eclim)
+(defun my-java-hook ()
+  "Setup for java development."
+  (smartparens-mode t)
+  (require 'eclim)
+  (eclim-mode)
+  (setq help-at-pt-display-when-idle t)
+  (setq help-at-pt-timer-delay 0.1)
+  (help-at-pt-set-timer)
+  (require 'company-emacs-eclim)
+  (company-emacs-eclim-setup)
+  (require 'eclimd)
+  (setq eclimd-wait-for-process nil)
+  (if (not (eclimd--running-p))
+      (start-eclimd default-directory)))
+
+(add-hook 'java-mode-hook #'my-java-hook)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
