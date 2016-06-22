@@ -497,12 +497,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (set 'fci-rule-column 80)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (global-fci-mode 1)
-; workaround for web-mode
-(defun my-web-mode-workaround ()
-  "Workaround for web-mode."
-  (if (string= major-mode "web-mode")
-                           (turn-off-fci-mode) (turn-on-fci-mode)))
-(add-hook 'after-change-major-mode-hook #'my-set-font)
 
 (setq eval-expression-debug-on-error t)
 
@@ -531,8 +525,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar ac-js2-add-prototype-completions)
 (setq ac-js2-add-prototype-completions t)
 (add-hook 'ac-js2-mode-hook #'skewer-run-phantomjs)
-
-
+;; default port conflicts with other soft
+(setq httpd-port 18080)
 
 
 ;; tern
