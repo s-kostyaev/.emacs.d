@@ -1293,7 +1293,7 @@ Otherwise, use the value of said variable as argument to a funcall."
   (require 'eclimd)
   (setq eclimd-wait-for-process nil)
   (if (not (eclimd--running-p))
-      (start-eclimd default-directory)))
+      (start-eclimd (expand-file-name "~/java"))))
 
 (add-hook 'java-mode-hook #'my-java-hook)
 
