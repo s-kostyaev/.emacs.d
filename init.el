@@ -1261,6 +1261,20 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'cmake-ide)
 (cmake-ide-setup)
 
+(need-package 'cmake-mode)
+; Add cmake listfile names to the mode list.
+(setq auto-mode-alist
+	  (append
+	   '(("CMakeLists\\.txt\\'" . cmake-mode))
+	   '(("\\.cmake\\'" . cmake-mode))
+	   auto-mode-alist))
+(need-package 'cmake-font-lock)
+(defun my-cmake-font-lock ()
+  "Activate font lock for cmake."
+  (require 'cmake-font-lock)
+  (cmake-font-lock-activate))
+(add-hook 'cmake-mode-hook #'my-cmake-font-lock)
+
 (defvar company-c-headers-path-user)
 (defun company-set-c-headers-user-path ()
   "Set path for selected directory with project headers."
