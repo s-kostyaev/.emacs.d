@@ -1068,52 +1068,49 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'erlang)
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
-(defun fix-erlang-project-includes ()
-  "Find erlang include paths for selected directory with project deps."
-  (interactive)
-  (let
-      ((dir
-        (expand-file-name (read-directory-name
-                           "Select project directory:" default-directory))))
-    (setq flycheck-erlang-include-path (append
-                                        (s-split
-                                         "\n"
-                                         (shell-command-to-string
-                                          (concat "find "
-                                                  dir
-                                                  "/*"
-                                                  " -type d -name include"))
-                                         t)
-                                        (list dir
-                                              (concat dir "/include")
-                                              (concat dir "/deps")
-                                              default-directory
-                                              (concat
-                                               (locate-dominating-file
-                                                default-directory
-                                                "src") "include")
-                                              (concat
-                                               (locate-dominating-file
-                                                default-directory
-                                                "src") "deps"))))))
+(defun fix-erlang-project-includes (project-root)
+  "Find erlang include paths for PROJECT-ROOT with project deps."
+  (setq-local flycheck-erlang-include-path
+              (append
+               (s-split
+                "\n"
+                (shell-command-to-string
+                 (concat "find "
+                         project-root
+                         "/*"
+                         " -type d -name include"))
+                t)
+               (list project-root
+                     (concat project-root "/include")
+                     (concat project-root "/deps")
+                     default-directory
+                     (concat
+                      (locate-dominating-file
+                       default-directory
+                       "src") "include")
+                     (concat
+                      (locate-dominating-file
+                       default-directory
+                       "src") "deps")))))
 
-(defun fix-erlang-project-code-path ()
-  "Find erlang include paths for selected directory with project deps."
-  (interactive)
+(defun fix-erlang-project-code-path (project-root)
+  "Find erlang include paths for PROJECT-ROOT with project deps."
   (let ((code-path
-         (let
-             ((dir
-               (expand-file-name (read-directory-name
-                                  "Select project directory:" default-directory))))
            (split-string (shell-command-to-string
-                        (concat "find " dir " -type d -name ebin"))))
+                        (concat "find " project-root " -type d -name ebin")))
          ))
-    (setq flycheck-erlang-library-path code-path)))
+    (setq-local flycheck-erlang-library-path code-path)))
 (need-package 'ivy-erlang-complete)
 (require 'ivy-erlang-complete)
 (defvar erlang-mode-map)
 (defun my-erlang-hook ()
   "Setup for erlang."
+  (let ((project-root (ivy-erlang-complete-autosetup-project-root)))
+      (async-start (eopengrok-make-index-with-enable-projects
+                    project-root))
+      (fix-erlang-project-code-path project-root)
+      (fix-erlang-project-includes project-root))
+  (ivy-erlang-complete-reparse)
   (define-key erlang-mode-map (kbd "C-:")
     'ivy-erlang-complete)
   (define-key erlang-mode-map (kbd "C-c C-h")
@@ -1141,11 +1138,7 @@ Otherwise, use the value of said variable as argument to a funcall."
                                    (ivy-erlang-complete--find-local-functions))))
             (eopengrok-find-reference
              (concat (file-name-base (buffer-file-name)) ":" thing))
-          (eopengrok-find-reference thing)))))
-  (define-key erlang-mode-map (kbd "C-c i")
-    'fix-erlang-project-includes)
-  (define-key erlang-mode-map (kbd "C-c b")
-    'fix-erlang-project-code-path))
+          (eopengrok-find-reference thing))))))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
