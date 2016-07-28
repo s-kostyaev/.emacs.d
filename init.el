@@ -18,7 +18,8 @@
 (defun my-set-font ()
   "Set my font."
   ;; (set-frame-font "-gohu-gohufont-medium-r-normal--14-*-100-100-c-80-iso10646-1" nil t)
-  (set-frame-font "-pyrs-Roboto Mono Light for Powerline-light-normal-normal-*-13-*-*-*-*-0-iso10646-1"))
+  ;; (set-frame-font "-pyrs-Roboto Mono Light for Powerline-light-normal-normal-*-13-*-*-*-*-0-iso10646-1")
+  (set-frame-font "-FBI -Input Mono Compressed-light-normal-extracondensed-*-14-*-*-*-m-0-iso10646-1"))
 (my-set-font)
 (add-hook 'after-change-major-mode-hook #'my-set-font)
 
