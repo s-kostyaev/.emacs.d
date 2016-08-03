@@ -724,6 +724,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar ivy-re-builders-alist)
 (setq ivy-re-builders-alist
       '((counsel-M-x . ivy--regex-fuzzy)
+        (swiper . ivy--regex-plus)
         ;; (t . ivy--regex-ignore-order)
         (t . ivy--regex-fuzzy)
         ))
