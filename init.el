@@ -1110,13 +1110,13 @@ Otherwise, use the value of said variable as argument to a funcall."
 (require 'ivy-erlang-complete)
 (defvar erlang-mode-map)
 
-(defun force-reindex-erlang-project ()
-  "Force update erlang project index."
-  (interactive)
-  (message "%s" (shell-command-to-string
-                 (concat "find " ivy-erlang-complete-project-root
-                         " -type d -name .opengrok -exec rm -fr {} +")))
-  (eopengrok-make-index-with-enable-projects ivy-erlang-complete-project-root))
+;; (defun force-reindex-erlang-project ()
+;;   "Force update erlang project index."
+;;   (interactive)
+;;   (message "%s" (shell-command-to-string
+;;                  (concat "find " ivy-erlang-complete-project-root
+;;                          " -type d -name .opengrok -exec rm -fr {} +")))
+;;   (eopengrok-make-index-with-enable-projects ivy-erlang-complete-project-root))
 
 (defun my-erlang-hook ()
   "Setup for erlang."
@@ -1126,27 +1126,14 @@ Otherwise, use the value of said variable as argument to a funcall."
   (ivy-erlang-complete-reparse)
   (define-key erlang-mode-map (kbd "C-:")
     'ivy-erlang-complete)
-  (define-key erlang-mode-map (kbd "C-c C-f")
-    #'force-reindex-erlang-project)
   (define-key erlang-mode-map (kbd "C-c C-h")
     'ivy-erlang-complete-show-doc-at-point)
   (define-key erlang-mode-map (kbd "C-c C-e")
-    #'(lambda ()
-        (interactive)
-        (eopengrok-make-index-with-enable-projects
-         (ivy-erlang-complete-set-project-root))))
+    #'ivy-erlang-complete-set-project-root)
   (define-key erlang-mode-map (kbd "C-c C-d")
     #'ivy-erlang-complete-find-definition)
   (define-key erlang-mode-map (kbd "C-c C-r")
-    #'(lambda () (interactive)
-        (let ((thing (ivy-erlang-complete-thing-at-point)))
-         (if (and (not (s-matches? ":" thing))
-                  (-reduce (lambda (a b) (or a b))
-                           (-map (lambda (s) (s-prefix? thing s))
-                                   (ivy-erlang-complete--find-local-functions))))
-            (eopengrok-find-reference
-             (concat (file-name-base (buffer-file-name)) ":" thing))
-          (eopengrok-find-reference thing))))))
+    #'ivy-erlang-complete-find-references))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
