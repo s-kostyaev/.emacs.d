@@ -1136,14 +1136,7 @@ Otherwise, use the value of said variable as argument to a funcall."
         (eopengrok-make-index-with-enable-projects
          (ivy-erlang-complete-set-project-root))))
   (define-key erlang-mode-map (kbd "C-c C-d")
-    #'(lambda () (interactive)
-        (if (ivy-erlang-complete-record-at-point)
-            (eopengrok-find-text
-             (concat "\""
-                     (s-replace "#" "record("
-                                (ivy-erlang-complete-thing-at-point))
-                     "\""))
-          (eopengrok-find-definition (ivy-erlang-complete-thing-at-point)))))
+    #'ivy-erlang-complete-find-definition)
   (define-key erlang-mode-map (kbd "C-c C-r")
     #'(lambda () (interactive)
         (let ((thing (ivy-erlang-complete-thing-at-point)))
