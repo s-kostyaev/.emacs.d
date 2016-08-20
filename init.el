@@ -1300,6 +1300,10 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (add-hook 'java-mode-hook #'my-java-hook)
 
+;;; Ace link
+(need-package 'ace-link)
+(ace-link-setup-default)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

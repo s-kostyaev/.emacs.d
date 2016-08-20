@@ -10,10 +10,13 @@
         completion-at-point
         dabbrev-completion
         electric-newline-and-maybe-indent
+        erlang-electric-comma
         go-mode-insert-and-indent
+        keyboard-escape-quit
         kill-region
         paredit-forward-delete
         paredit-open-round
+        sp-remove-active-pair-overlay
         wgrep-finish-edit
         yas-expand
         ))
