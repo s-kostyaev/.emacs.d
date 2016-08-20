@@ -1112,7 +1112,6 @@ Otherwise, use the value of said variable as argument to a funcall."
     (setq-local flycheck-erlang-library-path code-path)))
 (need-package 'ivy-erlang-complete)
 (require 'ivy-erlang-complete)
-(defvar erlang-mode-map)
 
 ;; (defun force-reindex-erlang-project ()
 ;;   "Force update erlang project index."
