@@ -1303,6 +1303,11 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'ace-link)
 (ace-link-setup-default)
 
+;;; Ace window
+(need-package 'ace-window)
+(global-set-key (kbd "M-p") 'ace-window)
+(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
