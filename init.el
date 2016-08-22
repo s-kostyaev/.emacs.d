@@ -1281,7 +1281,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
 ;;;; Java development
-(need-package 'emacs-eclim)
+(need-package 'eclim)
 (defun my-java-hook ()
   "Setup for java development."
   (smartparens-mode t)
