@@ -1131,6 +1131,9 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
 
+(add-to-list 'auto-mode-alist '("rebar\.config$" . erlang-mode))
+(add-to-list 'auto-mode-alist '("\\.app\.src$" . erlang-mode))
+
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
 ;; (require 'distel)
