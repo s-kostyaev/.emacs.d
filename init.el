@@ -758,13 +758,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require 'helm-descbinds)
 (helm-descbinds-mode 1)
 
-(defun my-force-refresh ()
-  "Force redisplay Emacs windows content."
-  (interactive)
- (force-window-update))
-
 (defvar ivy-mode-map)
-(define-key ivy-mode-map (kbd "C-c C-r") #'my-force-refresh)
 
 (defvar-local my-counsel-company-prefix nil
   "Company prefix for use counsel-company with multiple-cursors.")
