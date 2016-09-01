@@ -1313,6 +1313,11 @@ Otherwise, use the value of said variable as argument to a funcall."
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
+;;; Which key
+(need-package 'which-key)
+(require 'which-key)
+(which-key-mode)
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
