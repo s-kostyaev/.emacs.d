@@ -1136,6 +1136,9 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-to-list 'auto-mode-alist '("rebar\.config$" . erlang-mode))
 (add-to-list 'auto-mode-alist '("\\.app\.src$" . erlang-mode))
 
+(need-package 'flycheck-dialyzer)
+(require 'flycheck-dialyzer)
+
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
 ;; (require 'distel)
