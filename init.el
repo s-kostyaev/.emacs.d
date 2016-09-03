@@ -1307,6 +1307,10 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (add-hook 'java-mode-hook #'my-java-hook)
 
+;;;; Scala development
+(need-package 'ensime)
+(require 'ensime)
+
 ;;; Ace link
 (need-package 'ace-link)
 (ace-link-setup-default)
