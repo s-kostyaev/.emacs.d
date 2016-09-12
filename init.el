@@ -1139,6 +1139,14 @@ Otherwise, use the value of said variable as argument to a funcall."
 (need-package 'flycheck-dialyzer)
 (require 'flycheck-dialyzer)
 
+;;; wrangler
+(add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
+(require 'wrangler)
+; Some code inspection functionalities of Wrangler generate .dot
+; files, which can be compiled and previewed in Emacs if the
+; Graphviz-dot mode for Emacs is enabled.
+(load-library "graphviz-dot-mode")
+
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
 ;; (require 'distel)
