@@ -824,75 +824,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; rebind F1 for xterm
 ;(global-set-key (kbd "M-o p") 'help)
 
-;;
-;; helm-swoop
-;;
-(need-package 'helm-swoop)
-;; (need-package 'migemo)
-;; (require 'migemo)
-(require 'helm-swoop)
-
-;; Change the keybinds to whatever you like :)
-(global-set-key (kbd "M-i") #'helm-swoop)
-(global-set-key (kbd "M-I") #'helm-swoop-back-to-last-point)
-(global-set-key (kbd "C-c M-i") #'helm-multi-swoop)
-(global-set-key (kbd "C-x M-i") #'helm-multi-swoop-all)
-
-;; When doing isearch, hand the word over to helm-swoop
-(define-key isearch-mode-map (kbd "M-i") #'helm-swoop-from-isearch)
-;; From helm-swoop to helm-multi-swoop-all
-(define-key helm-swoop-map (kbd "M-i") #'helm-multi-swoop-all-from-helm-swoop)
-;; When doing evil-search, hand the word over to helm-swoop
-;; (define-key evil-motion-state-map (kbd "M-i") 'helm-swoop-from-evil-search)
-
-;; Instead of helm-multi-swoop-all, you can also use helm-multi-swoop-current-mode
-(define-key helm-swoop-map (kbd "M-m") 'helm-multi-swoop-current-mode-from-helm-swoop)
-
-;; Move up and down like isearch
-(define-key helm-swoop-map (kbd "C-r") #'helm-previous-line)
-(define-key helm-swoop-map (kbd "C-s") #'helm-next-line)
-(define-key helm-multi-swoop-map (kbd "C-r") #'helm-previous-line)
-(define-key helm-multi-swoop-map (kbd "C-s") #'helm-next-line)
-
-;; Save buffer when helm-multi-swoop-edit complete
-(setq helm-multi-swoop-edit-save t)
-
-;; If this value is t, split window inside the current window
-(setq helm-swoop-split-with-multiple-windows nil)
-
-;; Split direcion. 'split-window-vertically or 'split-window-horizontally
-(setq helm-swoop-split-direction 'split-window-vertically)
-
-;; If nil, you can slightly boost invoke speed in exchange for text color
-(setq helm-swoop-speed-or-color nil)
-
-;; ;; Go to the opposite side of line from the end or beginning of line
-(setq helm-swoop-move-to-line-cycle t)
-
-;; Optional face for line numbers
-;; Face name is `helm-swoop-line-number-face`
-(setq helm-swoop-use-line-number-face t)
-
-;; Match/Search methods (Fuzzy matching, Migemo)
-;; If you do not preferr fuzzy, remove it from the list below
-;; (defvar helm-c-source-swoop-match-functions
-;;   '(helm-mm-exact-match
-;;     helm-mm-match
-;;     helm-fuzzy-match
-;;     helm-mm-3-migemo-match))
-;; (setq helm-c-source-swoop-search-functions
-;;       '(helm-mm-exact-search
-;;         helm-mm-search
-;;         helm-candidates-in-buffer-search-default-fn
-;;         helm-fuzzy-search
-;;         helm-mm-3-migemo-search))
-
-;; In addition of above, you need to enable migemo mode if you'd like to
-;; (helm-migemo-mode 1)
-
-;; restclient-mode
-;; (require 'restclient)
-
+(global-set-key (kbd "M-i") #'imenu)
 
 ;;;; Projectile
 (need-package 'projectile)
@@ -987,13 +919,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;; helm flycheck
 (need-package 'helm-flycheck)
-
-;; (custom-set-faces
-;;  ;; custom-set-faces was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(default ((t (:family "Monaco" :foundry "FontForge" :slant normal :weight normal :height 90 :width normal)))))
 
 ;; pandoc
 (need-package 'pandoc-mode)
@@ -1176,11 +1101,6 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; fast open url
 (need-package 'link-hint)
 (global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
-(defun all-urls-in-buffer ()
-  "Find all links."
-  (interactive)
-  (helm-swoop :$query "https?://"))
-(global-set-key (kbd "C-x C-u") #'all-urls-in-buffer)
 
 ;;;; Lua
 (need-package 'lua-mode)
@@ -1385,7 +1305,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-swoop helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(projectile-globally-ignored-directories
