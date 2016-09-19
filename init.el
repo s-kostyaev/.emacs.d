@@ -943,6 +943,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (defvar swank-kawa-jar "")
 (defvar swank-kawa-cp "")
+(require 'subr-x)
 (setq swank-kawa-jar (concat
                         (string-trim
                          (shell-command-to-string
