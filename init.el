@@ -121,16 +121,22 @@ re-downloaded in order to locate PACKAGE."
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
 (need-package 'smooth-scroll)
-(require 'smooth-scroll)
-(smooth-scroll-mode t)
-(setq smooth-scroll/vscroll-step-size 4)
-;; (setq gc-cons-threshold 100000000)
+;; (require 'smooth-scroll)
+;; (smooth-scroll-mode t)
+;; (setq smooth-scroll/vscroll-step-size 1)
+(setq gc-cons-threshold 80000000)
+(setq gc-cons-percentage 0.5)
+(need-package 'smooth-scrolling)
+(require 'smooth-scrolling)
+(smooth-scrolling-mode 1)
 (global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
 (global-set-key [(control up)]   #'(lambda () (interactive) (scroll-down-1 4)))
-(global-set-key (kbd "C-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
-(global-set-key (kbd "M-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
-(global-set-key (kbd "<next>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
-(global-set-key (kbd "<prior>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
+;; (global-set-key (kbd "C-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
+;; (global-set-key (kbd "M-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
+;; (global-set-key (kbd "<next>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
+;; (global-set-key (kbd "<prior>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
+(global-set-key (kbd "M-J") #'scroll-up-line)
+(global-set-key (kbd "M-K") #'scroll-down-line)
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
@@ -1311,7 +1317,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (xref-js2 emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (which-key ace-window ace-link ensime eclim smartparens viking-mode cmake-font-lock cmake-mode xah-lookup flycheck-dialyzer ivy-erlang-complete eopengrok js2-refactor smooth-scrolling sublimity xref-js2 emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(projectile-globally-ignored-directories
