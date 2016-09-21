@@ -112,8 +112,8 @@
 ;; (quelpa 'smooth-scrolling)
 ;; (require 'smooth-scrolling)
 ;; (smooth-scrolling-mode 1)
-(global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
-(global-set-key [(control up)]   #'(lambda () (interactive) (scroll-down-1 4)))
+;; (global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
+;; (global-set-key [(control up)]   #'(lambda () (interactive) (scroll-down-1 4)))
 ;; (global-set-key (kbd "C-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
 ;; (global-set-key (kbd "M-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
 ;; (global-set-key (kbd "<next>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
@@ -449,7 +449,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq cider-repl-wrap-history t)
 (defvar cider-repl-history-size)
 (setq cider-repl-history-size 1000) ; the default is 500
-(add-hook 'cider-repl-mode-hook #'paredit-mode)
 
 (setq browse-url-browser-function #'browse-url-chromium)
 
@@ -814,8 +813,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; keyboard selection
 ;;
-(setq x-select-enable-primary t)
-(setq x-select-enable-clipboard t)
+(setq select-enable-primary t)
+(setq select-enable-clipboard t)
 
 ;; rebind F1 for xterm
 ;(global-set-key (kbd "M-o p") 'help)
@@ -1215,6 +1214,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;;;; Java development
 (quelpa 'eclim)
+(defvar eclimd-wait-for-process)
 (defun my-java-hook ()
   "Setup for java development."
   (smartparens-mode t)
