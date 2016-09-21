@@ -28,6 +28,7 @@
         ace-mc-add-multiple-cursors
         ace-mc-add-single-cursor
         ace-mc-do-keyboard-reset
+        avy-goto-word-1
         beginning-of-buffer
         company-complete-selection
         electrify-return-if-match

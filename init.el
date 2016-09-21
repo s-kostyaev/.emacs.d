@@ -31,55 +31,38 @@
 (add-hook 'after-change-major-mode-hook #'my-set-font)
 
 ;; Melpa
-(require 'package) ;; You might already have this line
-;; (add-to-list 'package-archives
-;; 			              '("melpa" . "http://melpa.org/packages/") t)
-;; (when (< emacs-major-version 24)
-;;     ;; For important compatibility libraries like cl-lib
-;;     (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/")))
-(setq  package-archives
-   (quote
-    (("gnu" . "http://elpa.gnu.org/packages/")
-     ("melpa" . "http://melpa.org/packages/"))))
-(package-initialize) ;; You might already have this line
-
-										; for automatic download required packages
-(defun need-package (package &optional min-version no-refresh)
-  "Install given PACKAGE, optionally requiring MIN-VERSION.
-If NO-REFRESH is non-nil, the available package lists will not be
-re-downloaded in order to locate PACKAGE."
-  (if (package-installed-p package min-version)
-	   t
-	 (if (or (assoc package package-archive-contents) no-refresh)
-		 (package-install package)
-	   (progn
-		 (package-refresh-contents)
-		 (need-package package min-version t)))))
+(require 'package)
+(package-initialize)
+(if (require 'quelpa nil t)
+    (quelpa-self-upgrade)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+    (eval-buffer)))
 
 ;; async
-(need-package 'async)
+(quelpa 'async)
 (async-bytecomp-package-mode 1)
 
 
-(need-package 'color-theme)
+(quelpa 'color-theme)
 (require 'color-theme)
 (setq color-theme-is-global t)
 (color-theme-initialize)
-(need-package 'color-theme-solarized)
+(quelpa 'color-theme-solarized)
 
-;; (need-package 'color-theme-sanityinc-solarized)
+;; (quelpa 'color-theme-sanityinc-solarized)
 ;; (require 'color-theme-sanityinc-solarized)
 ;; (color-theme-sanityinc-solarized-light)
-;; (need-package 'zenburn-theme)
+;; (quelpa 'zenburn-theme)
 ;; (load-theme 'zenburn t)
 
-(need-package 'sublime-themes)
+(quelpa 'sublime-themes)
 
 
 ;; powerline
-(need-package 'smart-mode-line)
+(quelpa 'smart-mode-line)
 (require 'smart-mode-line)
-;; (need-package 'smart-mode-line-powerline-theme)
+;; (quelpa 'smart-mode-line-powerline-theme)
 
 ;; (sml/apply-theme "powerline")
 ;; (sml/apply-theme 'respectful)
@@ -120,13 +103,13 @@ re-downloaded in order to locate PACKAGE."
 ;(display-time)
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
-(need-package 'smooth-scroll)
+(quelpa 'smooth-scroll)
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
 (setq gc-cons-threshold 80000000)
 (setq gc-cons-percentage 0.5)
-;; (need-package 'smooth-scrolling)
+;; (quelpa 'smooth-scrolling)
 ;; (require 'smooth-scrolling)
 ;; (smooth-scrolling-mode 1)
 (global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
@@ -154,7 +137,7 @@ re-downloaded in order to locate PACKAGE."
 ;;
 ;; hydra
 ;;
-(need-package 'hydra)
+(quelpa 'hydra)
 (require 'hydra)
 
 (global-set-key (kbd "C-x o")
@@ -202,7 +185,7 @@ re-downloaded in order to locate PACKAGE."
 	  (if this-win-2nd (other-window 1))))))
 
 ;; Flycheck
-(need-package 'flycheck)
+(quelpa 'flycheck)
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 (global-set-key (kbd "C-c r") #'helm-flycheck)
@@ -210,7 +193,7 @@ re-downloaded in order to locate PACKAGE."
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
 (setq exec-path (append exec-path '("~/go/bin")))
-(need-package 'go-mode)
+(quelpa 'go-mode)
 (require 'go-mode-autoloads)
 (defun goimports ()
   "Running goimports on go files."
@@ -220,7 +203,7 @@ re-downloaded in order to locate PACKAGE."
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
 
-(need-package 'company-go)
+(quelpa 'company-go)
 
 (declare-function go-remove-unused-imports "ext:go-mode")
 (declare-function go-goto-imports "ext:go-mode")
@@ -229,6 +212,8 @@ re-downloaded in order to locate PACKAGE."
 (defvar company-begin-commands)
 (defvar company-backends)
 
+(quelpa 'go-impl)
+(quelpa 'flycheck-gometalinter)
 (defun my-go-mode-hook ()
   "Setup for go."
   (require 'gobuild)
@@ -258,7 +243,7 @@ re-downloaded in order to locate PACKAGE."
 ;; Flycheck
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 ;; doc
-(need-package 'go-eldoc) ;; Don't need to require, if you install by package.el
+(quelpa 'go-eldoc) ;; Don't need to require, if you install by package.el
 (add-hook 'go-mode-hook #'go-eldoc-setup)
 
 
@@ -312,10 +297,10 @@ re-downloaded in order to locate PACKAGE."
 (put 'downcase-region 'disabled nil)
 
 ;;; Python mode
-(need-package 'anaconda-mode)
+(quelpa 'anaconda-mode)
 (add-hook 'python-mode-hook #'anaconda-mode)
 (add-hook 'python-mode-hook #'eldoc-mode)
-(need-package 'company-anaconda)
+(quelpa 'company-anaconda)
 
 (setenv "PYMACS_PYTHON" "python2")
 (setenv "PYTHONPATH" "/usr/bin/python2")
@@ -369,7 +354,7 @@ re-downloaded in order to locate PACKAGE."
 
 
 ;;; Auto-complete
-(need-package 'company)
+(quelpa 'company)
 (require 'company)
 (global-company-mode)
 (setq company-global-modes '(not erlang-mode))
@@ -469,7 +454,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq browse-url-browser-function #'browse-url-chromium)
 
 ;;;; Paredit
-;; (need-package 'paredit)
+;; (quelpa 'paredit)
 ;; (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 ;; (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -496,7 +481,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
 
 ;; Markdown
-(need-package 'markdown-mode)
+(quelpa 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -505,9 +490,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
 ;; for over-80-chars line highlightning
-;; (need-package 'column-enforce-mode)
+;; (quelpa 'column-enforce-mode)
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
-(need-package 'fill-column-indicator)
+(quelpa 'fill-column-indicator)
 (require 'fill-column-indicator)
 (set 'fci-rule-column 80)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
@@ -516,11 +501,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
-(need-package 'web-mode)
-(need-package 'js2-mode)
+(quelpa 'web-mode)
+(quelpa 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
-;; (need-package 'react-snippets)
+;; (quelpa 'react-snippets)
 (defvar js2-highlight-level)
 (setq js2-highlight-level 3)
 (defvar js2-idle-timer-delay)
@@ -530,7 +515,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 
-(need-package 'ac-js2)
+(quelpa 'ac-js2)
 (require 'ac-js2)
 (add-hook 'js2-mode-hook #'ac-js2-mode)
 (defvar ac-js2-evaluate-calls)
@@ -544,14 +529,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq httpd-port 18080)
 
 ;; xref-js2
-(need-package 'xref-js2)
+(quelpa 'xref-js2)
 (define-key js2-mode-map (kbd "M-.") nil)
 (add-hook 'js2-mode-hook (lambda ()
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 ;; tern
-;; (need-package 'tern)
-;; (need-package 'company-tern)
+;; (quelpa 'tern)
+;; (quelpa 'company-tern)
 ;; (add-to-list 'company-backends 'company-tern)
 ;; (defvar company-tern-meta-as-single-line)
 ;; (setq company-tern-meta-as-single-line t)
@@ -562,11 +547,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'js-mode-hook #'tern-mode)
 ;; (add-hook 'web-mode-hook #'tern-mode)
 
-(need-package 'js2-refactor)
+(quelpa 'js2-refactor)
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 
-(need-package 'skewer-mode)
+(quelpa 'skewer-mode)
 (require 'skewer-mode)
 (skewer-setup)
 
@@ -585,7 +570,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; emmet mode
 ;;
-(need-package 'emmet-mode)
+(quelpa 'emmet-mode)
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'web-mode-hook #'emmet-mode)
@@ -596,14 +581,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; key chord
 ;;
-(need-package 'key-chord)
+(quelpa 'key-chord)
 (require 'key-chord)
 (key-chord-mode 1)
 
 ;;
 ;; ace jump mode major function
 ;; 
-;; (need-package 'ace-jump-mode)
+;; (quelpa 'ace-jump-mode)
 ;; (autoload
 ;;   'ace-jump-mode
 ;;   "ace-jump-mode"
@@ -619,7 +604,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;                            ("p" ace-jump-mode-pop-mark "pop mark")
 ;;                            ("q" nil "quit")))
 ;; avy
-(need-package 'avy)
+(quelpa 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
 (define-key isearch-mode-map (kbd "C-'") #'avy-isearch)
@@ -641,7 +626,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; expand region
 ;;
-(need-package 'expand-region)
+(quelpa 'expand-region)
 (require 'expand-region)
 (key-chord-define-global "zj" 'er/expand-region)
 (key-chord-define-global "zk" 'er/contract-region)
@@ -650,9 +635,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; multiple cursors
 ;;
-(need-package 'multiple-cursors)
+(quelpa 'multiple-cursors)
 (require 'multiple-cursors)
-(need-package 'ace-mc)
+(quelpa 'ace-mc)
 
 (key-chord-define-global "fm"
                          (defhydra multiple-cursors-hydra (:hint nil)
@@ -688,7 +673,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; tagedit
 ;;
-;; (need-package 'tagedit)
+;; (quelpa 'tagedit)
 ;; (eval-after-load "sgml-mode"
 ;;   '(progn
 ;;      (require 'tagedit)
@@ -698,7 +683,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; yasnippet
 ;;
-(need-package 'yasnippet)
+(quelpa 'yasnippet)
 (require 'yasnippet)
 (yas-global-mode 1)
 
@@ -719,7 +704,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key [f9] #'key-chord-mode)
 
 ;helm
-(need-package 'helm)
+(quelpa 'helm)
 (require 'helm-config)
 (global-set-key (kbd "C-x C-x") #'helm-M-x)
 ;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
@@ -731,8 +716,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                     (byte-recompile-file "~/.emacs.d/init.el"))))
 (setq x-hyper-keysym 'meta)
 ;; ivy
-(need-package 'ivy)
-(need-package 'ivy-hydra)
+(quelpa 'ivy)
+(quelpa 'ivy-hydra)
 (ivy-mode 1)
 (defvar ivy-initial-inputs-alist)
 (setq ivy-initial-inputs-alist nil)
@@ -744,13 +729,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
         (t . ivy--regex-fuzzy)
         ))
 (setq completion-in-region-function 'ivy-completion-in-region)
-(need-package 'swiper)
+(quelpa 'swiper)
 (global-set-key "\C-s" #'swiper)
 (global-set-key (kbd "C-c s k") #'ivy-resume)
-(need-package 'counsel)
-(need-package 'smex)
-(need-package 'flx)
-(need-package 'wgrep)
+(quelpa 'counsel)
+(quelpa 'smex)
+(quelpa 'flx)
+(quelpa 'wgrep)
 (require 'wgrep)
 (setq wgrep-auto-save-buffer t)
 (counsel-mode t)
@@ -763,9 +748,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-;") #'comment-dwim-line)
 (global-set-key (kbd "C-c C-s") #'counsel-ag)
 (global-set-key (kbd "C-x l") #'counsel-locate)
-(need-package 'counsel-projectile)
+(quelpa 'counsel-projectile)
 
-(need-package 'helm-descbinds)
+(quelpa 'helm-descbinds)
 (require 'helm-descbinds)
 (helm-descbinds-mode 1)
 
@@ -838,8 +823,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-i") #'imenu)
 
 ;;;; Projectile
-(need-package 'projectile)
-(need-package 'helm-projectile)
+(quelpa 'projectile)
+(quelpa 'helm-projectile)
 (projectile-global-mode)
 (defvar projectile-completion-system)
 (setq projectile-completion-system 'ivy)
@@ -847,7 +832,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 
 ;;;; Gnu global
-(need-package 'helm-gtags)
+(quelpa 'helm-gtags)
 
 ;; key bindings
 (defvar helm-gtags-mode-map)
@@ -865,7 +850,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
      (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
 
 ;;;; OpenGrok
-(need-package 'eopengrok)
+(quelpa 'eopengrok)
 (defvar eopengrok-jar)
 (setq eopengrok-jar
       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
@@ -880,11 +865,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
 
 ;; speed-typing
-(need-package 'speed-type)
+(quelpa 'speed-type)
 (require 'speed-type)
 
 ;; magit
-(need-package 'magit)
+(quelpa 'magit)
 (require 'magit)
 
 ;; org-mode
@@ -929,17 +914,17 @@ Otherwise, use the value of said variable as argument to a funcall."
 (key-chord-define-global (kbd ";r") 'indirect-region)
 
 ;; helm flycheck
-(need-package 'helm-flycheck)
+(quelpa 'helm-flycheck)
 
 ;; pandoc
-(need-package 'pandoc-mode)
+(quelpa 'pandoc-mode)
 (require 'pandoc-mode)
 (add-hook 'markdown-mode-hook #'pandoc-mode)
 (declare-function pandoc-load-default-settings "ext:pandoc")
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
 ;; guile support
-(need-package 'geiser)
+(quelpa 'geiser)
 ;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
 ;; (add-hook 'geiser-mode-hook #'paredit-mode)
 (defvar geiser-chez-binary)
@@ -948,8 +933,8 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-to-list 'geiser-active-implementations 'chez)
 
 ;; slime
-(need-package 'slime)
-(need-package 'slime-company)
+(quelpa 'slime)
+(quelpa 'slime-company)
 (slime-setup '(slime-repl slime-company))
 
 (defvar swank-kawa-jar "")
@@ -1014,7 +999,7 @@ Otherwise, use the value of said variable as argument to a funcall."
   (slime 'kawa))
 
 ;;;; Erlang
-(need-package 'erlang)
+(quelpa 'erlang)
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
 (defun fix-erlang-project-includes (project-root)
@@ -1049,7 +1034,7 @@ Otherwise, use the value of said variable as argument to a funcall."
                         (concat "find " project-root " -type d -name ebin")))
          ))
     (setq-local flycheck-erlang-library-path code-path)))
-(need-package 'ivy-erlang-complete)
+(quelpa 'ivy-erlang-complete)
 (require 'ivy-erlang-complete)
 
 ;; (defun force-reindex-erlang-project ()
@@ -1073,7 +1058,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-to-list 'auto-mode-alist '("rebar\.config$" . erlang-mode))
 (add-to-list 'auto-mode-alist '("\\.app\.src$" . erlang-mode))
 
-(need-package 'flycheck-dialyzer)
+(quelpa 'flycheck-dialyzer)
 (require 'flycheck-dialyzer)
 
 ;;; wrangler
@@ -1111,11 +1096,11 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 
 ;; fast open url
-(need-package 'link-hint)
+(quelpa 'link-hint)
 (global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
 
 ;;;; Lua
-(need-package 'lua-mode)
+(quelpa 'lua-mode)
 (require 'lua-mode)
 
 ;; nXML mode customization
@@ -1125,19 +1110,19 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;;;; C, C++ Development
 ;; Rtags
-(need-package 'rtags)
+(quelpa 'rtags)
 (require 'rtags)
 (setq rtags-completions-enabled nil)
 (setq rtags-use-helm t)
 ;; completion
-(need-package 'irony)
-(need-package 'company-irony)
-(need-package 'company-irony-c-headers)
-;; (need-package 'company-c-headers)
+(quelpa 'irony)
+(quelpa 'company-irony)
+(quelpa 'company-irony-c-headers)
+;; (quelpa 'company-c-headers)
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
 ;; show docs at point
-(need-package 'xah-lookup)
+(quelpa 'xah-lookup)
 (require 'xah-lookup)
 ;; Uncomment the below line to use eww (Emacs Web Wowser)
 ;; (setq xah-lookup-browser-function 'eww)
@@ -1187,17 +1172,17 @@ Otherwise, use the value of said variable as argument to a funcall."
 ;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
 ;; (global-semantic-idle-summary-mode 1)
 
-(need-package 'cmake-ide)
+(quelpa 'cmake-ide)
 (cmake-ide-setup)
 
-(need-package 'cmake-mode)
+(quelpa 'cmake-mode)
 ; Add cmake listfile names to the mode list.
 (setq auto-mode-alist
 	  (append
 	   '(("CMakeLists\\.txt\\'" . cmake-mode))
 	   '(("\\.cmake\\'" . cmake-mode))
 	   auto-mode-alist))
-(need-package 'cmake-font-lock)
+(quelpa 'cmake-font-lock)
 (defun my-cmake-font-lock ()
   "Activate font lock for cmake."
   (require 'cmake-font-lock)
@@ -1215,21 +1200,21 @@ Otherwise, use the value of said variable as argument to a funcall."
     (setq company-c-headers-path-user (list (concat dir "/include")))))
 
 ;;; Viking mode - Kill first, ask later
-(need-package 'viking-mode)
+(quelpa 'viking-mode)
 (require 'viking-mode)
 (viking-global-mode)
 
 (show-paren-mode 1)
 
 ;;; Smartparens
-(need-package 'smartparens)
+(quelpa 'smartparens)
 (require 'smartparens-config)
 
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
 ;;;; Java development
-(need-package 'eclim)
+(quelpa 'eclim)
 (defun my-java-hook ()
   "Setup for java development."
   (smartparens-mode t)
@@ -1248,20 +1233,20 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'java-mode-hook #'my-java-hook)
 
 ;;;; Scala development
-(need-package 'ensime)
+(quelpa 'ensime)
 (require 'ensime)
 
 ;;; Ace link
-(need-package 'ace-link)
+(quelpa 'ace-link)
 (ace-link-setup-default)
 
 ;;; Ace window
-(need-package 'ace-window)
+(quelpa 'ace-window)
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 ;;; Which key
-(need-package 'which-key)
+(quelpa 'which-key)
 (require 'which-key)
 (which-key-mode)
 
@@ -1317,7 +1302,7 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (which-key ace-window ace-link ensime eclim smartparens viking-mode cmake-font-lock cmake-mode xah-lookup flycheck-dialyzer ivy-erlang-complete eopengrok js2-refactor smooth-scrolling sublimity xref-js2 emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile counsel cousel consel-ivy consel swiper ivy powerline async smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region erlang company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (flycheck-gometalinter go-impl color-theme pacmacs dash-functional which-key ace-window ace-link ensime eclim smartparens viking-mode cmake-font-lock cmake-mode xah-lookup flycheck-dialyzer eopengrok js2-refactor smooth-scrolling sublimity xref-js2 emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile cousel consel-ivy consel powerline smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(projectile-globally-ignored-directories
