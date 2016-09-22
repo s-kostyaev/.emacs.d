@@ -8,9 +8,10 @@
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
 (progn (cd "~/.emacs.d/lisp")
        (normal-top-level-add-subdirs-to-load-path))
-(progn (cd "~/.emacs.d/elpa")
-       (normal-top-level-add-subdirs-to-load-path)
-       (cd "~"))
+(if (file-exists-p "~/.emacs.d/elpa")
+    (progn (cd "~/.emacs.d/elpa")
+	   (normal-top-level-add-subdirs-to-load-path)
+	   (cd "~")))
 
 (defvar personal-keybindings nil)
 
