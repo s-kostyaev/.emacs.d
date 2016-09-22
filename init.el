@@ -71,6 +71,7 @@
 ;; (powerline-default-theme)
 ;; (sml/setup)
 
+(quelpa 'monokai-theme)
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (sml/setup)
@@ -1045,7 +1046,8 @@ Otherwise, use the value of said variable as argument to a funcall."
   (let ((project-root (ivy-erlang-complete-autosetup-project-root)))
       (fix-erlang-project-code-path project-root)
       (fix-erlang-project-includes project-root))
-  (ivy-erlang-complete-init))
+  (ivy-erlang-complete-init)
+  (define-key erlang-extended-mode-map (kbd "(") nil))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
