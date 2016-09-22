@@ -88,11 +88,6 @@
 (setq tab-stop-list (number-sequence 4 200 4))
 (setq-default indent-tabs-mode nil)
 
-(defun my-insert-tabs ()
-    "Insert tab for `tab' in text mode."
-  (setq indent-line-function 'insert-tab))
-(add-hook 'text-mode-hook #'my-insert-tabs)
-
 ;; Text and the such
 ;; Use colors to highlight commands, etc.
 (global-font-lock-mode t)
@@ -1292,7 +1287,6 @@ Otherwise, use the value of said variable as argument to a funcall."
      ("#A75B00" . 70)
      ("#F309DF" . 85)
      ("#49483E" . 100))))
- '(indent-line-function (quote insert-tab) t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(magit-diff-use-overlays nil)
