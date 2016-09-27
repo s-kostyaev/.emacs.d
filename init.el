@@ -104,7 +104,7 @@
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
-(setq gc-cons-threshold 80000000)
+(setq gc-cons-threshold 8000000)
 (setq gc-cons-percentage 0.5)
 ;; (quelpa 'smooth-scrolling)
 ;; (require 'smooth-scrolling)
