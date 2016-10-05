@@ -4,14 +4,13 @@
 
 ;;; Code:
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
-(progn (cd "~/.emacs.d/lisp")
-       (normal-top-level-add-subdirs-to-load-path))
-(if (file-exists-p "~/.emacs.d/elpa")
-    (progn (cd "~/.emacs.d/elpa")
-	   (normal-top-level-add-subdirs-to-load-path)
-	   (cd "~")))
+(require 'seq)
+(seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+ (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
+(seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+ (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
+(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 
 (defvar personal-keybindings nil)
 
@@ -35,7 +34,7 @@
 (require 'package)
 (package-initialize)
 (if (require 'quelpa nil t)
-    (quelpa-self-upgrade)
+    ;; (quelpa-self-upgrade)
   (with-temp-buffer
     (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
     (eval-buffer)))
@@ -104,8 +103,9 @@
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
-(setq gc-cons-threshold 8000000)
+(setq gc-cons-threshold (* 511 1024 1024))
 (setq gc-cons-percentage 0.5)
+(run-with-idle-timer 5 t #'garbage-collect)
 ;; (quelpa 'smooth-scrolling)
 ;; (require 'smooth-scrolling)
 ;; (smooth-scrolling-mode 1)

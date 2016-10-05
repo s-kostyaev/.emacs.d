@@ -21,7 +21,7 @@
     (prog-mode batch-file-mode csharp-mode css-mode haskell-mode jde-mode lua-mode python-mode)))
  '(company-gtags-modes
    (quote
-    (prog-mode web-mode)))
+    (prog-mode jde-mode web-mode js-mode js3-mode erlang-mode)))
  '(compilation-message-face (quote default))
  '(custom-safe-themes
    (quote
@@ -55,7 +55,7 @@
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (flycheck-gometalinter go-impl color-theme pacmacs dash-functional which-key ace-window ace-link ensime eclim smartparens viking-mode cmake-font-lock cmake-mode xah-lookup flycheck-dialyzer eopengrok js2-refactor smooth-scrolling sublimity xref-js2 emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile cousel consel-ivy consel powerline smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (timp signal fifo-class git-commit js2-mode ivy-erlang-complete s projectile with-editor ivy helm counsel flycheck-gometalinter go-impl color-theme pacmacs dash-functional which-key ace-window ace-link ensime eclim smartparens viking-mode cmake-font-lock cmake-mode xah-lookup flycheck-dialyzer eopengrok js2-refactor smooth-scrolling sublimity xref-js2 emmet-mode flx wgrep ivy-hydra darkokai-theme smart-mode-line monokai-theme clojure-mode cider counsel-projectile cousel consel-ivy consel powerline smooth-scroll link-hint helm-core avy ace-mc company-irony-c-headers company-irony flycheck yasnippet tern irony paredit-menu zenburn-theme web-mode tagedit sublime-themes speed-type solarized-theme smex smart-mode-line-powerline-theme slime-company rtags restclient react-snippets paredit pandoc-mode noflet nlinum multiple-cursors markdown-mode magit lua-mode key-chord json-rpc js3-mode jquery-doc ido-vertical-mode helm-themes helm-projectile helm-ls-git helm-gtags helm-flycheck helm-descbinds helm-company go-eldoc go-autocomplete geiser fuzzy fsm fill-column-indicator expand-region company-tern company-quickhelp company-go company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized color-theme-sanityinc-solarized cmake-ide auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(projectile-globally-ignored-directories
