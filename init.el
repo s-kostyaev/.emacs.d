@@ -33,8 +33,8 @@
 ;; Melpa
 (require 'package)
 (package-initialize)
-(if (require 'quelpa nil t)
-    ;; (quelpa-self-upgrade)
+(setq quelpa-update-melpa-p nil)
+(unless (require 'quelpa nil t)
   (with-temp-buffer
     (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
     (eval-buffer)))
@@ -47,7 +47,7 @@
 (quelpa 'color-theme)
 (require 'color-theme)
 (setq color-theme-is-global t)
-(color-theme-initialize)
+;; (color-theme-initialize)
 (quelpa 'color-theme-solarized)
 
 ;; (quelpa 'color-theme-sanityinc-solarized)
@@ -75,9 +75,10 @@
   "Hook for setting themes after init."
   (sml/setup)
   (require 's)
-  (if (s-equals? "probook" (s-trim (shell-command-to-string "hostname")))
-    (load-theme 'monokai t)
-  (load-theme 'solarized t))
+  ;; (if (s-equals? "probook" (s-trim (shell-command-to-string "hostname")))
+  ;;   (load-theme 'monokai t)
+  ;; (load-theme 'solarized t))
+  (load-theme 'solarized t)
   (load-theme 'smart-mode-line-respectful t))
 
 (add-hook 'after-init-hook #'my-set-themes-hook)
@@ -99,7 +100,7 @@
 ;(display-time)
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
-(quelpa 'smooth-scroll)
+;; (quelpa 'smooth-scroll)
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
@@ -680,7 +681,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; yasnippet
 ;;
 (quelpa 'yasnippet)
-(require 'yasnippet)
 (yas-global-mode 1)
 
 ;;
@@ -707,9 +707,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 ;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
-                                  (progn
-                                    (load-file "~/.emacs.d/init.el")
-                                    (byte-recompile-file "~/.emacs.d/init.el"))))
+                                  (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 (setq x-hyper-keysym 'meta)
 ;; ivy
 (quelpa 'ivy)
@@ -852,7 +850,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
 (defvar eopengrok-ctags)
 (setq eopengrok-ctags "/usr/bin/ctags")
-(require 'eopengrok)
+;; (require 'eopengrok)
 (defun my-opengrok-hook ()
   "Hook for eopengrok."
   (local-set-key (kbd "o") #'(lambda ()
@@ -866,7 +864,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; magit
 (quelpa 'magit)
-(require 'magit)
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
@@ -1043,10 +1040,12 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (defun my-erlang-hook ()
   "Setup for erlang."
+  (require 'wrangler)
   (let ((project-root (ivy-erlang-complete-autosetup-project-root)))
       (fix-erlang-project-code-path project-root)
       (fix-erlang-project-includes project-root))
   (ivy-erlang-complete-init)
+  (defvar erlang-extended-mode-map)
   (define-key erlang-extended-mode-map (kbd "M-.") nil)
   (define-key erlang-extended-mode-map (kbd "M-,") nil)
   (define-key erlang-extended-mode-map (kbd "M-?") nil)
@@ -1063,11 +1062,10 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 ;;; wrangler
 (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
-(require 'wrangler)
 ; Some code inspection functionalities of Wrangler generate .dot
 ; files, which can be compiled and previewed in Emacs if the
 ; Graphviz-dot mode for Emacs is enabled.
-(load-library "graphviz-dot-mode")
+;; (load-library "graphviz-dot-mode")
 
 ;; distel
 ;; (add-to-list 'load-path "/usr/share/distel/elisp")
@@ -1214,24 +1212,24 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
 ;;;; Java development
-(quelpa 'eclim)
-(defvar eclimd-wait-for-process)
-(defun my-java-hook ()
-  "Setup for java development."
-  (smartparens-mode t)
-  (require 'eclim)
-  (eclim-mode)
-  (setq help-at-pt-display-when-idle t)
-  (setq help-at-pt-timer-delay 0.1)
-  (help-at-pt-set-timer)
-  (require 'company-emacs-eclim)
-  (company-emacs-eclim-setup)
-  (require 'eclimd)
-  (setq eclimd-wait-for-process nil)
-  (if (not (eclimd--running-p))
-      (start-eclimd (expand-file-name "~/java"))))
+;; (quelpa 'eclim)
+;; (defvar eclimd-wait-for-process)
+;; (defun my-java-hook ()
+;;   "Setup for java development."
+;;   (smartparens-mode t)
+;;   (require 'eclim)
+;;   (eclim-mode)
+;;   (setq help-at-pt-display-when-idle t)
+;;   (setq help-at-pt-timer-delay 0.1)
+;;   (help-at-pt-set-timer)
+;;   (require 'company-emacs-eclim)
+;;   (company-emacs-eclim-setup)
+;;   (require 'eclimd)
+;;   (setq eclimd-wait-for-process nil)
+;;   (if (not (eclimd--running-p))
+;;       (start-eclimd (expand-file-name "~/java"))))
 
-(add-hook 'java-mode-hook #'my-java-hook)
+;; (add-hook 'java-mode-hook #'my-java-hook)
 
 ;;;; Scala development
 (quelpa 'ensime)
