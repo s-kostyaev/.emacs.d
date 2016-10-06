@@ -33,6 +33,7 @@
 ;; Melpa
 (require 'package)
 (package-initialize)
+(defvar quelpa-update-melpa-p)
 (setq quelpa-update-melpa-p nil)
 (unless (require 'quelpa nil t)
   (with-temp-buffer
@@ -1153,14 +1154,22 @@ Otherwise, use the value of said variable as argument to a funcall."
   "My hook for c & c++ modes."
   (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
   (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
-  (local-set-key (kbd "C-c C-j") #'rtags-find-symbol-at-point)
-  (local-set-key (kbd "C-c C-r") #'rtags-find-references-at-point)
+  (local-set-key (kbd "M-.") (lambda ()
+                               (interactive)
+                               (xref-push-marker-stack)
+                               (rtags-find-symbol-at-point)))
+  (local-set-key (kbd "M-?") (lambda ()
+                               (interactive)
+                               (xref-push-marker-stack)
+                               (rtags-find-references-at-point)))
   (local-set-key (kbd "C-'") #'company-irony-c-headers)
   (rtags-start-process-unless-running)
   (irony-mode)
   (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
 (add-hook 'c++-mode-hook #'my-cc-mode-hook)
 (add-hook 'c-mode-hook #'my-cc-mode-hook)
+(eval-after-load 'cc-mode (define-key c++-mode-map (kbd "C-c C-s") nil))
+(eval-after-load 'cc-mode (define-key c-mode-map (kbd "C-c C-s") nil))
 ;; Semantic
 ;; (require 'cc-mode)
 ;; (require 'semantic)
