@@ -313,7 +313,7 @@
   "Setup for python."
   (add-to-list 'company-backends 'company-anaconda)
   (setq indent-tabs-mode nil)
-  (setq python-indent 4)
+  (setq python-indent-offset 4)
   (setq tab-width 8)
   (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
   (local-set-key (kbd "<backtab>") #'py-shift-left))
@@ -820,7 +820,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;;; Projectile
 (quelpa 'projectile)
 (quelpa 'helm-projectile)
-(projectile-global-mode)
+(projectile-mode 1)
 (defvar projectile-completion-system)
 (setq projectile-completion-system 'ivy)
 (helm-projectile-on)
@@ -1220,29 +1220,10 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
-;;;; Java development
-;; (quelpa 'eclim)
-;; (defvar eclimd-wait-for-process)
-;; (defun my-java-hook ()
-;;   "Setup for java development."
-;;   (smartparens-mode t)
-;;   (require 'eclim)
-;;   (eclim-mode)
-;;   (setq help-at-pt-display-when-idle t)
-;;   (setq help-at-pt-timer-delay 0.1)
-;;   (help-at-pt-set-timer)
-;;   (require 'company-emacs-eclim)
-;;   (company-emacs-eclim-setup)
-;;   (require 'eclimd)
-;;   (setq eclimd-wait-for-process nil)
-;;   (if (not (eclimd--running-p))
-;;       (start-eclimd (expand-file-name "~/java"))))
-
-;; (add-hook 'java-mode-hook #'my-java-hook)
-
-;;;; Scala development
+;;;; Scala & Java development
 (quelpa 'ensime)
 (require 'ensime)
+(setq ensime-startup-snapshot-notification nil)
 
 ;;; Ace link
 (quelpa 'ace-link)
