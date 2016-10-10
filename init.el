@@ -105,7 +105,7 @@
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
-(setq gc-cons-threshold (* 511 1024 1024))
+(setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 (run-with-idle-timer 5 t #'garbage-collect)
 ;; (quelpa 'smooth-scrolling)
@@ -309,6 +309,7 @@
 (defvar python-indent)
 (declare-function py-shift-right "ext:python-mode")
 (declare-function py-shift-left "ext:python-mode")
+(defvar python-indent-offset)
 (defun my-python-hook ()
   "Setup for python."
   (add-to-list 'company-backends 'company-anaconda)
