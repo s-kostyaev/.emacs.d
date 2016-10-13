@@ -513,6 +513,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+;; for templates
+(add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
 
 (quelpa 'ac-js2)
 (require 'ac-js2)
@@ -1056,8 +1058,10 @@ Otherwise, use the value of said variable as argument to a funcall."
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
 
-(add-to-list 'auto-mode-alist '("rebar\.config$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("\\.app\.src$" . erlang-mode))
+(add-to-list 'auto-mode-alist '("rebar\\.config$" . erlang-mode))
+(add-to-list 'auto-mode-alist '("relx\\.config$" . erlang-mode))
+(add-to-list 'auto-mode-alist '("system\\.config$" . erlang-mode))
+(add-to-list 'auto-mode-alist '("\\.app\\.src$" . erlang-mode))
 
 (quelpa 'flycheck-dialyzer)
 (require 'flycheck-dialyzer)
