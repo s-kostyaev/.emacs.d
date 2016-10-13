@@ -187,7 +187,8 @@
 (quelpa 'flycheck)
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
-(global-set-key (kbd "C-c r") #'helm-flycheck)
+;; (global-set-key (kbd "C-c r") #'helm-flycheck)
+(global-set-key (kbd "C-c r") #'flycheck-list-errors)
 
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
@@ -704,9 +705,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key [f9] #'key-chord-mode)
 
 ;helm
-(quelpa 'helm)
-(require 'helm-config)
-(global-set-key (kbd "C-x C-x") #'helm-M-x)
+;; (quelpa 'helm)
+;; (require 'helm-config)
+;; (global-set-key (kbd "C-x C-x") #'helm-M-x)
 ;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
 ;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
 ;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
@@ -748,9 +749,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "C-x l") #'counsel-locate)
 (quelpa 'counsel-projectile)
 
-(quelpa 'helm-descbinds)
-(require 'helm-descbinds)
-(helm-descbinds-mode 1)
+;; (quelpa 'helm-descbinds)
+;; (require 'helm-descbinds)
+;; (helm-descbinds-mode 1)
 
 (defvar ivy-mode-map)
 
@@ -822,30 +823,30 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; Projectile
 (quelpa 'projectile)
-(quelpa 'helm-projectile)
+;; (quelpa 'helm-projectile)
 (projectile-mode 1)
 (defvar projectile-completion-system)
 (setq projectile-completion-system 'ivy)
-(helm-projectile-on)
+;; (helm-projectile-on)
 
 
 ;;;; Gnu global
-(quelpa 'helm-gtags)
+;; (quelpa 'helm-gtags)
 
 ;; key bindings
-(defvar helm-gtags-mode-map)
-(eval-after-load "helm-gtags"
-  '(progn
-     (define-key helm-gtags-mode-map (kbd "M-t d") #'helm-gtags-dwim)
-     (define-key helm-gtags-mode-map (kbd "M-t t") #'helm-gtags-find-tag)
-     (define-key helm-gtags-mode-map (kbd "M-t r") #'helm-gtags-find-rtag)
-     (define-key helm-gtags-mode-map (kbd "M-t s") #'helm-gtags-find-symbol)
-     (define-key helm-gtags-mode-map (kbd "M-t u") #'helm-gtags-update-tags)
-     (define-key helm-gtags-mode-map (kbd "M-t c") #'helm-gtags-create-tags)
-     (define-key helm-gtags-mode-map (kbd "M-g M-p") #'helm-gtags-parse-file)
-     (define-key helm-gtags-mode-map (kbd "C-c <") #'helm-gtags-previous-history)
-     (define-key helm-gtags-mode-map (kbd "C-c >") #'helm-gtags-next-history)
-     (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
+;; (defvar helm-gtags-mode-map)
+;; (eval-after-load "helm-gtags"
+;;   '(progn
+;;      (define-key helm-gtags-mode-map (kbd "M-t d") #'helm-gtags-dwim)
+;;      (define-key helm-gtags-mode-map (kbd "M-t t") #'helm-gtags-find-tag)
+;;      (define-key helm-gtags-mode-map (kbd "M-t r") #'helm-gtags-find-rtag)
+;;      (define-key helm-gtags-mode-map (kbd "M-t s") #'helm-gtags-find-symbol)
+;;      (define-key helm-gtags-mode-map (kbd "M-t u") #'helm-gtags-update-tags)
+;;      (define-key helm-gtags-mode-map (kbd "M-t c") #'helm-gtags-create-tags)
+;;      (define-key helm-gtags-mode-map (kbd "M-g M-p") #'helm-gtags-parse-file)
+;;      (define-key helm-gtags-mode-map (kbd "C-c <") #'helm-gtags-previous-history)
+;;      (define-key helm-gtags-mode-map (kbd "C-c >") #'helm-gtags-next-history)
+;;      (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
 
 ;;;; OpenGrok
 (quelpa 'eopengrok)
@@ -911,7 +912,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (key-chord-define-global (kbd ";r") 'indirect-region)
 
 ;; helm flycheck
-(quelpa 'helm-flycheck)
+;; (quelpa 'helm-flycheck)
 
 ;; pandoc
 (quelpa 'pandoc-mode)
@@ -1117,7 +1118,7 @@ Otherwise, use the value of said variable as argument to a funcall."
 (quelpa 'rtags)
 (require 'rtags)
 (setq rtags-completions-enabled nil)
-(setq rtags-use-helm t)
+;; (setq rtags-use-helm t)
 ;; completion
 (quelpa 'irony)
 (quelpa 'company-irony)
