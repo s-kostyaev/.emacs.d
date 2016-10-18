@@ -57,7 +57,7 @@
 ;; (quelpa 'zenburn-theme)
 ;; (load-theme 'zenburn t)
 
-(quelpa 'sublime-themes)
+;; (quelpa 'sublime-themes)
 
 
 ;; powerline
