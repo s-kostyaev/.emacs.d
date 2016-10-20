@@ -1045,10 +1045,14 @@ Otherwise, use the value of said variable as argument to a funcall."
 
 (defun my-erlang-hook ()
   "Setup for erlang."
+  (setq-local delimit-columns-separator "::")
+  (setq-local delimit-columns-str-separator "::")
+  (setq-local delimit-columns-format 'padding)
+  (local-set-key (kbd "C-c C-p") #'delimit-columns-region)
   (require 'wrangler)
   (let ((project-root (ivy-erlang-complete-autosetup-project-root)))
-      (fix-erlang-project-code-path project-root)
-      (fix-erlang-project-includes project-root))
+    (fix-erlang-project-code-path project-root)
+    (fix-erlang-project-includes project-root))
   (ivy-erlang-complete-init)
   (defvar erlang-extended-mode-map)
   (define-key erlang-extended-mode-map (kbd "M-.") nil)
