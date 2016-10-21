@@ -36,6 +36,14 @@
 (require 'package)
 (package-initialize)
 
+(defvar quelpa-update-melpa-p)
+(setq quelpa-update-melpa-p nil)
+(unless (require 'quelpa nil t)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+    (eval-buffer)))
+
+(quelpa 'async)
 
 (defvar quelpa-upgrade-p)
 (defun install-or-update-packages ()
