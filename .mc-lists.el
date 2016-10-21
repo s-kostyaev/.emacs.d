@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
         c-electric-semi&comma
+        comment-dwim-line
         company-abort
         company-select-next-or-abort
         complete-symbol
@@ -28,9 +29,11 @@
         ace-mc-add-multiple-cursors
         ace-mc-add-single-cursor
         ace-mc-do-keyboard-reset
+        ace-window
         avy-goto-word-1
         beginning-of-buffer
         company-complete-selection
+        counsel-M-x
         electrify-return-if-match
         eval-last-sexp
         find-tag

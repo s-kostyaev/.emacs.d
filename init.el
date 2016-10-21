@@ -6,6 +6,7 @@
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
 (require 'seq)
+(require 'subr-x)
 (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
 (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
@@ -30,26 +31,62 @@
 (my-set-font)
 (add-hook 'after-change-major-mode-hook #'my-set-font)
 
-;; Melpa
+(setq custom-file "~/.emacs.d/emacs-customizations.el")
+
 (require 'package)
 (package-initialize)
-(defvar quelpa-update-melpa-p)
-(setq quelpa-update-melpa-p nil)
-(unless (require 'quelpa nil t)
-  (with-temp-buffer
-    (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
-    (eval-buffer)))
 
+
+(defvar quelpa-upgrade-p)
+(defun install-or-update-packages ()
+  "Quelpa async install."
+  (interactive)
+  (if (file-exists-p (expand-file-name "~/.emacs.d/update-in-progress"))
+      (message "update in progress")
+    (shell-command-to-string "touch ~/.emacs.d/update-in-progress")
+    (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
+    (require 'seq)
+    (require 'subr-x)
+    (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+            (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
+    (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+            (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
+    (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+    (require 'async)
+    (async-start
+     (lambda ()
+       ;; Melpa
+       (require 'package)
+       (package-initialize)
+       (defvar quelpa-update-melpa-p)
+       (setq quelpa-update-melpa-p nil)
+       (unless (require 'quelpa nil t)
+         (with-temp-buffer
+           (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
+           (eval-buffer)))
+       (setq custom-file "~/.emacs.d/emacs-customizations.el")
+       (load custom-file 'noerror)
+       (setq quelpa-upgrade-p t)
+       (require 'cl-lib)
+       (cl-mapcar (lambda (package)
+                    (ignore-errors (quelpa package)))
+                  package-selected-packages)
+       (princ "done"))
+     (lambda (res)
+       (delete-file "~/.emacs.d/update-in-progress")
+       (message "package upgrade success: %s" res)))))
+
+(install-or-update-packages)
 ;; async
-(quelpa 'async)
+;; (quelpa 'async)
 (async-bytecomp-package-mode 1)
 
 
-(quelpa 'color-theme)
+;; (quelpa 'color-theme)
 (require 'color-theme)
 (setq color-theme-is-global t)
 ;; (color-theme-initialize)
-(quelpa 'color-theme-solarized)
+;; (quelpa 'color-theme-solarized)
 
 ;; (quelpa 'color-theme-sanityinc-solarized)
 ;; (require 'color-theme-sanityinc-solarized)
@@ -61,7 +98,7 @@
 
 
 ;; powerline
-(quelpa 'smart-mode-line)
+;; (quelpa 'smart-mode-line)
 (require 'smart-mode-line)
 ;; (quelpa 'smart-mode-line-powerline-theme)
 
@@ -71,7 +108,7 @@
 ;; (powerline-default-theme)
 ;; (sml/setup)
 
-(quelpa 'monokai-theme)
+;; (quelpa 'monokai-theme)
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (sml/setup)
@@ -154,7 +191,7 @@
 ;;
 ;; hydra
 ;;
-(quelpa 'hydra)
+;; (quelpa 'hydra)
 (require 'hydra)
 
 (global-set-key (kbd "C-x o")
@@ -202,7 +239,7 @@
 	  (if this-win-2nd (other-window 1))))))
 
 ;; Flycheck
-(quelpa 'flycheck)
+;; (quelpa 'flycheck)
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 ;; (global-set-key (kbd "C-c r") #'helm-flycheck)
@@ -211,7 +248,7 @@
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
 (setq exec-path (append exec-path '("~/go/bin")))
-(quelpa 'go-mode)
+;; (quelpa 'go-mode)
 (require 'go-mode-autoloads)
 (defun goimports ()
   "Running goimports on go files."
@@ -221,7 +258,7 @@
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
 
-(quelpa 'company-go)
+;; (quelpa 'company-go)
 
 (declare-function go-remove-unused-imports "ext:go-mode")
 (declare-function go-goto-imports "ext:go-mode")
@@ -230,8 +267,8 @@
 (defvar company-begin-commands)
 (defvar company-backends)
 
-(quelpa 'go-impl)
-(quelpa 'flycheck-gometalinter)
+;; (quelpa 'go-impl)
+;; (quelpa 'flycheck-gometalinter)
 (defun my-go-mode-hook ()
   "Setup for go."
   (require 'gobuild)
@@ -261,7 +298,7 @@
 ;; Flycheck
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 ;; doc
-(quelpa 'go-eldoc) ;; Don't need to require, if you install by package.el
+;; (quelpa 'go-eldoc) ;; Don't need to require, if you install by package.el
 (add-hook 'go-mode-hook #'go-eldoc-setup)
 
 
@@ -315,10 +352,10 @@
 (put 'downcase-region 'disabled nil)
 
 ;;; Python mode
-(quelpa 'anaconda-mode)
+;; (quelpa 'anaconda-mode)
 (add-hook 'python-mode-hook #'anaconda-mode)
 (add-hook 'python-mode-hook #'eldoc-mode)
-(quelpa 'company-anaconda)
+;; (quelpa 'company-anaconda)
 
 (setenv "PYMACS_PYTHON" "python2")
 (setenv "PYTHONPATH" "/usr/bin/python2")
@@ -373,7 +410,7 @@
 
 
 ;;; Auto-complete
-(quelpa 'company)
+;; (quelpa 'company)
 (require 'company)
 (global-company-mode)
 (setq company-global-modes '(not erlang-mode))
@@ -499,7 +536,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
 
 ;; Markdown
-(quelpa 'markdown-mode)
+;; (quelpa 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -510,7 +547,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; for over-80-chars line highlightning
 ;; (quelpa 'column-enforce-mode)
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
-(quelpa 'fill-column-indicator)
+;; (quelpa 'fill-column-indicator)
 (require 'fill-column-indicator)
 (set 'fci-rule-column 80)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
@@ -519,8 +556,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
-(quelpa 'web-mode)
-(quelpa 'js2-mode)
+;; (quelpa 'web-mode)
+;; (quelpa 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 ;; (quelpa 'react-snippets)
@@ -535,7 +572,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; for templates
 (add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
 
-(quelpa 'ac-js2)
+;; (quelpa 'ac-js2)
 (require 'ac-js2)
 (add-hook 'js2-mode-hook #'ac-js2-mode)
 (defvar ac-js2-evaluate-calls)
@@ -549,7 +586,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq httpd-port 18080)
 
 ;; xref-js2
-(quelpa 'xref-js2)
+;; (quelpa 'xref-js2)
 (define-key js2-mode-map (kbd "M-.") nil)
 (add-hook 'js2-mode-hook (lambda ()
   (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
@@ -567,11 +604,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'js-mode-hook #'tern-mode)
 ;; (add-hook 'web-mode-hook #'tern-mode)
 
-(quelpa 'js2-refactor)
+;; (quelpa 'js2-refactor)
 (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 
-(quelpa 'skewer-mode)
+;; (quelpa 'skewer-mode)
 (require 'skewer-mode)
 (skewer-setup)
 
@@ -590,7 +627,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; emmet mode
 ;;
-(quelpa 'emmet-mode)
+;; (quelpa 'emmet-mode)
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'web-mode-hook #'emmet-mode)
@@ -601,7 +638,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; key chord
 ;;
-(quelpa 'key-chord)
+;; (quelpa 'key-chord)
 (require 'key-chord)
 (key-chord-mode 1)
 
@@ -624,7 +661,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;                            ("p" ace-jump-mode-pop-mark "pop mark")
 ;;                            ("q" nil "quit")))
 ;; avy
-(quelpa 'avy)
+;; (quelpa 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
 (define-key isearch-mode-map (kbd "C-'") #'avy-isearch)
@@ -646,7 +683,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; expand region
 ;;
-(quelpa 'expand-region)
+;; (quelpa 'expand-region)
 (require 'expand-region)
 (key-chord-define-global "zj" 'er/expand-region)
 (key-chord-define-global "zk" 'er/contract-region)
@@ -655,9 +692,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; multiple cursors
 ;;
-(quelpa 'multiple-cursors)
+;; (quelpa 'multiple-cursors)
 (require 'multiple-cursors)
-(quelpa 'ace-mc)
+;; (quelpa 'ace-mc)
 
 (key-chord-define-global "fm"
                          (defhydra multiple-cursors-hydra (:hint nil)
@@ -703,7 +740,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; yasnippet
 ;;
-(quelpa 'yasnippet)
+;; (quelpa 'yasnippet)
 (yas-global-mode 1)
 
 ;;
@@ -733,8 +770,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 (setq x-hyper-keysym 'meta)
 ;; ivy
-(quelpa 'ivy)
-(quelpa 'ivy-hydra)
+;; (quelpa 'ivy)
+;; (quelpa 'ivy-hydra)
 (ivy-mode 1)
 (defvar ivy-initial-inputs-alist)
 (setq ivy-initial-inputs-alist nil)
@@ -746,13 +783,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
         (t . ivy--regex-fuzzy)
         ))
 (setq completion-in-region-function 'ivy-completion-in-region)
-(quelpa 'swiper)
+;; (quelpa 'swiper)
 (global-set-key "\C-s" #'swiper)
 (global-set-key (kbd "C-c s k") #'ivy-resume)
-(quelpa 'counsel)
-(quelpa 'smex)
-(quelpa 'flx)
-(quelpa 'wgrep)
+;; (quelpa 'counsel)
+;; (quelpa 'smex)
+;; (quelpa 'flx)
+;; (quelpa 'wgrep)
 (require 'wgrep)
 (setq wgrep-auto-save-buffer t)
 (counsel-mode t)
@@ -765,7 +802,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-;") #'comment-dwim-line)
 (global-set-key (kbd "C-c C-s") #'counsel-ag)
 (global-set-key (kbd "C-x l") #'counsel-locate)
-(quelpa 'counsel-projectile)
+;; (quelpa 'counsel-projectile)
 
 ;; (quelpa 'helm-descbinds)
 ;; (require 'helm-descbinds)
@@ -840,7 +877,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-i") #'imenu)
 
 ;;;; Projectile
-(quelpa 'projectile)
+;; (quelpa 'projectile)
 ;; (quelpa 'helm-projectile)
 (projectile-mode 1)
 (defvar projectile-completion-system)
@@ -867,7 +904,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;      (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
 
 ;;;; OpenGrok
-(quelpa 'eopengrok)
+;; (quelpa 'eopengrok)
 (defvar eopengrok-jar)
 (setq eopengrok-jar
       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
@@ -882,11 +919,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
 
 ;; speed-typing
-(quelpa 'speed-type)
+;; (quelpa 'speed-type)
 (require 'speed-type)
 
 ;; magit
-(quelpa 'magit)
+;; (quelpa 'magit)
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
@@ -899,21 +936,21 @@ the end of the line, then comment current line.  Replaces default behaviour of
  '((ditaa . t) (dot . t)))
 
 ;; indirect region
-(quelpa 'edit-indirect)
+;; (quelpa 'edit-indirect)
 (key-chord-define-global (kbd ";r") #'edit-indirect-region)
 
 ;; helm flycheck
 ;; (quelpa 'helm-flycheck)
 
 ;; pandoc
-(quelpa 'pandoc-mode)
+;; (quelpa 'pandoc-mode)
 (require 'pandoc-mode)
 (add-hook 'markdown-mode-hook #'pandoc-mode)
 (declare-function pandoc-load-default-settings "ext:pandoc")
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
 ;; guile support
-(quelpa 'geiser)
+;; (quelpa 'geiser)
 ;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
 ;; (add-hook 'geiser-mode-hook #'paredit-mode)
 (defvar geiser-chez-binary)
@@ -922,8 +959,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-to-list 'geiser-active-implementations 'chez)
 
 ;; slime
-(quelpa 'slime)
-(quelpa 'slime-company)
+;; (quelpa 'slime)
+;; (quelpa 'slime-company)
 (slime-setup '(slime-repl slime-company))
 
 (defvar swank-kawa-jar "")
@@ -988,7 +1025,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (slime 'kawa))
 
 ;;;; Erlang
-(quelpa 'erlang)
+;; (quelpa 'erlang)
 (setq flycheck-erlang-include-path '("../include" "../deps"))
 
 (defun fix-erlang-project-includes (project-root)
@@ -1023,7 +1060,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
                         (concat "find " project-root " -type d -name ebin")))
          ))
     (setq-local flycheck-erlang-library-path code-path)))
-(quelpa 'ivy-erlang-complete)
+;; (quelpa 'ivy-erlang-complete)
 (require 'ivy-erlang-complete)
 
 ;; (defun force-reindex-erlang-project ()
@@ -1073,7 +1110,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-to-list 'auto-mode-alist '("system\\.config$" . erlang-mode))
 (add-to-list 'auto-mode-alist '("\\.app\\.src$" . erlang-mode))
 
-(quelpa 'flycheck-dialyzer)
+;; (quelpa 'flycheck-dialyzer)
 (require 'flycheck-dialyzer)
 
 ;;; wrangler
@@ -1110,11 +1147,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 
 ;; fast open url
-(quelpa 'link-hint)
+;; (quelpa 'link-hint)
 (global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
 
 ;;;; Lua
-(quelpa 'lua-mode)
+;; (quelpa 'lua-mode)
 (require 'lua-mode)
 
 ;; nXML mode customization
@@ -1124,19 +1161,19 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; C, C++ Development
 ;; Rtags
-(quelpa 'rtags)
+;; (quelpa 'rtags)
 (require 'rtags)
 (setq rtags-completions-enabled nil)
 ;; (setq rtags-use-helm t)
 ;; completion
-(quelpa 'irony)
-(quelpa 'company-irony)
-(quelpa 'company-irony-c-headers)
+;; (quelpa 'irony)
+;; (quelpa 'company-irony)
+;; (quelpa 'company-irony-c-headers)
 ;; (quelpa 'company-c-headers)
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
 ;; show docs at point
-(quelpa 'xah-lookup)
+;; (quelpa 'xah-lookup)
 (require 'xah-lookup)
 ;; Uncomment the below line to use eww (Emacs Web Wowser)
 ;; (setq xah-lookup-browser-function 'eww)
@@ -1194,17 +1231,17 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
 ;; (global-semantic-idle-summary-mode 1)
 
-(quelpa 'cmake-ide)
+;; (quelpa 'cmake-ide)
 (cmake-ide-setup)
 
-(quelpa 'cmake-mode)
+;; (quelpa 'cmake-mode)
 ; Add cmake listfile names to the mode list.
 (setq auto-mode-alist
 	  (append
 	   '(("CMakeLists\\.txt\\'" . cmake-mode))
 	   '(("\\.cmake\\'" . cmake-mode))
 	   auto-mode-alist))
-(quelpa 'cmake-font-lock)
+;; (quelpa 'cmake-font-lock)
 (defun my-cmake-font-lock ()
   "Activate font lock for cmake."
   (require 'cmake-font-lock)
@@ -1222,41 +1259,42 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (setq company-c-headers-path-user (list (concat dir "/include")))))
 
 ;;; Viking mode - Kill first, ask later
-(quelpa 'viking-mode)
+;; (quelpa 'viking-mode)
 (require 'viking-mode)
 (viking-global-mode)
 
 (show-paren-mode 1)
 
 ;;; Smartparens
-(quelpa 'smartparens)
+;; (quelpa 'smartparens)
 (require 'smartparens-config)
 
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
 ;;;; Scala & Java development
-(quelpa 'ensime)
+;; (quelpa 'ensime)
 (require 'ensime)
 (setq ensime-startup-snapshot-notification nil)
 
 ;;; Ace link
-(quelpa 'ace-link)
+;; (quelpa 'ace-link)
 (ace-link-setup-default)
 
 ;;; Ace window
-(quelpa 'ace-window)
+;; (quelpa 'ace-window)
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 ;;; Which key
-(quelpa 'which-key)
+;; (quelpa 'which;; -key)
 (require 'which-key)
 (which-key-mode)
 
 
-(setq custom-file "~/.emacs.d/emacs-customizations.el")
 (load custom-file 'noerror)
+
+(setq gc-cons-threshold (* 8 1024 1024))
 
 (provide 'init)
 ;;; init.el ends here
