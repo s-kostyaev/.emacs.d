@@ -133,6 +133,24 @@
 ;; Use y or n instead of yes or not
 (fset 'yes-or-no-p 'y-or-n-p)
 
+
+(defun my-align-region-by (&optional delimiter)
+  "Align current region by DELIMITER."
+  (interactive)
+  (let* ((delim (or delimiter (read-string "delimiter: ")))
+         (delimit-columns-separator delim)
+         (delimit-columns-str-separator delim)
+         (delimit-columns-format 'separator)
+         (delimit-columns-extra nil)
+         (beg (region-beginning)))
+    (delimit-columns-region beg (region-end))
+    (goto-char beg)
+    (ignore-errors (er/expand-region))
+    (let ((new-end (region-end)))
+     (goto-char new-end)
+     (whitespace-cleanup-region beg (line-end-position)))))
+(global-set-key (kbd "C-c a") #'my-align-region-by)
+
 ;;
 ;; hydra
 ;;
@@ -872,7 +890,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
+;; (define-key global-map "\C-ca" 'org-agenda)
 (defvar org-log-done)
 (setq org-log-done t)
 ; ditaa
@@ -1016,12 +1034,25 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;                          " -type d -name .opengrok -exec rm -fr {} +")))
 ;;   (eopengrok-make-index-with-enable-projects ivy-erlang-complete-project-root))
 
+(defun my-format-erlang-record ()
+  "Format erlang record."
+  (interactive)
+  (let ((from (line-beginning-position)))
+  (goto-char from)
+  (search-forward "-record" )
+  (search-forward "{")
+  (goto-char (- (point) 1))
+  (ignore-errors (er/expand-region 1))
+  (my-align-region-by "=")
+  (goto-char from)
+  (search-forward "-record" )
+  (search-forward "{")
+  (goto-char (- (point) 1))
+  (ignore-errors (er/expand-region 1))
+  (my-align-region-by "::")))
+
 (defun my-erlang-hook ()
   "Setup for erlang."
-  (setq-local delimit-columns-separator "::")
-  (setq-local delimit-columns-str-separator "::")
-  (setq-local delimit-columns-format 'padding)
-  (local-set-key (kbd "C-c C-p") #'delimit-columns-region)
   (require 'wrangler)
   (let ((project-root (ivy-erlang-complete-autosetup-project-root)))
     (fix-erlang-project-code-path project-root)
@@ -1031,7 +1062,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (define-key erlang-extended-mode-map (kbd "M-.") nil)
   (define-key erlang-extended-mode-map (kbd "M-,") nil)
   (define-key erlang-extended-mode-map (kbd "M-?") nil)
-  (define-key erlang-extended-mode-map (kbd "(") nil))
+  (define-key erlang-extended-mode-map (kbd "(") nil)
+  (local-set-key (kbd "C-c C-p") #'my-format-erlang-record))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 (eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
