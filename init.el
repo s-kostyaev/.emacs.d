@@ -45,9 +45,41 @@
 
 (quelpa 'async)
 
-(defvar quelpa-upgrade-p)
-(defun install-or-update-packages ()
+(defun my-bootstrap ()
   "Quelpa async install."
+  (interactive)
+    (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
+    (require 'seq)
+    (require 'subr-x)
+    (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+            (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
+    (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+            (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
+    (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+    (require 'async)
+    (async-start
+     (lambda ()
+       ;; Melpa
+       (require 'package)
+       (package-initialize)
+       (defvar quelpa-update-melpa-p)
+       (setq quelpa-update-melpa-p nil)
+       (require 'quelpa)
+       (setq custom-file "~/.emacs.d/emacs-customizations.el")
+       (load custom-file 'noerror)
+       (require 'cl-lib)
+       (cl-mapcar (lambda (package)
+                    (ignore-errors (quelpa package)))
+                  package-selected-packages)
+       (princ "done"))
+     (lambda (res)
+       (message "packages bootstrap success: %s" res))))
+
+(my-bootstrap)
+
+(defvar quelpa-upgrade-p)
+(defun my-async-upgrade ()
+  "Quelpa async upgrade."
   (interactive)
   (if (file-exists-p (expand-file-name "~/.emacs.d/update-in-progress"))
       (message "update in progress")
@@ -66,25 +98,16 @@
        ;; Melpa
        (require 'package)
        (package-initialize)
-       (defvar quelpa-update-melpa-p)
-       (setq quelpa-update-melpa-p nil)
-       (unless (require 'quelpa nil t)
-         (with-temp-buffer
-           (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
-           (eval-buffer)))
+       (require 'quelpa)
        (setq custom-file "~/.emacs.d/emacs-customizations.el")
        (load custom-file 'noerror)
-       (setq quelpa-upgrade-p t)
-       (require 'cl-lib)
-       (cl-mapcar (lambda (package)
-                    (ignore-errors (quelpa package)))
-                  package-selected-packages)
+       (quelpa-upgrade)
        (princ "done"))
      (lambda (res)
        (delete-file "~/.emacs.d/update-in-progress")
-       (message "package upgrade success: %s" res)))))
+       (message "packages upgrade success: %s" res)))))
 
-(install-or-update-packages)
+
 ;; async
 ;; (quelpa 'async)
 (async-bytecomp-package-mode 1)
