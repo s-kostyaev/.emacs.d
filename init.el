@@ -280,7 +280,7 @@
 (setenv "GOPATH" "/home/feofan/go")
 (setq exec-path (append exec-path '("~/go/bin")))
 ;; (quelpa 'go-mode)
-(require 'go-mode-autoloads)
+;; (require 'go-mode-autoloads)
 (defun goimports ()
   "Running goimports on go files."
   (interactive)
