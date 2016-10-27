@@ -1322,6 +1322,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require 'which-key)
 (which-key-mode)
 
+;;; On the fly markdown preview
+(defun my-flymd-browser-function (url)
+  "See URL in firefox for flymd."
+  (let ((browse-url-browser-function 'browse-url-firefox))
+    (browse-url url)))
+(setq flymd-browser-open-function 'my-flymd-browser-function)
 
 (load custom-file 'noerror)
 
