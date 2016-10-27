@@ -1323,6 +1323,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (which-key-mode)
 
 ;;; On the fly markdown preview
+(defvar flymd-browser-open-function)
 (defun my-flymd-browser-function (url)
   "See URL in firefox for flymd."
   (let ((browse-url-browser-function 'browse-url-firefox))
