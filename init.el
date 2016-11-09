@@ -598,6 +598,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq js2-idle-timer-delay 2)
 (setq blink-matching-paren nil)
 
+;; use web-mode for .htm & .html files
+(add-to-list 'auto-mode-alist '("\\.htm[l]?$" . web-mode))
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
 ;; for templates
