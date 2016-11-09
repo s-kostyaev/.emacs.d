@@ -647,12 +647,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar web-mode-markup-indent-offset)
 (defvar web-mode-css-indent-offset)
 (defvar web-mode-code-indent-offset)
+(defvar web-mode-enable-current-element-highlight)
 (defun my-web-mode-hook ()
   "Hooks for Web mode.  Adjust `indent's."
   ;; http://web-mode.org/
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-enable-current-element-highlight t))
 (add-hook 'web-mode-hook  #'my-web-mode-hook)
 
 ;;
