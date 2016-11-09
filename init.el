@@ -957,6 +957,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; magit
 ;; (quelpa 'magit)
+(defun my-magit-diff-hook ()
+  "My hook for improve magit diff."
+  (local-set-key (kbd "h") #'diff-refine-hunk))
+(add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
