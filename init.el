@@ -601,7 +601,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; use web-mode for .htm & .html files
 (add-to-list 'auto-mode-alist '("\\.htm[l]?$" . web-mode))
 ;; use web-mode for .jsx files
-(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
 ;; for templates
 (add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
 
@@ -666,6 +666,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (require 'emmet-mode)
 (add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'web-mode-hook #'emmet-mode)
+(add-hook 'rjsx-mode #'emmet-mode)
 (add-hook 'css-mode-hook #'emmet-mode) ;; enable Emmet's css abbreviation.
 (setq emmet-move-cursor-between-quotes t) ;; default nil
 
