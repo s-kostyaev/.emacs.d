@@ -964,6 +964,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   "My hook for improve magit diff."
   (local-set-key (kbd "h") #'diff-refine-hunk))
 (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
+(defvar auto-revert-check-vc-info)
+(setq auto-revert-check-vc-info t)
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
