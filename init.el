@@ -605,6 +605,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; for templates
 (add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
 
+;; fix for infinite eating RAM
+(defun my-disable-fci () "Disable fci mode." (fci-mode -1))
+(add-hook 'rjsx-mode-hook #'my-disable-fci)
+
 ;; (quelpa 'ac-js2)
 (require 'ac-js2)
 (add-hook 'js2-mode-hook #'ac-js2-mode)
