@@ -1000,9 +1000,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
 ;; (add-hook 'geiser-mode-hook #'paredit-mode)
 (defvar geiser-chez-binary)
-(setq geiser-chez-binary "chez-scheme")
+(setq geiser-chez-binary "scheme")
 (require 'geiser-impl)
 (add-to-list 'geiser-active-implementations 'chez)
+(add-hook 'geiser-repl-mode-hook #'smartparens-mode)
 
 ;; slime
 ;; (quelpa 'slime)
