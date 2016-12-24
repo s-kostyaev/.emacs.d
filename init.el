@@ -1160,6 +1160,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (quelpa 'flycheck-dialyzer)
 (require 'flycheck-dialyzer)
 
+(add-hook 'erlang-mode-hook #'company-erlang-init)
+
 ;;; wrangler
 (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
 ; Some code inspection functionalities of Wrangler generate .dot
