@@ -1008,9 +1008,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (start-process-shell-command "swank-kawa compilation"
                                  "*swank-kawa-compilation*"
                                  (concat "cd `dirname " swank-kawa-jar
-                                         "` && java -cp /usr/share/java/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
+                                         "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
 
-(setq swank-kawa-cp (concat "/usr/share/java/kawa.jar:"
+(setq swank-kawa-cp (concat "/usr/share/kawa/lib/kawa.jar:"
                         swank-kawa-jar
                         ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
 
