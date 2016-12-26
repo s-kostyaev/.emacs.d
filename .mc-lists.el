@@ -34,9 +34,12 @@
         beginning-of-buffer
         company-complete-selection
         counsel-M-x
+        counsel-find-file
+        counsel-grep-or-swiper
         electrify-return-if-match
         eval-last-sexp
         find-tag
+        handle-switch-frame
         helm-M-x
         helm-browse-project
         helm-buffers-list
@@ -54,6 +57,7 @@
         hydra-multiple-cursors/mc/unmark-previous-like-this
         hydra-multiple-cursors/nil
         ivy-wgrep-change-to-wgrep-mode
+        key-chord-mode
         kmacro-end-macro
         multiple-cursors-hydra/ace-mc-add-multiple-cursors-and-exit
         multiple-cursors-hydra/ace-mc-add-single-cursor-and-exit
