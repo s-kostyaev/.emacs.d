@@ -483,7 +483,7 @@
 
 (global-set-key [tab] #'tab-indent-or-complete)
 
-
+(add-hook 'after-init-hook 'company-statistics-mode)
 
 ;;; ElDoc
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)

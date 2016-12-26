@@ -9,7 +9,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(default ((t (:background nil)))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -58,7 +58,7 @@
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (ace-link anaconda-mode async cider clojure-mode cmake-ide company company-quickhelp counsel counsel-projectile emmet-mode ensime expand-region flycheck flycheck-gometalinter geiser go-impl go-mode hydra irony ivy ivy-erlang-complete ivy-hydra js2-mode js2-refactor link-hint lua-mode macrostep magit markdown-mode monokai-theme pandoc-mode projectile rtags scala-mode skewer-mode slime smartparens solarized-theme swiper tagedit web-mode which-key with-editor xah-lookup yasnippet ace-window company-go go-eldoc package-build quelpa company-erlang package-lint cask-mode header2 rjsx-mode flymd edit-indirect esup timp signal fifo-class s color-theme pacmacs dash-functional viking-mode cmake-font-lock cmake-mode flycheck-dialyzer eopengrok smooth-scrolling xref-js2 flx wgrep darkokai-theme smart-mode-line cousel consel-ivy consel smooth-scroll avy ace-mc company-irony-c-headers company-irony paredit-menu sublime-themes speed-type smex smart-mode-line-powerline-theme slime-company restclient react-snippets paredit noflet nlinum multiple-cursors key-chord json-rpc js3-mode jquery-doc ido-vertical-mode go-autocomplete fuzzy fsm fill-column-indicator company-tern company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
+    (company-statistics ace-link anaconda-mode async cider clojure-mode cmake-ide company company-quickhelp counsel counsel-projectile emmet-mode ensime expand-region flycheck flycheck-gometalinter geiser go-impl go-mode hydra irony ivy ivy-erlang-complete ivy-hydra js2-mode js2-refactor link-hint lua-mode macrostep magit markdown-mode monokai-theme pandoc-mode projectile rtags scala-mode skewer-mode slime smartparens solarized-theme swiper tagedit web-mode which-key with-editor xah-lookup yasnippet ace-window company-go go-eldoc package-build quelpa company-erlang package-lint cask-mode header2 rjsx-mode flymd edit-indirect esup timp signal fifo-class s color-theme pacmacs dash-functional viking-mode cmake-font-lock cmake-mode flycheck-dialyzer eopengrok smooth-scrolling xref-js2 flx wgrep darkokai-theme smart-mode-line cousel consel-ivy consel smooth-scroll avy ace-mc company-irony-c-headers company-irony paredit-menu sublime-themes speed-type smex smart-mode-line-powerline-theme slime-company restclient react-snippets paredit noflet nlinum multiple-cursors key-chord json-rpc js3-mode jquery-doc ido-vertical-mode go-autocomplete fuzzy fsm fill-column-indicator company-tern company-c-headers company-anaconda column-marker column-enforce-mode color-theme-solarized auto-complete-clang ace-jump-mode ac-js2 ac-emmet ac-cider)))
  '(pos-tip-background-color "#A6E22E")
  '(pos-tip-foreground-color "#272822")
  '(projectile-globally-ignored-directories
