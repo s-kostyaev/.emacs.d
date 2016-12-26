@@ -54,9 +54,15 @@
      (setq custom-file "~/.emacs.d/emacs-customizations.el")
      (load custom-file 'noerror)
      (package-initialize)
-     (package-refresh-contents)
-     (package-install-selected-packages)
-     (princ "done"))
+     (require 'cl-lib)
+     (cl-flet ((always-yes (&rest _) t))
+       (defun no-confirm (fun &rest args)
+         "Apply FUN to ARGS, skipping user confirmations."
+         (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+                   ((symbol-function 'yes-or-no-p) #'always-yes))
+           (apply fun args)))
+       (no-confirm 'package-refresh-contents)
+       (no-confirm 'package-install-selected-packages)))
    (lambda (res)
      (message "packages bootstrap success: %s" res))))
 
