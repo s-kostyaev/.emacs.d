@@ -1090,10 +1090,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (define-key erlang-extended-mode-map (kbd "M-,") nil)
   (define-key erlang-extended-mode-map (kbd "M-?") nil)
   (define-key erlang-extended-mode-map (kbd "(") nil)
+  (define-key erlang-mode-map (kbd "C-c C-s") nil)
   (local-set-key (kbd "C-c C-p") #'my-format-erlang-record))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
-(eval-after-load 'erlang (define-key erlang-mode-map (kbd "C-c C-s") nil))
 
 (add-to-list 'auto-mode-alist '("rebar\\.config$" . erlang-mode))
 (add-to-list 'auto-mode-alist '("relx\\.config$" . erlang-mode))
