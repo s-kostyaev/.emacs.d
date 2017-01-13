@@ -1064,51 +1064,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; Erlang
 ;; (quelpa 'erlang)
-(setq flycheck-erlang-include-path '("../include" "../deps"))
-
-(defun fix-erlang-project-includes (project-root)
-  "Find erlang include paths for PROJECT-ROOT with project deps."
-  (setq-local flycheck-erlang-include-path
-              (append
-               (s-split
-                "\n"
-                (shell-command-to-string
-                 (concat "find "
-                         project-root
-                         "/*"
-                         " -type d -name include"))
-                t)
-               (list project-root
-                     (concat project-root "/include")
-                     (concat project-root "/deps")
-                     default-directory
-                     (concat
-                      (locate-dominating-file
-                       default-directory
-                       "src") "include")
-                     (concat
-                      (locate-dominating-file
-                       default-directory
-                       "src") "deps")))))
-
-(defun fix-erlang-project-code-path (project-root)
-  "Find erlang include paths for PROJECT-ROOT with project deps."
-  (let ((code-path
-           (split-string (shell-command-to-string
-                        (concat "find " project-root " -type d -name ebin")))
-         ))
-    (setq-local flycheck-erlang-library-path code-path)))
-;; (quelpa 'ivy-erlang-complete)
-(require 'ivy-erlang-complete)
-
-;; (defun force-reindex-erlang-project ()
-;;   "Force update erlang project index."
-;;   (interactive)
-;;   (message "%s" (shell-command-to-string
-;;                  (concat "find " ivy-erlang-complete-project-root
-;;                          " -type d -name .opengrok -exec rm -fr {} +")))
-;;   (eopengrok-make-index-with-enable-projects ivy-erlang-complete-project-root))
-
 (defun my-format-erlang-record ()
   "Format erlang record."
   (interactive)
@@ -1129,9 +1084,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defun my-erlang-hook ()
   "Setup for erlang."
   (require 'wrangler)
-  (let ((project-root (ivy-erlang-complete-autosetup-project-root)))
-    (fix-erlang-project-code-path project-root)
-    (fix-erlang-project-includes project-root))
   (ivy-erlang-complete-init)
   (defvar erlang-extended-mode-map)
   (define-key erlang-extended-mode-map (kbd "M-.") nil)
