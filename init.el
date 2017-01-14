@@ -1294,6 +1294,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;; embrace
 (global-set-key (kbd "C-,") #'embrace-commander)
 
+;;; composable
+(composable-mode)
+(composable-mark-mode)
+
 (load custom-file 'noerror)
 
 (setq gc-cons-threshold (* 8 1024 1024))
