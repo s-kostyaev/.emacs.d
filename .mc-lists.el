@@ -9,6 +9,7 @@
         company-select-next-or-abort
         complete-symbol
         completion-at-point
+        composable-comment-or-uncomment-region
         dabbrev-completion
         electric-newline-and-maybe-indent
         erlang-electric-comma

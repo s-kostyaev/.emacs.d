@@ -782,8 +782,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; C-w like in readline
 ;;
-(global-set-key (kbd "C-w") #'backward-kill-word)
-(global-set-key (kbd "C-c C-w") #'kill-region)
+;; (global-set-key (kbd "C-w") #'backward-kill-word)
+;; (global-set-key (kbd "C-c C-w") #'kill-region)
 
 (global-set-key (kbd "C-c C-n") #'goto-line)
 
