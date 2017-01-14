@@ -1291,6 +1291,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (browse-url url)))
 (setq flymd-browser-open-function 'my-flymd-browser-function)
 
+;;; embrace
+(global-set-key (kbd "C-,") #'embrace-commander)
+
 (load custom-file 'noerror)
 
 (setq gc-cons-threshold (* 8 1024 1024))
