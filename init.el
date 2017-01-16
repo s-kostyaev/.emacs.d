@@ -64,40 +64,13 @@
        (no-confirm 'package-refresh-contents)
        (no-confirm 'package-install-selected-packages)))
    (lambda (res)
+     (seq-do #'load-file
+               (split-string
+                (shell-command-to-string
+                 "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
      (message "packages bootstrap success: %s" res))))
 
 (my-bootstrap)
-
-(defvar quelpa-upgrade-p)
-(defun my-async-upgrade ()
-  "Quelpa async upgrade."
-  (interactive)
-  (if (file-exists-p (expand-file-name "~/.emacs.d/update-in-progress"))
-      (message "update in progress")
-    (shell-command-to-string "touch ~/.emacs.d/update-in-progress")
-    (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
-    (require 'seq)
-    (require 'subr-x)
-    (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
-            (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
-    (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
-            (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
-    (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
-    (require 'async)
-    (async-start
-     (lambda ()
-       ;; Melpa
-       (require 'package)
-       (package-initialize)
-       (require 'quelpa)
-       (setq custom-file "~/.emacs.d/emacs-customizations.el")
-       (load custom-file 'noerror)
-       (quelpa-upgrade)
-       (princ "done"))
-     (lambda (res)
-       (delete-file "~/.emacs.d/update-in-progress")
-       (message "packages upgrade success: %s" res)))))
-
 
 ;; async
 ;; (quelpa 'async)
