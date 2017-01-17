@@ -857,6 +857,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (global-set-key (kbd "C-:") #'counsel-company)
 
+;;; ivy-rich
+(require 'ivy-rich)
+(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+
 ;;
 ;; ash integration
 ;;
