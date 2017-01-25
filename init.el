@@ -1,4 +1,4 @@
-;;; init.el --- Emacs init file.
+;;; init.el --- Emacs init file. -*- lexical-binding: t -*-
 
 ;;; Commentary:
 
@@ -166,6 +166,10 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 
+(defvar delimit-columns-extra)
+(defvar delimit-columns-format)
+(defvar delimit-columns-str-separator)
+(defvar delimit-columns-separator)
 (defun my-align-region-by (&optional delimiter)
   "Align current region by DELIMITER."
   (interactive)
