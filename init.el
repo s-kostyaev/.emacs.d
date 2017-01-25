@@ -4,6 +4,9 @@
 
 ;;; Code:
 
+(setq gc-cons-threshold (* 80 1024 1024))
+(setq gc-cons-percentage 0.5)
+
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
 (require 'seq)
 (require 'subr-x)
@@ -74,7 +77,7 @@
 
 ;; async
 ;; (quelpa 'async)
-(async-bytecomp-package-mode 1)
+;; (async-bytecomp-package-mode 1)
 
 
 ;; (quelpa 'color-theme)
@@ -137,9 +140,9 @@
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
-(setq gc-cons-threshold (* 80 1024 1024))
-(setq gc-cons-percentage 0.5)
-(run-with-idle-timer 5 t #'garbage-collect)
+;; (setq gc-cons-threshold (* 80 1024 1024))
+;; (setq gc-cons-percentage 0.5)
+;; (run-with-idle-timer 5 t #'garbage-collect)
 ;; (quelpa 'smooth-scrolling)
 ;; (require 'smooth-scrolling)
 ;; (smooth-scrolling-mode 1)
