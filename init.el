@@ -624,7 +624,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2)
-  (setq web-mode-enable-current-element-highlight t))
+  (setq web-mode-enable-current-element-highlight t)
+  (fci-mode -1))
 (add-hook 'web-mode-hook  #'my-web-mode-hook)
 
 ;;
