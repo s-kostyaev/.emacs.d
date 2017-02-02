@@ -107,7 +107,8 @@
 ;; (quelpa 'monokai-theme)
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
-  (load-theme 'spacemacs-dark t))
+  (load-theme 'spacemacs-dark t)
+  (sml/setup))
 
 (add-hook 'after-init-hook #'my-set-themes-hook)
 ;; to setup tabs
