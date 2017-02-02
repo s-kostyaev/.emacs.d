@@ -8,11 +8,16 @@
 (setq gc-cons-percentage 0.5)
 
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
+
+(defun my-add-to-load-path (dir)
+  "Add DIR to load path."
+  (add-to-list 'load-path (expand-file-name dir)))
+
 (require 'seq)
 (require 'subr-x)
-(seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+(seq-do #'my-add-to-load-path
  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
-(seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+(seq-do #'my-add-to-load-path
  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
 (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 
@@ -95,27 +100,14 @@
 ;; (quelpa 'sublime-themes)
 
 
-;; powerline
+;; modeline
 ;; (quelpa 'smart-mode-line)
 (require 'smart-mode-line)
-;; (quelpa 'smart-mode-line-powerline-theme)
-
-;; (sml/apply-theme "powerline")
-;; (sml/apply-theme 'respectful)
-;; (load-theme 'smart-mode-line-respectful t)
-;; (powerline-default-theme)
-;; (sml/setup)
 
 ;; (quelpa 'monokai-theme)
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
-  (sml/setup)
-  (require 's)
-  ;; (if (s-equals? "probook" (s-trim (shell-command-to-string "hostname")))
-  ;;   (load-theme 'monokai t)
-  ;; (load-theme 'solarized t))
-  (load-theme 'solarized t)
-  (load-theme 'smart-mode-line-respectful t))
+  (load-theme 'spacemacs-dark t))
 
 (add-hook 'after-init-hook #'my-set-themes-hook)
 ;; to setup tabs
