@@ -1245,7 +1245,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;;; Scala & Java development
 ;; (quelpa 'ensime)
 (require 'ensime)
-(setq ensime-startup-snapshot-notification nil)
+(setq ensime-startup-notification nil)
 
 ;;; Ace link
 ;; (quelpa 'ace-link)
