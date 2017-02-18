@@ -873,68 +873,71 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'geiser-repl-mode-hook #'smartparens-mode)))
 
 ;; slime
-(slime-setup '(slime-repl slime-company))
+(use-package slime
+  :init
+  (progn (defvar swank-kawa-jar "")
+         (defvar swank-kawa-cp "")
+         (require 'subr-x)
+         (setq swank-kawa-jar (concat
+                               (string-trim
+                                (shell-command-to-string
+                                 (concat "dirname " (locate-library "slime.el"))))
+                               "/contrib/swank-kawa.jar"))
 
-(defvar swank-kawa-jar "")
-(defvar swank-kawa-cp "")
-(require 'subr-x)
-(setq swank-kawa-jar (concat
-                        (string-trim
-                         (shell-command-to-string
-                          (concat "dirname " (locate-library "slime.el"))))
-                        "/contrib/swank-kawa.jar"))
+         (if (not (file-exists-p swank-kawa-jar))
+             (start-process-shell-command "swank-kawa compilation"
+                                          "*swank-kawa-compilation*"
+                                          (concat "cd `dirname " swank-kawa-jar
+                                                  "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
 
-(if (not (file-exists-p swank-kawa-jar))
-    (start-process-shell-command "swank-kawa compilation"
-                                 "*swank-kawa-compilation*"
-                                 (concat "cd `dirname " swank-kawa-jar
-                                         "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
+         (setq swank-kawa-cp (concat "/usr/share/kawa/lib/kawa.jar:"
+                                     swank-kawa-jar
+                                     ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
 
-(setq swank-kawa-cp (concat "/usr/share/kawa/lib/kawa.jar:"
-                        swank-kawa-jar
-                        ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
+         (defvar slime-lisp-implementations)
+         (defmacro setup-slime-implementations ()
+           "Setup slime Lisp implementations."
+           `(setq slime-lisp-implementations
+                  '((kawa
+                     ("java"
+                      ;; needed jar files
+                      "-cp"
+                      ,(prin1-to-string swank-kawa-cp 't)
+                      ;; use eval-print-last-sexp on it
+                      ;; channel for debugger
+                      "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
+                      ;; depending on JVM, compiler may need more stack
+                      "-Xss2M"
+                      ;; kawa without GUI
+                      "kawa.repl" "-s")
+                     :init kawa-slime-init))))
 
-(defvar slime-lisp-implementations)
-(defmacro setup-slime-implementations ()
-  "Setup slime Lisp implementations."
-  `(setq slime-lisp-implementations
-        '((kawa
-           ("java"
-            ;; needed jar files
-            "-cp"
-            ,(prin1-to-string swank-kawa-cp 't)
-            ;; use eval-print-last-sexp on it
-            ;; channel for debugger
-            "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
-            ;; depending on JVM, compiler may need more stack
-            "-Xss2M"
-            ;; kawa without GUI
-            "kawa.repl" "-s")
-           :init kawa-slime-init))))
+         (setup-slime-implementations)
 
-(setup-slime-implementations)
+         (defvar slime-protocol-version)
+         (defun kawa-slime-init (file ignore)
+           "Init kawa-slime for `FILE' and IGNORE second arg."
+           (setq slime-protocol-version 'ignore)
+           (format "%S\n"
+                   `(begin (import (swank-kawa))
+                           (start-swank ,file)
+                           ;; Optionally add source paths of your code so
+                           ;; that M-. works better:
+                           ;; (set! swank-java-source-path
+                           ;;  (append
+                           ;;   '(,(expand-file-name "~/.emacs.d/elpa/slime-20160113.630/contrib/")
+                           ;;     "")
+                           ;;   swank-java-source-path))
+                           )))
 
-(defvar slime-protocol-version)
-(defun kawa-slime-init (file ignore)
-  "Init kawa-slime for `FILE' and IGNORE second arg."
-  (setq slime-protocol-version 'ignore)
-  (format "%S\n"
-          `(begin (import (swank-kawa))
-                  (start-swank ,file)
-                  ;; Optionally add source paths of your code so
-                  ;; that M-. works better:
-                  ;; (set! swank-java-source-path
-                  ;;  (append
-                  ;;   '(,(expand-file-name "~/.emacs.d/elpa/slime-20160113.630/contrib/")
-                  ;;     "")
-                  ;;   swank-java-source-path))
-                  )))
+         ;; Optionally define a command to start it.
+         (defun kawa ()
+           "Run kawa repl."
+           (interactive)
+           (slime 'kawa)))
+  :config
+  (slime-setup '(slime-repl slime-company)))
 
-;; Optionally define a command to start it.
-(defun kawa ()
-  "Run kawa repl."
-  (interactive)
-  (slime 'kawa))
 
 ;;;; Erlang
 (defun my-format-erlang-record ()
