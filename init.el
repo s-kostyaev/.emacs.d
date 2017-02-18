@@ -881,9 +881,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar org-log-done)
 (setq org-log-done t)
 ; ditaa
-(org-babel-do-load-languages
+(defun my-org-hook ()
+  "My hook for `org-mode'."
+ (org-babel-do-load-languages
  'org-babel-load-languages
- '((ditaa . t) (dot . t)))
+ '((ditaa . t) (dot . t))))
+(add-hook 'org-mode-hook #'my-org-hook)
 
 ;; indirect region
 (key-chord-define-global (kbd ";r") #'edit-indirect-region)
