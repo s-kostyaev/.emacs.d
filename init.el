@@ -874,6 +874,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; slime
 (use-package slime
+  :defer 2
   :init
   (progn (defvar swank-kawa-jar "")
          (defvar swank-kawa-cp "")
