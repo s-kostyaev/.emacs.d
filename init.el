@@ -33,7 +33,12 @@
 (require 'package)
 (package-initialize)
 
-(package-install 'async)
+(eval-when-compile
+  (require 'use-package))
+(require 'bind-key)
+
+
+(use-package async :ensure t)
 
 (defun my-bootstrap ()
   "Async install all needed packages."
@@ -78,7 +83,9 @@
 
 ;; (require 'color-theme)
 (defvar color-theme-is-global)
-(setq color-theme-is-global t)
+(use-package color-theme
+  :config
+  (setq color-theme-is-global t))
 ;; (color-theme-initialize)
 
 ;; (require 'color-theme-sanityinc-solarized)
@@ -162,7 +169,7 @@
          (beg (region-beginning)))
     (delimit-columns-region beg (region-end))
     (goto-char beg)
-    (ignore-errors (er/expand-region))
+    (ignore-errors (er/expand-region 1))
     (let ((new-end (region-end)))
      (goto-char new-end)
      (whitespace-cleanup-region beg (line-end-position)))))
@@ -230,7 +237,7 @@
 (defun goimports ()
   "Running goimports on go files."
   (interactive)
-  (if (s-equals-p mode-name "Go")
+  (if (string-equal mode-name "Go")
       (progn
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
@@ -549,6 +556,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq httpd-port 18080)
 
 ;; xref-js2
+(defvar js2-mode-map)
 (add-hook 'js2-mode-hook
           (lambda ()
             (define-key js2-mode-map (kbd "M-.") nil)
@@ -749,53 +757,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-;") #'comment-dwim-line)
 (global-set-key (kbd "C-c C-s") #'counsel-ag)
 (global-set-key (kbd "C-x l") #'counsel-locate)
-
-;; (require 'helm-descbinds)
-;; (helm-descbinds-mode 1)
-
-(defvar ivy-mode-map)
-
-(defvar-local my-counsel-company-prefix nil
-  "Company prefix for use counsel-company with multiple-cursors.")
-(defvar ivy-completion-beg)
-(defvar ivy-completion-end)
-(defun my-counsel-company ()
-  "Complete using `company-candidates'."
-  (interactive)
-  (company-mode 1)
-  (company-cancel)
-  (unless company-candidates
-    (company-complete))
-  (when company-point
-    (setq my-counsel-company-prefix company-prefix)
-    (company--fetch-candidates my-counsel-company-prefix)
-    (when (looking-back company-common (line-beginning-position))
-      (setq ivy-completion-beg (match-beginning 0))
-      (setq ivy-completion-end (match-end 0)))
-    (ivy-read "company cand: " (mapcar #'(lambda (x)
-                                           (let ((annotation
-                                                  (company-call-backend 'annotation x)))
-                                             (if (> (length annotation) 0)
-                                                 (progn
-                                                   (set-text-properties
-                                                    0 (length annotation)
-                                                    '(face success) annotation)
-                                                   (concat x "\t\t" annotation))
-                                               x)))
-                                       company-candidates)
-              :action #'(lambda (x)
-                          (company-cancel)
-                          (ivy-completion-in-region-action
-                           (replace-regexp-in-string "\t\t\.*" "" x))
-                          (let
-                              ((insertion (s-chop-prefix my-counsel-company-prefix
-                                                       (replace-regexp-in-string "\t\t\.*" "" x))))
-                            (ignore-errors
-                             (mc/execute-command-for-all-fake-cursors
-                              #'(lambda ()
-                                  (interactive)
-                                  (insert insertion)))))))))
-
 (global-set-key (kbd "C-:") #'counsel-company)
 
 ;;; ivy-rich
@@ -905,6 +866,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar geiser-chez-binary)
 (setq geiser-chez-binary "scheme")
 ;; (require 'geiser-impl)
+(defvar geiser-active-implementations)
 (eval-after-load "geiser-impl"
   (lambda ()
     (add-to-list 'geiser-active-implementations 'chez)
@@ -1072,6 +1034,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; Uncomment the below line to use eww (Emacs Web Wowser)
 ;; (setq xah-lookup-browser-function 'eww)
 
+(use-package xah-lookup
+  :functions xah-lookup-word-on-internet)
+(defvar xah-lookup-browser-function)
 (defun xah-lookup-cppreference (&optional word)
   "Lookup definition of current WORD or text selection in URL."
   (interactive)
@@ -1093,6 +1058,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
    "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
    xah-lookup-browser-function))
 
+(defvar c++-mode-map)
+(defvar c-mode-map)
 (defun xah-c++-setup ()
   "Setup xah-lookups for c++-mode."
   (require 'cc-mode)
