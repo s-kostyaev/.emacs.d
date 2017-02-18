@@ -10,6 +10,7 @@
         complete-symbol
         completion-at-point
         composable-comment-or-uncomment-region
+        composable-kill-region
         dabbrev-completion
         electric-newline-and-maybe-indent
         erlang-electric-comma

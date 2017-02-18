@@ -7,19 +7,19 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
 
-(defun my-add-to-load-path (dir)
-  "Add DIR to load path."
-  (add-to-list 'load-path (expand-file-name dir)))
+;; (defun my-add-to-load-path (dir)
+;;   "Add DIR to load path."
+;;   (add-to-list 'load-path (expand-file-name dir)))
 
-(require 'seq)
-(require 'subr-x)
-(seq-do #'my-add-to-load-path
- (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
-(seq-do #'my-add-to-load-path
- (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+;; (require 'seq)
+;; (require 'subr-x)
+;; (seq-do #'my-add-to-load-path
+;;  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
+;; (seq-do #'my-add-to-load-path
+;;  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
 
 (defvar personal-keybindings nil)
 
@@ -33,27 +33,19 @@
 (require 'package)
 (package-initialize)
 
-;; (defvar quelpa-update-melpa-p)
-;; (setq quelpa-update-melpa-p nil)
-;; (unless (require 'quelpa nil t)
-;;   (with-temp-buffer
-;;     (url-insert-file-contents "https://raw.github.com/quelpa/quelpa/master/bootstrap.el")
-;;     (eval-buffer)))
-
-;; (quelpa 'async)
 (package-install 'async)
 
 (defun my-bootstrap ()
-  "Quelpa async install."
+  "Async install all needed packages."
   (interactive)
-  (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
-  (require 'seq)
-  (require 'subr-x)
-  (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
-          (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
-  (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
-          (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
-  (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
+  ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
+  ;; (require 'seq)
+  ;; (require 'subr-x)
+  ;; (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+  ;;         (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
+  ;; (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
+  ;;         (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
+  ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
   (require 'async)
   (async-start
    (lambda ()
@@ -81,34 +73,29 @@
 (my-bootstrap)
 
 ;; async
-;; (quelpa 'async)
 ;; (async-bytecomp-package-mode 1)
 
 
-;; (quelpa 'color-theme)
-(require 'color-theme)
+;; (require 'color-theme)
+(defvar color-theme-is-global)
 (setq color-theme-is-global t)
 ;; (color-theme-initialize)
-;; (quelpa 'color-theme-solarized)
 
-;; (quelpa 'color-theme-sanityinc-solarized)
 ;; (require 'color-theme-sanityinc-solarized)
 ;; (color-theme-sanityinc-solarized-light)
-;; (quelpa 'zenburn-theme)
 ;; (load-theme 'zenburn t)
 
-;; (quelpa 'sublime-themes)
-
-
 ;; modeline
-;; (quelpa 'smart-mode-line)
-(require 'smart-mode-line)
+;; (require 'smart-mode-line)
 
-;; (quelpa 'monokai-theme)
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
+  (interactive)
   (load-theme 'spacemacs-dark t)
-  (sml/setup))
+  (smart-mode-line-enable)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1))
 
 (add-hook 'after-init-hook #'my-set-themes-hook)
 ;; to setup tabs
@@ -129,14 +116,12 @@
 ;(display-time)
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
-;; (quelpa 'smooth-scroll)
 ;; (require 'smooth-scroll)
 ;; (smooth-scroll-mode t)
 ;; (setq smooth-scroll/vscroll-step-size 1)
 ;; (setq gc-cons-threshold (* 80 1024 1024))
 ;; (setq gc-cons-percentage 0.5)
 ;; (run-with-idle-timer 5 t #'garbage-collect)
-;; (quelpa 'smooth-scrolling)
 ;; (require 'smooth-scrolling)
 ;; (smooth-scrolling-mode 1)
 ;; (global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
@@ -186,8 +171,7 @@
 ;;
 ;; hydra
 ;;
-;; (quelpa 'hydra)
-(require 'hydra)
+;; (require 'hydra)
 
 (global-set-key (kbd "C-x o")
                 (defhydra hydra-cycle-windows
@@ -234,8 +218,7 @@
 	  (if this-win-2nd (other-window 1))))))
 
 ;; Flycheck
-;; (quelpa 'flycheck)
-(require 'flycheck)
+;; (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 ;; (global-set-key (kbd "C-c r") #'helm-flycheck)
 (global-set-key (kbd "C-c r") #'flycheck-list-errors)
@@ -243,7 +226,6 @@
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
 (setq exec-path (append exec-path '("~/go/bin")))
-;; (quelpa 'go-mode)
 ;; (require 'go-mode-autoloads)
 (defun goimports ()
   "Running goimports on go files."
@@ -253,7 +235,6 @@
         (shell-command "goimports -w *.go")
         (revert-buffer t t))))
 
-;; (quelpa 'company-go)
 
 (declare-function go-remove-unused-imports "ext:go-mode")
 (declare-function go-goto-imports "ext:go-mode")
@@ -262,8 +243,6 @@
 (defvar company-begin-commands)
 (defvar company-backends)
 
-;; (quelpa 'go-impl)
-;; (quelpa 'flycheck-gometalinter)
 (defun my-go-mode-hook ()
   "Setup for go."
   (require 'gobuild)
@@ -293,7 +272,6 @@
 ;; Flycheck
 (add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 ;; doc
-;; (quelpa 'go-eldoc) ;; Don't need to require, if you install by package.el
 (add-hook 'go-mode-hook #'go-eldoc-setup)
 
 
@@ -347,10 +325,8 @@
 (put 'downcase-region 'disabled nil)
 
 ;;; Python mode
-;; (quelpa 'anaconda-mode)
 (add-hook 'python-mode-hook #'anaconda-mode)
 (add-hook 'python-mode-hook #'eldoc-mode)
-;; (quelpa 'company-anaconda)
 
 (setenv "PYMACS_PYTHON" "python2")
 (setenv "PYTHONPATH" "/usr/bin/python2")
@@ -405,9 +381,8 @@
 
 
 ;;; Auto-complete
-;; (quelpa 'company)
-(require 'company)
-(global-company-mode)
+;; (require 'company)
+(add-hook 'after-init-hook #'global-company-mode)
 (setq company-global-modes '(not erlang-mode))
 (defvar company-etags-ignore-case)
 (setq company-etags-ignore-case nil)
@@ -443,11 +418,6 @@
         (backward-char 1)
         (if (looking-at "->") t nil)))))
 
-(defun do-yas-expand ()
-  "Do yasnippet expansion."
-  (let ((yas-fallback-behavior 'return-nil))
-    (yas-expand)))
-
 (defvar yas-minor-mode)
 (defun tab-indent-or-complete ()
   "Smart tab function."
@@ -455,7 +425,7 @@
   (if (minibufferp)
       (minibuffer-complete)
     (if (or (not yas-minor-mode)
-            (null (do-yas-expand)))
+            (null (yas-expand)))
         (if (check-expansion)
             (company-complete-common)
           (indent-for-tab-command)))))
@@ -504,7 +474,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq browse-url-browser-function #'browse-url-chromium)
 
 ;;;; Paredit
-;; (quelpa 'paredit)
 ;; (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
 ;; (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
 ;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
@@ -514,7 +483,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
 ;; (add-hook 'clojure-mode-hook          #'enable-paredit-mode)
 
-(require 'eldoc) ; if not already loaded
+;; (require 'eldoc) ; if not already loaded
 
 ;; Forces the messages to 0, and kills the *Messages* buffer - thus disabling it on startup.
 ;(setq-default message-log-max nil)
@@ -531,7 +500,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
 
 ;; Markdown
-;; (quelpa 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode"
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
@@ -540,10 +508,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 
 ;; for over-80-chars line highlightning
-;; (quelpa 'column-enforce-mode)
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
-;; (quelpa 'fill-column-indicator)
-(require 'fill-column-indicator)
+;; (require 'fill-column-indicator)
 (set 'fci-rule-column 80)
 (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
 (global-fci-mode 1)
@@ -551,11 +517,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
-;; (quelpa 'web-mode)
-;; (quelpa 'js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
-;; (quelpa 'react-snippets)
 (defvar js2-highlight-level)
 (setq js2-highlight-level 3)
 (defvar js2-idle-timer-delay)
@@ -573,8 +536,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defun my-disable-fci () "Disable fci mode." (fci-mode -1))
 (add-hook 'rjsx-mode-hook #'my-disable-fci)
 
-;; (quelpa 'ac-js2)
-(require 'ac-js2)
+;; (require 'ac-js2)
 (add-hook 'js2-mode-hook #'ac-js2-mode)
 (defvar ac-js2-evaluate-calls)
 (setq ac-js2-evaluate-calls t)
@@ -587,14 +549,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq httpd-port 18080)
 
 ;; xref-js2
-;; (quelpa 'xref-js2)
-(define-key js2-mode-map (kbd "M-.") nil)
-(add-hook 'js2-mode-hook (lambda ()
-  (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
+(add-hook 'js2-mode-hook
+          (lambda ()
+            (define-key js2-mode-map (kbd "M-.") nil)
+            (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 ;; tern
-;; (quelpa 'tern)
-;; (quelpa 'company-tern)
 ;; (add-to-list 'company-backends 'company-tern)
 ;; (defvar company-tern-meta-as-single-line)
 ;; (setq company-tern-meta-as-single-line t)
@@ -605,13 +565,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'js-mode-hook #'tern-mode)
 ;; (add-hook 'web-mode-hook #'tern-mode)
 
-;; (quelpa 'js2-refactor)
-(require 'js2-refactor)
+;; (require 'js2-refactor)
 (add-hook 'js2-mode-hook #'js2-refactor-mode)
 
-;; (quelpa 'skewer-mode)
-(require 'skewer-mode)
-(skewer-setup)
+;; (require 'skewer-mode)
+(add-hook 'after-init-hook #'skewer-setup)
 
 ;; adjust indents for web-mode to 2 spaces
 (defvar web-mode-markup-indent-offset)
@@ -631,26 +589,24 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; emmet mode
 ;;
-;; (quelpa 'emmet-mode)
-(require 'emmet-mode)
+;; (require 'emmet-mode)
 (add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'web-mode-hook #'emmet-mode)
 (add-hook 'rjsx-mode #'emmet-mode)
 (add-hook 'css-mode-hook #'emmet-mode) ;; enable Emmet's css abbreviation.
+(defvar emmet-move-cursor-between-quotes)
 (setq emmet-move-cursor-between-quotes t) ;; default nil
 
 
 ;;
 ;; key chord
 ;;
-;; (quelpa 'key-chord)
-(require 'key-chord)
+;; (require 'key-chord)
 (key-chord-mode 1)
 
 ;;
 ;; ace jump mode major function
 ;; 
-;; (quelpa 'ace-jump-mode)
 ;; (autoload
 ;;   'ace-jump-mode
 ;;   "ace-jump-mode"
@@ -666,7 +622,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;                            ("p" ace-jump-mode-pop-mark "pop mark")
 ;;                            ("q" nil "quit")))
 ;; avy
-;; (quelpa 'avy)
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
 (define-key isearch-mode-map (kbd "C-'") #'avy-isearch)
@@ -688,8 +643,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; expand region
 ;;
-;; (quelpa 'expand-region)
-(require 'expand-region)
+;; (require 'expand-region)
 (key-chord-define-global "zj" 'er/expand-region)
 (key-chord-define-global "zk" 'er/contract-region)
 (delete-selection-mode)
@@ -697,9 +651,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; multiple cursors
 ;;
-;; (quelpa 'multiple-cursors)
-(require 'multiple-cursors)
-;; (quelpa 'ace-mc)
+;; (require 'multiple-cursors)
 
 (key-chord-define-global "fm"
                          (defhydra multiple-cursors-hydra (:hint nil)
@@ -735,7 +687,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; tagedit
 ;;
-;; (quelpa 'tagedit)
 ;; (eval-after-load "sgml-mode"
 ;;   '(progn
 ;;      (require 'tagedit)
@@ -745,13 +696,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; yasnippet
 ;;
-;; (quelpa 'yasnippet)
 (yas-global-mode 1)
 
 ;;
 ;; tramp mode for fast open files with sudo
 ;;
-(require 'tramp)
+;; (require 'tramp)
 
 ;;
 ;; C-w like in readline
@@ -765,7 +715,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key [f9] #'key-chord-mode)
 
 ;helm
-;; (quelpa 'helm)
 ;; (require 'helm-config)
 ;; (global-set-key (kbd "C-x C-x") #'helm-M-x)
 ;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
@@ -775,8 +724,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 (setq x-hyper-keysym 'meta)
 ;; ivy
-;; (quelpa 'ivy)
-;; (quelpa 'ivy-hydra)
 (ivy-mode 1)
 (defvar ivy-initial-inputs-alist)
 (setq ivy-initial-inputs-alist nil)
@@ -788,14 +735,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
         (t . ivy--regex-fuzzy)
         ))
 (setq completion-in-region-function 'ivy-completion-in-region)
-;; (quelpa 'swiper)
 (global-set-key "\C-s" #'swiper)
 (global-set-key (kbd "C-c s k") #'ivy-resume)
-;; (quelpa 'counsel)
-;; (quelpa 'smex)
-;; (quelpa 'flx)
-;; (quelpa 'wgrep)
-(require 'wgrep)
+;; (require 'wgrep)
 (setq wgrep-auto-save-buffer t)
 (counsel-mode t)
 (global-set-key "\C-s" #'counsel-grep-or-swiper)
@@ -807,9 +749,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-;") #'comment-dwim-line)
 (global-set-key (kbd "C-c C-s") #'counsel-ag)
 (global-set-key (kbd "C-x l") #'counsel-locate)
-;; (quelpa 'counsel-projectile)
 
-;; (quelpa 'helm-descbinds)
 ;; (require 'helm-descbinds)
 ;; (helm-descbinds-mode 1)
 
@@ -859,7 +799,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "C-:") #'counsel-company)
 
 ;;; ivy-rich
-(require 'ivy-rich)
+;; (require 'ivy-rich)
+(add-hook 'ivy-mode-hook (lambda () (require 'ivy-rich)))
 (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
 
 ;;
@@ -886,8 +827,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "M-i") #'imenu)
 
 ;;;; Projectile
-;; (quelpa 'projectile)
-;; (quelpa 'helm-projectile)
 (projectile-mode 1)
 (defvar projectile-completion-system)
 (setq projectile-completion-system 'ivy)
@@ -895,7 +834,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 
 ;;;; Gnu global
-;; (quelpa 'helm-gtags)
 
 ;; key bindings
 ;; (defvar helm-gtags-mode-map)
@@ -913,7 +851,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;      (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
 
 ;;;; OpenGrok
-;; (quelpa 'eopengrok)
 (defvar eopengrok-jar)
 (setq eopengrok-jar
       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
@@ -928,11 +865,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
 
 ;; speed-typing
-;; (quelpa 'speed-type)
-(require 'speed-type)
+;; (require 'speed-type)
 
 ;; magit
-;; (quelpa 'magit)
 (defun my-magit-diff-hook ()
   "My hook for improve magit diff."
   (local-set-key (kbd "h") #'diff-refine-hunk))
@@ -951,32 +886,28 @@ the end of the line, then comment current line.  Replaces default behaviour of
  '((ditaa . t) (dot . t)))
 
 ;; indirect region
-;; (quelpa 'edit-indirect)
 (key-chord-define-global (kbd ";r") #'edit-indirect-region)
 
 ;; helm flycheck
-;; (quelpa 'helm-flycheck)
 
 ;; pandoc
-;; (quelpa 'pandoc-mode)
-(require 'pandoc-mode)
+;; (require 'pandoc-mode)
 (add-hook 'markdown-mode-hook #'pandoc-mode)
 (declare-function pandoc-load-default-settings "ext:pandoc")
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
 ;; guile support
-;; (quelpa 'geiser)
 ;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
 ;; (add-hook 'geiser-mode-hook #'paredit-mode)
 (defvar geiser-chez-binary)
 (setq geiser-chez-binary "scheme")
-(require 'geiser-impl)
-(add-to-list 'geiser-active-implementations 'chez)
-(add-hook 'geiser-repl-mode-hook #'smartparens-mode)
+;; (require 'geiser-impl)
+(eval-after-load "geiser-impl"
+  (lambda ()
+    (add-to-list 'geiser-active-implementations 'chez)
+    (add-hook 'geiser-repl-mode-hook #'smartparens-mode)))
 
 ;; slime
-;; (quelpa 'slime)
-;; (quelpa 'slime-company)
 (slime-setup '(slime-repl slime-company))
 
 (defvar swank-kawa-jar "")
@@ -1041,7 +972,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (slime 'kawa))
 
 ;;;; Erlang
-;; (quelpa 'erlang)
 (defun my-format-erlang-record ()
   "Format erlang record."
   (interactive)
@@ -1078,8 +1008,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-to-list 'auto-mode-alist '("system\\.config$" . erlang-mode))
 (add-to-list 'auto-mode-alist '("\\.app\\.src$" . erlang-mode))
 
-;; (quelpa 'flycheck-dialyzer)
-(require 'flycheck-dialyzer)
+;; (require 'flycheck-dialyzer)
 
 (add-hook 'erlang-mode-hook #'company-erlang-init)
 
@@ -1117,12 +1046,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 
 ;; fast open url
-;; (quelpa 'link-hint)
 (global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
 
 ;;;; Lua
-;; (quelpa 'lua-mode)
-(require 'lua-mode)
+;; (require 'lua-mode)
 
 ;; nXML mode customization
 (add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
@@ -1131,20 +1058,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; C, C++ Development
 ;; Rtags
-;; (quelpa 'rtags)
-(require 'rtags)
+;; (require 'rtags)
 (setq rtags-completions-enabled nil)
 ;; (setq rtags-use-helm t)
 ;; completion
-;; (quelpa 'irony)
-;; (quelpa 'company-irony)
-;; (quelpa 'company-irony-c-headers)
-;; (quelpa 'company-c-headers)
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
 ;; show docs at point
-;; (quelpa 'xah-lookup)
-(require 'xah-lookup)
+;; (require 'xah-lookup)
 ;; Uncomment the below line to use eww (Emacs Web Wowser)
 ;; (setq xah-lookup-browser-function 'eww)
 
@@ -1157,11 +1078,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
    "http://en.cppreference.com/mwiki/index.php?search=�"
    xah-lookup-browser-function))
 
-(require 'cc-mode)
+;; (require 'cc-mode)
 
 ;; Add shortcut for c++-mode
-(define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference)
-
 ;; Another example with http://www.boost.org
 (defun xah-lookup-boost (&optional word)
   "Lookup definition of current WORD or text selection in URL."
@@ -1170,10 +1089,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
    word
    "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
    xah-lookup-browser-function))
-(define-key c++-mode-map (kbd "C-c b") #'xah-lookup-boost)
+
+(defun xah-c++-setup ()
+  "Setup xah-lookups for c++-mode."
+  (require 'cc-mode)
+  (define-key c++-mode-map (kbd "C-c b") #'xah-lookup-boost)
+  (define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference))
+
+(add-hook 'c++-mode-hook #'xah-c++-setup)
 
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
+  (require 'cc-mode)
   (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
   (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
   (local-set-key (kbd "M-.") (lambda ()
@@ -1187,11 +1114,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (local-set-key (kbd "C-'") #'company-irony-c-headers)
   (rtags-start-process-unless-running)
   (irony-mode)
-  (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
+  (add-to-list 'company-backends '(company-irony company-irony-c-headers))
+  (define-key c++-mode-map (kbd "C-c C-s") nil)
+  (define-key c-mode-map (kbd "C-c C-s") nil))
 (add-hook 'c++-mode-hook #'my-cc-mode-hook)
 (add-hook 'c-mode-hook #'my-cc-mode-hook)
-(eval-after-load 'cc-mode (define-key c++-mode-map (kbd "C-c C-s") nil))
-(eval-after-load 'cc-mode (define-key c-mode-map (kbd "C-c C-s") nil))
 ;; Semantic
 ;; (require 'cc-mode)
 ;; (require 'semantic)
@@ -1201,17 +1128,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
 ;; (global-semantic-idle-summary-mode 1)
 
-;; (quelpa 'cmake-ide)
 (cmake-ide-setup)
 
-;; (quelpa 'cmake-mode)
 ; Add cmake listfile names to the mode list.
 (setq auto-mode-alist
 	  (append
 	   '(("CMakeLists\\.txt\\'" . cmake-mode))
 	   '(("\\.cmake\\'" . cmake-mode))
 	   auto-mode-alist))
-;; (quelpa 'cmake-font-lock)
 (defun my-cmake-font-lock ()
   "Activate font lock for cmake."
   (require 'cmake-font-lock)
@@ -1229,37 +1153,31 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (setq company-c-headers-path-user (list (concat dir "/include")))))
 
 ;;; Viking mode - Kill first, ask later
-;; (quelpa 'viking-mode)
 (require 'viking-mode)
 (viking-global-mode)
 
 (show-paren-mode 1)
 
 ;;; Smartparens
-;; (quelpa 'smartparens)
-(require 'smartparens-config)
+;; (require 'smartparens-config)
 
 (add-hook 'prog-mode-hook #'smartparens-mode)
 (add-hook 'erlang-mode-hook #'smartparens-mode)
 
 ;;;; Scala & Java development
-;; (quelpa 'ensime)
-(require 'ensime)
+;; (require 'ensime)
 (setq ensime-startup-notification nil)
 
 ;;; Ace link
-;; (quelpa 'ace-link)
 (ace-link-setup-default)
 
 ;;; Ace window
-;; (quelpa 'ace-window)
 (global-set-key (kbd "M-p") 'ace-window)
 (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
 
 ;;; Which key
-;; (quelpa 'which;; -key)
-(require 'which-key)
-(which-key-mode)
+;; (require 'which-key)
+(add-hook 'after-init-hook #'which-key-mode)
 
 ;;; On the fly markdown preview
 (defvar flymd-browser-open-function)
