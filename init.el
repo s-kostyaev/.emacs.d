@@ -1165,7 +1165,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (composable-mark-mode)
 
 (load custom-file 'noerror)
-
+(add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
 
 (provide 'init)
