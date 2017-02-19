@@ -857,7 +857,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (eval-after-load "geiser-impl"
   (lambda ()
     (add-to-list 'geiser-active-implementations 'chez)
-    (add-hook 'geiser-repl-mode-hook #'smartparens-mode)))
+    ;; (add-hook 'geiser-repl-mode-hook #'smartparens-mode)
+    ))
 
 ;; slime
 (use-package slime
@@ -1122,11 +1123,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;; Smartparens
 ;; (require 'smartparens-config)
 
-(add-hook 'prog-mode-hook #'smartparens-mode)
-(add-hook 'erlang-mode-hook #'smartparens-mode)
+;; (add-hook 'prog-mode-hook #'smartparens-mode)
+;; (add-hook 'erlang-mode-hook #'smartparens-mode)
+(electric-pair-mode 1)
 
 ;;;; Scala & Java development
 ;; (require 'ensime)
+(defvar ensime-startup-notification)
 (setq ensime-startup-notification nil)
 
 ;;; Ace link
