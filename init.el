@@ -38,7 +38,7 @@
 (require 'bind-key)
 
 
-(use-package async :ensure t)
+(package-install 'async)
 
 (defun my-bootstrap ()
   "Async install all needed packages."
@@ -77,34 +77,21 @@
 
 (my-bootstrap)
 
-;; async
-;; (async-bytecomp-package-mode 1)
 
-
-;; (require 'color-theme)
-(defvar color-theme-is-global)
 (use-package color-theme
+  :defer 0.1
   :config
-  (setq color-theme-is-global t))
-;; (color-theme-initialize)
+  (progn
+    (defun my-set-themes-hook ()
+      "Hook for setting themes after init."
+      (interactive)
+      (load-theme 'spacemacs-dark t)
+      (smart-mode-line-enable)
+      (tool-bar-mode -1)
+      (menu-bar-mode -1)
+      (scroll-bar-mode -1))
+    (my-set-themes-hook)))
 
-;; (require 'color-theme-sanityinc-solarized)
-;; (color-theme-sanityinc-solarized-light)
-;; (load-theme 'zenburn t)
-
-;; modeline
-;; (require 'smart-mode-line)
-
-(defun my-set-themes-hook ()
-  "Hook for setting themes after init."
-  (interactive)
-  (load-theme 'spacemacs-dark t)
-  (smart-mode-line-enable)
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1))
-
-(add-hook 'after-init-hook #'my-set-themes-hook)
 ;; to setup tabs
 (defvar c-basic-indent)
 (setq c-basic-indent 4)
