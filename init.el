@@ -717,38 +717,40 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 (setq x-hyper-keysym 'meta)
-;; ivy
-(ivy-mode 1)
-(defvar ivy-initial-inputs-alist)
-(setq ivy-initial-inputs-alist nil)
-(defvar ivy-re-builders-alist)
-(setq ivy-re-builders-alist
+
+(use-package ivy
+  :bind* ("C-c s k" . ivy-resume)
+  :config
+  (progn
+    (setq ivy-initial-inputs-alist nil)
+    (setq ivy-re-builders-alist
       '((counsel-M-x . ivy--regex-fuzzy)
         (swiper . ivy--regex-plus)
         ;; (t . ivy--regex-ignore-order)
         (t . ivy--regex-fuzzy)
         ))
-(setq completion-in-region-function 'ivy-completion-in-region)
-(global-set-key "\C-s" #'swiper)
-(global-set-key (kbd "C-c s k") #'ivy-resume)
-;; (require 'wgrep)
-(setq wgrep-auto-save-buffer t)
-(counsel-mode t)
-(global-set-key "\C-s" #'counsel-grep-or-swiper)
-(global-set-key (kbd "s-x") #'counsel-M-x)
-(global-set-key (kbd "s-y") #'counsel-yank-pop)
-(global-set-key (kbd "s-w") #'kill-ring-save)
-(global-set-key (kbd "s-v") #'scroll-down-command)
-(global-set-key (kbd "s-;") #'comment-dwim-line)
-(global-set-key (kbd "M-;") #'comment-dwim-line)
-(global-set-key (kbd "C-c C-s") #'counsel-ag)
-(global-set-key (kbd "C-x l") #'counsel-locate)
-(global-set-key (kbd "C-:") #'counsel-company)
+    (setq completion-in-region-function 'ivy-completion-in-region)
+    (ivy-mode 1)))
 
-;;; ivy-rich
-;; (require 'ivy-rich)
-(add-hook 'ivy-mode-hook (lambda () (require 'ivy-rich)))
-(ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer)
+(use-package swiper)
+
+(use-package counsel
+  :bind*
+  (("C-s" . counsel-grep-or-swiper)
+   ("C-c C-s" . counsel-ag)
+   ("C-x l" . counsel-locate)
+   ("C-:" . counsel-company))
+  :config
+  (counsel-mode t))
+
+(use-package ivy-rich
+  :functions ivy-rich-switch-buffer-transformer
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
+
+(use-package wgrep
+  :config
+  (setq wgrep-auto-save-buffer t))
 
 ;;
 ;; ash integration
@@ -954,7 +956,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (define-key erlang-extended-mode-map (kbd "M-,") nil)
   (define-key erlang-extended-mode-map (kbd "M-?") nil)
   (define-key erlang-extended-mode-map (kbd "(") nil)
-  (define-key erlang-mode-map (kbd "C-c C-s") nil)
   (local-set-key (kbd "C-c C-p") #'my-format-erlang-record))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
@@ -1075,9 +1076,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (local-set-key (kbd "C-'") #'company-irony-c-headers)
   (rtags-start-process-unless-running)
   (irony-mode)
-  (add-to-list 'company-backends '(company-irony company-irony-c-headers))
-  (define-key c++-mode-map (kbd "C-c C-s") nil)
-  (define-key c-mode-map (kbd "C-c C-s") nil))
+  (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
 (add-hook 'c++-mode-hook #'my-cc-mode-hook)
 (add-hook 'c-mode-hook #'my-cc-mode-hook)
 ;; Semantic
@@ -1132,11 +1131,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq ensime-startup-notification nil)
 
 ;;; Ace link
-(ace-link-setup-default)
+(use-package ace-link
+  :config
+  (ace-link-setup-default))
 
 ;;; Ace window
-(global-set-key (kbd "M-p") 'ace-window)
-(setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(use-package ace-window
+  :bind* ("M-p" . ace-window)
+  :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;;; Which key
 ;; (require 'which-key)
