@@ -678,19 +678,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
   ("k" ace-mc-add-single-cursor :exit t)
   ("q" nil)))
 
-;;
-;; tagedit
-;;
-;; (eval-after-load "sgml-mode"
-;;   '(progn
-;;      (require 'tagedit)
-;;      (tagedit-add-paredit-like-keybindings)
-;;      (add-hook 'html-mode-hook #'tagedit-mode)))
-
-;;
-;; yasnippet
-;;
-(yas-global-mode 1)
+(use-package yasnippet
+  :defer 3
+  :config
+  (yas-global-mode 1))
 
 ;;
 ;; tramp mode for fast open files with sudo
@@ -732,7 +723,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (setq completion-in-region-function 'ivy-completion-in-region)
     (ivy-mode 1)))
 
-(use-package swiper)
+(use-package swiper
+  :defer t)
 
 (use-package counsel
   :bind*
@@ -744,11 +736,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (counsel-mode t))
 
 (use-package ivy-rich
+  :defer t
   :functions ivy-rich-switch-buffer-transformer
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
 
 (use-package wgrep
+  :defer t
   :config
   (setq wgrep-auto-save-buffer t))
 
@@ -770,17 +764,16 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq select-enable-primary t)
 (setq select-enable-clipboard t)
 
-;; rebind F1 for xterm
-;(global-set-key (kbd "M-o p") 'help)
+(use-package imenu
+  :defer t
+  :bind* ("M-i" . imenu))
 
-(global-set-key (kbd "M-i") #'imenu)
-
-;;;; Projectile
-(projectile-mode 1)
-(defvar projectile-completion-system)
-(setq projectile-completion-system 'ivy)
-;; (helm-projectile-on)
-
+(use-package projectile
+  :defer 1
+  :config
+  (progn
+    (setq projectile-completion-system 'ivy)
+    (projectile-mode 1)))
 
 ;;;; Gnu global
 
@@ -1088,7 +1081,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
 ;; (global-semantic-idle-summary-mode 1)
 
-(cmake-ide-setup)
+(use-package cmake-ide
+  :defer 2
+  :config
+  (cmake-ide-setup))
 
 ; Add cmake listfile names to the mode list.
 (setq auto-mode-alist
@@ -1155,9 +1151,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;; embrace
 (global-set-key (kbd "C-,") #'embrace-commander)
 
-;;; composable
-(composable-mode)
-(composable-mark-mode)
+(use-package composable
+  :defer 0.1
+  :config
+  (progn
+    (composable-mode)
+    (composable-mark-mode)))
 
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
