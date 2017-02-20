@@ -647,10 +647,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package counsel
   :bind*
-  (("C-s" . counsel-grep-or-swiper)
-   ("C-c C-s" . counsel-ag)
+  (("C-c C-s" . counsel-ag)
    ("C-x l" . counsel-locate)
    ("C-:" . counsel-company))
+  :bind
+  ("C-s" . counsel-grep-or-swiper)
   :config
   (counsel-mode t))
 
@@ -1043,7 +1044,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;; Ace window
 (use-package ace-window
-  :bind* ("M-p" . ace-window)
+  :bind ("M-p" . ace-window)
   :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;;; Which key
