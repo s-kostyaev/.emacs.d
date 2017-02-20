@@ -33,11 +33,6 @@
 (require 'package)
 (package-initialize)
 
-(eval-when-compile
-  (require 'use-package))
-(require 'bind-key)
-
-
 (package-install 'async)
 
 (defun my-bootstrap ()
@@ -76,6 +71,10 @@
      (message "packages bootstrap success: %s" res))))
 
 (my-bootstrap)
+
+(eval-when-compile
+  (require 'use-package))
+(require 'bind-key)
 
 
 (use-package color-theme
