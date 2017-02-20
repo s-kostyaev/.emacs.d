@@ -73,7 +73,8 @@
 (my-bootstrap)
 
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+  (require 'use-package-chords))
 (require 'bind-key)
 
 
@@ -105,24 +106,8 @@
 (setq inhibit-startup-message t)
 ;; Format the title-bar to always include the buffer name
 (setq frame-title-format "emacs - %b")
-;; Display time
-;(display-time)
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
-;; (require 'smooth-scroll)
-;; (smooth-scroll-mode t)
-;; (setq smooth-scroll/vscroll-step-size 1)
-;; (setq gc-cons-threshold (* 80 1024 1024))
-;; (setq gc-cons-percentage 0.5)
-;; (run-with-idle-timer 5 t #'garbage-collect)
-;; (require 'smooth-scrolling)
-;; (smooth-scrolling-mode 1)
-;; (global-set-key [(control down)] #'(lambda () (interactive) (scroll-up-1 4)))
-;; (global-set-key [(control up)]   #'(lambda () (interactive) (scroll-down-1 4)))
-;; (global-set-key (kbd "C-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
-;; (global-set-key (kbd "M-v") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
-;; (global-set-key (kbd "<next>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-up)))
-;; (global-set-key (kbd "<prior>") #'(lambda () (interactive) (smooth-scroll/orig-scroll-down)))
 (global-set-key (kbd "M-J") #'scroll-up-line)
 (global-set-key (kbd "M-K") #'scroll-down-line)
 
@@ -161,27 +146,25 @@
      (whitespace-cleanup-region beg (line-end-position)))))
 (global-set-key (kbd "C-c a") #'my-align-region-by)
 
-;;
-;; hydra
-;;
-;; (require 'hydra)
+(use-package hydra
+  :defer t
+  :config (defhydra hydra-cycle-windows
+                     (:body-pre (other-window 1))
+                     "Windows"
+                     ("o" (other-window 1) "Next")
+                     ("O" (other-window -1) "Previous")
+                     ("t" toggle-window-split "Toggle split")
+                     ("]" enlarge-window-horizontally "Enlarge horizontal")
+                     ("[" shrink-window-horizontally "Shrink horizontal")
+                     ("=" enlarge-window "Enlarge vertival")
+                     ("-" shrink-window "Shrink vertical")
+                     ("b" balance-windows "Balance windows")
+                     ("m" delete-other-windows "Maximize window")
+                     ("n" split-window-below "New window")
+                     ("c" delete-window "Close window")
+                     ("q" nil "quit"))
+  :bind ("C-x o" . hydra-cycle-windows/body))
 
-(global-set-key (kbd "C-x o")
-                (defhydra hydra-cycle-windows
-                  (:body-pre (other-window 1))
-                  "Windows"
-                  ("o" (other-window 1) "Next")
-                  ("O" (other-window -1) "Previous")
-                  ("t" toggle-window-split "Toggle split")
-                  ("]" enlarge-window-horizontally "Enlarge horizontal")
-                  ("[" shrink-window-horizontally "Shrink horizontal")
-                  ("=" enlarge-window "Enlarge vertival")
-                  ("-" shrink-window "Shrink vertical")
-                  ("b" balance-windows "Balance windows")
-                  ("m" delete-other-windows "Maximize window")
-                  ("n" split-window-below "New window")
-                  ("c" delete-window "Close window")
-                  ("q" nil "quit")))
 (windmove-default-keybindings)
 
 (defun toggle-window-split ()
@@ -466,20 +449,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (setq browse-url-browser-function #'browse-url-chromium)
 
-;;;; Paredit
-;; (autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
-;; (add-hook 'emacs-lisp-mode-hook       #'enable-paredit-mode)
-;; (add-hook 'eval-expression-minibuffer-setup-hook #'enable-paredit-mode)
-;; (add-hook 'ielm-mode-hook             #'enable-paredit-mode)
-;; (add-hook 'lisp-mode-hook             #'enable-paredit-mode)
-;; (add-hook 'lisp-interaction-mode-hook #'enable-paredit-mode)
-;; (add-hook 'scheme-mode-hook           #'enable-paredit-mode)
-;; (add-hook 'clojure-mode-hook          #'enable-paredit-mode)
-
-;; (require 'eldoc) ; if not already loaded
-
-;; Forces the messages to 0, and kills the *Messages* buffer - thus disabling it on startup.
-;(setq-default message-log-max nil)
 (kill-buffer "*Messages*")
 
 ;; Show only one active window when opening multiple files at the same time.
@@ -503,9 +472,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; for over-80-chars line highlightning
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
 ;; (require 'fill-column-indicator)
-(set 'fci-rule-column 80)
-(define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
-(global-fci-mode 1)
+(use-package fill-column-indicator
+  :defer 0.1
+  :config
+  (progn
+    (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+    (set 'fci-rule-column 80)
+    (global-fci-mode 1)))
 
 (setq eval-expression-debug-on-error t)
 
@@ -583,7 +556,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; emmet mode
 ;;
-;; (require 'emmet-mode)
 (add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
 (add-hook 'web-mode-hook #'emmet-mode)
 (add-hook 'rjsx-mode #'emmet-mode)
@@ -595,60 +567,26 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 ;; key chord
 ;;
-;; (require 'key-chord)
 (key-chord-mode 1)
 
-;;
-;; ace jump mode major function
-;; 
-;; (autoload
-;;   'ace-jump-mode
-;;   "ace-jump-mode"
-;;   "Emacs quick move minor mode"
-;;   t)
-;; ;; you can select the key you prefer to
-;; (key-chord-define-global "fk"
-;;                          (defhydra hydra-ace-jump (:exit t) "Ace jump mode"
-;;                            ("j" ace-jump-mode "jump")
-;;                            ("l" ace-jump-line-mode "line")
-;;                            ("w" ace-jump-word-mode "word")
-;;                            ("c" ace-jump-char-mode "char")
-;;                            ("p" ace-jump-mode-pop-mark "pop mark")
-;;                            ("q" nil "quit")))
 ;; avy
 (key-chord-define-global "fj" 'avy-goto-word-1)
 (key-chord-define-global "f'" 'avy-pop-mark)
 (define-key isearch-mode-map (kbd "C-'") #'avy-isearch)
 
-;; 
-;; enable a more powerful jump back function from ace jump mode
-;;
-(autoload
-  'ace-jump-mode-pop-mark
-  "ace-jump-mode"
-  "Ace jump back:-)"
-  t)
-;; (declare-function ace-jump-mode-enable-mark-sync "ext:ace-jump-mode")
-;; (eval-after-load "ace-jump-mode"
-;;   '(ace-jump-mode-enable-mark-sync))
-
-
 
 ;;
 ;; expand region
 ;;
-;; (require 'expand-region)
 (key-chord-define-global "zj" 'er/expand-region)
 (key-chord-define-global "zk" 'er/contract-region)
 (delete-selection-mode)
 
-;;
-;; multiple cursors
-;;
-;; (require 'multiple-cursors)
-
-(key-chord-define-global "fm"
-                         (defhydra multiple-cursors-hydra (:hint nil)
+(use-package multiple-cursors
+  :defer t
+  :chords ("fm" . multiple-cursors-hydra/body)
+  :config
+  (defhydra multiple-cursors-hydra (:hint nil)
     "
      ^Up^            ^Down^            ^Other^
 --------------------------------------------------
@@ -683,28 +621,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config
   (yas-global-mode 1))
 
-;;
-;; tramp mode for fast open files with sudo
-;;
-;; (require 'tramp)
-
-;;
-;; C-w like in readline
-;;
-;; (global-set-key (kbd "C-w") #'backward-kill-word)
-;; (global-set-key (kbd "C-c C-w") #'kill-region)
-
-(global-set-key (kbd "C-c C-n") #'goto-line)
-
-;;for faste toggle key-chord-mode
+;;for faster toggle key-chord-mode
 (global-set-key [f9] #'key-chord-mode)
 
-;helm
-;; (require 'helm-config)
-;; (global-set-key (kbd "C-x C-x") #'helm-M-x)
-;; (global-set-key (kbd "C-x b") 'helm-buffers-list)
-;; (global-set-key (kbd "C-x C-f") 'helm-find-files)
-;; (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 (setq x-hyper-keysym 'meta)
@@ -842,84 +761,80 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
 ;; guile support
-;; (add-hook 'geiser-repl-mode-hook #'paredit-mode)
-;; (add-hook 'geiser-mode-hook #'paredit-mode)
 (defvar geiser-chez-binary)
 (setq geiser-chez-binary "scheme")
 ;; (require 'geiser-impl)
 (defvar geiser-active-implementations)
 (eval-after-load "geiser-impl"
   (lambda ()
-    (add-to-list 'geiser-active-implementations 'chez)
-    ;; (add-hook 'geiser-repl-mode-hook #'smartparens-mode)
-    ))
+    (add-to-list 'geiser-active-implementations 'chez)))
 
 ;; slime
 (use-package slime
   :defer 2
-  :init
-  (progn (defvar swank-kawa-jar "")
-         (defvar swank-kawa-cp "")
-         (require 'subr-x)
-         (setq swank-kawa-jar (concat
-                               (string-trim
-                                (shell-command-to-string
-                                 (concat "dirname " (locate-library "slime.el"))))
-                               "/contrib/swank-kawa.jar"))
-
-         (if (not (file-exists-p swank-kawa-jar))
-             (start-process-shell-command "swank-kawa compilation"
-                                          "*swank-kawa-compilation*"
-                                          (concat "cd `dirname " swank-kawa-jar
-                                                  "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
-
-         (setq swank-kawa-cp (concat "/usr/share/kawa/lib/kawa.jar:"
-                                     swank-kawa-jar
-                                     ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
-
-         (defvar slime-lisp-implementations)
-         (defmacro setup-slime-implementations ()
-           "Setup slime Lisp implementations."
-           `(setq slime-lisp-implementations
-                  '((kawa
-                     ("java"
-                      ;; needed jar files
-                      "-cp"
-                      ,(prin1-to-string swank-kawa-cp 't)
-                      ;; use eval-print-last-sexp on it
-                      ;; channel for debugger
-                      "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
-                      ;; depending on JVM, compiler may need more stack
-                      "-Xss2M"
-                      ;; kawa without GUI
-                      "kawa.repl" "-s")
-                     :init kawa-slime-init))))
-
-         (setup-slime-implementations)
-
-         (defvar slime-protocol-version)
-         (defun kawa-slime-init (file ignore)
-           "Init kawa-slime for `FILE' and IGNORE second arg."
-           (setq slime-protocol-version 'ignore)
-           (format "%S\n"
-                   `(begin (import (swank-kawa))
-                           (start-swank ,file)
-                           ;; Optionally add source paths of your code so
-                           ;; that M-. works better:
-                           ;; (set! swank-java-source-path
-                           ;;  (append
-                           ;;   '(,(expand-file-name "~/.emacs.d/elpa/slime-20160113.630/contrib/")
-                           ;;     "")
-                           ;;   swank-java-source-path))
-                           )))
-
-         ;; Optionally define a command to start it.
-         (defun kawa ()
-           "Run kawa repl."
-           (interactive)
-           (slime 'kawa)))
   :config
-  (slime-setup '(slime-repl slime-company)))
+  (progn
+    (slime-setup '(slime-repl slime-company))
+    (defvar swank-kawa-jar "")
+    (defvar swank-kawa-cp "")
+    (require 'subr-x)
+    (setq swank-kawa-jar (concat
+                          (string-trim
+                           (shell-command-to-string
+                            (concat "dirname " (locate-library "slime.el"))))
+                          "/contrib/swank-kawa.jar"))
+
+    (if (not (file-exists-p swank-kawa-jar))
+        (start-process-shell-command "swank-kawa compilation"
+                                     "*swank-kawa-compilation*"
+                                     (concat "cd `dirname " swank-kawa-jar
+                                             "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
+
+    (setq swank-kawa-cp (concat "/usr/share/kawa/lib/kawa.jar:"
+                                swank-kawa-jar
+                                ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
+
+    (defvar slime-lisp-implementations)
+    (defmacro setup-slime-implementations ()
+      "Setup slime Lisp implementations."
+      `(setq slime-lisp-implementations
+             '((kawa
+                ("java"
+                 ;; needed jar files
+                 "-cp"
+                 ,(prin1-to-string swank-kawa-cp 't)
+                 ;; use eval-print-last-sexp on it
+                 ;; channel for debugger
+                 "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n"
+                 ;; depending on JVM, compiler may need more stack
+                 "-Xss2M"
+                 ;; kawa without GUI
+                 "kawa.repl" "-s")
+                :init kawa-slime-init))))
+
+    (setup-slime-implementations)
+
+    (defvar slime-protocol-version)
+    (defun kawa-slime-init (file ignore)
+      "Init kawa-slime for `FILE' and IGNORE second arg."
+      (setq slime-protocol-version 'ignore)
+      (format "%S\n"
+              `(begin (import (swank-kawa))
+                      (start-swank ,file)
+                      ;; Optionally add source paths of your code so
+                      ;; that M-. works better:
+                      ;; (set! swank-java-source-path
+                      ;;  (append
+                      ;;   '(,(expand-file-name "~/.emacs.d/elpa/slime-20160113.630/contrib/")
+                      ;;     "")
+                      ;;   swank-java-source-path))
+                      )))
+
+    ;; Optionally define a command to start it.
+    (defun kawa ()
+      "Run kawa repl."
+      (interactive)
+      (slime 'kawa))))
 
 
 ;;;; Erlang
@@ -1008,9 +923,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; C, C++ Development
 ;; Rtags
-;; (require 'rtags)
 (setq rtags-completions-enabled nil)
-;; (setq rtags-use-helm t)
 ;; completion
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
@@ -1020,6 +933,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (setq xah-lookup-browser-function 'eww)
 
 (use-package xah-lookup
+  :defer t
   :functions xah-lookup-word-on-internet)
 (defvar xah-lookup-browser-function)
 (defun xah-lookup-cppreference (&optional word)
@@ -1114,11 +1028,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (show-paren-mode 1)
 
-;;; Smartparens
-;; (require 'smartparens-config)
-
-;; (add-hook 'prog-mode-hook #'smartparens-mode)
-;; (add-hook 'erlang-mode-hook #'smartparens-mode)
 (electric-pair-mode 1)
 
 ;;;; Scala & Java development
@@ -1128,6 +1037,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;; Ace link
 (use-package ace-link
+  :defer 0.1
   :config
   (ace-link-setup-default))
 
@@ -1137,7 +1047,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;;; Which key
-;; (require 'which-key)
 (add-hook 'after-init-hook #'which-key-mode)
 
 ;;; On the fly markdown preview
