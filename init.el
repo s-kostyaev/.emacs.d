@@ -1068,6 +1068,24 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (composable-mode)
     (composable-mark-mode)))
 
+(use-package mu4e
+  :defer t
+  :commands mu4e
+  :config
+  (progn
+    (setq
+     user-mail-address (string-trim (shell-command-to-string "git config user.email"))
+     user-full-name  (string-trim (shell-command-to-string "git config user.name")))
+    (run-at-time "5 sec" 60 (lambda () (mu4e-update-mail-and-index t)))))
+
+(use-package mu4e-alert
+  :defer 2
+  :config
+  (progn
+    (mu4e-alert-enable-mode-line-display)
+    (mu4e-alert-enable-notifications)
+    (mu4e-alert-set-default-style 'libnotify)))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
