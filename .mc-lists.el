@@ -81,4 +81,5 @@
         multiple-cursors-hydra/nil
         my-counsel-company
         save-buffers-kill-terminal
+        scroll-up-line
         ))
