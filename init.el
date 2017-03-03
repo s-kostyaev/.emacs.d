@@ -1076,7 +1076,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (setq
      user-mail-address (string-trim (shell-command-to-string "git config user.email"))
      user-full-name  (string-trim (shell-command-to-string "git config user.name")))
-    (run-at-time "5 sec" 60 (lambda () (mu4e-update-mail-and-index t)))
+    ;; (run-at-time "5 sec" 60 (lambda () (mu4e-update-mail-and-index t)))
+    (setq mu4e-get-mail-command "/usr/bin/mbsync -aq")
+    (setq mu4e-update-interval 60)
     (setq mu4e-refile-folder
           (lambda (msg)
             (cond
