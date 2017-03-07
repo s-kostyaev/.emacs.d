@@ -473,6 +473,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
 ;; (require 'fill-column-indicator)
 (use-package fill-column-indicator
+  :disabled t
   :defer 0.1
   :config
   (progn
@@ -1115,6 +1116,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (mu4e-alert-enable-mode-line-display)
     (mu4e-alert-enable-notifications)
     (mu4e-alert-set-default-style 'libnotify)))
+
+(use-package ibuffer-vc
+  :defer 2
+  :config (add-hook 'ibuffer-hook
+                    (lambda ()
+                      (ibuffer-vc-set-filter-groups-by-vc-root)
+                      (unless (eq ibuffer-sorting-mode 'alphabetic)
+                        (ibuffer-do-sort-by-alphabetic))))
+  :bind* ("C-x C-b" . ibuffer))
 
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
