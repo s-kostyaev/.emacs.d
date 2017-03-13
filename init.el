@@ -1126,6 +1126,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
                         (ibuffer-do-sort-by-alphabetic))))
   :bind* ("C-x C-b" . ibuffer))
 
+(use-package ivy-history
+  :defer 2
+  :config
+  (ivy-historian-mode 1))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
