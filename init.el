@@ -366,47 +366,10 @@
 (setq company-dabbrev-ignore-case nil)
 (defvar company-dabbrev-code-ignore-case)
 (setq company-dabbrev-code-ignore-case nil)
-;; Disable fci if needed.
-(defvar company-fci-mode-on-p)
-(defun disable-fci (&rest ignore)
-  "Disable fci with IGNORE arg."
-  (when (boundp 'fci-mode)
-    (setq company-fci-mode-on-p fci-mode)
-    (when fci-mode (fci-mode -1))))
-(add-hook 'company-completion-started-hook #'disable-fci)
-;; Re-enable fci if needed.
-(defun reenable-fci (&rest ignore)
-  "Reenable fci with IGNORE arg."
-  (when company-fci-mode-on-p (fci-mode 1)))
-(add-hook 'company-completion-finished-hook #'reenable-fci)
-;; Re-enable fci if needed.
-(add-hook 'company-completion-cancelled-hook #'reenable-fci)
 (setq company-tooltip-limit 20)                      ; bigger popup window
 (setq company-idle-delay 0.1)                         ; decrease delay before autocompletion popup shows
 (setq company-echo-delay 0)                          ; remove annoying blinking
 (setq company-minimum-prefix-length 3)
-(defun check-expansion ()
-  "Check yasnippet expansion."
-  (save-excursion
-    (if (looking-at "\\_>") t
-      (backward-char 1)
-      (if (looking-at "\\.") t
-        (backward-char 1)
-        (if (looking-at "->") t nil)))))
-
-(defvar yas-minor-mode)
-(defun tab-indent-or-complete ()
-  "Smart tab function."
-  (interactive)
-  (if (minibufferp)
-      (minibuffer-complete)
-    (if (or (not yas-minor-mode)
-            (null (yas-expand)))
-        (if (check-expansion)
-            (company-complete-common)
-          (indent-for-tab-command)))))
-
-(global-set-key [tab] #'tab-indent-or-complete)
 
 (add-hook 'after-init-hook 'company-statistics-mode)
 
@@ -474,12 +437,28 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (require 'fill-column-indicator)
 (use-package fill-column-indicator
   :disabled t
+  :after company
   :defer 0.1
   :config
   (progn
     (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
     (set 'fci-rule-column 80)
-    (global-fci-mode 1)))
+    (global-fci-mode 1)
+    ;; Disable fci if needed.
+    (defvar company-fci-mode-on-p)
+    (defun disable-fci (&rest ignore)
+      "Disable fci with IGNORE arg."
+      (when (boundp 'fci-mode)
+        (setq company-fci-mode-on-p fci-mode)
+        (when fci-mode (fci-mode -1))))
+    (add-hook 'company-completion-started-hook #'disable-fci)
+    ;; Re-enable fci if needed.
+    (defun reenable-fci (&rest ignore)
+      "Reenable fci with IGNORE arg."
+      (when company-fci-mode-on-p (fci-mode 1)))
+    (add-hook 'company-completion-finished-hook #'reenable-fci)
+    ;; Re-enable fci if needed.
+    (add-hook 'company-completion-cancelled-hook #'reenable-fci)))
 
 (setq eval-expression-debug-on-error t)
 
@@ -619,8 +598,32 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package yasnippet
   :defer 3
+  :after company
   :config
-  (yas-global-mode 1))
+  (progn
+    (yas-global-mode 1)
+    (defun check-expansion ()
+      "Check yasnippet expansion."
+      (save-excursion
+        (if (looking-at "\\_>") t
+          (backward-char 1)
+          (if (looking-at "\\.") t
+            (backward-char 1)
+            (if (looking-at "->") t nil)))))
+
+    (defvar yas-minor-mode)
+    (defun tab-indent-or-complete ()
+      "Smart tab function."
+      (interactive)
+      (if (minibufferp)
+          (minibuffer-complete)
+        (if (or (not yas-minor-mode)
+                (null (yas-expand)))
+            (if (check-expansion)
+                (company-complete-common)
+              (indent-for-tab-command)))))
+
+    (global-set-key [tab] #'tab-indent-or-complete)))
 
 ;;for faster toggle key-chord-mode
 (global-set-key [f9] #'key-chord-mode)
