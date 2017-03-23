@@ -1139,6 +1139,23 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config
   (ivy-historian-mode 1))
 
+(use-package counsel-dash
+  :defer 2
+  :config
+  (defun url-copy-file (url newname &optional ok-if-already-exists
+                            _keep-time _preserve-uid-gid)
+    "Copy URL to NEWNAME.  Both args must be strings.
+Signals a `file-already-exists' error if file NEWNAME already exists,
+unless a third argument OK-IF-ALREADY-EXISTS is supplied and non-nil.
+A number as third arg means request confirmation if NEWNAME already exists.
+This is what happens in interactive use with M-x.
+Fourth arg KEEP-TIME non-nil means give the new file the same
+last-modified time as the old one.  (This works on only some systems.)
+Fifth arg PRESERVE-UID-GID is ignored.
+A prefix arg makes KEEP-TIME non-nil."
+    (shell-command-to-string
+     (format "curl -L -o \"%s\" \"%s\"" (expand-file-name newname) url))))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
