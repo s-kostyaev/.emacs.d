@@ -86,7 +86,12 @@
       "Hook for setting themes after init."
       (interactive)
       (load-theme 'spacemacs-dark t)
-      (smart-mode-line-enable)
+      ;; (smart-mode-line-enable)
+      (require 'spaceline)
+      (require 'spaceline-config)
+      (spaceline-toggle-minor-modes-off)
+      (spaceline-toggle-buffer-size-off)
+      (spaceline-emacs-theme)
       (tool-bar-mode -1)
       (menu-bar-mode -1)
       (scroll-bar-mode -1))
