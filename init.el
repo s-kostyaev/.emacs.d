@@ -77,6 +77,10 @@
   (require 'use-package-chords))
 (require 'bind-key)
 
+(use-package key-chord
+  :defer 2
+  :config
+  (key-chord-mode 1))
 
 (use-package color-theme
   :defer 0.1
@@ -568,11 +572,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (delete-selection-mode)
 
 (use-package multiple-cursors
-  :defer t
+  :defer 2
   :chords ("fm" . multiple-cursors-hydra/body)
   :config
-  (defhydra multiple-cursors-hydra (:hint nil)
-    "
+  (progn
+    (require 'hydra)
+    (defhydra multiple-cursors-hydra (:hint nil)
+      "
      ^Up^            ^Down^            ^Other^
 --------------------------------------------------
 [_p_]   Next      [_n_]   Next      [_l_] Edit lines
@@ -599,7 +605,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   ("h" mc-hide-unmatched-lines-mode)
   ("j" ace-mc-add-multiple-cursors :exit t)
   ("k" ace-mc-add-single-cursor :exit t)
-  ("q" nil)))
+  ("q" nil))))
 
 (use-package yasnippet
   :defer 3
