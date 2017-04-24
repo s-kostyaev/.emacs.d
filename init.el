@@ -787,10 +787,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; slime
 (use-package slime
+  :disabled t
   :defer 2
-  :config
+  :init
   (progn
-    (slime-setup '(slime-repl slime-company))
     (defvar swank-kawa-jar "")
     (defvar swank-kawa-cp "")
     (require 'subr-x)
@@ -799,18 +799,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
                            (shell-command-to-string
                             (concat "dirname " (locate-library "slime.el"))))
                           "/contrib/swank-kawa.jar"))
-
-    (if (not (file-exists-p swank-kawa-jar))
-        (start-process-shell-command "swank-kawa compilation"
-                                     "*swank-kawa-compilation*"
-                                     (concat "cd `dirname " swank-kawa-jar
-                                             "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
-
     (setq swank-kawa-cp (concat "/usr/share/kawa/lib/kawa.jar:"
                                 swank-kawa-jar
                                 ":/usr/lib/jvm/java-8-openjdk/lib/tools.jar"))
 
-    (defvar slime-lisp-implementations)
     (defmacro setup-slime-implementations ()
       "Setup slime Lisp implementations."
       `(setq slime-lisp-implementations
@@ -826,7 +818,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
                  "-Xss2M"
                  ;; kawa without GUI
                  "kawa.repl" "-s")
-                :init kawa-slime-init))))
+                :init kawa-slime-init)))))
+  :config
+  (progn
+    (slime-setup '(slime-repl slime-company))
+
+    (if (not (file-exists-p swank-kawa-jar))
+        (start-process-shell-command "swank-kawa compilation"
+                                     "*swank-kawa-compilation*"
+                                     (concat "cd `dirname " swank-kawa-jar
+                                             "` && java -cp /usr/share/kawa/lib/kawa.jar:/usr/lib/jvm/java-8-openjdk/lib/tools.jar -Xss2M kawa.repl --r7rs -d classes -C swank-kawa.scm &&  jar cf swank-kawa.jar -C classes .")))
+
+    (defvar slime-lisp-implementations)
 
     (setup-slime-implementations)
 
