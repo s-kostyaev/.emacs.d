@@ -1143,7 +1143,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
                         (ibuffer-do-sort-by-alphabetic))))
   :bind* ("C-x C-b" . ibuffer))
 
-(use-package ivy-history
+(use-package ivy-historian
   :defer 2
   :config
   (ivy-historian-mode 1))
