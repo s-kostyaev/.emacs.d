@@ -876,7 +876,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (defun my-erlang-hook ()
   "Setup for erlang."
-  (require 'wrangler)
+  (ignore-errors (require 'wrangler))
   (ivy-erlang-complete-init)
   (defvar erlang-extended-mode-map)
   (define-key erlang-extended-mode-map (kbd "M-.") nil)
