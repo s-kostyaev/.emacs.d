@@ -1165,6 +1165,11 @@ A prefix arg makes KEEP-TIME non-nil."
     (shell-command-to-string
      (format "curl -L -o \"%s\" \"%s\"" (expand-file-name newname) url))))
 
+(use-package all-the-icons-ivy
+  :defer 2
+  :config
+  (all-the-icons-ivy-setup))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
