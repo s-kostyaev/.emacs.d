@@ -1170,6 +1170,11 @@ A prefix arg makes KEEP-TIME non-nil."
   :config
   (all-the-icons-ivy-setup))
 
+(use-package all-the-icons-dired
+  :defer 2
+  :config
+  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
