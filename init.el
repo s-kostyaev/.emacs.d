@@ -33,7 +33,10 @@
 (require 'package)
 (package-initialize)
 
-(package-install 'async)
+(if (not (package-installed-p 'async))
+    (progn
+      (package-refresh-contents)
+      (package-install 'async)))
 
 (defun my-bootstrap ()
   "Async install all needed packages."
