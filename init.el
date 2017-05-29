@@ -1175,6 +1175,15 @@ A prefix arg makes KEEP-TIME non-nil."
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
+(use-package symbol-overlay
+  :defer 2
+  :config
+  (progn
+    (setq-default symbol-overlay-temp-in-scope t)
+    (define-globalized-minor-mode symbol-overlay-global-mode
+      symbol-overlay-mode symbol-overlay-mode)
+    (symbol-overlay-global-mode 1)))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
