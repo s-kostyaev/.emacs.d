@@ -1187,6 +1187,13 @@ A prefix arg makes KEEP-TIME non-nil."
       symbol-overlay-mode symbol-overlay-mode)
     (symbol-overlay-global-mode 1)))
 
+;; auto configure indent with SMIE
+(defun smie-auto-guess ()
+  (when (featurep 'smie)
+    (unless (eq smie-grammar 'unset)
+      (smie-config-guess))))
+(add-hook 'prog-mode-hook 'smie-auto-guess)
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
