@@ -1054,7 +1054,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (electric-pair-mode 1)
 
-(add-hook 'prog-mode-hook #'electric-operator-mode)
+;; (add-hook 'prog-mode-hook #'electric-operator-mode) ;; bad for erlang mode
 
 ;;;; Scala & Java development
 ;; (require 'ensime)
