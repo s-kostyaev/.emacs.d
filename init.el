@@ -1054,6 +1054,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (electric-pair-mode 1)
 
+(add-hook 'prog-mode-hook #'electric-operator-mode)
+
 ;;;; Scala & Java development
 ;; (require 'ensime)
 (defvar ensime-startup-notification)
