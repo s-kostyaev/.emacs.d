@@ -1044,9 +1044,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
                            "Select project directory:" default-directory))))
     (setq company-c-headers-path-user (list (concat dir "/include")))))
 
-;;; Viking mode - Kill first, ask later
-(require 'viking-mode)
-(viking-global-mode)
+;; hungry deletion
+(use-package hungry-delete
+  :defer 0.5
+  :config
+  (global-hungry-delete-mode))
 
 (show-paren-mode 1)
 
@@ -1099,7 +1101,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
      user-full-name  (string-trim (shell-command-to-string "git config user.name")))
     ;; (run-at-time "5 sec" 60 (lambda () (mu4e-update-mail-and-index t)))
     (setq mu4e-get-mail-command "/usr/bin/mbsync -aq")
-    (setq mu4e-update-interval 60)
+    (setq mu4e-update-interval (* 5 60))
     (setq mu4e-refile-folder
           (lambda (msg)
             (cond
@@ -1127,7 +1129,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
               mu4e-sent-folder)
              ;; everything else goes to /archive
              ;; important to have a catch-all at the end!
-             (t  "/archive"))))))
+             (t  "/archive"))))
+    (setq smtpmail-smtp-service 465)
+    (setq smtpmail-stream-type 'ssl)
+    (setq smtpmail-smtp-credentials "~/.authinfo")))
 
 (use-package mu4e-alert
   :defer 2
