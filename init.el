@@ -1201,6 +1201,8 @@ A prefix arg makes KEEP-TIME non-nil."
       (smie-config-guess))))
 (add-hook 'prog-mode-hook 'smie-auto-guess)
 
+(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
