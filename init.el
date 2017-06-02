@@ -41,6 +41,7 @@
       (package-refresh-contents)
       (package-install 'async)))
 
+(declare-function no-confirm "ext:my-bootstrap")
 (defun my-bootstrap ()
   "Async install all needed packages."
   (interactive)
@@ -174,20 +175,20 @@
 (use-package hydra
   :defer t
   :config (defhydra hydra-cycle-windows
-                     (:body-pre (other-window 1))
-                     "Windows"
-                     ("o" (other-window 1) "Next")
-                     ("O" (other-window -1) "Previous")
-                     ("t" toggle-window-split "Toggle split")
-                     ("]" enlarge-window-horizontally "Enlarge horizontal")
-                     ("[" shrink-window-horizontally "Shrink horizontal")
-                     ("=" enlarge-window "Enlarge vertival")
-                     ("-" shrink-window "Shrink vertical")
-                     ("b" balance-windows "Balance windows")
-                     ("m" delete-other-windows "Maximize window")
-                     ("n" split-window-below "New window")
-                     ("c" delete-window "Close window")
-                     ("q" nil "quit"))
+            (:body-pre (other-window 1))
+            "Windows"
+            ("o" (other-window 1) "Next")
+            ("O" (other-window -1) "Previous")
+            ("t" toggle-window-split "Toggle split")
+            ("]" enlarge-window-horizontally "Enlarge horizontal")
+            ("[" shrink-window-horizontally "Shrink horizontal")
+            ("=" enlarge-window "Enlarge vertival")
+            ("-" shrink-window "Shrink vertical")
+            ("b" balance-windows "Balance windows")
+            ("m" delete-other-windows "Maximize window")
+            ("n" split-window-below "New window")
+            ("c" delete-window "Close window")
+            ("q" nil "quit"))
   :bind ("C-x o" . hydra-cycle-windows/body))
 
 (windmove-default-keybindings)
@@ -315,13 +316,13 @@
 
 
 
-; http://emacsblog.org/2007/01/17/indent-whole-buffer/
+                                        ; http://emacsblog.org/2007/01/17/indent-whole-buffer/
 (defun iwb ()
-    "Indent whole buffer."
-    (interactive)
-    (delete-trailing-whitespace)
-    (indent-region (point-min) (point-max) nil)
-    (untabify (point-min) (point-max)))
+  "Indent whole buffer."
+  (interactive)
+  (delete-trailing-whitespace)
+  (indent-region (point-min) (point-max) nil)
+  (untabify (point-min) (point-max)))
 
 (put 'downcase-region 'disabled nil)
 
@@ -365,7 +366,7 @@
 ;;     ;; and putting its buffer into Inferior Octave mode. Hence, if you like
 ;;     ;; the up and down arrow keys to behave in the interaction buffer as in
 ;;     ;; the shell, and you want this buffer to use nice colors:
-    
+
 ;;        (add-hook 'inferior-octave-mode-hook
 ;;          (lambda ()
 ;;            (turn-on-font-lock)
@@ -384,6 +385,7 @@
 ;;; Auto-complete
 ;; (require 'company)
 (add-hook 'after-init-hook #'global-company-mode)
+(defvar company-global-modes)
 (setq company-global-modes '(not erlang-mode))
 (defvar company-etags-ignore-case)
 (setq company-etags-ignore-case nil)
@@ -391,9 +393,13 @@
 (setq company-dabbrev-ignore-case nil)
 (defvar company-dabbrev-code-ignore-case)
 (setq company-dabbrev-code-ignore-case nil)
+(defvar company-tooltip-limit)
 (setq company-tooltip-limit 20)                      ; bigger popup window
+(defvar company-idle-delay)
 (setq company-idle-delay 0.1)                         ; decrease delay before autocompletion popup shows
+(defvar company-echo-delay)
 (setq company-echo-delay 0)                          ; remove annoying blinking
+(defvar company-minimum-prefix-length)
 (setq company-minimum-prefix-length 3)
 
 (add-hook 'after-init-hook 'company-statistics-mode)
@@ -408,15 +414,15 @@
 ;; Original idea from
 ;; http://www.opensubscriber.com/message/emacs-devel@gnu.org/10971693.html
 (defun comment-dwim-line (&optional arg)
-        "Replacement for the `comment-dwim' command.  ARG is selected region.
+  "Replacement for the `comment-dwim' command.  ARG is selected region.
 If no region is selected and current line is not blank and we are not at
 the end of the line, then comment current line.  Replaces default behaviour of
 `comment-dwim', when it inserts comment at the end of the line."
-          (interactive "*P")
-          (comment-normalize-vars)
-          (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
-              (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-            (comment-dwim arg)))
+  (interactive "*P")
+  (comment-normalize-vars)
+  (if (and (not (region-active-p)) (not (looking-at "[ \t]*$")))
+      (comment-or-uncomment-region (line-beginning-position) (line-end-position))
+    (comment-dwim arg)))
 (global-set-key "\M-;" #'comment-dwim-line)
 
 
@@ -451,7 +457,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; Markdown
 (autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
+  "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
@@ -517,6 +523,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq ac-js2-add-prototype-completions t)
 (add-hook 'ac-js2-mode-hook #'skewer-run-phantomjs)
 ;; default port conflicts with other soft
+(defvar httpd-port)
 (setq httpd-port 18080)
 
 ;; xref-js2
@@ -601,10 +608,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 [_P_]   Skip      [_N_]   Skip      [_a_] Mark all
 [_M-p_] Unmark    [_M-n_] Unmark    [_A_] Mark all words
 [_W_]   Up word   [_w_]   Down word [_r_] Mark
- ^ ^               ^ ^              [_q_] Quit
- ^ ^               ^ ^              [_h_] Toggle hide unmatched
- ^ ^               ^ ^              [_j_] Jump for add or remove cursors
- ^ ^               ^ ^              [_k_] Jump for single cursor
+^ ^               ^ ^              [_q_] Quit
+^ ^               ^ ^              [_h_] Toggle hide unmatched
+^ ^               ^ ^              [_j_] Jump for add or remove cursors
+^ ^               ^ ^              [_k_] Jump for single cursor
 "
   ("l" mc/edit-lines :exit t)
   ("a" mc/mark-all-like-this)
@@ -956,6 +963,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;;; C, C++ Development
 ;; Rtags
+(defvar rtags-completions-enabled)
 (setq rtags-completions-enabled nil)
 ;; completion
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
@@ -1104,6 +1112,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (composable-mode)
     (composable-mark-mode)))
 
+(defvar mu4e-get-mail-command)
+(defvar mu4e-update-interval)
+(defvar mu4e-refile-folder)
+(defvar mu4e-user-mail-address-list)
+(defvar mu4e-sent-folder)
+(defvar smtpmail-smtp-service)
+(defvar smtpmail-stream-type)
+(defvar smtpmail-smtp-credentials)
 (use-package mu4e
   :defer t
   :commands mu4e
@@ -1135,7 +1151,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
              ((string-prefix-p "отчет" (mu4e-message-field msg :subject))
               "/reports")
              ;; messages sent by me go to the sent folder
-             ((find-if
+             ((cl-find-if
                (lambda (addr)
                  (mu4e-message-contact-field-matches msg :from addr))
                mu4e-user-mail-address-list)
@@ -1172,7 +1188,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package counsel-dash
   :defer 2
   :config
-  (defun url-copy-file (url newname &optional ok-if-already-exists
+  (defun url-copy-file (url newname &optional _ok-if-already-exists
                             _keep-time _preserve-uid-gid)
     "Copy URL to NEWNAME.  Both args must be strings.
 Signals a `file-already-exists' error if file NEWNAME already exists,
@@ -1199,14 +1215,13 @@ A prefix arg makes KEEP-TIME non-nil."
 (use-package symbol-overlay
   :defer 2
   :config
-  (progn
-    (setq-default symbol-overlay-temp-in-scope t)
-    (define-globalized-minor-mode symbol-overlay-global-mode
-      symbol-overlay-mode symbol-overlay-mode)
-    (symbol-overlay-global-mode 1)))
+  (setq-default symbol-overlay-temp-in-scope t))
 
 ;; auto configure indent with SMIE
+(defvar smie-grammar)
+(declare-function smie-config-guess "ext:smie")
 (defun smie-auto-guess ()
+  "Autoindentation with SMIE."
   (when (featurep 'smie)
     (unless (eq smie-grammar 'unset)
       (smie-config-guess))))
