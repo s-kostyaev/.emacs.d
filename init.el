@@ -55,8 +55,8 @@
      ;; Melpa
      (require 'package)
      (setq custom-file "~/.emacs.d/emacs-customizations.el")
-     (load custom-file 'noerror)
      (package-initialize)
+     (load custom-file 'noerror)
      (require 'cl-lib)
      (cl-flet ((always-yes (&rest _) t))
        (defun no-confirm (fun &rest args)
@@ -68,9 +68,19 @@
        (no-confirm 'package-install-selected-packages)))
    (lambda (res)
      (seq-do #'load-file
-               (split-string
-                (shell-command-to-string
-                 "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+             (split-string
+              (shell-command-to-string
+               "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+     (seq-do (lambda (filename)
+               (let* ((pac (file-name-base filename))
+                      (pac-sym (intern pac)))
+                 (if (featurep pac-sym)
+                     (progn
+                       (message "reloading %s" pac)
+                       (load-file filename)))))
+             (split-string
+              (shell-command-to-string
+               "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
      (message "packages bootstrap success: %s" res))))
 
 (my-bootstrap)
