@@ -33,6 +33,9 @@
 (require 'package)
 (package-initialize)
 
+(global-set-key (kbd "C-M-r") #'(lambda () (interactive)
+                                  (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
+
 (if (not (package-installed-p 'async))
     (progn
       (package-refresh-contents)
@@ -652,8 +655,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;for faster toggle key-chord-mode
 (global-set-key [f9] #'key-chord-mode)
 
-(global-set-key (kbd "C-M-r") #'(lambda () (interactive)
-                                  (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 (setq x-hyper-keysym 'meta)
 
 (use-package ivy
