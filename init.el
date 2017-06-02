@@ -59,7 +59,7 @@
      (require 'package)
      (setq custom-file "~/.emacs.d/emacs-customizations.el")
      (package-initialize)
-     (load custom-file 'noerror)
+     (ignore-errors (load custom-file 'noerror))
      (require 'cl-lib)
      (cl-flet ((always-yes (&rest _) t))
        (defun no-confirm (fun &rest args)
