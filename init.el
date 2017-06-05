@@ -766,6 +766,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (require 'speed-type)
 
 ;; magit
+(autoload 'diff-refine-hunk "diff-mode")
 (defun my-magit-diff-hook ()
   "My hook for improve magit diff."
   (local-set-key (kbd "h") #'diff-refine-hunk))
