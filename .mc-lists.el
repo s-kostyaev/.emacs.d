@@ -15,6 +15,7 @@
         electric-newline-and-maybe-indent
         erlang-electric-comma
         go-mode-insert-and-indent
+        hungry-delete-forward
         keyboard-escape-quit
         kill-region
         paredit-forward-delete

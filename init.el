@@ -966,6 +966,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; Rtags
 (defvar rtags-completions-enabled)
 (setq rtags-completions-enabled nil)
+
+(defun my-flycheck-irony-setup ()
+  "Setup irony checker."
+  (require 'flycheck-irony)
+  (flycheck-select-checker 'irony))
+(add-hook 'c-mode-hook #'my-flycheck-irony-setup)
+(add-hook 'c++-mode-hook #'my-flycheck-irony-setup)
+(add-hook 'objc-mode-hook #'my-flycheck-irony-setup)
 ;; completion
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
