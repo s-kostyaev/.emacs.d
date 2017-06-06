@@ -982,9 +982,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; Uncomment the below line to use eww (Emacs Web Wowser)
 ;; (setq xah-lookup-browser-function 'eww)
 
+(autoload 'xah-lookup-word-on-internet "xah-lookup")
 (use-package xah-lookup
-  :defer t
-  :functions xah-lookup-word-on-internet)
+  :defer t)
 (defvar xah-lookup-browser-function)
 (defun xah-lookup-cppreference (&optional word)
   "Lookup definition of current WORD or text selection in URL."
