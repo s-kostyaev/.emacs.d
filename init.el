@@ -1238,6 +1238,11 @@ A prefix arg makes KEEP-TIME non-nil."
 
 (global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
 
+(declare-function reverse-im-activate "ext:reverse-im")
+(use-package reverse-im
+  :config
+  (reverse-im-activate "russian-computer"))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
