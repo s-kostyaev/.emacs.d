@@ -683,7 +683,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package counsel
   :bind*
-  (("C-c C-s" . counsel-ag)
+  (("C-c C-s" . counsel-rg)
    ("C-x l" . counsel-locate)
    ("C-:" . counsel-company))
   :bind
