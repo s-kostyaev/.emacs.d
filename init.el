@@ -1243,6 +1243,77 @@ A prefix arg makes KEEP-TIME non-nil."
   :config
   (reverse-im-activate "russian-computer"))
 
+(declare-function my-count-query "ext:config")
+(declare-function my-notmuch-hello-query-insert "ext:config")
+(use-package notmuch-hello
+  :defer t
+  :config
+  (setq notmuch-saved-searches
+        '((:key "i" :name "inbox" :query "tag:inbox" :search-type 'tree :sort-order 'newest-first)
+          (:key "u" :name "unread" :query "tag:unread" :search-type 'tree :sort-order 'oldest-first)
+          (:key "D" :name "Deleted" :query "tag:deleted" :search-type 'tree :sort-order 'newest-first)
+          (:key "F" :name "Flagged" :query "tag:flagged" :search-type 'tree :sort-order 'newest-first)
+          (:key "r" :name "reports" :query "tag:report" :search-type 'tree :sort-order 'newest-first)
+          (:key "j" :name "jenkins" :query "tag:jenkins" :search-type 'tree :sort-order 'newest-first)
+          (:key "l" :name "license" :query "to:sergey.kostyaev@eltex.loc and lic" :search-type 'tree :sort-order 'newest-first)))
+  (setq notmuch-hello-thousands-separator ".")
+
+  (defun my-count-query (query)
+    (with-temp-buffer
+      (insert query "\n")
+      (unless (= (call-process-region (point-min) (point-max) notmuch-command
+                                      t t nil "count" "--batch") 0)
+        (notmuch-logged-error "notmuch count --batch failed"
+                              "Please check that the notmuch CLI is new enough to support `count
+--batch'. In general we recommend running matching versions of
+the CLI and emacs interface."))
+
+      (goto-char (point-min))
+      (let ((n (read (current-buffer))))
+        (if (= n 0)
+            nil
+          (notmuch-hello-nice-number n)))))
+
+  (defun my-notmuch-hello-query-insert (cnt query elem)
+    (if cnt
+        (let* ((str (format "%s" cnt))
+               (widget-push-button-prefix "")
+               (widget-push-button-suffix "")
+               (oldest-first (case (plist-get elem :sort-order)
+                               (newest-first nil)
+                               (oldest-first t)
+                               (otherwise notmuch-search-oldest-first))))
+          (widget-create 'push-button
+                         :notify #'notmuch-hello-widget-search
+                         :notmuch-search-terms query
+                         :notmuch-search-oldest-first oldest-first
+                         :notmuch-search-type 'tree
+                         str)
+          (widget-insert (make-string (- 8 (length str)) ? )))
+      (widget-insert "        ")))
+
+  (defun my-notmuch-hello-insert-searches ()
+    "Insert the saved-searches section."
+    (widget-insert (propertize "New     Total      Key  List\n" 'face 'my-notmuch-hello-header-face))
+    (mapc (lambda (elem)
+            (when elem
+              (let* ((q_tot (plist-get elem :query))
+                     (q_new (concat q_tot " AND tag:unread"))
+                     (n_tot (my-count-query q_tot))
+                     (n_new (my-count-query q_new)))
+                (my-notmuch-hello-query-insert n_new q_new elem)
+                (my-notmuch-hello-query-insert n_tot q_tot elem)
+                (widget-insert "   ")
+                (widget-insert (plist-get elem :key))
+                (widget-insert "    ")
+                (widget-insert (plist-get elem :name))
+                (widget-insert "\n")
+                ))
+            )
+          notmuch-saved-searches))
+
+  (setq notmuch-hello-sections '(notmuch-hello-insert-header my-notmuch-hello-insert-searches notmuch-hello-insert-search notmuch-hello-insert-recent-searches notmuch-hello-insert-alltags notmuch-hello-insert-footer)))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))

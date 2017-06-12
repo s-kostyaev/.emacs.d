@@ -30,6 +30,7 @@
  '(mail-envelope-from (quote header))
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from (quote header))
+ '(notmuch-search-oldest-first nil)
  '(package-archives
    (quote
     (("gnu" . "http://elpa.gnu.org/packages/")
