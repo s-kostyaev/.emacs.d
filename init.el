@@ -1121,64 +1121,64 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (composable-mode)
     (composable-mark-mode)))
 
-(defvar mu4e-get-mail-command)
-(defvar mu4e-update-interval)
-(defvar mu4e-refile-folder)
-(defvar mu4e-user-mail-address-list)
-(defvar mu4e-sent-folder)
-(defvar smtpmail-smtp-service)
-(defvar smtpmail-stream-type)
-(defvar smtpmail-smtp-credentials)
-(use-package mu4e
-  :defer t
-  :commands mu4e
-  :config
-  (progn
-    (setq
-     user-mail-address (string-trim (shell-command-to-string "git config user.email"))
-     user-full-name  (string-trim (shell-command-to-string "git config user.name")))
-    ;; (run-at-time "5 sec" 60 (lambda () (mu4e-update-mail-and-index t)))
-    (setq mu4e-get-mail-command "/usr/bin/mbsync -aq")
-    (setq mu4e-update-interval (* 5 60))
-    (setq mu4e-refile-folder
-          (lambda (msg)
-            (cond
-             ;; ;; messages to the mu mailing list go to the /mu folder
-             ;; ((mu4e-message-contact-field-matches msg :to
-             ;;                                      "mu-discuss@googlegroups.com")
-             ;;  "/mu")
-             ;; ;; messages sent directly to me go to /archive
-             ;; ;; also `mu4e-user-mail-address-p' can be used
-             ;; ((mu4e-message-contact-field-matches msg :to "me@example.com")
-             ;;  "/private")
-             ;; ;; messages with football or soccer in the subject go to /football
-             ;; ((string-match "football\\|soccer"
-             ;;                (mu4e-message-field msg :subject))
-             ;;  "/football")
-             ((mu4e-message-contact-field-matches msg :from "jenkins.ims@eltex.loc")
-              "/jenkins")
-             ((string-prefix-p "отчет" (mu4e-message-field msg :subject))
-              "/reports")
-             ;; messages sent by me go to the sent folder
-             ((cl-find-if
-               (lambda (addr)
-                 (mu4e-message-contact-field-matches msg :from addr))
-               mu4e-user-mail-address-list)
-              mu4e-sent-folder)
-             ;; everything else goes to /archive
-             ;; important to have a catch-all at the end!
-             (t  "/archive"))))
-    (setq smtpmail-smtp-service 465)
-    (setq smtpmail-stream-type 'ssl)
-    (setq smtpmail-smtp-credentials "~/.authinfo")))
+;; (defvar mu4e-get-mail-command)
+;; (defvar mu4e-update-interval)
+;; (defvar mu4e-refile-folder)
+;; (defvar mu4e-user-mail-address-list)
+;; (defvar mu4e-sent-folder)
+;; (defvar smtpmail-smtp-service)
+;; (defvar smtpmail-stream-type)
+;; (defvar smtpmail-smtp-credentials)
+;; (use-package mu4e
+;;   :defer t
+;;   :commands mu4e
+;;   :config
+;;   (progn
+;;     (setq
+;;      user-mail-address (string-trim (shell-command-to-string "git config user.email"))
+;;      user-full-name  (string-trim (shell-command-to-string "git config user.name")))
+;;     ;; (run-at-time "5 sec" 60 (lambda () (mu4e-update-mail-and-index t)))
+;;     (setq mu4e-get-mail-command "/usr/bin/mbsync -aq")
+;;     (setq mu4e-update-interval (* 5 60))
+;;     (setq mu4e-refile-folder
+;;           (lambda (msg)
+;;             (cond
+;;              ;; ;; messages to the mu mailing list go to the /mu folder
+;;              ;; ((mu4e-message-contact-field-matches msg :to
+;;              ;;                                      "mu-discuss@googlegroups.com")
+;;              ;;  "/mu")
+;;              ;; ;; messages sent directly to me go to /archive
+;;              ;; ;; also `mu4e-user-mail-address-p' can be used
+;;              ;; ((mu4e-message-contact-field-matches msg :to "me@example.com")
+;;              ;;  "/private")
+;;              ;; ;; messages with football or soccer in the subject go to /football
+;;              ;; ((string-match "football\\|soccer"
+;;              ;;                (mu4e-message-field msg :subject))
+;;              ;;  "/football")
+;;              ((mu4e-message-contact-field-matches msg :from "jenkins.ims@eltex.loc")
+;;               "/jenkins")
+;;              ((string-prefix-p "отчет" (mu4e-message-field msg :subject))
+;;               "/reports")
+;;              ;; messages sent by me go to the sent folder
+;;              ((cl-find-if
+;;                (lambda (addr)
+;;                  (mu4e-message-contact-field-matches msg :from addr))
+;;                mu4e-user-mail-address-list)
+;;               mu4e-sent-folder)
+;;              ;; everything else goes to /archive
+;;              ;; important to have a catch-all at the end!
+;;              (t  "/archive"))))
+;;     (setq smtpmail-smtp-service 465)
+;;     (setq smtpmail-stream-type 'ssl)
+;;     (setq smtpmail-smtp-credentials "~/.authinfo")))
 
-(use-package mu4e-alert
-  :defer 2
-  :config
-  (progn
-    (mu4e-alert-enable-mode-line-display)
-    (mu4e-alert-enable-notifications)
-    (mu4e-alert-set-default-style 'libnotify)))
+;; (use-package mu4e-alert
+;;   :defer 2
+;;   :config
+;;   (progn
+;;     (mu4e-alert-enable-mode-line-display)
+;;     (mu4e-alert-enable-notifications)
+;;     (mu4e-alert-set-default-style 'libnotify)))
 
 (use-package ibuffer-vc
   :defer 2
