@@ -1248,14 +1248,20 @@ A prefix arg makes KEEP-TIME non-nil."
 (use-package notmuch-hello
   :defer t
   :config
-  (setq notmuch-saved-searches
-        '((:key "i" :name "inbox" :query "tag:inbox" :search-type 'tree :sort-order 'newest-first)
-          (:key "u" :name "unread" :query "tag:unread" :search-type 'tree :sort-order 'oldest-first)
-          (:key "D" :name "Deleted" :query "tag:deleted" :search-type 'tree :sort-order 'newest-first)
-          (:key "F" :name "Flagged" :query "tag:flagged" :search-type 'tree :sort-order 'newest-first)
-          (:key "r" :name "reports" :query "tag:report" :search-type 'tree :sort-order 'newest-first)
-          (:key "j" :name "jenkins" :query "tag:jenkins" :search-type 'tree :sort-order 'newest-first)
-          (:key "l" :name "license" :query "to:sergey.kostyaev@eltex.loc and lic" :search-type 'tree :sort-order 'newest-first)))
+  (defun my-gen-notmuch-ss (tag)
+    (let ((key (downcase (or (and (let ((case-fold-search nil))
+                                    (string-match "[[:upper:]]" tag))
+                                  (match-string 0 tag))
+                             (substring tag 0 1)))))
+      (list :key key :name tag :query (format "tag:%s" tag)
+            :search-type 'tree :sort-order 'newest-first)))
+  (defun my-notmuch-update-ss ()
+    (setq notmuch-saved-searches
+          (cons '(:key "e" :name "licEnse" :query "to:sergey.kostyaev@eltex.loc and lic"
+                       :search-type 'tree :sort-order 'newest-first)
+                (seq-map #'my-gen-notmuch-ss (notmuch-tag-completions)))))
+  (my-notmuch-update-ss)
+  (advice-add 'notmuch-jump-search :before 'my-notmuch-update-ss)
   (setq notmuch-hello-thousands-separator ".")
 
   (defun my-count-query (query)
