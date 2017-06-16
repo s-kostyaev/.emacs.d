@@ -1245,6 +1245,10 @@ A prefix arg makes KEEP-TIME non-nil."
 
 (declare-function my-count-query "ext:config")
 (declare-function my-notmuch-hello-query-insert "ext:config")
+(declare-function notmuch-tag-completions "ext:notmuch")
+(declare-function notmuch-logged-error "ext:notmuch")
+(declare-function notmuch-hello-nice-number "ext:notmuch")
+(declare-function notmuch-hello-widget-search "ext:notmuch")
 (use-package notmuch-hello
   :defer t
   :config
