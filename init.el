@@ -45,14 +45,6 @@
 (defun my-bootstrap ()
   "Async install all needed packages."
   (interactive)
-  ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
-  ;; (require 'seq)
-  ;; (require 'subr-x)
-  ;; (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
-  ;;         (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
-  ;; (seq-do (lambda (dir) (add-to-list 'load-path (expand-file-name dir)))
-  ;;         (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
-  ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
   (require 'async)
   (async-start
    (lambda ()
@@ -85,6 +77,7 @@
              (split-string
               (shell-command-to-string
                "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+     (my-set-themes-hook)
      (message "packages bootstrap success: %s" res))))
 
 (my-bootstrap)
