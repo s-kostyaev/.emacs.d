@@ -1032,6 +1032,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                (rtags-find-references-at-point)))
   (local-set-key (kbd "C-'") #'company-irony-c-headers)
   (rtags-start-process-unless-running)
+  (setq-local eldoc-documentation-function #'rtags-eldoc)
+  (eldoc-mode +1)
   (irony-mode)
   (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
 (add-hook 'c++-mode-hook #'my-cc-mode-hook)
