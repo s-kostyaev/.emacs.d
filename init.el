@@ -1010,6 +1010,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (add-hook 'c++-mode-hook #'xah-c++-setup)
 
+(declare-function rtags-eldoc "ext:rtags")
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
   (require 'cc-mode)
