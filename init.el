@@ -970,6 +970,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; completion
 (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
 
+(use-package flycheck-clang-analyzer
+  :after flycheck-irony
+  :config
+  (flycheck-clang-analyzer-setup))
+
 ;; show docs at point
 ;; (require 'xah-lookup)
 ;; Uncomment the below line to use eww (Emacs Web Wowser)
