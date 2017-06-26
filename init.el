@@ -184,6 +184,8 @@
             ("q" nil "quit"))
   :bind ("C-x o" . hydra-cycle-windows/body))
 
+(global-set-key (kbd "C-x t") #'toggle-window-split)
+
 (windmove-default-keybindings)
 
 (defun toggle-window-split ()
@@ -277,7 +279,7 @@
 (global-set-key "\C-xg" #'goto-line)
 (global-set-key "\C-xf" #'search-forward)
 (global-set-key "\C-xc" #'compile)
-(global-set-key "\C-xt" #'text-mode);
+;; (global-set-key "\C-xt" #'text-mode);
 (global-set-key "\C-xr" #'replace-string);
 (global-set-key "\C-xa" #'repeat-complex-command);
 (global-set-key "\C-xm" #'manual-entry);
