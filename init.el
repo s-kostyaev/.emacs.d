@@ -1327,6 +1327,7 @@ the CLI and emacs interface."))
 
 ;;; Rust
 (add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'rust-mode-hook #'flycheck-rust-setup)
 
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
