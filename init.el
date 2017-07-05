@@ -626,7 +626,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
   ("h" mc-hide-unmatched-lines-mode)
   ("j" ace-mc-add-multiple-cursors :exit t)
   ("k" ace-mc-add-single-cursor :exit t)
-  ("q" nil))))
+  ("q" nil))
+(defun my-mc-prompt-once-advice (fn &rest args) ; needs lexical-binding!
+  "Make FN prompt only once with ARGS and multiple cursors."
+  (setq mc--this-command (lambda () (interactive) (apply fn args)))
+  (apply fn args))
+
+(defun my-mc-prompt-once (&rest fns)
+  "Make FNS prompt only once with multiple cursors."
+  (dolist (fn fns)
+    (advice-add fn :around #'my-mc-prompt-once-advice)))
+
+(my-mc-prompt-once #'counsel-company)))
 
 (use-package yasnippet
   :defer 3
