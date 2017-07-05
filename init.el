@@ -1246,6 +1246,10 @@ A prefix arg makes KEEP-TIME non-nil."
   :config
   (reverse-im-activate "russian-computer"))
 
+(use-package notmuch
+  :defer t
+  :commands notmuch)
+
 (declare-function my-count-query "ext:config")
 (declare-function my-notmuch-hello-query-insert "ext:config")
 (declare-function notmuch-tag-completions "ext:notmuch")
@@ -1254,6 +1258,7 @@ A prefix arg makes KEEP-TIME non-nil."
 (declare-function notmuch-hello-widget-search "ext:notmuch")
 (use-package notmuch-hello
   :defer t
+  :after notmuch
   :config
   (defun my-gen-notmuch-ss (tag)
     (let ((key (downcase (or (and (let ((case-fold-search nil))
