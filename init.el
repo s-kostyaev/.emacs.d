@@ -1239,11 +1239,13 @@ A prefix arg makes KEEP-TIME non-nil."
      (format "curl -L -o \"%s\" \"%s\"" (expand-file-name newname) url))))
 
 (use-package all-the-icons-ivy
+  :disabled t
   :defer 2
   :config
   (all-the-icons-ivy-setup))
 
 (use-package all-the-icons-dired
+  :disabled t
   :defer 2
   :config
   (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
