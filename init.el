@@ -111,8 +111,17 @@
       (spaceline-compile)
       (tool-bar-mode -1)
       (menu-bar-mode -1)
-      (scroll-bar-mode -1))
+      (scroll-bar-mode -1)
+      (my-solarized-dark-workaround (selected-frame)))
     (my-set-themes-hook)))
+
+(defun my-solarized-dark-workaround (frame)
+  "Fix solarized-dark theme for terminal FRAME."
+  (if (and (featurep 'color-theme)
+           (not window-system))
+      (set-face-background 'default "unspecified-bg" frame)))
+
+(add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
 
 ;; to setup tabs
 (defvar c-basic-indent)
