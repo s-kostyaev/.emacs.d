@@ -647,7 +647,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (dolist (fn fns)
     (advice-add fn :around #'my-mc-prompt-once-advice)))
 
-(my-mc-prompt-once #'counsel-company)))
+(my-mc-prompt-once #'my-counsel-company)))
 
 (use-package yasnippet
   :defer 3
@@ -701,14 +701,30 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :defer t)
 
 (use-package counsel
+  :functions my-counsel-company
+  :init
+  (define-key lisp-interaction-mode-map (kbd "C-M-i") #'my-counsel-company)
   :bind*
   (("C-c C-s" . counsel-rg)
-   ("C-x l" . counsel-locate)
-   ("C-:" . counsel-company))
+   ("C-x l" . counsel-locate))
   :bind
-  ("C-s" . counsel-grep-or-swiper)
+  (("C-s" . counsel-grep-or-swiper)
+   ("C-M-i" . my-counsel-company))
   :config
-  (counsel-mode t))
+  (counsel-mode t)
+  (defun my-counsel-company ()
+    "Complete using `company-candidates'."
+    (interactive)
+    (company-mode 1)
+    (unless company-candidates
+      (company-other-backend)
+      (setq company-prefix (company-call-backend 'prefix)))
+    (when company-point
+      (when (looking-back company-prefix (line-beginning-position))
+        (setq ivy-completion-beg (match-beginning 0))
+        (setq ivy-completion-end (match-end 0)))
+      (ivy-read "company cand: " company-candidates
+                :action #'ivy-completion-in-region-action))))
 
 (use-package ivy-rich
   :defer t
@@ -924,7 +940,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (define-key erlang-extended-mode-map (kbd "M-,") nil)
   (define-key erlang-extended-mode-map (kbd "M-?") nil)
   (define-key erlang-extended-mode-map (kbd "(") nil)
-  (local-set-key (kbd "C-c C-p") #'my-format-erlang-record))
+  (define-key erlang-extended-mode-map (kbd "C-M-i") nil)
+  (local-set-key (kbd "C-c C-p") #'my-format-erlang-record)
+  (local-set-key (kbd "C-M-i") #'ivy-erlang-complete))
 (add-hook 'erlang-mode-hook #'my-erlang-hook)
 (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
 
