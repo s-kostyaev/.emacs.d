@@ -717,8 +717,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (interactive)
     (company-mode 1)
     (unless company-candidates
-      (company-other-backend)
-      (setq company-prefix (company-call-backend 'prefix)))
+      (company-other-backend))
     (when company-point
       (when (looking-back company-prefix (line-beginning-position))
         (setq ivy-completion-beg (match-beginning 0))
