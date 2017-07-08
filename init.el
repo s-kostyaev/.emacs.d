@@ -760,7 +760,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq select-enable-primary t)
 (setq select-enable-clipboard t)
 (when (getenv "DISPLAY")
-  (defun xclip-cut-function (text &optional push)
+  (defun xclip-cut-function (text &optional _push)
     (with-temp-buffer
       (insert text)
       (call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
@@ -770,6 +770,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
         xclip-output )))
   (setq interprogram-cut-function 'xclip-cut-function)
   (setq interprogram-paste-function 'xclip-paste-function))
+
+(require 'mouse)
+(xterm-mouse-mode t)
+(setq mouse-drag-copy-region t)
+(global-set-key [drag-mouse-0]	'mouse-set-region)
 
 (use-package imenu
   :defer t
