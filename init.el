@@ -128,7 +128,7 @@
 
 (add-hook 'focus-in-hook #'my-solarized-dark-on-focus)
 
-;; (add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
+(add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
 
 ;; to setup tabs
 (defvar c-basic-indent)
