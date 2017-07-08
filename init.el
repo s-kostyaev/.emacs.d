@@ -759,6 +759,17 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 (setq select-enable-primary t)
 (setq select-enable-clipboard t)
+(when (getenv "DISPLAY")
+  (defun xclip-cut-function (text &optional push)
+    (with-temp-buffer
+      (insert text)
+      (call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
+  (defun xclip-paste-function()
+    (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
+      (unless (string= (car kill-ring) xclip-output)
+        xclip-output )))
+  (setq interprogram-cut-function 'xclip-cut-function)
+  (setq interprogram-paste-function 'xclip-paste-function))
 
 (use-package imenu
   :defer t
