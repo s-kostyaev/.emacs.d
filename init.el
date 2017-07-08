@@ -122,7 +122,13 @@
              (not window-system))
         (set-face-background 'default "none" frame))))
 
-(add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
+(defun my-solarized-dark-on-focus ()
+  "Fix solarized-dark theme for terminal on focus."
+  (my-solarized-dark-workaround (selected-frame)))
+
+(add-hook 'focus-in-hook #'my-solarized-dark-on-focus)
+
+;; (add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
 
 ;; to setup tabs
 (defvar c-basic-indent)
