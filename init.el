@@ -157,8 +157,6 @@
 ;; Flash instead of that annoying bell
 (setq visible-bell t)
 ;; Remove icons toolbar
-;(if (> emacs-major-version 20)
-;(tool-bar-mode -1))
 ;; Use y or n instead of yes or not
 (fset 'yes-or-no-p 'y-or-n-p)
 
@@ -180,8 +178,8 @@
     (goto-char beg)
     (ignore-errors (er/expand-region 1))
     (let ((new-end (region-end)))
-     (goto-char new-end)
-     (whitespace-cleanup-region beg (line-end-position)))))
+      (goto-char new-end)
+      (whitespace-cleanup-region beg (line-end-position)))))
 (global-set-key (kbd "C-c a") #'my-align-region-by)
 
 (use-package hydra
@@ -212,26 +210,26 @@
   (interactive)
   (if (= (count-windows) 2)
       (let* ((this-win-buffer (window-buffer))
-	     (next-win-buffer (window-buffer (next-window)))
-	     (this-win-edges (window-edges (selected-window)))
-	     (next-win-edges (window-edges (next-window)))
-	     (this-win-2nd (not (and (<= (car this-win-edges)
-					 (car next-win-edges))
-				     (<= (cadr this-win-edges)
-					 (cadr next-win-edges)))))
-	     (splitter
-	      (if (= (car this-win-edges)
-		     (car (window-edges (next-window))))
-		  'split-window-horizontally
-		'split-window-vertically)))
-	(delete-other-windows)
-	(let ((first-win (selected-window)))
-	  (funcall splitter)
-	  (if this-win-2nd (other-window 1))
-	  (set-window-buffer (selected-window) this-win-buffer)
-	  (set-window-buffer (next-window) next-win-buffer)
-	  (select-window first-win)
-	  (if this-win-2nd (other-window 1))))))
+             (next-win-buffer (window-buffer (next-window)))
+             (this-win-edges (window-edges (selected-window)))
+             (next-win-edges (window-edges (next-window)))
+             (this-win-2nd (not (and (<= (car this-win-edges)
+                                         (car next-win-edges))
+                                     (<= (cadr this-win-edges)
+                                         (cadr next-win-edges)))))
+             (splitter
+              (if (= (car this-win-edges)
+                     (car (window-edges (next-window))))
+                  'split-window-horizontally
+                'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd (other-window 1))
+          (set-window-buffer (selected-window) this-win-buffer)
+          (set-window-buffer (next-window) next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd (other-window 1))))))
 
 ;; Flycheck
 ;; (require 'flycheck)
@@ -242,7 +240,6 @@
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
 (setq exec-path (append exec-path '("~/go/bin")))
-;; (require 'go-mode-autoloads)
 (defun goimports ()
   "Running goimports on go files."
   (interactive)
@@ -252,46 +249,36 @@
         (revert-buffer t t))))
 
 
-(declare-function go-remove-unused-imports "ext:go-mode")
 (declare-function go-goto-imports "ext:go-mode")
-(declare-function gobuild "ext:gobuild")
-(declare-function gometalinter "ext:gometalinter")
 (defvar company-begin-commands)
 (defvar company-backends)
+(defvar flycheck-gometalinter-deadline)
 
 (defun my-go-mode-hook ()
   "Setup for go."
-  (require 'gobuild)
   (require 'company-go)
   (require 'go-impl)
-  (require 'gometalinter)
-  (require 'go-flycheck)
-  ; start autocompletion only after typing
-  (setq company-begin-commands '(self-insert-command))
+  (require 'lsp-mode)
+  (require 'flycheck-gometalinter)
+  (flycheck-gometalinter-setup)
+  (setq flycheck-gometalinter-deadline "30s")
   (add-hook 'before-save-hook #'gofmt-before-save)
   (add-hook 'after-save-hook #'goimports)
-  (local-set-key (kbd "C-c C-r") #'go-remove-unused-imports)
   (local-set-key (kbd "C-c i") #'go-goto-imports)
-  (local-set-key (kbd "C-c C-c") #'(lambda ()
-                                     (interactive)
-                                     (gobuild)))
   (local-set-key (kbd "C-c C-t") #'(lambda ()
                                      (interactive)
                                      (shell-command "go test")))
-  (set (make-local-variable 'company-backends) '(company-go))
-  (company-mode)
-  (local-set-key (kbd "C-c C-l") #'(lambda ()
-                                     (interactive)
-                                     (gometalinter))))
+  (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
+                           '("go-langserver" "-mode=stdio")
+                           :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
+  (lsp-mode))
 
 (add-hook 'go-mode-hook #'my-go-mode-hook)
-;; Flycheck
-(add-to-list 'load-path "~/go/src/github.com/dougm/goflymake")
 ;; doc
 (add-hook 'go-mode-hook #'go-eldoc-setup)
 
 
-; for compiling C/C++
+;; for compiling C/C++
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
 (global-set-key "\C-xv" #'quoted-insert)
@@ -309,7 +296,6 @@
 (global-set-key "\C-t" #'kill-word);
 (global-set-key "\C-p" #'previous-line);
 (global-set-key "\C-o" #'forward-word);
-;(global-set-key "\C-h" 'backward-delete-char-untabify);
 (global-set-key "\C-x\C-m" #'not-modified);
 (setq make-backup-files 'nil);
 (setq text-mode-hook 'turn-on-auto-fill)
@@ -317,7 +303,7 @@
 (setq auto-mode-alist (cons '("\\.hpp$" . c++-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.tex$" . latex-mode) auto-mode-alist))
 
-; http://nex-3.com/posts/45-efficient-window-switching-in-emacs#comments
+                                        ; http://nex-3.com/posts/45-efficient-window-switching-in-emacs#comments
 (global-set-key [M-left] #'windmove-left)          ; move to left windnow
 (global-set-key [M-right] #'windmove-right)        ; move to right window
 (global-set-key [M-up] #'windmove-up)              ; move to upper window
@@ -327,16 +313,6 @@
 ;; http://emacs-fu.blogspot.com/2008/12/cycling-through-your-buffers-with-ctrl.html
 ;; cycle through buffers with Ctrl-Tab (like Firefox)
 (global-set-key (kbd "<C-tab>") #'bury-buffer)
-
-
-
-                                        ; http://emacsblog.org/2007/01/17/indent-whole-buffer/
-(defun iwb ()
-  "Indent whole buffer."
-  (interactive)
-  (delete-trailing-whitespace)
-  (indent-region (point-min) (point-max) nil)
-  (untabify (point-min) (point-max)))
 
 (put 'downcase-region 'disabled nil)
 
@@ -399,8 +375,6 @@
 ;;; Auto-complete
 ;; (require 'company)
 (add-hook 'after-init-hook #'global-company-mode)
-(defvar company-global-modes)
-(setq company-global-modes '(not erlang-mode))
 (defvar company-etags-ignore-case)
 (setq company-etags-ignore-case nil)
 (defvar company-dabbrev-ignore-case)
@@ -695,11 +669,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (progn
     (setq ivy-initial-inputs-alist nil)
     (setq ivy-re-builders-alist
-      '((counsel-M-x . ivy--regex-fuzzy)
-        (swiper . ivy--regex-plus)
-        ;; (t . ivy--regex-ignore-order)
-        (t . ivy--regex-fuzzy)
-        ))
+          '((counsel-M-x . ivy--regex-fuzzy)
+            (swiper . ivy--regex-plus)
+            ;; (t . ivy--regex-ignore-order)
+            (t . ivy--regex-fuzzy)
+            ))
     (setq completion-in-region-function 'ivy-completion-in-region)
     (ivy-mode 1)))
 
@@ -835,12 +809,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (define-key global-map "\C-ca" 'org-agenda)
 (defvar org-log-done)
 (setq org-log-done t)
-; ditaa
+;; ditaa
 (defun my-org-hook ()
   "My hook for `org-mode'."
- (org-babel-do-load-languages
- 'org-babel-load-languages
- '((ditaa . t) (dot . t))))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((ditaa . t) (dot . t))))
 (add-hook 'org-mode-hook #'my-org-hook)
 
 ;; indirect region
@@ -939,18 +913,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
   "Format erlang record."
   (interactive)
   (let ((from (line-beginning-position)))
-  (goto-char from)
-  (search-forward "-record" )
-  (search-forward "{")
-  (goto-char (- (point) 1))
-  (ignore-errors (er/expand-region 1))
-  (my-align-region-by "=")
-  (goto-char from)
-  (search-forward "-record" )
-  (search-forward "{")
-  (goto-char (- (point) 1))
-  (ignore-errors (er/expand-region 1))
-  (my-align-region-by "::")))
+    (goto-char from)
+    (search-forward "-record" )
+    (search-forward "{")
+    (goto-char (- (point) 1))
+    (ignore-errors (er/expand-region 1))
+    (my-align-region-by "=")
+    (goto-char from)
+    (search-forward "-record" )
+    (search-forward "{")
+    (goto-char (- (point) 1))
+    (ignore-errors (er/expand-region 1))
+    (my-align-region-by "::")))
 
 (defun my-erlang-hook ()
   "Setup for erlang."
@@ -978,9 +952,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;;; wrangler
 (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
-; Some code inspection functionalities of Wrangler generate .dot
-; files, which can be compiled and previewed in Emacs if the
-; Graphviz-dot mode for Emacs is enabled.
+                                        ; Some code inspection functionalities of Wrangler generate .dot
+                                        ; files, which can be compiled and previewed in Emacs if the
+                                        ; Graphviz-dot mode for Emacs is enabled.
 ;; (load-library "graphviz-dot-mode")
 
 ;; distel
@@ -1116,7 +1090,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config
   (cmake-ide-setup))
 
-; Add cmake listfile names to the mode list.
+;; Add cmake listfile names to the mode list.
 (setq auto-mode-alist
 	  (append
 	   '(("CMakeLists\\.txt\\'" . cmake-mode))
