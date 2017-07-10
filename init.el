@@ -41,6 +41,24 @@
       (package-refresh-contents)
       (package-install 'async)))
 
+(defun my-set-themes-hook ()
+  "Hook for setting themes after init."
+  (interactive)
+  ;; (load-theme 'spacemacs-dark t)
+  (load-theme 'solarized-dark t)
+  ;; (smart-mode-line-enable)
+  (require 'spaceline)
+  (require 'spaceline-config)
+  (spaceline-toggle-minor-modes-off)
+  (spaceline-toggle-buffer-size-off)
+  (spaceline-emacs-theme)
+  (setq powerline-default-separator 'slant)
+  (spaceline-compile)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+  (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame)))
+
 (declare-function no-confirm "ext:my-bootstrap")
 (defun my-bootstrap ()
   "Async install all needed packages."
@@ -96,23 +114,6 @@
   :defer 0.1
   :config
   (progn
-    (defun my-set-themes-hook ()
-      "Hook for setting themes after init."
-      (interactive)
-      ;; (load-theme 'spacemacs-dark t)
-      (load-theme 'solarized-dark t)
-      ;; (smart-mode-line-enable)
-      (require 'spaceline)
-      (require 'spaceline-config)
-      (spaceline-toggle-minor-modes-off)
-      (spaceline-toggle-buffer-size-off)
-      (spaceline-emacs-theme)
-      (setq powerline-default-separator 'slant)
-      (spaceline-compile)
-      (tool-bar-mode -1)
-      (menu-bar-mode -1)
-      (scroll-bar-mode -1)
-      (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame)))
     (my-set-themes-hook)))
 
 (defun my-solarized-dark-workaround (frame)
