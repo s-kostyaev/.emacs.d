@@ -251,6 +251,7 @@
 
 
 (declare-function go-goto-imports "ext:go-mode")
+(declare-function lsp-define-stdio-client "ext:lsp-mode")
 (defvar company-begin-commands)
 (defvar company-backends)
 (defvar flycheck-gometalinter-deadline)
