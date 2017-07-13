@@ -45,7 +45,7 @@
   "Hook for setting themes after init."
   (interactive)
   ;; (load-theme 'spacemacs-dark t)
-  (load-theme 'solarized-dark t)
+  (load-theme 'solarized-light t)
   ;; (smart-mode-line-enable)
   (require 'spaceline)
   (require 'spaceline-config)
