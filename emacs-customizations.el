@@ -46,7 +46,8 @@
  '(sml/theme (quote respectful))
  '(smtpmail-smtp-server (password-store-get "smtp-server"))
  '(smtpmail-smtp-service 25)
- '(symbol-overlay-global-mode t))
+ '(symbol-overlay-global-mode t)
+ '(godoc-at-point-function (quote godoc-gogetdoc)))
 
 (provide 'emacs-customizations)
 ;;; emacs-customizations.el ends here
