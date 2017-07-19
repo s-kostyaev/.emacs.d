@@ -274,7 +274,7 @@
   (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
                            '("go-langserver" "-mode=stdio")
                            :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
-  (lsp-mode)
+  (if (buffer-file-name) (lsp-mode))
   (local-set-key (kbd "C-h C-d") #'godoc-at-point))
 
 (add-hook 'go-mode-hook #'my-go-mode-hook)
