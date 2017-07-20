@@ -41,6 +41,11 @@
       (package-refresh-contents)
       (package-install 'async)))
 
+(defvar powerline-default-separator)
+(declare-function spaceline-toggle-minor-modes-off "ext:spaceline")
+(declare-function spaceline-toggle-buffer-size-off "ext:spaceline")
+(declare-function spaceline-emacs-theme "ext:spaceline")
+(declare-function spaceline-compile "ext:spaceline")
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (interactive)
@@ -587,6 +592,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (key-chord-define-global "zk" 'er/contract-region)
 (delete-selection-mode)
 
+(declare-function my-mc-prompt-once "ext:config")
+(declare-function my-mc-prompt-once-advice "ext:config")
 (use-package multiple-cursors
   :defer 2
   :chords ("fm" . multiple-cursors-hydra/body)
@@ -634,6 +641,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (my-mc-prompt-once #'my-counsel-company)))
 
+(declare-function check-expansion "ext:config")
+(declare-function company-complete-common "ext:company")
+(declare-function tab-indent-or-complete "ext:config")
 (use-package yasnippet
   :defer 3
   :after company
@@ -685,6 +695,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package swiper
   :defer t)
 
+(defvar company-candidates)
+(defvar company-point)
+(defvar company-prefix)
+(declare-function company-other-backend "ext:company")
 (use-package counsel
   :functions my-counsel-company
   :init
@@ -1300,6 +1314,13 @@ A prefix arg makes KEEP-TIME non-nil."
 (declare-function notmuch-logged-error "ext:notmuch")
 (declare-function notmuch-hello-nice-number "ext:notmuch")
 (declare-function notmuch-hello-widget-search "ext:notmuch")
+(declare-function my-gen-notmuch-ss "ext:config")
+(declare-function my-notmuch-update-ss "ext:config")
+(defvar notmuch-hello-thousands-separator)
+(defvar notmuch-command)
+(defvar notmuch-search-oldest-first)
+(defvar notmuch-saved-searches)
+(defvar notmuch-hello-sections)
 (use-package notmuch-hello
   :defer t
   :after notmuch
@@ -1325,7 +1346,7 @@ A prefix arg makes KEEP-TIME non-nil."
       (insert query "\n")
       (unless (= (call-process-region (point-min) (point-max) notmuch-command
                                       t t nil "count" "--batch") 0)
-        (notmuch-logged-error "notmuch count --batch failed"
+        (notmuch-logged-error "Command \"notmuch count --batch\" failed"
                               "Please check that the notmuch CLI is new enough to support `count
 --batch'. In general we recommend running matching versions of
 the CLI and emacs interface."))
