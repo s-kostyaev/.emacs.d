@@ -275,7 +275,8 @@
                            '("go-langserver" "-mode=stdio")
                            :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
   (if (buffer-file-name) (lsp-mode))
-  (local-set-key (kbd "C-h C-d") #'godoc-at-point))
+  (local-set-key (kbd "C-h C-d") #'godoc-at-point)
+  (setq-local company-backends '(company-go)))
 
 (add-hook 'go-mode-hook #'my-go-mode-hook)
 ;; doc
