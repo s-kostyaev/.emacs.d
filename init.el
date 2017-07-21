@@ -280,12 +280,11 @@
                            '("go-langserver" "-mode=stdio")
                            :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
   (if (buffer-file-name) (lsp-mode))
+  (go-eldoc-setup)
   (local-set-key (kbd "C-h C-d") #'godoc-at-point)
   (setq-local company-backends '(company-go)))
 
 (add-hook 'go-mode-hook #'my-go-mode-hook)
-;; doc
-(add-hook 'go-mode-hook #'go-eldoc-setup)
 
 
 ;; for compiling C/C++
