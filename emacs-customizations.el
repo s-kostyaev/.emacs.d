@@ -25,7 +25,7 @@
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
  '(flycheck-disabled-checkers (quote (erlang-rebar3)))
- '(flycheck-vale-modes (quote (text-mode markdown-mode rst-mode gfm-mode)))
+ '(flycheck-vale-modes (quote (text-mode markdown-mode rst-mode gfm-mode web-mode)))
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
