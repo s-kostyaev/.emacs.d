@@ -1401,6 +1401,11 @@ the CLI and emacs interface."))
 (add-hook 'rust-mode-hook #'racer-mode)
 (add-hook 'rust-mode-hook #'flycheck-rust-setup)
 
+;;; Prose linting
+(use-package flycheck-vale
+  :after flycheck
+  :config (flycheck-vale-setup))
+
 (load custom-file 'noerror)
 (add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
