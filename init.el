@@ -273,9 +273,7 @@
   (add-hook 'before-save-hook #'gofmt-before-save)
   (add-hook 'after-save-hook #'goimports)
   (local-set-key (kbd "C-c i") #'go-goto-imports)
-  (local-set-key (kbd "C-c C-t") #'(lambda ()
-                                     (interactive)
-                                     (shell-command "go test")))
+  (local-set-key (kbd "C-c C-t") #'go-test-current-project)
   (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
                            '("go-langserver" "-mode=stdio")
                            :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
