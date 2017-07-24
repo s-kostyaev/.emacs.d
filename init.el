@@ -503,6 +503,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
 ;; for templates
 (add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
+;; json
+(add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
 
 ;; fix for infinite eating RAM
 (defun my-disable-fci () "Disable fci mode." (fci-mode -1))
