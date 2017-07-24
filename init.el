@@ -100,6 +100,8 @@
              (split-string
               (shell-command-to-string
                "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+     (if (featurep 'yasnippet)
+         (yas-reload-all))
      (my-set-themes-hook)
      (message "packages bootstrap success: %s" res))))
 
