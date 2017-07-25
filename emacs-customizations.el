@@ -32,6 +32,10 @@
  '(global-flycheck-mode t)
  '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
+ '(helm-M-x-always-save-history t)
+ '(helm-M-x-fuzzy-match t)
+ '(helm-locate-command "locate %s -e -A --regex %s")
+ '(helm-mode t)
  '(mail-envelope-from (quote header))
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from (quote header))
@@ -42,7 +46,7 @@
      ("melpa" . "http://melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv godoctor go-playground color-theme lsp-mode company-racer cargo flycheck-rust racer rust-mode rust-playground flycheck-clang-analyzer feature-mode reverse-im flycheck-irony flycheck-rtags json-navigator zygospore electric-operator hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay aurel arch-packer org-brain spaceline counsel-dash ivy-historian ibuffer-vc rainbow-mode mu4e-alert pass password-store paradox use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-mode web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex smart-mode-line-powerline-theme slime-company rtags rjsx-mode restclient react-snippets quelpa pandoc-mode pacmacs package-lint noflet nlinum monokai-theme markdown-mode lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-rich ivy-hydra ido-vertical-mode header2 go-impl go-eldoc go-autocomplete geiser fuzzy fsm flymd flycheck-gometalinter flycheck-dialyzer flx fill-column-indicator esup eopengrok ensime embrace edit-indirect darkokai-theme counsel-projectile composable company-tern company-statistics company-quickhelp company-irony-c-headers company-irony company-go company-erlang company-c-headers company-anaconda column-marker column-enforce-mode cmake-ide cmake-font-lock cask-mode camcorder auto-complete-clang ace-window ace-mc ace-link ac-js2 ac-emmet ac-cider)))
+    (helm-flycheck swiper-helm helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv godoctor go-playground color-theme lsp-mode company-racer cargo flycheck-rust racer rust-mode rust-playground flycheck-clang-analyzer feature-mode reverse-im flycheck-irony flycheck-rtags json-navigator zygospore electric-operator hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay aurel arch-packer org-brain spaceline counsel-dash ivy-historian ibuffer-vc rainbow-mode mu4e-alert pass password-store paradox use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-mode web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex smart-mode-line-powerline-theme slime-company rtags rjsx-mode restclient react-snippets quelpa pandoc-mode pacmacs package-lint noflet nlinum monokai-theme markdown-mode lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-rich ivy-hydra ido-vertical-mode header2 go-impl go-eldoc go-autocomplete geiser fuzzy fsm flymd flycheck-gometalinter flycheck-dialyzer flx fill-column-indicator esup eopengrok ensime embrace edit-indirect darkokai-theme counsel-projectile composable company-tern company-statistics company-quickhelp company-irony-c-headers company-irony company-go company-erlang company-c-headers company-anaconda column-marker column-enforce-mode cmake-ide cmake-font-lock cask-mode camcorder auto-complete-clang ace-window ace-mc ace-link ac-js2 ac-emmet ac-cider)))
  '(paradox-automatically-star nil)
  '(paradox-github-token (password-store-get "paradox-token"))
  '(paradox-spinner-type (quote progress-bar))

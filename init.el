@@ -673,6 +673,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (declare-function my-mc-prompt-once "ext:config")
 (declare-function my-mc-prompt-once-advice "ext:config")
+(defvar ivy-completion-beg)
+(defvar ivy-completion-end)
 (use-package multiple-cursors
   :defer 2
   :chords ("fm" . multiple-cursors-hydra/body)
@@ -718,7 +720,20 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (dolist (fn fns)
     (advice-add fn :around #'my-mc-prompt-once-advice)))
 
-(my-mc-prompt-once #'my-counsel-company)))
+(defun my-counsel-company ()
+  "Complete using `company-candidates'."
+  (interactive)
+  (company-mode 1)
+  (unless company-candidates
+    (company-other-backend))
+  (when company-point
+    (when (looking-back company-prefix (line-beginning-position))
+      (setq ivy-completion-beg (match-beginning 0))
+      (setq ivy-completion-end (match-end 0)))
+    (ivy-read "company cand: " company-candidates
+              :action #'ivy-completion-in-region-action)))
+
+(my-mc-prompt-once 'my-counsel-company #'helm-company)))
 
 (declare-function check-expansion "ext:config")
 (declare-function company-complete-common "ext:company")
@@ -768,8 +783,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
             ;; (t . ivy--regex-ignore-order)
             (t . ivy--regex-fuzzy)
             ))
-    (setq completion-in-region-function 'ivy-completion-in-region)
-    (ivy-mode 1)))
+    ;; (setq completion-in-region-function 'ivy-completion-in-region)
+    ;; (ivy-mode 1)
+    ))
 
 (use-package swiper
   :defer t)
@@ -779,7 +795,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar company-prefix)
 (declare-function company-other-backend "ext:company")
 (use-package counsel
-  :functions my-counsel-company
+  :disabled t
   :init
   (define-key lisp-interaction-mode-map (kbd "C-M-i") #'my-counsel-company)
   :bind*
@@ -789,21 +805,23 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (("C-s" . counsel-grep-or-swiper)
    ("C-M-i" . my-counsel-company))
   :config
-  (counsel-mode t)
-  (defun my-counsel-company ()
-    "Complete using `company-candidates'."
-    (interactive)
-    (company-mode 1)
-    (unless company-candidates
-      (company-other-backend))
-    (when company-point
-      (when (looking-back company-prefix (line-beginning-position))
-        (setq ivy-completion-beg (match-beginning 0))
-        (setq ivy-completion-end (match-end 0)))
-      (ivy-read "company cand: " company-candidates
-                :action #'ivy-completion-in-region-action))))
+  (counsel-mode t))
+
+(defvar helm-grep-ag-command)
+(use-package helm
+  :bind*
+  (("C-c C-s" . helm-do-grep-ag)
+   ("C-x l" . helm-locate))
+  :bind
+  (("C-s" . swiper-helm)
+   ("C-x C-f" . helm-find-files)
+   ("M-x" . helm-M-x))
+  :config
+  (require 'helm-config)
+  (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
 
 (use-package ivy-rich
+  :disabled t
   :defer t
   :functions ivy-rich-switch-buffer-transformer
   :config
@@ -917,8 +935,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; indirect region
 (key-chord-define-global (kbd ";r") #'edit-indirect-region)
-
-;; helm flycheck
 
 ;; pandoc
 ;; (require 'pandoc-mode)
