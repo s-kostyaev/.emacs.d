@@ -30,6 +30,7 @@
     (text-mode markdown-mode rst-mode gfm-mode web-mode)))
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
+ '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
  '(mail-envelope-from (quote header))
  '(mail-specify-envelope-from t)
