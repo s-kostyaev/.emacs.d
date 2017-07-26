@@ -840,7 +840,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :bind
   (("C-s" . swiper-helm)
    ("C-x C-f" . helm-find-files)
-   ("M-x" . helm-M-x))
+   ("M-x" . helm-M-x)
+   ("M-y". helm-show-kill-ring))
   :config
   (require 'helm-config)
   (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
