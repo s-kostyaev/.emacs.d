@@ -833,6 +833,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (counsel-mode t))
 
 (defvar helm-grep-ag-command)
+(declare-function helm-ido-like-higher-gc "ext:helm")
+(declare-function helm-ido-like-lower-gc "ext:helm")
 (use-package helm
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
@@ -844,6 +846,35 @@ the end of the line, then comment current line.  Replaces default behaviour of
    ("M-y". helm-show-kill-ring))
   :config
   (require 'helm-config)
+  (require 'helm-fuzzier)
+  (helm-fuzzier-mode 1)
+  (require 'helm-flx)
+  (helm-flx-mode +1)
+  (defvar helm-ido-like-user-gc-setting nil)
+
+  (defun helm-ido-like-higher-gc ()
+    (setq helm-ido-like-user-gc-setting gc-cons-threshold)
+    (setq gc-cons-threshold most-positive-fixnum))
+
+
+  (defun helm-ido-like-lower-gc ()
+    (setq gc-cons-threshold helm-ido-like-user-gc-setting))
+
+  (defun helm-ido-like-helm-make-source (f &rest args)
+    (let ((source-type (cadr args)))
+      (unless (or (memq source-type '(helm-source-async helm-source-ffiles))
+                  (eq (plist-get args :filtered-candidate-transformer)
+                      'helm-ff-sort-candidates)
+                  (eq (plist-get args :persistent-action)
+                      'helm-find-files-persistent-action))
+        (nconc args '(:fuzzy-match t))))
+    (apply f args))
+
+  (defun helm-ido-like-load-fuzzy-enhancements ()
+    (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
+    (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
+    (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
+
   (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
 
 (use-package ivy-rich
