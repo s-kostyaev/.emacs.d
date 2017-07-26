@@ -813,6 +813,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     ))
 
 (use-package swiper
+  :disabled t
   :defer t)
 
 (defvar company-candidates)
@@ -835,12 +836,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar helm-grep-ag-command)
 (declare-function helm-ido-like-higher-gc "ext:helm")
 (declare-function helm-ido-like-lower-gc "ext:helm")
+(declare-function helm-occur-init-source "ext:helm")
+(defvar helm-source-occur)
 (use-package helm
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
    ("C-x l" . helm-locate))
   :bind
-  (("C-s" . swiper-helm)
+  (("C-s" . helm-occur)
    ("C-x C-f" . helm-find-files)
    ("M-x" . helm-M-x)
    ("M-y". helm-show-kill-ring))
@@ -874,6 +877,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
     (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
     (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
+
+  (with-eval-after-load 'helm-regexp
+    (setq helm-source-occur
+          (helm-make-source "Occur" 'helm-source-multi-occur
+            :follow 1)))
 
   (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
 
