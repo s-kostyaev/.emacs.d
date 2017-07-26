@@ -80,6 +80,7 @@
         multiple-cursors-hydra/mc/skip-to-next-like-this
         multiple-cursors-hydra/mc/skip-to-previous-like-this
         multiple-cursors-hydra/mc/unmark-next-like-this
+        multiple-cursors-hydra/mc/unmark-previous-like-this
         multiple-cursors-hydra/nil
         my-counsel-company
         save-buffers-kill-terminal

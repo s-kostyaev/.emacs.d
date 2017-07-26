@@ -534,6 +534,31 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; js2-refactor: refactoring options for emacs
 ;; https://github.com/magnars/js2-refactor.el
+(declare-function 'js2r-expand-node-at-point "ext:js2-refactor")
+(declare-function 'js2r-contract-node-at-point "ext:js2-refactor")
+(declare-function 'js2r-extract-function "ext:js2-refactor")
+(declare-function 'js2r-extract-method "ext:js2-refactor")
+(declare-function 'js2r-toggle-function-expression-and-declaration "ext:js2-refactor")
+(declare-function 'js2r-toggle-arrow-function-and-expression "ext:js2-refactor")
+(declare-function 'js2r-introduce-parameter "ext:js2-refactor")
+(declare-function 'js2r-localize-parameter "ext:js2-refactor")
+(declare-function 'js2r-wrap-buffer-in-iife "ext:js2-refactor")
+(declare-function 'js2r-inject-global-in-iife "ext:js2-refactor")
+(declare-function 'js2r-add-to-globals-annotation "ext:js2-refactor")
+(declare-function 'js2r-inline-var "ext:js2-refactor")
+(declare-function 'js2r-rename-var "ext:js2-refactor")
+(declare-function 'js2r-var-to-this "ext:js2-refactor")
+(declare-function 'js2r-arguments-to-object "ext:js2-refactor")
+(declare-function 'js2r-ternary-to-if "ext:js2-refactor")
+(declare-function 'js2r-split-var-declaration "ext:js2-refactor")
+(declare-function 'js2r-split-string "ext:js2-refactor")
+(declare-function 'js2r-unwrap "ext:js2-refactor")
+(declare-function 'js2r-log-this "ext:js2-refactor")
+(declare-function 'js2r-debug-this "ext:js2-refactor")
+(declare-function 'js2r-forward-slurp "ext:js2-refactor")
+(declare-function 'js2r-forward-barf "ext:js2-refactor")
+(declare-function 'js2r-kill "ext:js2-refactor")
+
 (use-package js2-refactor
   :diminish js2-refactor-mode "𝐉𝐫"
   :bind
