@@ -7,26 +7,7 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
-;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/elpa"))
-
-;; (defun my-add-to-load-path (dir)
-;;   "Add DIR to load path."
-;;   (add-to-list 'load-path (expand-file-name dir)))
-
-;; (require 'seq)
-;; (require 'subr-x)
-;; (seq-do #'my-add-to-load-path
-;;  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/elpa/")))
-;; (seq-do #'my-add-to-load-path
-;;  (split-string (shell-command-to-string "ls -1 ~/.emacs.d/lisp")))
-;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/lisp"))
-
 (defvar personal-keybindings nil)
-
-;; all keybindings must work with russian (key-chord still doesn't work)
-;; system language must be set to en
-;; use C-\ for change language in emacs instead
-(setq default-input-method "cyrillic-jis-russian")
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
