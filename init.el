@@ -64,6 +64,7 @@
   "Hook for setting themes after init."
   (interactive)
   ;; (load-theme 'spacemacs-dark t)
+  (require 'solarized)
   (load-theme 'solarized-light t)
   ;; (smart-mode-line-enable)
   (require 'spaceline)
@@ -254,11 +255,11 @@
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 
-;; Flycheck
-;; (require 'flycheck)
-(add-hook 'after-init-hook #'global-flycheck-mode)
-;; (global-set-key (kbd "C-c r") #'helm-flycheck)
-(global-set-key (kbd "C-c r") #'flycheck-list-errors)
+(use-package flycheck
+  :defer 3
+  :bind ("C-c r" . flycheck-list-errors)
+  :config
+  (global-flycheck-mode))
 
 ;;;; Go mode
 (setenv "GOPATH" "/home/feofan/go")
@@ -414,7 +415,10 @@
 (defvar company-minimum-prefix-length)
 (setq company-minimum-prefix-length 3)
 
-(add-hook 'after-init-hook 'company-statistics-mode)
+(use-package company-statistics
+  :functions (company-statistics-mode)
+  :init
+  (add-hook 'after-init-hook 'company-statistics-mode))
 
 ;;; ElDoc
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
@@ -857,57 +861,59 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :bind
   (("C-s" . helm-occur)
    ("C-x C-f" . helm-find-files)
+   ("C-x b" . helm-buffers-list)
    ("M-x" . helm-M-x)
    ("M-y". helm-show-kill-ring))
   :config
-  (require 'helm-config)
-  (require 'helm-fuzzier)
-  (helm-fuzzier-mode 1)
-  (require 'helm-flx)
-  (helm-flx-mode +1)
-  (defvar helm-ido-like-user-gc-setting nil)
+  (progn
+    (require 'helm-config)
+    (require 'helm-fuzzier)
+    (helm-fuzzier-mode 1)
+    (require 'helm-flx)
+    (helm-flx-mode +1)
+    (defvar helm-ido-like-user-gc-setting nil)
 
-  (defun helm-ido-like-higher-gc ()
-    (setq helm-ido-like-user-gc-setting gc-cons-threshold)
-    (setq gc-cons-threshold most-positive-fixnum))
+    (defun helm-ido-like-higher-gc ()
+      (setq helm-ido-like-user-gc-setting gc-cons-threshold)
+      (setq gc-cons-threshold most-positive-fixnum))
 
 
-  (defun helm-ido-like-lower-gc ()
-    (setq gc-cons-threshold helm-ido-like-user-gc-setting))
+    (defun helm-ido-like-lower-gc ()
+      (setq gc-cons-threshold helm-ido-like-user-gc-setting))
 
-  (defun helm-ido-like-helm-make-source (f &rest args)
-    (let ((source-type (cadr args)))
-      (unless (or (memq source-type '(helm-source-async helm-source-ffiles))
-                  (eq (plist-get args :filtered-candidate-transformer)
-                      'helm-ff-sort-candidates)
-                  (eq (plist-get args :persistent-action)
-                      'helm-find-files-persistent-action))
-        (nconc args '(:fuzzy-match t))))
-    (apply f args))
+    (defun helm-ido-like-helm-make-source (f &rest args)
+      (let ((source-type (cadr args)))
+        (unless (or (memq source-type '(helm-source-async helm-source-ffiles))
+                    (eq (plist-get args :filtered-candidate-transformer)
+                        'helm-ff-sort-candidates)
+                    (eq (plist-get args :persistent-action)
+                        'helm-find-files-persistent-action))
+          (nconc args '(:fuzzy-match t))))
+      (apply f args))
 
-  (defun helm-ido-like-load-fuzzy-enhancements ()
-    (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
-    (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
-    (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
+    (defun helm-ido-like-load-fuzzy-enhancements ()
+      (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
+      (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
+      (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
 
-  (with-eval-after-load 'helm-regexp
-    (setq helm-source-occur
-          (helm-make-source "Occur" 'helm-source-multi-occur
-            :follow 1)))
+    (with-eval-after-load 'helm-regexp
+      (setq helm-source-occur
+            (helm-make-source "Occur" 'helm-source-multi-occur
+              :follow 1)))
 
-  (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
+    (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
 
-(use-package ivy-rich
-  :disabled t
-  :defer t
-  :functions ivy-rich-switch-buffer-transformer
-  :config
-  (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
+  (use-package ivy-rich
+    :disabled t
+    :defer t
+    :functions ivy-rich-switch-buffer-transformer
+    :config
+    (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
 
-(use-package wgrep
-  :defer t
-  :config
-  (setq wgrep-auto-save-buffer t))
+  (use-package wgrep
+    :defer t
+    :config
+    (setq wgrep-auto-save-buffer t)))
 
 ;;
 ;; ash integration
@@ -1333,7 +1339,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;;; Which key
-(add-hook 'after-init-hook #'which-key-mode)
+(use-package which-key
+  :functions (which-key-mode)
+  :init
+  (add-hook 'after-init-hook #'which-key-mode))
 
 ;;; On the fly markdown preview
 (defvar flymd-browser-open-function)
@@ -1580,7 +1589,6 @@ the CLI and emacs interface."))
   :config (flycheck-vale-setup))
 
 (load custom-file 'noerror)
-(add-hook 'after-init-hook #'package-initialize)
 (setq gc-cons-threshold (* 8 1024 1024))
 
 (provide 'init)
