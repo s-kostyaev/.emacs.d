@@ -104,7 +104,7 @@
        (seq-do #'load-file
                (split-string
                 (shell-command-to-string
-                 "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+                 "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
        (seq-do (lambda (filename)
                  (let* ((pac (file-name-base filename))
                         (pac-sym (intern pac)))
@@ -114,7 +114,7 @@
                          (load-file filename)))))
                (split-string
                 (shell-command-to-string
-                 "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+                 "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
        (if (featurep 'yasnippet)
            (yas-reload-all))
        (my-set-themes-hook)
