@@ -17,6 +17,7 @@
  ;; If there is more than one, they won't work right.
  '(arch-packer-default-command "pacaur")
  '(browse-url-browser-function (quote browse-url-firefox))
+ '(column-number-mode t)
  '(counsel-rg-base-command
    "rg -i -u --no-heading --line-number --max-columns 150 %s .")
  '(custom-safe-themes

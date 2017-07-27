@@ -863,6 +863,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config
   (counsel-mode t))
 
+(use-package helm-files
+  :functions (helm-find-files-up-one-level))
+
 (use-package helm
   :defines (helm-grep-ag-command
             helm-source-occur
@@ -870,8 +873,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
             helm-find-files-map)
   :functions (helm-ido-like-higher-gc
               helm-ido-like-lower-gc
-              helm-occur-init-source
-              helm-ido-like-find-files-navigate-forward)
+              helm-ido-like-find-files-navigate-forward
+              helm-ido-like-load-file-nav
+              helm-ido-like-load-fuzzy-enhancements)
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
    ("C-x l" . helm-locate))
@@ -882,6 +886,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
    ("M-y". helm-show-kill-ring)
    :map helm-map
    ([tab] . helm-select-action))
+  :init
+  (progn
+    (load "helm-autoloads"))
   :config
   (progn
     (require 'helm-config)
@@ -895,7 +902,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (defun helm-ido-like-higher-gc ()
       (setq helm-ido-like-user-gc-setting gc-cons-threshold)
       (setq gc-cons-threshold most-positive-fixnum))
-
 
     (defun helm-ido-like-lower-gc ()
       (setq gc-cons-threshold helm-ido-like-user-gc-setting))
@@ -927,35 +933,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
           (helm-find-files-up-one-level 1)
         (delete-char -1)))
 
-
-    (defun helm-ido-like-find-files-navigate-forward (orig-fun &rest args)
-      "Adjust how helm-execute-persistent actions behaves, depending on context."
-      (let ((sel (helm-get-selection)))
-        (if (file-directory-p sel)
-            ;; the current dir needs to work to
-            ;; be able to select directories if needed
-            (cond ((and (stringp sel)
-                        (string-match "\\.\\'" (helm-get-selection)))
-                   (helm-maybe-exit-minibuffer))
-                  (t
-                   (apply orig-fun args)))
-          (helm-maybe-exit-minibuffer))))
-
-
     (defun helm-ido-like-load-file-nav ()
-      (advice-add 'helm-execute-persistent-action :around #'helm-ido-like-find-files-navigate-forward)
-      ;; <return> is not bound in helm-map by default
-      (define-key helm-map (kbd "<return>") 'helm-maybe-exit-minibuffer)
       (with-eval-after-load 'helm-files
         (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
-        (define-key helm-read-file-map (kbd "DEL") 'helm-ido-like-find-files-up-one-level-maybe)
-        (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
-        (define-key helm-find-files-map (kbd "DEL") 'helm-ido-like-find-files-up-one-level-maybe)
+        (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
 
-        (define-key helm-find-files-map (kbd "<return>") 'helm-execute-persistent-action)
-        (define-key helm-read-file-map (kbd "<return>") 'helm-execute-persistent-action)
-        (define-key helm-find-files-map (kbd "RET") 'helm-execute-persistent-action)
-        (define-key helm-read-file-map (kbd "RET") 'helm-execute-persistent-action)))
+    (helm-ido-like-load-fuzzy-enhancements)
     (helm-ido-like-load-file-nav)))
 
 (use-package ivy-rich
@@ -1629,9 +1612,19 @@ the CLI and emacs interface."))
 
   (setq notmuch-hello-sections '(notmuch-hello-insert-header my-notmuch-hello-insert-searches notmuch-hello-insert-search notmuch-hello-insert-recent-searches notmuch-hello-insert-alltags notmuch-hello-insert-footer)))
 
-;;; Rust
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'rust-mode-hook #'flycheck-rust-setup)
+(use-package rust-mode
+  :init
+  (load "rust-mode-autoloads")
+  :config
+  (progn
+    (add-hook 'rust-mode-hook #'flycheck-rust-setup)
+    (add-hook 'rust-mode-hook #'racer-mode)))
+
+(use-package racer
+  :functions (racer-mode))
+
+(use-package flycheck-rust
+  :functions (flycheck-rust-setup))
 
 ;;; Prose linting
 (use-package flycheck-vale
