@@ -875,7 +875,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-lower-gc
               helm-ido-like-find-files-navigate-forward
               helm-ido-like-load-file-nav
-              helm-ido-like-load-fuzzy-enhancements)
+              helm-ido-like-load-fuzzy-enhancements
+              helm-ido-like-fuzzier-deactivate
+              helm-ido-like-fuzzier-activate
+              helm-ido-like-fix-fuzzy-files)
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
    ("C-x l" . helm-locate))
@@ -908,7 +911,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
     (defun helm-ido-like-helm-make-source (f &rest args)
       (let ((source-type (cadr args)))
-        (unless (or (memq source-type '(helm-source-async helm-source-ffiles))
+        (unless (or (memq source-type '(helm-source-async helm-source-ffiles helm-grep-ag-class helm-grep-class))
                     (eq (plist-get args :filtered-candidate-transformer)
                         'helm-ff-sort-candidates)
                     (eq (plist-get args :persistent-action)
@@ -938,8 +941,25 @@ the end of the line, then comment current line.  Replaces default behaviour of
         (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
         (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
 
+    (defun helm-ido-like-fuzzier-deactivate (&rest _)
+      (helm-fuzzier-mode -1))
+
+
+    (defun helm-ido-like-fuzzier-activate (&rest _)
+      (unless helm-fuzzier-mode
+        (helm-fuzzier-mode 1)))
+
+
+    (defun helm-ido-like-fix-fuzzy-files ()
+      (add-hook 'helm-find-files-before-init-hook #'helm-ido-like-fuzzier-deactivate)
+      (advice-add 'helm--generic-read-file-name :before #'helm-ido-like-fuzzier-deactivate)
+      (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
+      (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
+      (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
+
     (helm-ido-like-load-fuzzy-enhancements)
-    (helm-ido-like-load-file-nav)))
+    (helm-ido-like-load-file-nav)
+    (helm-ido-like-fix-fuzzy-files)))
 
 (use-package ivy-rich
   :disabled t
