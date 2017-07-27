@@ -66,14 +66,15 @@
   ;; (load-theme 'spacemacs-dark t)
   (require 'solarized)
   (load-theme 'solarized-light t)
-  ;; (smart-mode-line-enable)
-  (require 'spaceline)
-  (require 'spaceline-config)
-  (spaceline-toggle-minor-modes-off)
-  (spaceline-toggle-buffer-size-off)
-  (spaceline-emacs-theme)
-  (setq powerline-default-separator 'slant)
-  (spaceline-compile)
+  (require 'smart-mode-line)
+  (smart-mode-line-enable)
+  ;; (require 'spaceline)
+  ;; (require 'spaceline-config)
+  ;; (spaceline-toggle-minor-modes-off)
+  ;; (spaceline-toggle-buffer-size-off)
+  ;; (spaceline-emacs-theme)
+  ;; (setq powerline-default-separator 'slant)
+  ;; (spaceline-compile)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
@@ -1484,7 +1485,9 @@ A prefix arg makes KEEP-TIME non-nil."
       (smie-config-guess))))
 (add-hook 'prog-mode-hook 'smie-auto-guess)
 
-(global-set-key (kbd "C-x 1") 'zygospore-toggle-delete-other-windows)
+(use-package zygospore
+  :bind
+  ("C-x 1" . zygospore-toggle-delete-other-windows))
 
 (declare-function reverse-im-activate "ext:reverse-im")
 (use-package reverse-im
@@ -1600,6 +1603,22 @@ the CLI and emacs interface."))
   :demand t
   :config
   (aggressive-indent-global-mode))
+
+(use-package password-store
+  :commands (password-store-get))
+
+(use-package rich-minority
+  :demand t
+  :config
+  (progn
+    (setq rm-whitelist "FlyC.*")
+    (rich-minority-mode 1)))
+
+(use-package pass
+  :commands (pass))
+
+(use-package paradox
+  :commands (paradox-list-packages))
 
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
