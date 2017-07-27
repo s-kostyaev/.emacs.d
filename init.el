@@ -80,7 +80,6 @@
   (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame)))
 
 (eval-when-compile
-  (declare-function no-confirm "ext:my-bootstrap")
   (defun my-bootstrap ()
     "Async install all needed packages."
     (interactive)
@@ -256,56 +255,50 @@
           (if this-win-2nd (other-window 1))))))
 
 (use-package flycheck
-  :defer 3
-  :bind ("C-c r" . flycheck-list-errors)
-  :config
-  (global-flycheck-mode))
+             :defer 3
+             :bind ("C-c r" . flycheck-list-errors)
+             :config
+             (global-flycheck-mode))
 
-;;;; Go mode
-(setenv "GOPATH" "/home/feofan/go")
-(setq exec-path (append exec-path '("~/go/bin")))
-(defun goimports ()
-  "Running goimports on go files."
-  (interactive)
-  (if (string-equal mode-name "Go")
-      (progn
-        (shell-command "goimports -w *.go")
-        (revert-buffer t t))))
+(use-package
+ go-mode
+ :mode "\\.go\\'"
+ :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
+                             godoc-at-point goimports)
+ :defines (company-begin-commands company-backends flycheck-gometalinter-deadline)
+ :config
+ (progn
+   (setenv "GOPATH" "/home/feofan/go")
+   (setq exec-path (append exec-path '("~/go/bin")))
+   (defun goimports ()
+     "Running goimports on go files."
+     (interactive)
+     (if (string-equal mode-name "Go")
+         (progn
+           (shell-command "goimports -w *.go")
+           (revert-buffer t t))))
 
+   (defun my-go-mode-hook ()
+     "Setup for go."
+     (require 'company-go)
+     (require 'go-impl)
+     (require 'lsp-mode)
+     (require 'flycheck-gometalinter)
+     (flycheck-gometalinter-setup)
+     (setq flycheck-gometalinter-deadline "30s")
+     (add-hook 'before-save-hook #'gofmt-before-save)
+     (add-hook 'after-save-hook #'goimports)
+     (local-set-key (kbd "C-c i") #'go-goto-imports)
+     (local-set-key (kbd "C-c C-t") #'go-test-current-project)
+     (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
+                              '("go-langserver" "-mode=stdio")
+                              :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
+     (if (buffer-file-name) (lsp-mode))
+     (go-eldoc-setup)
+     (local-set-key (kbd "C-h C-d") #'godoc-at-point)
+     (setq-local company-backends '(company-go)))
 
-(declare-function go-goto-imports "ext:go-mode")
-(declare-function lsp-define-stdio-client "ext:lsp-mode")
-(declare-function godoc-at-point "ext:go-mode")
-(defvar company-begin-commands)
-(defvar company-backends)
-(defvar flycheck-gometalinter-deadline)
-
-(use-package go-mode
-  :mode "\\.go\\'"
-  :functions (my-go-mode-hook)
-  :init
-  (progn
-    (defun my-go-mode-hook ()
-      "Setup for go."
-      (require 'company-go)
-      (require 'go-impl)
-      (require 'lsp-mode)
-      (require 'flycheck-gometalinter)
-      (flycheck-gometalinter-setup)
-      (setq flycheck-gometalinter-deadline "30s")
-      (add-hook 'before-save-hook #'gofmt-before-save)
-      (add-hook 'after-save-hook #'goimports)
-      (local-set-key (kbd "C-c i") #'go-goto-imports)
-      (local-set-key (kbd "C-c C-t") #'go-test-current-project)
-      (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
-                               '("go-langserver" "-mode=stdio")
-                               :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
-      (if (buffer-file-name) (lsp-mode))
-      (go-eldoc-setup)
-      (local-set-key (kbd "C-h C-d") #'godoc-at-point)
-      (setq-local company-backends '(company-go)))
-
-    (add-hook 'go-mode-hook #'my-go-mode-hook)))
+   (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
 
 
@@ -906,19 +899,19 @@ the end of the line, then comment current line.  Replaces default behaviour of
             (helm-make-source "Occur" 'helm-source-multi-occur
               :follow 1)))
 
-    (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s"))
+    (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s")))
 
-  (use-package ivy-rich
-    :disabled t
-    :defer t
-    :functions ivy-rich-switch-buffer-transformer
-    :config
-    (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
+(use-package ivy-rich
+  :disabled t
+  :defer t
+  :functions ivy-rich-switch-buffer-transformer
+  :config
+  (ivy-set-display-transformer 'ivy-switch-buffer 'ivy-rich-switch-buffer-transformer))
 
-  (use-package wgrep
-    :defer t
-    :config
-    (setq wgrep-auto-save-buffer t)))
+(use-package wgrep
+  :defer t
+  :config
+  (setq wgrep-auto-save-buffer t))
 
 ;;
 ;; ash integration
