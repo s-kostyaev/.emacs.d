@@ -9,18 +9,51 @@
 
 (defvar personal-keybindings nil)
 
-(setq custom-file "~/.emacs.d/emacs-customizations.el")
+;; Disable package initialize after us.  We either initialize it
+;; anyway in case of interpreted .emacs, or we don't want slow
+;; initizlization in case of byte-compiled .emacs.elc.
+(setq package-enable-at-startup nil)
+;; Ask package.el to not add (package-initialize) to .emacs.
+(setq package--init-file-ensured t)
+;; set use-package-verbose to t for interpreted .emacs,
+;; and to nil for byte-compiled .emacs.elc
+(eval-and-compile
+  (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
+;; Add the macro generated list of package.el loadpaths to load-path.
+(mapc #'(lambda (add) (add-to-list 'load-path add))
+      (eval-when-compile
+        (require 'package)
+        (package-initialize)
+        ;; Install use-package if not installed yet.
+        (unless (package-installed-p 'use-package)
+          (package-refresh-contents)
+          (package-install 'use-package))
+        ;; (require 'use-package)
+        (let ((package-user-dir-real (file-truename package-user-dir)))
+          ;; The reverse is necessary, because outside we mapc
+          ;; add-to-list element-by-element, which reverses.
+          (nreverse (apply #'nconc
+                           ;; Only keep package.el provided loadpaths.
+                           (mapcar #'(lambda (path)
+                                       (if (string-prefix-p package-user-dir-real path)
+                                           (list path)
+                                         nil))
+                                   load-path))))))
 
-(require 'package)
-(package-initialize)
+;; (require 'package)
+;; (package-initialize)
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 
-(if (not (package-installed-p 'async))
-    (progn
-      (package-refresh-contents)
-      (package-install 'async)))
+(eval-when-compile
+  (require 'package)
+  (if (not (package-installed-p 'async))
+      (progn
+        (package-refresh-contents)
+        (package-install 'async))))
+
+(setq custom-file "~/.emacs.d/emacs-customizations.el")
 
 (defvar powerline-default-separator)
 (declare-function spaceline-toggle-minor-modes-off "ext:spaceline")
@@ -45,48 +78,49 @@
   (scroll-bar-mode -1)
   (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame)))
 
-(declare-function no-confirm "ext:my-bootstrap")
-(defun my-bootstrap ()
-  "Async install all needed packages."
-  (interactive)
-  (require 'async)
-  (async-start
-   (lambda ()
-     ;; Melpa
-     (require 'package)
-     (setq custom-file "~/.emacs.d/emacs-customizations.el")
-     (package-initialize)
-     (ignore-errors (load custom-file 'noerror))
-     (require 'cl-lib)
-     (cl-flet ((always-yes (&rest _) t))
-       (defun no-confirm (fun &rest args)
-         "Apply FUN to ARGS, skipping user confirmations."
-         (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
-                   ((symbol-function 'yes-or-no-p) #'always-yes))
-           (apply fun args)))
-       (no-confirm 'package-refresh-contents)
-       (no-confirm 'package-install-selected-packages)))
-   (lambda (res)
-     (seq-do #'load-file
-             (split-string
-              (shell-command-to-string
-               "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
-     (seq-do (lambda (filename)
-               (let* ((pac (file-name-base filename))
-                      (pac-sym (intern pac)))
-                 (if (featurep pac-sym)
-                     (progn
-                       (message "reloading %s" pac)
-                       (load-file filename)))))
-             (split-string
-              (shell-command-to-string
-               "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
-     (if (featurep 'yasnippet)
-         (yas-reload-all))
-     (my-set-themes-hook)
-     (message "packages bootstrap success: %s" res))))
+(eval-when-compile
+  (declare-function no-confirm "ext:my-bootstrap")
+  (defun my-bootstrap ()
+    "Async install all needed packages."
+    (interactive)
+    (require 'async)
+    (async-start
+     (lambda ()
+       ;; Melpa
+       (require 'package)
+       (setq custom-file "~/.emacs.d/emacs-customizations.el")
+       (package-initialize)
+       (ignore-errors (load custom-file 'noerror))
+       (require 'cl-lib)
+       (cl-flet ((always-yes (&rest _) t))
+         (defun no-confirm (fun &rest args)
+           "Apply FUN to ARGS, skipping user confirmations."
+           (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+                     ((symbol-function 'yes-or-no-p) #'always-yes))
+             (apply fun args)))
+         (no-confirm 'package-refresh-contents)
+         (no-confirm 'package-install-selected-packages)))
+     (lambda (res)
+       (seq-do #'load-file
+               (split-string
+                (shell-command-to-string
+                 "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+       (seq-do (lambda (filename)
+                 (let* ((pac (file-name-base filename))
+                        (pac-sym (intern pac)))
+                   (if (featurep pac-sym)
+                       (progn
+                         (message "reloading %s" pac)
+                         (load-file filename)))))
+               (split-string
+                (shell-command-to-string
+                 "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 day ago')") "\n" t))
+       (if (featurep 'yasnippet)
+           (yas-reload-all))
+       (my-set-themes-hook)
+       (message "packages bootstrap success: %s" res))))
 
-(my-bootstrap)
+  (my-bootstrap))
 
 (eval-when-compile
   (require 'use-package)
@@ -659,22 +693,19 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq emmet-move-cursor-between-quotes t) ;; default nil
 
 
-;;
-;; key chord
-;;
-(key-chord-mode 1)
-
-;; avy
-(key-chord-define-global "fj" 'avy-goto-word-1)
-(key-chord-define-global "f'" 'avy-pop-mark)
-(define-key isearch-mode-map (kbd "C-'") #'avy-isearch)
+(use-package avy
+  :chords (("fj" . avy-goto-word-1)
+           ("f'" . avy-pop-mark))
+  :config
+  (define-key isearch-mode-map (kbd "C-'") #'avy-isearch))
 
 
 ;;
 ;; expand region
 ;;
-(key-chord-define-global "zj" 'er/expand-region)
-(key-chord-define-global "zk" 'er/contract-region)
+(use-package expand-region
+  :chords (("zj" . er/expand-region)
+           ("zk" . er/contract-region)))
 (delete-selection-mode)
 
 (declare-function my-mc-prompt-once "ext:config")
@@ -979,8 +1010,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
    '((ditaa . t) (dot . t))))
 (add-hook 'org-mode-hook #'my-org-hook)
 
-;; indirect region
-(key-chord-define-global (kbd ";r") #'edit-indirect-region)
+
+(use-package edit-indirect
+  :chords ((";r" . edit-indirect-region)))
 
 ;; pandoc
 ;; (require 'pandoc-mode)
