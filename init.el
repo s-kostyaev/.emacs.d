@@ -524,83 +524,44 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
-(add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+(use-package js2-mode
+  :mode
+  (("\\.js$" . js2-mode)
+   ("\\.json$" . js2-jsx-mode)
+   ("\\.jsx$" . js2-jsx-mode))
+  :bind (:map js2-mode-map
+              ("C-c C-l" . indium-eval-buffer))
+  :config
+  ;; extra features for imenu
+  (add-hook 'js2-mode-hook (lambda ()
+                             (js2-imenu-extras-mode)))
 
-(defvar js2-highlight-level)
-(setq js2-highlight-level 3)
-(defvar js2-idle-timer-delay)
-(setq js2-idle-timer-delay 2)
-(setq blink-matching-paren nil)
+  (defvar js2-highlight-level)
+  (setq js2-highlight-level 3)
+  (defvar js2-idle-timer-delay)
+  (setq js2-idle-timer-delay 2)
+  (setq blink-matching-paren nil)
+  (use-package js2-refactor
+    :functions
+    (js2r-expand-node-at-point
+     js2r-contract-node-at-point
+     js2r-extract-function js2r-extract-method
+     js2r-toggle-function-expression-and-declaration
+     js2r-toggle-arrow-function-and-expression
+     js2r-introduce-parameter js2r-localize-parameter
+     js2r-wrap-buffer-in-iife js2r-inject-global-in-iife
+     js2r-add-to-globals-annotation js2r-inline-var js2r-rename-var
+     js2r-var-to-this js2r-arguments-to-object js2r-ternary-to-if
+     js2r-split-var-declaration js2r-split-string js2r-unwrap
+     js2r-log-this js2r-debug-this js2r-forward-slurp
+     js2r-forward-barf js2r-kill)
+    :bind
+    (:map js2-mode-map
+          ("C-c h r" . js2-refactor-hydra/body))
+    :config (js2r-add-keybindings-with-prefix "C-c C-r")
 
-;; use web-mode for .htm & .html files
-(add-to-list 'auto-mode-alist '("\\.htm[l]?$" . web-mode))
-;; use web-mode for .jsx files
-(add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
-;; for templates
-(add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
-;; json
-(add-to-list 'auto-mode-alist '("\\.json$" . js2-mode))
-
-;; fix for infinite eating RAM
-(defun my-disable-fci () "Disable fci mode." (fci-mode -1))
-(add-hook 'rjsx-mode-hook #'my-disable-fci)
-
-;; (require 'ac-js2)
-;; (add-hook 'js2-mode-hook #'ac-js2-mode)
-;; (defvar ac-js2-evaluate-calls)
-;; (setq ac-js2-evaluate-calls t)
-;; (defvar ac-js2-add-browser-externs)
-;; (setq ac-js2-add-browser-externs t)
-;; (defvar ac-js2-add-prototype-completions)
-;; (setq ac-js2-add-prototype-completions t)
-;; (add-hook 'ac-js2-mode-hook #'skewer-run-phantomjs)
-;; default port conflicts with other soft
-(defvar httpd-port)
-(setq httpd-port 18080)
-
-;; xref-js2
-(defvar js2-mode-map)
-(add-hook 'js2-mode-hook
-          (lambda ()
-            (define-key js2-mode-map (kbd "M-.") nil)
-            (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
-
-;; js2-refactor: refactoring options for emacs
-;; https://github.com/magnars/js2-refactor.el
-(declare-function 'js2r-expand-node-at-point "ext:js2-refactor")
-(declare-function 'js2r-contract-node-at-point "ext:js2-refactor")
-(declare-function 'js2r-extract-function "ext:js2-refactor")
-(declare-function 'js2r-extract-method "ext:js2-refactor")
-(declare-function 'js2r-toggle-function-expression-and-declaration "ext:js2-refactor")
-(declare-function 'js2r-toggle-arrow-function-and-expression "ext:js2-refactor")
-(declare-function 'js2r-introduce-parameter "ext:js2-refactor")
-(declare-function 'js2r-localize-parameter "ext:js2-refactor")
-(declare-function 'js2r-wrap-buffer-in-iife "ext:js2-refactor")
-(declare-function 'js2r-inject-global-in-iife "ext:js2-refactor")
-(declare-function 'js2r-add-to-globals-annotation "ext:js2-refactor")
-(declare-function 'js2r-inline-var "ext:js2-refactor")
-(declare-function 'js2r-rename-var "ext:js2-refactor")
-(declare-function 'js2r-var-to-this "ext:js2-refactor")
-(declare-function 'js2r-arguments-to-object "ext:js2-refactor")
-(declare-function 'js2r-ternary-to-if "ext:js2-refactor")
-(declare-function 'js2r-split-var-declaration "ext:js2-refactor")
-(declare-function 'js2r-split-string "ext:js2-refactor")
-(declare-function 'js2r-unwrap "ext:js2-refactor")
-(declare-function 'js2r-log-this "ext:js2-refactor")
-(declare-function 'js2r-debug-this "ext:js2-refactor")
-(declare-function 'js2r-forward-slurp "ext:js2-refactor")
-(declare-function 'js2r-forward-barf "ext:js2-refactor")
-(declare-function 'js2r-kill "ext:js2-refactor")
-
-(use-package js2-refactor
-  :diminish js2-refactor-mode "𝐉𝐫"
-  :bind
-  (:map js2-mode-map
-        ("C-c h r" . js2-refactor-hydra/body))
-  :config (js2r-add-keybindings-with-prefix "C-c C-r")
-
-  (defhydra js2-refactor-hydra (:color blue :hint nil)
-    "
+    (defhydra js2-refactor-hydra (:color blue :hint nil)
+      "
 ^Functions^                    ^Variables^               ^Buffer^                      ^sexp^               ^Debugging^
 ------------------------------------------------------------------------------------------------------------------------------
 [_lp_] Localize Parameter      [_ev_] Extract variable   [_wi_] Wrap buffer in IIFE    [_k_]  js2 kill      [_lt_] log this
@@ -638,12 +599,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
       ("k" js2r-kill)
       ("q" nil)
       ))
-
-(add-hook 'js2-mode-hook 'js2-refactor-mode)
-
-
-;; json-snatcher: get the path of any JSON element easily
-;; https://github.com/Sterlingg/json-snatcher
 (use-package json-snatcher
   :config
   (defun js-mode-bindings ()
@@ -651,11 +606,63 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (when (string-match  "\\.json$" (buffer-name))
       (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
   (add-hook 'js2-mode-hook 'js-mode-bindings))
+(use-package xref-js2
+  :config
+
+  ;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
+  ;; unbind it.
+  (define-key js-mode-map (kbd "M-.") nil)
+
+  (add-hook 'js2-mode-hook (lambda ()
+                             (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 
 ;; indium: javascript awesome development environment
 ;; https://github.com/NicolasPetton/indium
 (use-package indium
   :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
+(use-package tern
+  :functions
+  (my-js-mode-hook)
+  :config
+  (defun my-js-mode-hook ()
+    "Hook for `js-mode'."
+    (tern-mode)
+    (define-key tern-mode-keymap (kbd "M-.") nil)
+    (define-key tern-mode-keymap (kbd "M-,") nil)
+    (set (make-local-variable 'company-backends)
+         '((company-tern company-files))))
+  (add-hook 'js2-mode-hook 'my-js-mode-hook))
+
+;; turn off all warnings in js2-mode
+(setq js2-mode-show-parse-errors t)
+(setq js2-mode-show-strict-warnings nil)
+
+(use-package company-tern))
+
+;; use web-mode for .htm & .html files
+(add-to-list 'auto-mode-alist '("\\.htm[l]?$" . web-mode))
+;; use web-mode for .jsx files
+(add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
+;; for templates
+(add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
+
+;; fix for infinite eating RAM
+(defun my-disable-fci () "Disable fci mode." (fci-mode -1))
+(add-hook 'rjsx-mode-hook #'my-disable-fci)
+
+;; (require 'ac-js2)
+;; (add-hook 'js2-mode-hook #'ac-js2-mode)
+;; (defvar ac-js2-evaluate-calls)
+;; (setq ac-js2-evaluate-calls t)
+;; (defvar ac-js2-add-browser-externs)
+;; (setq ac-js2-add-browser-externs t)
+;; (defvar ac-js2-add-prototype-completions)
+;; (setq ac-js2-add-prototype-completions t)
+;; (add-hook 'ac-js2-mode-hook #'skewer-run-phantomjs)
+;; default port conflicts with other soft
+(defvar httpd-port)
+(setq httpd-port 18080)
+
 
 ;; tern
 ;; (add-to-list 'company-backends 'company-tern)
@@ -668,13 +675,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (add-hook 'js-mode-hook #'tern-mode)
 ;; (add-hook 'web-mode-hook #'tern-mode)
 (defvar tern-mode-keymap)
-(defun my-js-mode-hook ()
-  "Hook for `js-mode'."
-  (tern-mode)
-  (define-key tern-mode-keymap (kbd "M-.") nil)
-  (define-key tern-mode-keymap (kbd "M-,") nil)
-  (set (make-local-variable 'company-backends)
-       '((company-tern company-files))))
+
 (add-hook 'js2-mode-hook #'my-js-mode-hook)
 (add-hook 'js-mode-hook #'my-js-mode-hook)
 (add-hook 'web-mode-hook #'my-js-mode-hook)
