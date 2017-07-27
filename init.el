@@ -55,11 +55,18 @@
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
-(defvar powerline-default-separator)
-(declare-function spaceline-toggle-minor-modes-off "ext:spaceline")
-(declare-function spaceline-toggle-buffer-size-off "ext:spaceline")
-(declare-function spaceline-emacs-theme "ext:spaceline")
-(declare-function spaceline-compile "ext:spaceline")
+(use-package
+  smart-mode-line
+  :functions
+  (smart-mode-line-enable))
+
+(use-package spaceline
+  :functions
+  (spaceline-toggle-minor-modes-off
+   spaceline-toggle-buffer-size-off
+   spaceline-emacs-theme spaceline-compile)
+  :defines (powerline-default-separator))
+
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (interactive)
@@ -263,10 +270,10 @@
           (if this-win-2nd (other-window 1))))))
 
 (use-package flycheck
-             :defer 3
-             :bind ("C-c r" . flycheck-list-errors)
-             :config
-             (global-flycheck-mode))
+  :defer 3
+  :bind ("C-c r" . flycheck-list-errors)
+  :config
+  (global-flycheck-mode))
 
 (use-package
  go-mode
@@ -857,8 +864,14 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (counsel-mode t))
 
 (use-package helm
-  :defines (helm-grep-ag-command helm-source-occur)
-  :functions (helm-ido-like-higher-gc helm-ido-like-lower-gc helm-occur-init-source)
+  :defines (helm-grep-ag-command
+            helm-source-occur
+            helm-read-file-map
+            helm-find-files-map)
+  :functions (helm-ido-like-higher-gc
+              helm-ido-like-lower-gc
+              helm-occur-init-source
+              helm-ido-like-find-files-navigate-forward)
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
    ("C-x l" . helm-locate))
@@ -907,7 +920,43 @@ the end of the line, then comment current line.  Replaces default behaviour of
             (helm-make-source "Occur" 'helm-source-multi-occur
               :follow 1)))
 
-    (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s")))
+    (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s")
+    (defun helm-ido-like-find-files-up-one-level-maybe ()
+      (interactive)
+      (if (looking-back "/" 1)
+          (helm-find-files-up-one-level 1)
+        (delete-char -1)))
+
+
+    (defun helm-ido-like-find-files-navigate-forward (orig-fun &rest args)
+      "Adjust how helm-execute-persistent actions behaves, depending on context."
+      (let ((sel (helm-get-selection)))
+        (if (file-directory-p sel)
+            ;; the current dir needs to work to
+            ;; be able to select directories if needed
+            (cond ((and (stringp sel)
+                        (string-match "\\.\\'" (helm-get-selection)))
+                   (helm-maybe-exit-minibuffer))
+                  (t
+                   (apply orig-fun args)))
+          (helm-maybe-exit-minibuffer))))
+
+
+    (defun helm-ido-like-load-file-nav ()
+      (advice-add 'helm-execute-persistent-action :around #'helm-ido-like-find-files-navigate-forward)
+      ;; <return> is not bound in helm-map by default
+      (define-key helm-map (kbd "<return>") 'helm-maybe-exit-minibuffer)
+      (with-eval-after-load 'helm-files
+        (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
+        (define-key helm-read-file-map (kbd "DEL") 'helm-ido-like-find-files-up-one-level-maybe)
+        (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
+        (define-key helm-find-files-map (kbd "DEL") 'helm-ido-like-find-files-up-one-level-maybe)
+
+        (define-key helm-find-files-map (kbd "<return>") 'helm-execute-persistent-action)
+        (define-key helm-read-file-map (kbd "<return>") 'helm-execute-persistent-action)
+        (define-key helm-find-files-map (kbd "RET") 'helm-execute-persistent-action)
+        (define-key helm-read-file-map (kbd "RET") 'helm-execute-persistent-action)))
+    (helm-ido-like-load-file-nav)))
 
 (use-package ivy-rich
   :disabled t
@@ -1001,13 +1050,25 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (require 'speed-type)
 
 ;; magit
-(autoload 'diff-refine-hunk "diff-mode")
-(defun my-magit-diff-hook ()
-  "My hook for improve magit diff."
-  (local-set-key (kbd "h") #'diff-refine-hunk))
-(add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
-(defvar auto-revert-check-vc-info)
-(setq auto-revert-check-vc-info t)
+(use-package
+  magit
+  :defines (auto-revert-check-vc-info)
+  :functions (my-magit-diff-hook)
+  :defer t
+  :init
+  (load "magit-autoloads")
+  :config
+  (progn
+    (defun my-magit-diff-hook ()
+      "My hook for improve magit diff."
+      (local-set-key (kbd "h") #'diff-refine-hunk))
+    (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
+    (setq auto-revert-check-vc-info t)))
+
+(use-package
+ diff-mode
+ :functions
+ (diff-refine-hunk))
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
@@ -1111,81 +1172,62 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (interactive)
       (slime 'kawa))))
 
+(use-package company-erlang
+  :defer t
+  :init
+  (load "company-erlang-autoloads"))
 
-;;;; Erlang
-(defun my-format-erlang-record ()
-  "Format erlang record."
-  (interactive)
-  (let ((from (line-beginning-position)))
-    (goto-char from)
-    (search-forward "-record" )
-    (search-forward "{")
-    (goto-char (- (point) 1))
-    (ignore-errors (er/expand-region 1))
-    (my-align-region-by "=")
-    (goto-char from)
-    (search-forward "-record" )
-    (search-forward "{")
-    (goto-char (- (point) 1))
-    (ignore-errors (er/expand-region 1))
-    (my-align-region-by "::")))
+(use-package ivy-erlang-complete
+  :defer t
+  :init
+  (load "company-erlang-autoloads"))
 
-(defun my-erlang-hook ()
-  "Setup for erlang."
-  (ignore-errors (require 'wrangler))
-  (ivy-erlang-complete-init)
-  (defvar erlang-extended-mode-map)
-  (define-key erlang-extended-mode-map (kbd "M-.") nil)
-  (define-key erlang-extended-mode-map (kbd "M-,") nil)
-  (define-key erlang-extended-mode-map (kbd "M-?") nil)
-  (define-key erlang-extended-mode-map (kbd "(") nil)
-  (define-key erlang-extended-mode-map (kbd "C-M-i") nil)
-  (local-set-key (kbd "C-c C-p") #'my-format-erlang-record)
-  (local-set-key (kbd "C-M-i") #'ivy-erlang-complete))
-(add-hook 'erlang-mode-hook #'my-erlang-hook)
-(add-hook 'after-save-hook #'ivy-erlang-complete-reparse)
+(use-package erlang
+  :functions
+  (my-erlang-hook my-format-erlang-record)
+  :mode (("\\.erl$" . erlang-mode)
+         ("\\.hrl$" . erlang-mode)
+         ("rebar\\.config$" . erlang-mode)
+         ("relx\\.config$" . erlang-mode)
+         ("system\\.config$" . erlang-mode)
+         ("\\.app\\.src$" . erlang-mode))
+  :defines (erlang-extended-mode-map)
+  :init
+  (add-hook 'erlang-mode-hook #'my-erlang-hook)
+  (add-hook 'erlang-mode-hook #'company-erlang-init)
+  :config
+  (progn
+    (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
+    (defun my-format-erlang-record ()
+      "Format erlang record."
+      (interactive)
+      (let ((from (line-beginning-position)))
+        (goto-char from)
+        (search-forward "-record" )
+        (search-forward "{")
+        (goto-char (- (point) 1))
+        (ignore-errors (er/expand-region 1))
+        (my-align-region-by "=")
+        (goto-char from)
+        (search-forward "-record" )
+        (search-forward "{")
+        (goto-char (- (point) 1))
+        (ignore-errors (er/expand-region 1))
+        (my-align-region-by "::")))
+    (defun my-erlang-hook ()
+      "Setup for erlang."
+      (ignore-errors (require 'wrangler))
+      (ivy-erlang-complete-init)
+      (define-key erlang-extended-mode-map (kbd "M-.") nil)
+      (define-key erlang-extended-mode-map (kbd "M-,") nil)
+      (define-key erlang-extended-mode-map (kbd "M-?") nil)
+      (define-key erlang-extended-mode-map (kbd "(") nil)
+      (define-key erlang-extended-mode-map (kbd "C-M-i") nil)
+      (local-set-key (kbd "C-c C-p") #'my-format-erlang-record)
+      (local-set-key (kbd "C-M-i") #'ivy-erlang-complete))
 
-(add-to-list 'auto-mode-alist '("rebar\\.config$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("relx\\.config$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("system\\.config$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("\\.app\\.src$" . erlang-mode))
-
+    (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)))
 ;; (require 'flycheck-dialyzer)
-
-(add-hook 'erlang-mode-hook #'company-erlang-init)
-
-;;; wrangler
-(add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
-                                        ; Some code inspection functionalities of Wrangler generate .dot
-                                        ; files, which can be compiled and previewed in Emacs if the
-                                        ; Graphviz-dot mode for Emacs is enabled.
-;; (load-library "graphviz-dot-mode")
-
-;; distel
-;; (add-to-list 'load-path "/usr/share/distel/elisp")
-;; (require 'distel)
-;; (distel-setup)
-
-;; A number of the erlang-extended-mode key bindings are useful in the shell too
-;; (defconst distel-shell-keys
-;;   '(("\M-/"      erl-complete)
-;;     ("\M-."      erl-find-source-under-point)
-;;     ("\M-,"      erl-find-source-unwind)
-;;     )
-;;   "Additional keys to bind when in Erlang shell.")
-
-;; (add-hook 'erlang-shell-mode-hook
-;;           (lambda ()
-;;             ;; add some Distel bindings to the Erlang shell
-;;             (dolist (spec distel-shell-keys)
-;;               (define-key erlang-shell-mode-map (car spec) (cadr spec)))))
-
-;; (defun distel-start-local ()
-;;   "Start local erlang node for distel."
-;;   (interactive)
-;;   (start-process-shell-command
-;;    "erlang-local-node" "*erlang-local*" "erl -sname local"))
-
 
 ;; fast open url
 (global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
