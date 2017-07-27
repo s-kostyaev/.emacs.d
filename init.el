@@ -280,27 +280,33 @@
 (defvar company-backends)
 (defvar flycheck-gometalinter-deadline)
 
-(defun my-go-mode-hook ()
-  "Setup for go."
-  (require 'company-go)
-  (require 'go-impl)
-  (require 'lsp-mode)
-  (require 'flycheck-gometalinter)
-  (flycheck-gometalinter-setup)
-  (setq flycheck-gometalinter-deadline "30s")
-  (add-hook 'before-save-hook #'gofmt-before-save)
-  (add-hook 'after-save-hook #'goimports)
-  (local-set-key (kbd "C-c i") #'go-goto-imports)
-  (local-set-key (kbd "C-c C-t") #'go-test-current-project)
-  (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
-                           '("go-langserver" "-mode=stdio")
-                           :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
-  (if (buffer-file-name) (lsp-mode))
-  (go-eldoc-setup)
-  (local-set-key (kbd "C-h C-d") #'godoc-at-point)
-  (setq-local company-backends '(company-go)))
+(use-package go-mode
+  :mode "\\.go\\'"
+  :functions (my-go-mode-hook)
+  :init
+  (progn
+    (defun my-go-mode-hook ()
+      "Setup for go."
+      (require 'company-go)
+      (require 'go-impl)
+      (require 'lsp-mode)
+      (require 'flycheck-gometalinter)
+      (flycheck-gometalinter-setup)
+      (setq flycheck-gometalinter-deadline "30s")
+      (add-hook 'before-save-hook #'gofmt-before-save)
+      (add-hook 'after-save-hook #'goimports)
+      (local-set-key (kbd "C-c i") #'go-goto-imports)
+      (local-set-key (kbd "C-c C-t") #'go-test-current-project)
+      (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
+                               '("go-langserver" "-mode=stdio")
+                               :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
+      (if (buffer-file-name) (lsp-mode))
+      (go-eldoc-setup)
+      (local-set-key (kbd "C-h C-d") #'godoc-at-point)
+      (setq-local company-backends '(company-go)))
 
-(add-hook 'go-mode-hook #'my-go-mode-hook)
+    (add-hook 'go-mode-hook #'my-go-mode-hook)))
+
 
 
 ;; for compiling C/C++
@@ -849,24 +855,23 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :config
   (counsel-mode t))
 
-(defvar helm-grep-ag-command)
-(declare-function helm-ido-like-higher-gc "ext:helm")
-(declare-function helm-ido-like-lower-gc "ext:helm")
-(declare-function helm-occur-init-source "ext:helm")
-(defvar helm-source-occur)
 (use-package helm
+  :defines (helm-grep-ag-command helm-source-occur)
+  :functions (helm-ido-like-higher-gc helm-ido-like-lower-gc helm-occur-init-source)
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
    ("C-x l" . helm-locate))
   :bind
   (("C-s" . helm-occur)
    ("C-x C-f" . helm-find-files)
-   ("C-x b" . helm-buffers-list)
    ("M-x" . helm-M-x)
-   ("M-y". helm-show-kill-ring))
+   ("M-y". helm-show-kill-ring)
+   :map helm-map
+   ([tab] . helm-select-action))
   :config
   (progn
     (require 'helm-config)
+    (helm-mode +1)
     (require 'helm-fuzzier)
     (helm-fuzzier-mode 1)
     (require 'helm-flx)
@@ -1590,6 +1595,11 @@ the CLI and emacs interface."))
 
 (use-package esup
   :functions (esup))
+
+(use-package aggressive-indent
+  :demand t
+  :config
+  (aggressive-indent-global-mode))
 
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
