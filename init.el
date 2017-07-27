@@ -1588,6 +1588,9 @@ the CLI and emacs interface."))
   :after flycheck
   :config (flycheck-vale-setup))
 
+(use-package esup
+  :functions (esup))
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
