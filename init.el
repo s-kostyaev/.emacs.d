@@ -171,6 +171,13 @@
 (mouse-wheel-mode t)
 (global-set-key (kbd "M-J") #'scroll-up-line)
 (global-set-key (kbd "M-K") #'scroll-down-line)
+(defun my-scroll-hook(_)
+  "Increase gc-threshold before scroll and set it back after."
+  (setq gc-cons-threshold most-positive-fixnum)
+  (run-with-idle-timer 3 nil (lambda () (setq gc-cons-threshold (* 8 1024 1024)))))
+
+(advice-add 'scroll-up-line :before 'my-scroll-hook)
+(advice-add 'scroll-down-line :before 'my-scroll-hook)
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
