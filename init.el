@@ -884,7 +884,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (("C-c C-s" . helm-do-grep-ag)
    ("C-x l" . helm-locate))
   :bind
-  (("C-s" . helm-occur)
+  (("C-s" . helm-swoop)
    ("C-x C-f" . helm-find-files)
    ("M-x" . helm-M-x)
    ("M-y". helm-show-kill-ring)
@@ -894,73 +894,74 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (progn
     (load "helm-autoloads"))
   :config
-  (progn
-    (require 'helm-config)
-    (helm-mode +1)
-    (require 'helm-fuzzier)
-    (helm-fuzzier-mode 1)
-    (require 'helm-flx)
-    (helm-flx-mode +1)
-    (defvar helm-ido-like-user-gc-setting nil)
+  (use-package helm-swoop
+    :functions (helm-swoop))
+  (require 'helm-config)
+  (helm-mode +1)
+  (require 'helm-fuzzier)
+  (helm-fuzzier-mode 1)
+  (require 'helm-flx)
+  (helm-flx-mode +1)
+  (defvar helm-ido-like-user-gc-setting nil)
 
-    (defun helm-ido-like-higher-gc ()
-      (setq helm-ido-like-user-gc-setting gc-cons-threshold)
-      (setq gc-cons-threshold most-positive-fixnum))
+  (defun helm-ido-like-higher-gc ()
+    (setq helm-ido-like-user-gc-setting gc-cons-threshold)
+    (setq gc-cons-threshold most-positive-fixnum))
 
-    (defun helm-ido-like-lower-gc ()
-      (setq gc-cons-threshold helm-ido-like-user-gc-setting))
+  (defun helm-ido-like-lower-gc ()
+    (setq gc-cons-threshold helm-ido-like-user-gc-setting))
 
-    (defun helm-ido-like-helm-make-source (f &rest args)
-      (let ((source-type (cadr args)))
-        (unless (or (memq source-type '(helm-source-async helm-source-ffiles helm-grep-ag-class helm-grep-class))
-                    (eq (plist-get args :filtered-candidate-transformer)
-                        'helm-ff-sort-candidates)
-                    (eq (plist-get args :persistent-action)
-                        'helm-find-files-persistent-action))
-          (nconc args '(:fuzzy-match t))))
-      (apply f args))
+  (defun helm-ido-like-helm-make-source (f &rest args)
+    (let ((source-type (cadr args)))
+      (unless (or (memq source-type '(helm-source-async helm-source-ffiles helm-grep-ag-class helm-grep-class))
+                  (eq (plist-get args :filtered-candidate-transformer)
+                      'helm-ff-sort-candidates)
+                  (eq (plist-get args :persistent-action)
+                      'helm-find-files-persistent-action))
+        (nconc args '(:fuzzy-match t))))
+    (apply f args))
 
-    (defun helm-ido-like-load-fuzzy-enhancements ()
-      (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
-      (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
-      (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
+  (defun helm-ido-like-load-fuzzy-enhancements ()
+    (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
+    (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
+    (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
 
-    (with-eval-after-load 'helm-regexp
-      (setq helm-source-occur
-            (helm-make-source "Occur" 'helm-source-multi-occur
-              :follow 1)))
+  (with-eval-after-load 'helm-regexp
+    (setq helm-source-occur
+          (helm-make-source "Occur" 'helm-source-multi-occur
+            :follow 1)))
 
-    (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s")
-    (defun helm-ido-like-find-files-up-one-level-maybe ()
-      (interactive)
-      (if (looking-back "/" 1)
-          (helm-find-files-up-one-level 1)
-        (delete-char -1)))
+  (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s")
+  (defun helm-ido-like-find-files-up-one-level-maybe ()
+    (interactive)
+    (if (looking-back "/" 1)
+        (helm-find-files-up-one-level 1)
+      (delete-char -1)))
 
-    (defun helm-ido-like-load-file-nav ()
-      (with-eval-after-load 'helm-files
-        (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
-        (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
+  (defun helm-ido-like-load-file-nav ()
+    (with-eval-after-load 'helm-files
+      (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
+      (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
 
-    (defun helm-ido-like-fuzzier-deactivate (&rest _)
-      (helm-fuzzier-mode -1))
-
-
-    (defun helm-ido-like-fuzzier-activate (&rest _)
-      (unless helm-fuzzier-mode
-        (helm-fuzzier-mode 1)))
+  (defun helm-ido-like-fuzzier-deactivate (&rest _)
+    (helm-fuzzier-mode -1))
 
 
-    (defun helm-ido-like-fix-fuzzy-files ()
-      (add-hook 'helm-find-files-before-init-hook #'helm-ido-like-fuzzier-deactivate)
-      (advice-add 'helm--generic-read-file-name :before #'helm-ido-like-fuzzier-deactivate)
-      (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
-      (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
-      (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
+  (defun helm-ido-like-fuzzier-activate (&rest _)
+    (unless helm-fuzzier-mode
+      (helm-fuzzier-mode 1)))
 
-    (helm-ido-like-load-fuzzy-enhancements)
-    (helm-ido-like-load-file-nav)
-    (helm-ido-like-fix-fuzzy-files)))
+
+  (defun helm-ido-like-fix-fuzzy-files ()
+    (add-hook 'helm-find-files-before-init-hook #'helm-ido-like-fuzzier-deactivate)
+    (advice-add 'helm--generic-read-file-name :before #'helm-ido-like-fuzzier-deactivate)
+    (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
+    (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
+    (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
+
+  (helm-ido-like-load-fuzzy-enhancements)
+  (helm-ido-like-load-file-nav)
+  (helm-ido-like-fix-fuzzy-files))
 
 (use-package ivy-rich
   :disabled t
