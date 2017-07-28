@@ -882,7 +882,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-fix-fuzzy-files)
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
-   ("C-x l" . helm-locate))
+   ("C-x l" . helm-locate)
+   ("C-x b" . helm-mini))
   :bind
   (("C-s" . helm-swoop)
    ("C-x C-f" . helm-find-files)
