@@ -61,6 +61,7 @@
   (smart-mode-line-enable))
 
 (use-package spaceline
+  :disabled t
   :functions
   (spaceline-toggle-minor-modes-off
    spaceline-toggle-buffer-size-off
@@ -885,8 +886,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
    ("C-x l" . helm-locate)
    ("C-x b" . helm-mini))
   :bind
-  (("C-s" . helm-swoop)
-   ("C-x C-f" . helm-find-files)
+  (("C-x C-f" . helm-find-files)
    ("M-x" . helm-M-x)
    ("M-y". helm-show-kill-ring)
    :map helm-map
@@ -896,6 +896,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (load "helm-autoloads"))
   :config
   (use-package helm-swoop
+    :defines helm-swoop-map
     :functions (helm-swoop))
   (require 'helm-config)
   (helm-mode +1)
@@ -1677,6 +1678,22 @@ the CLI and emacs interface."))
 
 (use-package paradox
   :commands (paradox-list-packages))
+
+(eval-after-load 'dash '(dash-enable-font-lock))
+
+(use-package evalator
+  :bind (("C-c e e" . evalator)
+         ("C-c e x" . evalator-explicit)
+         ("C-c e r" . evalator-resume)
+         ("C-c e i" . evalator-insert-equiv-expr)))
+
+(use-package ace-isearch
+  :after helm-swoop
+  :config
+  (global-ace-isearch-mode +1)
+  (setq ace-isearch-function 'avy-goto-word-1)
+  (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
+  (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev))
 
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
