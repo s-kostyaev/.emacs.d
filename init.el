@@ -1179,16 +1179,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (interactive)
       (slime 'kawa))))
 
-(use-package company-erlang
-  :defer t
-  :init
-  (load "company-erlang-autoloads"))
-
-(use-package ivy-erlang-complete
-  :defer t
-  :init
-  (load "company-erlang-autoloads"))
-
 (use-package erlang
   :functions
   (my-erlang-hook my-format-erlang-record)
@@ -1204,6 +1194,16 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (add-hook 'erlang-mode-hook #'company-erlang-init)
   :config
   (progn
+    (use-package company-erlang
+      :defer t
+      :init
+      (load "company-erlang-autoloads"))
+
+    (use-package ivy-erlang-complete
+      :defer t
+      :init
+      (load "company-erlang-autoloads"))
+
     (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
     (defun my-format-erlang-record ()
       "Format erlang record."
@@ -1248,66 +1248,64 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 
 ;;;; C, C++ Development
-;; Rtags
-(defvar rtags-completions-enabled)
-(setq rtags-completions-enabled nil)
-
-(defun my-flycheck-irony-setup ()
-  "Setup irony checker."
-  (require 'flycheck-irony)
-  (flycheck-select-checker 'irony))
-(add-hook 'c-mode-hook #'my-flycheck-irony-setup)
-(add-hook 'c++-mode-hook #'my-flycheck-irony-setup)
-(add-hook 'objc-mode-hook #'my-flycheck-irony-setup)
-;; completion
-(add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options)
-
 (use-package flycheck-clang-analyzer
   :after flycheck-irony
   :config
   (flycheck-clang-analyzer-setup))
 
-;; show docs at point
-;; (require 'xah-lookup)
-;; Uncomment the below line to use eww (Emacs Web Wowser)
-;; (setq xah-lookup-browser-function 'eww)
-
-(autoload 'xah-lookup-word-on-internet "xah-lookup")
 (use-package xah-lookup
-  :defer t)
-(defvar xah-lookup-browser-function)
-(defun xah-lookup-cppreference (&optional word)
-  "Lookup definition of current WORD or text selection in URL."
-  (interactive)
-  (xah-lookup-word-on-internet
-   word
-   ;; Use � as a placeholder in the query URL.
-   "http://en.cppreference.com/mwiki/index.php?search=�"
-   xah-lookup-browser-function))
+  :bind (:map c++-mode-map
+              ("C-c b" . xah-lookup-boost)
+              ("C-c d" . xah-lookup-cppreference))
+  :functions (xah-lookup-word-on-internet xah-lookup-cppreference xah-lookup-boost)
+  :defines (xah-lookup-browser-function)
+  :config
+  (defun xah-lookup-cppreference (&optional word)
+    "Lookup definition of current WORD or text selection in URL."
+    (interactive)
+    (xah-lookup-word-on-internet
+     word
+     ;; Use � as a placeholder in the query URL.
+     "http://en.cppreference.com/mwiki/index.php?search=�"
+     xah-lookup-browser-function))
 
-;; (require 'cc-mode)
+  (defun xah-lookup-boost (&optional word)
+    "Lookup definition of current WORD or text selection in URL."
+    (interactive)
+    (xah-lookup-word-on-internet
+     word
+     "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
+     xah-lookup-browser-function)))
 
-;; Add shortcut for c++-mode
-;; Another example with http://www.boost.org
-(defun xah-lookup-boost (&optional word)
-  "Lookup definition of current WORD or text selection in URL."
-  (interactive)
-  (xah-lookup-word-on-internet
-   word
-   "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
-   xah-lookup-browser-function))
+(use-package cmake-ide
+  :defer 2
+  :config
+  (use-package rtags
+    :functions (rtags-eldoc
+                rtags-call-rc
+                rtags-symbol-type
+                rtags-print-symbol-info
+                rtags-find-symbol-at-point
+                rtags-find-references-at-point)
+    :config
+    (require 'package)
+    (require 'pkg-info)
+    (setq rtags-completions-enabled nil))
 
-(defvar c++-mode-map)
-(defvar c-mode-map)
-(defun xah-c++-setup ()
-  "Setup xah-lookups for c++-mode."
-  (require 'cc-mode)
-  (define-key c++-mode-map (kbd "C-c b") #'xah-lookup-boost)
-  (define-key c++-mode-map (kbd "C-c d") #'xah-lookup-cppreference))
+  (use-package irony
+    :functions (irony-cdb-json-add-compile-commands-path my-flycheck-irony-setup)
+    :config
+    (use-package irony-cdb)
+    (use-package irony-cdb-json)
+    (defun my-flycheck-irony-setup ()
+      "Setup irony checker."
+      (use-package flycheck-irony)
+      (flycheck-select-checker 'irony))
 
-(add-hook 'c++-mode-hook #'xah-c++-setup)
+    (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
 
-(declare-function rtags-eldoc "ext:rtags")
+  (cmake-ide-setup))
+
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
   (require 'cc-mode)
@@ -1326,9 +1324,24 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (setq-local eldoc-documentation-function #'rtags-eldoc)
   (eldoc-mode +1)
   (irony-mode)
+  (my-flycheck-irony-setup)
   (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
 (add-hook 'c++-mode-hook #'my-cc-mode-hook)
 (add-hook 'c-mode-hook #'my-cc-mode-hook)
+
+(use-package cmake-mode
+  :mode
+  (("CMakeLists\\.txt\\'" . cmake-mode)
+   ("\\.cmake\\'" . cmake-mode)))
+
+(use-package cmake-font-lock
+  :functions (cmake-font-lock-activate))
+
+(defun my-cmake-font-lock ()
+  "Activate font lock for cmake."
+  (cmake-font-lock-activate))
+(add-hook 'cmake-mode-hook #'my-cmake-font-lock)
+
 ;; Semantic
 ;; (require 'cc-mode)
 ;; (require 'semantic)
@@ -1337,33 +1350,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (semantic-mode 1)
 ;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
 ;; (global-semantic-idle-summary-mode 1)
-
-(use-package cmake-ide
-  :defer 2
-  :config
-  (cmake-ide-setup))
-
-;; Add cmake listfile names to the mode list.
-(setq auto-mode-alist
-	  (append
-	   '(("CMakeLists\\.txt\\'" . cmake-mode))
-	   '(("\\.cmake\\'" . cmake-mode))
-	   auto-mode-alist))
-(defun my-cmake-font-lock ()
-  "Activate font lock for cmake."
-  (require 'cmake-font-lock)
-  (cmake-font-lock-activate))
-(add-hook 'cmake-mode-hook #'my-cmake-font-lock)
-
-(defvar company-c-headers-path-user)
-(defun company-set-c-headers-user-path ()
-  "Set path for selected directory with project headers."
-  (interactive)
-  (let
-      ((dir
-        (expand-file-name (read-directory-name
-                           "Select project directory:" default-directory))))
-    (setq company-c-headers-path-user (list (concat dir "/include")))))
 
 ;; hungry deletion
 (use-package hungry-delete
@@ -1689,7 +1675,17 @@ the CLI and emacs interface."))
 
 (use-package ace-isearch
   :after helm-swoop
+  :bind (:map helm-swoop-map
+              ("C-s" . swoop-action-goto-line-next)
+              ("C-r" . swoop-action-goto-line-prev)
+              ("C-w" . nil)
+              :map isearch-mode-map
+              ("M-n" . my-isearch-next))
   :config
+  (defun my-isearch-next ()
+    "Isearch symbol at point or next isearch history item."
+    (interactive)
+    (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
   (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
