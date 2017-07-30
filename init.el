@@ -7,8 +7,6 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
-(defvar personal-keybindings nil)
-
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
 ;; initizlization in case of byte-compiled .emacs.elc.
@@ -276,49 +274,45 @@
   :config
   (global-flycheck-mode))
 
-(use-package
- go-mode
- :mode "\\.go\\'"
- :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
-                             godoc-at-point goimports)
- :defines (company-begin-commands company-backends flycheck-gometalinter-deadline)
- :config
- (progn
-   (setenv "GOPATH" "/home/feofan/go")
-   (setq exec-path (append exec-path '("~/go/bin")))
-   (defun goimports ()
-     "Running goimports on go files."
-     (interactive)
-     (if (string-equal mode-name "Go")
-         (progn
-           (shell-command "goimports -w *.go")
-           (revert-buffer t t))))
+(use-package go-mode
+  :mode "\\.go\\'"
+  :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
+                              godoc-at-point goimports)
+  :defines (company-begin-commands company-backends flycheck-gometalinter-deadline)
+  :config
+  (progn
+    (setenv "GOPATH" "/home/feofan/go")
+    (setq exec-path (append exec-path '("~/go/bin")))
+    (defun goimports ()
+      "Running goimports on go files."
+      (interactive)
+      (if (string-equal mode-name "Go")
+          (progn
+            (shell-command "goimports -w *.go")
+            (revert-buffer t t))))
 
-   (defun my-go-mode-hook ()
-     "Setup for go."
-     (require 'company-go)
-     (require 'go-impl)
-     (require 'lsp-mode)
-     (require 'flycheck-gometalinter)
-     (flycheck-gometalinter-setup)
-     (setq flycheck-gometalinter-deadline "30s")
-     (add-hook 'before-save-hook #'gofmt-before-save)
-     (add-hook 'after-save-hook #'goimports)
-     (local-set-key (kbd "C-c i") #'go-goto-imports)
-     (local-set-key (kbd "C-c C-t") #'go-test-current-project)
-     (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
-                              '("go-langserver" "-mode=stdio")
-                              :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
-     (if (buffer-file-name) (lsp-mode))
-     (go-eldoc-setup)
-     (local-set-key (kbd "C-h C-d") #'godoc-at-point)
-     (setq-local company-backends '(company-go)))
+    (defun my-go-mode-hook ()
+      "Setup for go."
+      (require 'company-go)
+      (require 'go-impl)
+      (require 'lsp-mode)
+      (require 'flycheck-gometalinter)
+      (flycheck-gometalinter-setup)
+      (setq flycheck-gometalinter-deadline "30s")
+      (add-hook 'before-save-hook #'gofmt-before-save)
+      (add-hook 'after-save-hook #'goimports)
+      (local-set-key (kbd "C-c i") #'go-goto-imports)
+      (local-set-key (kbd "C-c C-t") #'go-test-current-project)
+      (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
+                               '("go-langserver" "-mode=stdio")
+                               :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
+      (if (buffer-file-name) (lsp-mode))
+      (go-eldoc-setup)
+      (local-set-key (kbd "C-h C-d") #'godoc-at-point)
+      (setq-local company-backends '(company-go)))
 
-   (add-hook 'go-mode-hook #'my-go-mode-hook)))
+    (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
-
-
-;; for compiling C/C++
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
 (global-set-key "\C-xv" #'quoted-insert)
@@ -688,6 +682,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package multiple-cursors
   :defer 2
+  :after ivy
   :chords ("fm" . multiple-cursors-hydra/body)
   :functions
   (my-mc-prompt-once my-mc-prompt-once-advice)
@@ -733,6 +728,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (dolist (fn fns)
     (advice-add fn :around #'my-mc-prompt-once-advice)))
 
+(defvar ivy-completion-beg)
+(defvar ivy-completion-end)
 (defun my-counsel-company ()
   "Complete using `company-candidates'."
   (interactive)
@@ -1029,10 +1026,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
     (setq auto-revert-check-vc-info t)))
 
-(use-package
- diff-mode
- :functions
- (diff-refine-hunk))
+(use-package diff-mode
+  :functions
+  (diff-refine-hunk))
 
 ;; org-mode
 (define-key global-map "\C-cl" 'org-store-link)
@@ -1468,14 +1464,16 @@ A prefix arg makes KEEP-TIME non-nil."
   (setq-default symbol-overlay-temp-in-scope t))
 
 ;; auto configure indent with SMIE
-(defvar smie-grammar)
-(declare-function smie-config-guess "ext:smie")
-(defun smie-auto-guess ()
-  "Autoindentation with SMIE."
-  (when (featurep 'smie)
-    (unless (eq smie-grammar 'unset)
-      (smie-config-guess))))
-(add-hook 'prog-mode-hook 'smie-auto-guess)
+(use-package smie
+  :functions (smie-auto-guess)
+  :init
+  (add-hook 'prog-mode-hook 'smie-auto-guess)
+  :config
+  (defun smie-auto-guess ()
+    "Autoindentation with SMIE."
+    (when (featurep 'smie)
+      (unless (eq smie-grammar 'unset)
+        (smie-config-guess)))))
 
 (use-package zygospore
   :bind
@@ -1487,24 +1485,21 @@ A prefix arg makes KEEP-TIME non-nil."
   (reverse-im-activate "russian-computer"))
 
 (use-package notmuch
-  :defer t
+  :functions (notmuch-tag-completions notmuch-logged-error)
+  :defines (notmuch-hello-thousands-separator
+            notmuch-command
+            notmuch-search-oldest-first
+            notmuch-hello-sections
+            notmuch-saved-searches)
   :commands notmuch)
 
-(declare-function my-count-query "ext:config")
-(declare-function my-notmuch-hello-query-insert "ext:config")
-(declare-function notmuch-tag-completions "ext:notmuch")
-(declare-function notmuch-logged-error "ext:notmuch")
-(declare-function notmuch-hello-nice-number "ext:notmuch")
-(declare-function notmuch-hello-widget-search "ext:notmuch")
-(declare-function my-gen-notmuch-ss "ext:config")
-(declare-function my-notmuch-update-ss "ext:config")
-(defvar notmuch-hello-thousands-separator)
-(defvar notmuch-command)
-(defvar notmuch-search-oldest-first)
-(defvar notmuch-saved-searches)
-(defvar notmuch-hello-sections)
 (use-package notmuch-hello
-  :defer t
+  :functions (my-count-query
+              my-notmuch-hello-query-insert
+              notmuch-hello-nice-number
+              notmuch-hello-widget-search
+              my-gen-notmuch-ss
+              my-notmuch-update-ss)
   :after notmuch
   :config
   (defun my-gen-notmuch-ss (tag)
@@ -1583,15 +1578,14 @@ the CLI and emacs interface."))
   :init
   (load "rust-mode-autoloads")
   :config
-  (progn
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup)
-    (add-hook 'rust-mode-hook #'racer-mode)))
+  (use-package racer
+    :functions (racer-mode))
 
-(use-package racer
-  :functions (racer-mode))
+  (use-package flycheck-rust
+    :functions (flycheck-rust-setup))
 
-(use-package flycheck-rust
-  :functions (flycheck-rust-setup))
+  (add-hook 'rust-mode-hook #'flycheck-rust-setup)
+  (add-hook 'rust-mode-hook #'racer-mode))
 
 ;;; Prose linting
 (use-package flycheck-vale

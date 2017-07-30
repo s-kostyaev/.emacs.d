@@ -17,6 +17,9 @@
  ;; If there is more than one, they won't work right.
  '(arch-packer-default-command "pacaur")
  '(browse-url-browser-function (quote browse-url-chromium))
+ '(byte-compile-warnings
+   (quote
+    (redefine callargs unresolved obsolete cl-functions interactive-only make-local mapcar constants suspicious lexical)))
  '(column-number-mode t)
  '(counsel-rg-base-command
    "rg -i -u --no-heading --line-number --max-columns 150 %s .")
@@ -60,6 +63,7 @@
  '(paradox-github-token (password-store-get "paradox-token"))
  '(paradox-spinner-type (quote progress-bar))
  '(racer-rust-src-path "/usr/src/rust/src")
+ '(safe-local-variable-values (quote ((eval c-set-offset (quote innamespace) 0))))
  '(send-mail-function (quote sendmail-send-it))
  '(sendmail-program "/usr/bin/msmtp")
  '(sml/theme (quote respectful))
