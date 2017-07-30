@@ -408,10 +408,6 @@
 ;;        (autoload 'run-octave "octave-inf" nil t)
 
 
-(defvar fsm-debug)
-(setq fsm-debug nil)
-
-
 ;;; Auto-complete
 ;; (require 'company)
 (add-hook 'after-init-hook #'global-company-mode)
@@ -479,20 +475,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook #'delete-other-windows)
 
-;; (setq scroll-margin 12)
-;; (setq scroll-step 1)
+(use-package pkgbuild-mode
+  :functions (pkgbuild-mode)
+  :mode ("/PKGBUILD$" . pkgbuild-mode))
 
-;; PKGBUILDs
-(autoload 'pkgbuild-mode "pkgbuild-mode.el" "PKGBUILD mode." t)
-(setq auto-mode-alist (append '(("/PKGBUILD$" . pkgbuild-mode)) auto-mode-alist))
-
-;; Markdown
-(autoload 'markdown-mode "markdown-mode"
-  "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.text\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+(use-package markdown-mode
+  :mode (("\\.text\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode)))
 
 ;; for over-80-chars line highlightning
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
@@ -503,6 +494,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :defer 0.1
   :config
   (progn
+    (defun my-disable-fci () "Disable fci mode." (fci-mode -1))
+
     (define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
     (set 'fci-rule-column 80)
     (global-fci-mode 1)
@@ -520,7 +513,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (when company-fci-mode-on-p (fci-mode 1)))
     (add-hook 'company-completion-finished-hook #'reenable-fci)
     ;; Re-enable fci if needed.
-    (add-hook 'company-completion-cancelled-hook #'reenable-fci)))
+    (add-hook 'company-completion-cancelled-hook #'reenable-fci)
+
+    ;; fix for infinite eating RAM
+    (add-hook 'rjsx-mode-hook #'my-disable-fci)))
 
 (setq eval-expression-debug-on-error t)
 
@@ -528,8 +524,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package js2-mode
   :mode
   (("\\.js$" . js2-mode)
-   ("\\.json$" . js2-jsx-mode)
-   ("\\.jsx$" . js2-jsx-mode))
+   ("\\.json$" . js2-jsx-mode))
   :bind (:map js2-mode-map
               ("C-c C-l" . indium-eval-buffer))
   :config
@@ -622,6 +617,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package indium
   :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
 (use-package tern
+  :init
+  (add-hook 'js2-mode-hook #'my-js-mode-hook)
+  (add-hook 'js-mode-hook #'my-js-mode-hook)
+  (add-hook 'web-mode-hook #'my-js-mode-hook)
   :functions
   (my-js-mode-hook)
   :config
@@ -640,78 +639,37 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package company-tern))
 
-;; use web-mode for .htm & .html files
-(add-to-list 'auto-mode-alist '("\\.htm[l]?$" . web-mode))
-;; use web-mode for .jsx files
-(add-to-list 'auto-mode-alist '("\\.jsx$" . rjsx-mode))
-;; for templates
-(add-to-list 'auto-mode-alist '("\\.dtl$" . web-mode))
+(use-package rjsx-mode
+  :mode ("\\.jsx$" . rjsx-mode))
 
-;; fix for infinite eating RAM
-(defun my-disable-fci () "Disable fci mode." (fci-mode -1))
-(add-hook 'rjsx-mode-hook #'my-disable-fci)
+(use-package web-mode
+  :init
+  (add-hook 'web-mode-hook  #'my-web-mode-hook)
+  :mode (("\\.htm[l]?$" . web-mode)
+         ("\\.dtl$" . web-mode))
+  :functions (my-web-mode-hook)
+  :config
+  (defun my-web-mode-hook ()
+    "Hooks for Web mode.  Adjust `indent's."
+    ;; http://web-mode.org/
+    (setq web-mode-markup-indent-offset 2)
+    (setq web-mode-css-indent-offset 2)
+    (setq web-mode-code-indent-offset 2)
+    (setq web-mode-enable-current-element-highlight t)
+    (fci-mode -1)))
 
-;; (require 'ac-js2)
-;; (add-hook 'js2-mode-hook #'ac-js2-mode)
-;; (defvar ac-js2-evaluate-calls)
-;; (setq ac-js2-evaluate-calls t)
-;; (defvar ac-js2-add-browser-externs)
-;; (setq ac-js2-add-browser-externs t)
-;; (defvar ac-js2-add-prototype-completions)
-;; (setq ac-js2-add-prototype-completions t)
-;; (add-hook 'ac-js2-mode-hook #'skewer-run-phantomjs)
-;; default port conflicts with other soft
-(defvar httpd-port)
-(setq httpd-port 18080)
-
-
-;; tern
-;; (add-to-list 'company-backends 'company-tern)
-;; (defvar company-tern-meta-as-single-line)
-;; (setq company-tern-meta-as-single-line t)
 (defvar company-tooltip-align-annotations)
 (setq company-tooltip-align-annotations t)
 
-;; (add-hook 'js2-mode-hook #'tern-mode)
-;; (add-hook 'js-mode-hook #'tern-mode)
-;; (add-hook 'web-mode-hook #'tern-mode)
-(defvar tern-mode-keymap)
-
-(add-hook 'js2-mode-hook #'my-js-mode-hook)
-(add-hook 'js-mode-hook #'my-js-mode-hook)
-(add-hook 'web-mode-hook #'my-js-mode-hook)
-
-;; (require 'js2-refactor)
-(add-hook 'js2-mode-hook #'js2-refactor-mode)
-
-;; (require 'skewer-mode)
-;; (add-hook 'after-init-hook #'skewer-setup)
-
-;; adjust indents for web-mode to 2 spaces
-(defvar web-mode-markup-indent-offset)
-(defvar web-mode-css-indent-offset)
-(defvar web-mode-code-indent-offset)
-(defvar web-mode-enable-current-element-highlight)
-(defun my-web-mode-hook ()
-  "Hooks for Web mode.  Adjust `indent's."
-  ;; http://web-mode.org/
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-  (setq web-mode-enable-current-element-highlight t)
-  (fci-mode -1))
-(add-hook 'web-mode-hook  #'my-web-mode-hook)
-
-;;
-;; emmet mode
-;;
-(add-hook 'sgml-mode-hook #'emmet-mode) ;; Auto-start on any markup modes
-(add-hook 'web-mode-hook #'emmet-mode)
-(add-hook 'rjsx-mode #'emmet-mode)
-(add-hook 'css-mode-hook #'emmet-mode) ;; enable Emmet's css abbreviation.
-(defvar emmet-move-cursor-between-quotes)
-(setq emmet-move-cursor-between-quotes t) ;; default nil
-
+(use-package emmet-mode
+  :functions (emmet-mode)
+  :init
+  (add-hook 'sgml-mode-hook #'emmet-mode)
+  (add-hook 'web-mode-hook #'emmet-mode)
+  (add-hook 'rjsx-mode #'emmet-mode)
+  (add-hook 'css-mode-hook #'emmet-mode)
+  :config
+  (setq emmet-move-cursor-between-quotes t))
 
 (use-package avy
   :chords (("fj" . avy-goto-word-1)
@@ -728,13 +686,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
            ("zk" . er/contract-region)))
 (delete-selection-mode)
 
-(declare-function my-mc-prompt-once "ext:config")
-(declare-function my-mc-prompt-once-advice "ext:config")
-(defvar ivy-completion-beg)
-(defvar ivy-completion-end)
 (use-package multiple-cursors
   :defer 2
   :chords ("fm" . multiple-cursors-hydra/body)
+  :functions
+  (my-mc-prompt-once my-mc-prompt-once-advice)
   :config
   (progn
     (require 'hydra)
@@ -831,6 +787,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package ivy
   :bind* ("C-c s k" . ivy-resume)
+  :defines (ivy-completion-beg ivy-completion-end)
   :config
   (progn
     (setq ivy-initial-inputs-alist nil)
