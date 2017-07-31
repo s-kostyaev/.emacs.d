@@ -1630,6 +1630,7 @@ the CLI and emacs interface."))
               ("C-s" . swoop-action-goto-line-next)
               ("C-r" . swoop-action-goto-line-prev)
               ("C-w" . nil)
+              ("M-n" . helm-swoop-yank-thing-at-point)
               :map isearch-mode-map
               ("M-n" . my-isearch-next))
   :config
