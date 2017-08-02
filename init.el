@@ -298,6 +298,8 @@
       (require 'lsp-mode)
       (require 'flycheck-gometalinter)
       (require 'go-direx)
+      (require 'gotest)
+      (require 'go-playground)
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
