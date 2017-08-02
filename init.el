@@ -297,12 +297,14 @@
       (require 'go-impl)
       (require 'lsp-mode)
       (require 'flycheck-gometalinter)
+      (require 'go-direx)
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
       (add-hook 'after-save-hook #'goimports)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
+      (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
                                '("go-langserver" "-mode=stdio")
                                :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
@@ -967,7 +969,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package imenu
   :defer t
-  :bind* ("M-i" . imenu))
+  :bind ("M-i" . imenu))
 
 (use-package projectile
   :defer 1
