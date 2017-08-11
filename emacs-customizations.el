@@ -30,6 +30,8 @@
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
  '(flycheck-disabled-checkers (quote (erlang-rebar3)))
+ '(flycheck-gometalinter-deadline "30s")
+ '(flycheck-gometalinter-disable-linters (quote ("gotype")))
  '(flycheck-vale-modes
    (quote
     (text-mode markdown-mode rst-mode gfm-mode web-mode)))
