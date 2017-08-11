@@ -301,21 +301,12 @@
       (require 'gotest)
       (require 'go-playground)
       (require 'go-eldoc)
-      (require 's)
-      (require 'dash)
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
       (add-hook 'after-save-hook #'goimports)
-      (defun my-go-test()
-        "Test current project without vendored packages."
-        (interactive)
-        (let ((packages (-filter (lambda (s) (not (s-contains? "/vendor/" s)))
-                                 (s-split "\n"
-                                          (shell-command-to-string "go list ./...")))))
-          (go-test--go-test (s-join " " packages))))
       (local-set-key (kbd "C-c i") #'go-goto-imports)
-      (local-set-key (kbd "C-c C-t") #'my-go-test)
+      (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
                                '("go-langserver" "-mode=stdio")
