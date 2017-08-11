@@ -1475,7 +1475,8 @@ A prefix arg makes KEEP-TIME non-nil."
 (use-package symbol-overlay
   :defer 2
   :config
-  (setq-default symbol-overlay-temp-in-scope t))
+  (setq-default symbol-overlay-temp-in-scope t)
+  (add-hook 'prog-mode-hook #'symbol-overlay-mode))
 
 ;; auto configure indent with SMIE
 (use-package smie
