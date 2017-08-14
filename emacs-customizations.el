@@ -19,7 +19,7 @@
  '(browse-url-browser-function (quote browse-url-chromium))
  '(byte-compile-warnings
    (quote
-    (redefine callargs unresolved obsolete cl-functions interactive-only make-local mapcar constants suspicious lexical)))
+    (redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical)))
  '(column-number-mode t)
  '(counsel-rg-base-command
    "rg -i -u --no-heading --line-number --max-columns 150 %s .")
@@ -39,6 +39,7 @@
  '(global-flycheck-mode t)
  '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
+ '(gofmt-command "goimports")
  '(helm-M-x-always-save-history t)
  '(helm-M-x-fuzzy-match t)
  '(helm-adaptive-mode t nil (helm-adaptive))

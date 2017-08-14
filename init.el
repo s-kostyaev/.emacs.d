@@ -283,13 +283,6 @@
   (progn
     (setenv "GOPATH" "/home/feofan/go")
     (setq exec-path (append exec-path '("~/go/bin")))
-    (defun goimports ()
-      "Running goimports on go files."
-      (interactive)
-      (if (string-equal mode-name "Go")
-          (progn
-            (shell-command "goimports -w *.go")
-            (revert-buffer t t))))
 
     (defun my-go-mode-hook ()
       "Setup for go."
@@ -304,7 +297,6 @@
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
-      (add-hook 'after-save-hook #'goimports)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
