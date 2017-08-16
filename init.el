@@ -70,8 +70,10 @@
   "Hook for setting themes after init."
   (interactive)
   ;; (load-theme 'spacemacs-dark t)
-  (require 'solarized)
-  (load-theme 'solarized-light t)
+  ;; (require 'solarized)
+  ;; (load-theme 'solarized-light t)
+  (require 'spacemacs-light-theme)
+  (load-theme 'spacemacs-light t)
   (require 'smart-mode-line)
   (smart-mode-line-enable)
   ;; (require 'spaceline)
@@ -84,7 +86,8 @@
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
-  (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame)))
+  ;; (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame))
+  )
 
 (eval-when-compile
   (defun my-bootstrap ()
@@ -145,20 +148,20 @@
   (progn
     (my-set-themes-hook)))
 
-(defun my-solarized-dark-workaround (frame)
-  "Fix solarized-dark theme for terminal FRAME."
-  (with-selected-frame frame
-    (if (and (featurep 'color-theme)
-             (not window-system))
-        (set-face-background 'default "none" frame))))
+;; (defun my-solarized-dark-workaround (frame)
+;;   "Fix solarized-dark theme for terminal FRAME."
+;;   (with-selected-frame frame
+;;     (if (and (featurep 'color-theme)
+;;              (not window-system))
+;;         (set-face-background 'default "none" frame))))
 
-(defun my-solarized-dark-on-focus ()
-  "Fix solarized-dark theme for terminal on focus."
-  (my-solarized-dark-workaround (selected-frame)))
+;; (defun my-solarized-dark-on-focus ()
+;;   "Fix solarized-dark theme for terminal on focus."
+;;   (my-solarized-dark-workaround (selected-frame)))
 
-(add-hook 'focus-in-hook #'my-solarized-dark-on-focus)
+;; (add-hook 'focus-in-hook #'my-solarized-dark-on-focus)
 
-(add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
+;; (add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
 
 ;; to setup tabs
 (defvar c-basic-indent)
