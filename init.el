@@ -1038,6 +1038,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; ditaa
 (defun my-org-hook ()
   "My hook for `org-mode'."
+  (require 'org-mind-map)
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((ditaa . t) (dot . t))))
