@@ -297,6 +297,7 @@
       (require 'gotest)
       (require 'go-playground)
       (require 'go-eldoc)
+      (require 'godoctor)
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
