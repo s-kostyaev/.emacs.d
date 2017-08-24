@@ -39,7 +39,7 @@
  '(global-flycheck-mode t)
  '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
- '(gofmt-command "goreturns")
+ '(gofmt-command "goimports")
  '(helm-M-x-always-save-history t)
  '(helm-M-x-fuzzy-match t)
  '(helm-adaptive-mode t nil (helm-adaptive))

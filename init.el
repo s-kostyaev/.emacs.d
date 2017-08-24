@@ -298,6 +298,8 @@
       (require 'go-playground)
       (require 'go-eldoc)
       (require 'godoctor)
+      (if (not (featurep 'expanderr))
+          (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
