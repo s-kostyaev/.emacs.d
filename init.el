@@ -837,9 +837,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-load-fuzzy-enhancements
               helm-ido-like-fuzzier-deactivate
               helm-ido-like-fuzzier-activate
-              helm-ido-like-fix-fuzzy-files)
+              helm-ido-like-fix-fuzzy-files
+              my-helm-rg)
   :bind*
   (("C-c C-s" . helm-do-grep-ag)
+   ("C-u C-c C-s" . my-helm-rg)
    ("C-x l" . helm-locate)
    ("C-x b" . helm-mini))
   :bind
@@ -920,7 +922,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
   (helm-ido-like-load-fuzzy-enhancements)
   (helm-ido-like-load-file-nav)
-  (helm-ido-like-fix-fuzzy-files))
+  (helm-ido-like-fix-fuzzy-files)
+
+  (defun my-helm-rg ()
+    (interactive)
+    (let ((dir (read-directory-name "select directory for search" default-directory)))
+      (helm-grep-ag dir nil))))
 
 (use-package ivy-rich
   :disabled t
