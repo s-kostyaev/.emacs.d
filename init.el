@@ -1659,6 +1659,13 @@ the CLI and emacs interface."))
   (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
   (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev))
 
+;;; plantuml
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((plantuml . t)))
+(setq org-plantuml-jar-path
+      (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
