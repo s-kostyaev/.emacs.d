@@ -23,6 +23,7 @@
         paredit-open-round
         sp-remove-active-pair-overlay
         wgrep-finish-edit
+        yaml-electric-dash-and-dot
         yas-expand
         ))
 

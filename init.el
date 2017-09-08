@@ -873,7 +873,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
   (defun helm-ido-like-helm-make-source (f &rest args)
     (let ((source-type (cadr args)))
-      (unless (or (memq source-type '(helm-source-async helm-source-ffiles helm-grep-ag-class helm-grep-class))
+      (unless (or (memq source-type '(helm-source-async helm-source-ffiles helm-grep-ag-class helm-grep-class helm-mac-spotlight-source))
                   (eq (plist-get args :filtered-candidate-transformer)
                       'helm-ff-sort-candidates)
                   (eq (plist-get args :persistent-action)
