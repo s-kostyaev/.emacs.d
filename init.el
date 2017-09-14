@@ -298,6 +298,13 @@
       (require 'go-playground)
       (require 'go-eldoc)
       (require 'godoctor)
+      (defun my-go-gen-tests()
+        "Generate tests for exported functions of current file."
+        (interactive)
+        (message "%s"
+                 (shell-command-to-string
+                  (format "gotests -w -exported %s" (buffer-file-name))))
+        (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)
@@ -305,6 +312,7 @@
       (add-hook 'before-save-hook #'gofmt-before-save)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
+      (local-set-key (kbd "C-c C-g") #'my-go-gen-tests)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
                                '("go-langserver" "-mode=stdio")

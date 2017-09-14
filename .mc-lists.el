@@ -11,9 +11,11 @@
         completion-at-point
         composable-comment-or-uncomment-region
         composable-kill-region
+        composable-save-region
         dabbrev-completion
         electric-newline-and-maybe-indent
         erlang-electric-comma
+        forward-sexp
         go-mode-insert-and-indent
         hungry-delete-backward
         hungry-delete-forward
