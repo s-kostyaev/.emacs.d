@@ -277,6 +277,14 @@
   :config
   (global-flycheck-mode))
 
+(defun my-go-gen-tests()
+  "Generate tests for exported functions of current file."
+  (interactive)
+  (message "%s"
+           (shell-command-to-string
+            (format "gotests -w -exported %s" (buffer-file-name))))
+  (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
+
 (use-package go-mode
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
@@ -298,13 +306,6 @@
       (require 'go-playground)
       (require 'go-eldoc)
       (require 'godoctor)
-      (defun my-go-gen-tests()
-        "Generate tests for exported functions of current file."
-        (interactive)
-        (message "%s"
-                 (shell-command-to-string
-                  (format "gotests -w -exported %s" (buffer-file-name))))
-        (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)
