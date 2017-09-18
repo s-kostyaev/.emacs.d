@@ -3,6 +3,7 @@
 
 (setq mc/cmds-to-run-for-all
       '(
+        backward-sexp
         c-electric-semi&comma
         comment-dwim-line
         company-abort
