@@ -277,12 +277,29 @@
   :config
   (global-flycheck-mode))
 
+(defconst my-go-function-regexp "^func \\(([^()]*)\\)?\s*\\(\[A-Za-z0-9_]+\\)\s*\\(([^()]*)\\)")
+
+(defun my-go-functions (start end)
+  "Create list of go functions defined between START & END."
+  (interactive "r")
+  (save-excursion
+    (save-match-data
+      (goto-char start)
+      (let ((functions nil))
+        (while (search-forward-regexp my-go-function-regexp end t)
+          (push (match-string-no-properties 2) functions))
+        functions))))
+
 (defun my-go-gen-tests()
   "Generate tests for exported functions of current file."
   (interactive)
   (message "%s"
            (shell-command-to-string
-            (format "gotests -w -exported %s" (buffer-file-name))))
+            (if (region-active-p)
+                (format "gotests -w -only %s %s"
+                        (s-join "|" (my-go-functions (region-beginning) (region-end)))
+                        (buffer-file-name))
+              (format "gotests -w -exported %s" (buffer-file-name)))))
   (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
 
 (use-package go-mode
