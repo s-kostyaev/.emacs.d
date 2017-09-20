@@ -297,7 +297,8 @@
            (shell-command-to-string
             (if (region-active-p)
                 (format "gotests -w -only %s %s"
-                        (s-join "|" (my-go-functions (region-beginning) (region-end)))
+                        (shell-quote-argument
+                         (s-join "|" (my-go-functions (region-beginning) (region-end))))
                         (buffer-file-name))
               (format "gotests -w -exported %s" (buffer-file-name)))))
   (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
