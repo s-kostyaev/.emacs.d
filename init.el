@@ -1691,6 +1691,8 @@ the CLI and emacs interface."))
 (setq org-plantuml-jar-path
       (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
 
+(put 'upcase-region 'disabled nil)
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
