@@ -1681,6 +1681,7 @@ the CLI and emacs interface."))
     (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
+  (setq ace-isearch-use-jump nil)
   (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
   (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev))
 
