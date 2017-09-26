@@ -72,8 +72,8 @@
   ;; (load-theme 'spacemacs-dark t)
   ;; (require 'solarized)
   ;; (load-theme 'solarized-light t)
-  (require 'spacemacs-light-theme)
-  (load-theme 'spacemacs-light t)
+  ;; (require 'spacemacs-light-theme)
+  ;; (load-theme 'spacemacs-light t)
   (require 'smart-mode-line)
   (smart-mode-line-enable)
   ;; (require 'spaceline)
@@ -1692,6 +1692,14 @@ the CLI and emacs interface."))
       (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
 
 (put 'upcase-region 'disabled nil)
+
+(use-package circadian
+  :config
+  (require 'spacemacs-light-theme)
+  (require 'spacemacs-dark-theme)
+  (setq circadian-themes '(("8:00" . spacemacs-light)
+                           ("21:00" . spacemacs-dark)))
+  (circadian-setup))
 
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
