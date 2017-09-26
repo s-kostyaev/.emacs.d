@@ -1701,6 +1701,10 @@ the CLI and emacs interface."))
                            ("21:00" . spacemacs-dark)))
   (circadian-setup))
 
+(use-package comment-tags
+  :config
+  (add-hook 'prog-mode-hook #'comment-tags-mode))
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
