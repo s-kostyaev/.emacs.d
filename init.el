@@ -53,11 +53,6 @@
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
-(use-package
-  smart-mode-line
-  :functions
-  (smart-mode-line-enable))
-
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (interactive)
@@ -464,18 +459,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 ;; Clojure
 
-(declare-function cider-turn-on-eldoc-mode "ext:cider")
-(add-hook 'cider-mode-hook #'cider-turn-on-eldoc-mode)
-(defvar nrepl-hide-special-buffers)
-(setq nrepl-hide-special-buffers t)
-(defvar cider-repl-print-length)
-(setq cider-repl-print-length 100) ; the default is nil, no limit
-;; (set cider-repl-result-prefix ";; => ")
-;; (set cider-interactive-eval-result-prefix ";; => ")
-(defvar cider-repl-wrap-history)
-(setq cider-repl-wrap-history t)
-(defvar cider-repl-history-size)
-(setq cider-repl-history-size 1000) ; the default is 500
+;; (declare-function cider-turn-on-eldoc-mode "ext:cider")
+;; (add-hook 'cider-mode-hook #'cider-turn-on-eldoc-mode)
+;; (defvar nrepl-hide-special-buffers)
+;; (setq nrepl-hide-special-buffers t)
+;; (defvar cider-repl-print-length)
+;; (setq cider-repl-print-length 100) ; the default is nil, no limit
+;; ;; (set cider-repl-result-prefix ";; => ")
+;; ;; (set cider-interactive-eval-result-prefix ";; => ")
+;; (defvar cider-repl-wrap-history)
+;; (setq cider-repl-wrap-history t)
+;; (defvar cider-repl-history-size)
+;; (setq cider-repl-history-size 1000) ; the default is 500
 
 (setq browse-url-browser-function #'browse-url-chromium)
 
@@ -696,11 +691,11 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (delete-selection-mode)
 
 (use-package multiple-cursors
-  :defer 2
+  :defer 3
   :after ivy
   :chords ("fm" . multiple-cursors-hydra/body)
   :functions
-  (my-mc-prompt-once my-mc-prompt-once-advice)
+  ;; (my-mc-prompt-once my-mc-prompt-once-advice)
   :config
   (progn
     (require 'hydra)
@@ -733,15 +728,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
   ("j" ace-mc-add-multiple-cursors :exit t)
   ("k" ace-mc-add-single-cursor :exit t)
   ("q" nil))
-(defun my-mc-prompt-once-advice (fn &rest args) ; needs lexical-binding!
-  "Make FN prompt only once with ARGS and multiple cursors."
-  (setq mc--this-command (lambda () (interactive) (apply fn args)))
-  (apply fn args))
+;; (defun my-mc-prompt-once-advice (fn &rest args) ; needs lexical-binding!
+;;   "Make FN prompt only once with ARGS and multiple cursors."
+;;   (setq mc--this-command (lambda () (interactive) (apply fn args)))
+;;   (apply fn args))
 
-(defun my-mc-prompt-once (&rest fns)
-  "Make FNS prompt only once with multiple cursors."
-  (dolist (fn fns)
-    (advice-add fn :around #'my-mc-prompt-once-advice)))
+;; (defun my-mc-prompt-once (&rest fns)
+;;   "Make FNS prompt only once with multiple cursors."
+;;   (dolist (fn fns)
+;;     (advice-add fn :around #'my-mc-prompt-once-advice)))
 
 ;; (defvar ivy-completion-beg)
 ;; (defvar ivy-completion-end)
@@ -758,7 +753,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;     (ivy-read "company cand: " company-candidates
 ;;               :action #'ivy-completion-in-region-action)))
 
-(my-mc-prompt-once 'my-counsel-company #'helm-company)))
+;; (my-mc-prompt-once 'my-counsel-company #'helm-company)
+))
 
 (declare-function check-expansion "ext:config")
 (declare-function company-complete-common "ext:company")
@@ -1174,9 +1170,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (load "company-erlang-autoloads"))
 
     (use-package ivy-erlang-complete
-      :defer t
-      :init
-      (load "company-erlang-autoloads"))
+      :defer t)
 
     (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
     (defun my-format-erlang-record ()
@@ -1252,7 +1246,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
      xah-lookup-browser-function)))
 
 (use-package cmake-ide
-  :defer 2
+  :defer 3
   :config
   (use-package rtags
     :functions (rtags-eldoc
@@ -1376,7 +1370,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (composable-mark-mode)))
 
 (use-package ibuffer-vc
-  :defer 2
+  :defer 3
   :config (add-hook 'ibuffer-hook
                     (lambda ()
                       (ibuffer-vc-set-filter-groups-by-vc-root)
@@ -1385,6 +1379,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :bind* ("C-x C-b" . ibuffer))
 
 (use-package counsel-dash
+  :disabled t
   :defer 2
   :config
   (defun url-copy-file (url newname &optional _ok-if-already-exists

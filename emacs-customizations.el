@@ -42,7 +42,6 @@
  '(gofmt-command "goimports")
  '(helm-M-x-always-save-history t)
  '(helm-M-x-fuzzy-match t)
- '(helm-adaptive-mode t nil (helm-adaptive))
  '(helm-buffers-fuzzy-matching t)
  '(helm-completion-in-region-fuzzy-match t)
  '(helm-file-cache-fuzzy-match t)
