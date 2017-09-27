@@ -66,6 +66,8 @@
   ;; (load-theme 'solarized-light t)
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
+  (require 'circadian)
+  (circadian-activate-latest-theme)
   (require 'smart-mode-line)
   (smart-mode-line-enable)
   (tool-bar-mode -1)
@@ -741,20 +743,20 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (dolist (fn fns)
     (advice-add fn :around #'my-mc-prompt-once-advice)))
 
-(defvar ivy-completion-beg)
-(defvar ivy-completion-end)
-(defun my-counsel-company ()
-  "Complete using `company-candidates'."
-  (interactive)
-  (company-mode 1)
-  (unless company-candidates
-    (company-other-backend))
-  (when company-point
-    (when (looking-back company-prefix (line-beginning-position))
-      (setq ivy-completion-beg (match-beginning 0))
-      (setq ivy-completion-end (match-end 0)))
-    (ivy-read "company cand: " company-candidates
-              :action #'ivy-completion-in-region-action)))
+;; (defvar ivy-completion-beg)
+;; (defvar ivy-completion-end)
+;; (defun my-counsel-company ()
+;;   "Complete using `company-candidates'."
+;;   (interactive)
+;;   (company-mode 1)
+;;   (unless company-candidates
+;;     (company-other-backend))
+;;   (when company-point
+;;     (when (looking-back company-prefix (line-beginning-position))
+;;       (setq ivy-completion-beg (match-beginning 0))
+;;       (setq ivy-completion-end (match-end 0)))
+;;     (ivy-read "company cand: " company-candidates
+;;               :action #'ivy-completion-in-region-action)))
 
 (my-mc-prompt-once 'my-counsel-company #'helm-company)))
 
@@ -798,6 +800,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package ivy
   :bind* ("C-c s k" . ivy-resume)
   :defines (ivy-completion-beg ivy-completion-end)
+  :functions (ivy-completion-in-region-action)
   :config
   (progn
     (setq ivy-initial-inputs-alist nil)
