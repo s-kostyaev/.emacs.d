@@ -46,6 +46,7 @@
  '(helm-buffers-fuzzy-matching t)
  '(helm-completion-in-region-fuzzy-match t)
  '(helm-file-cache-fuzzy-match t)
+ '(helm-grep-file-path-style (quote relative))
  '(helm-lisp-fuzzy-completion t)
  '(helm-locate-command "locate %s -e -A --regex %s")
  '(helm-mode t)
