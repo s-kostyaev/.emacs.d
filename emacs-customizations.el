@@ -53,6 +53,7 @@
  '(helm-recentf-fuzzy-match t)
  '(helm-session-fuzzy-match t)
  '(helm-swoop-pre-input-function (lambda nil nil))
+ '(helm-echo-input-in-header-line t)
  '(mail-envelope-from (quote header))
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from (quote header))
