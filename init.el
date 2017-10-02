@@ -1617,7 +1617,7 @@ the CLI and emacs interface."))
   "Replace java decimals to regular floats."
   (interactive)
   (goto-char (point-min))
-  (while (search-forward-regexp "[0-9]+E[+-][0-9]+" (point-max) t)
+  (while (search-forward-regexp "[0-9.]+E[+-][0-9]+" (point-max) t)
     (shell-command-on-region
      (match-beginning 0) (match-end 0)
      (concat "LC_NUMERIC=C printf \"%'.3f\" " (match-string 0)) (buffer-file-name) t)))
