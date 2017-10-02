@@ -1599,6 +1599,7 @@ the CLI and emacs interface."))
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((plantuml . t)))
+(defvar org-plantuml-jar-path)
 (setq org-plantuml-jar-path
       (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
 
