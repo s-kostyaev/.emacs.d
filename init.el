@@ -860,11 +860,44 @@ the end of the line, then comment current line.  Replaces default behaviour of
    ([tab] . helm-select-action))
   :init
   (progn
+    (setq helm-source-grep (helm-build-dummy-source "init_grep" :follow 1))
+    (add-hook 'helm-before-initialize-hook
+              (lambda () (helm-attrset 'follow 1 helm-source-grep)))
     (load "helm-autoloads"))
   :config
   (use-package helm-swoop
     :defines helm-swoop-map
-    :functions (helm-swoop))
+    :functions (helm-swoop)
+    :config
+    (defvar my-compressed-file-regex
+      (progn
+        (require 'jka-compr nil t)
+        (jka-compr-build-file-regexp))
+      "Store the regex for compressed file names.")
+    (defvar my-swoop-limit 300000
+      "When the buffer is larger than this, use `my-helm-rg' instead of `helm-swoop'.")
+    (require 'helm-grep)
+    (defun helm-swoop-or-grep ()
+      "Call `helm-swoop' for small buffers and `helm-do-grep' for large ones."
+      (interactive)
+      (let ((fname (buffer-file-name)))
+        (if (and fname
+                 (not (buffer-narrowed-p))
+                 (not (ignore-errors
+                        (file-remote-p fname)))
+                 (not (string-match
+                       my-compressed-file-regex
+                       fname))
+                 (> (buffer-size)
+                    (if (eq major-mode 'org-mode)
+                        (/ my-swoop-limit 4)
+                      my-swoop-limit)))
+            (progn
+              (when (file-writable-p fname)
+                (save-buffer))
+              (let ((input isearch-string))
+                (helm-do-grep-1 (list (buffer-file-name)) nil nil nil nil input)))
+          (helm-swoop)))))
   (require 'helm-config)
   (helm-mode +1)
   (require 'helm-fuzzier)
@@ -1591,6 +1624,7 @@ the CLI and emacs interface."))
     (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
+  (setq ace-isearch-function-from-isearch 'helm-swoop-or-grep)
   (setq ace-isearch-use-jump nil)
   (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
   (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev))
