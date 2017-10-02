@@ -1613,6 +1613,15 @@ the CLI and emacs interface."))
                            ("21:00" . spacemacs-dark)))
   (circadian-setup))
 
+(defun my-format-decimal ()
+  "Replace java decimals to regular floats."
+  (interactive)
+  (goto-char (point-min))
+  (while (search-forward-regexp "[0-9]+E[+-][0-9]+" (point-max) t)
+    (shell-command-on-region
+     (match-beginning 0) (match-end 0)
+     (concat "LC_NUMERIC=C printf \"%'.3f\" " (match-string 0)) (buffer-file-name) t)))
+
 (use-package comment-tags
   :config
   (add-hook 'prog-mode-hook #'comment-tags-mode))
