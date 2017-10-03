@@ -528,7 +528,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package js2-mode
   :mode
   (("\\.js$" . js2-mode)
-   ("\\.json$" . js2-jsx-mode))
+   ("\\.json$" . js-mode))
   :bind (:map js2-mode-map
               ("C-c C-l" . indium-eval-buffer))
   :config
