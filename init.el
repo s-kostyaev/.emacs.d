@@ -264,13 +264,12 @@
 (defun my-go-functions (start end)
   "Create list of go functions defined between START & END."
   (interactive "r")
-  (save-excursion
-    (save-match-data
-      (goto-char start)
-      (let ((functions nil))
-        (while (search-forward-regexp my-go-function-regexp end t)
-          (push (match-string-no-properties 2) functions))
-        functions))))
+  (save-match-data
+    (goto-char start)
+    (let ((functions nil))
+      (while (search-forward-regexp my-go-function-regexp end t)
+        (push (match-string-no-properties 2) functions))
+      functions)))
 
 (defun my-go-gen-tests()
   "Generate tests for exported functions of current file."
