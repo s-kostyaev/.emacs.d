@@ -909,7 +909,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
           (helm-make-source "Occur" 'helm-source-multi-occur
             :follow 1)))
 
-  (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number %s %s %s")
+  (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number -M 150 %s %s %s")
   (defun helm-ido-like-find-files-up-one-level-maybe ()
     (interactive)
     (if (looking-back "/" 1)
