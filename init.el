@@ -873,7 +873,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
                 (save-buffer))
               (let ((input isearch-string))
                 (helm-do-grep-1 (list (buffer-file-name)) nil nil nil nil input)))
-          (helm-swoop)))))
+          (helm-swoop-from-isearch)))))
   (require 'helm-config)
   (helm-mode +1)
   (require 'helm-fuzzier)
