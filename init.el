@@ -352,11 +352,6 @@
 (global-set-key [M-up] #'windmove-up)              ; move to upper window
 (global-set-key [M-down] #'windmove-down)          ; move to downer window
 
-
-;; http://emacs-fu.blogspot.com/2008/12/cycling-through-your-buffers-with-ctrl.html
-;; cycle through buffers with Ctrl-Tab (like Firefox)
-(global-set-key (kbd "<C-tab>") #'bury-buffer)
-
 (put 'downcase-region 'disabled nil)
 
 ;;; Python mode
