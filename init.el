@@ -382,34 +382,15 @@
   (local-set-key (kbd "<backtab>") #'py-shift-left))
 (add-hook 'python-mode-hook #'my-python-hook)
 
-;;; Octave mode
-;; (autoload 'octave-mode "octave-mod" nil t)
-;;           ;(setq auto-mode-alist
-;;           ;      (cons '("\\.m$" . octave-mode) auto-mode-alist))
-;; (add-to-list 'auto-mode-alist '("\\.m$" . octave-mode))
-;; ;; to turn on the abbrevs, auto-fill and font-lock features automatically
-;;        (add-hook 'octave-mode-hook
-;;          (lambda ()
-;;          (abbrev-mode 1)
-;;          (auto-fill-mode 1)
-;;          (if (eq window-system 'x)
-;;           (font-lock-mode 1))))
-
-;; ;; And finally, inferior-octave-mode-hook is run after starting the process
-;;     ;; and putting its buffer into Inferior Octave mode. Hence, if you like
-;;     ;; the up and down arrow keys to behave in the interaction buffer as in
-;;     ;; the shell, and you want this buffer to use nice colors:
-
-;;        (add-hook 'inferior-octave-mode-hook
-;;          (lambda ()
-;;            (turn-on-font-lock)
-;;            (define-key inferior-octave-mode-map [up]
-;;              'comint-previous-input)
-;;            (define-key inferior-octave-mode-map [down]
-;;              'comint-next-input)))
-;; ;; run an inferior Octave process in a special Emacs buffer
-;;        (autoload 'run-octave "octave-inf" nil t)
-
+(use-package octave-mode
+  :mode "\\.m$"
+  :defines (octave-mode-map)
+  :init
+  (defun my-octave-hook ()
+    "My hook for octave."
+    (interactive)
+    (local-set-key (kbd "C-c C-z") #'run-octave))
+  (add-hook 'octave-mode-hook 'my-octave-hook))
 
 ;;; Auto-complete
 ;; (require 'company)
