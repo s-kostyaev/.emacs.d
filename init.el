@@ -869,6 +869,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     :defines helm-swoop-map
     :functions (helm-swoop)
     :config
+    (add-hook 'after-revert-hook #'helm-swoop--clear-cache)
     (defvar my-compressed-file-regex
       (progn
         (require 'jka-compr nil t)
