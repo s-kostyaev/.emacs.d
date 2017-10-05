@@ -284,6 +284,8 @@
               (format "gotests -w -exported %s" (buffer-file-name)))))
   (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
 
+(fset 'go-insert-struct-field-macro
+      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([25 32 96 106 115 111 110 58 34 25 6 32 98 115 111 110 58 34 25 1 6 67108896 6 134217848 117 112 99 97 115 101 45 114 101 103 105 111 110 13 134217734 32] 0 "%d")) arg)))
 (use-package go-mode
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
@@ -306,11 +308,13 @@
       (require 'go-playground)
       (require 'go-eldoc)
       (require 'godoctor)
+      (require 'go-rename)
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
+      (local-set-key (kbd "<f5>") #'go-insert-struct-field-macro)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "C-c C-g") #'my-go-gen-tests)
