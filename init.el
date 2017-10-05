@@ -309,6 +309,9 @@
       (require 'go-eldoc)
       (require 'godoctor)
       (require 'go-rename)
+      (require 'go-add-tags)
+      (custom-set-variables
+       '(go-add-tags-style 'lower-camel-case))
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)
@@ -317,6 +320,7 @@
       (local-set-key (kbd "<f5>") #'go-insert-struct-field-macro)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
+      (local-set-key (kbd "C-c t") #'go-add-tags)
       (local-set-key (kbd "C-c C-g") #'my-go-gen-tests)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (if (buffer-file-name) (lsp-mode))
