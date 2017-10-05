@@ -282,7 +282,11 @@
                          (s-join "|" (my-go-functions (region-beginning) (region-end))))
                         (buffer-file-name))
               (format "gotests -w -exported %s" (buffer-file-name)))))
-  (find-file-other-window (format "%s_test.go" (file-name-base (buffer-file-name)))))
+  (deactivate-mark)
+  (if (s-suffix-p "_test.go" (buffer-file-name))
+      (revert-buffer nil t)
+    (find-file-other-window
+     (format "%s_test.go" (file-name-base (buffer-file-name))))))
 
 (fset 'go-insert-struct-field-macro
       (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([25 32 96 106 115 111 110 58 34 25 6 32 98 115 111 110 58 34 25 1 6 67108896 6 134217848 117 112 99 97 115 101 45 114 101 103 105 111 110 13 134217734 32] 0 "%d")) arg)))
