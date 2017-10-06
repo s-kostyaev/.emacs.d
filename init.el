@@ -321,8 +321,6 @@
       (require 'godoctor)
       (require 'go-rename)
       (require 'go-add-tags)
-      (custom-set-variables
-       '(go-add-tags-style 'lower-camel-case))
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)

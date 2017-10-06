@@ -37,6 +37,7 @@
     (text-mode markdown-mode rst-mode gfm-mode web-mode)))
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
+ '(go-add-tags-style (quote lower-camel-case))
  '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
  '(gofmt-command "goimports")
