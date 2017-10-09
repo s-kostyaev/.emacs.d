@@ -314,7 +314,19 @@
       (require 'lsp-mode)
       (require 'lsp-go)
       (require 'flycheck-gometalinter)
-      (require 'go-direx)
+      (use-package go-direx
+        :config
+        (defun my-kill-prev-buf (_)
+          "Kill current buffer."
+          (interactive)
+          (kill-buffer (caar (window-prev-buffers))))
+        (defun my-direx-hook()
+          "My hook for direx."
+          (interactive)
+          (local-set-key (kbd "s") #'helm-swoop)
+          (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
+          (advice-add 'direx:find-item :after 'my-kill-prev-buf))
+        (add-hook 'direx:direx-mode-hook 'my-direx-hook))
       (require 'gotest)
       (require 'go-playground)
       (require 'go-eldoc)
