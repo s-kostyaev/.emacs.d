@@ -318,7 +318,6 @@
       (require 'company-go)
       (require 'go-impl)
       (require 'lsp-mode)
-      (require 'lsp-go)
       (require 'flycheck-gometalinter)
       (use-package go-direx
         :config
@@ -350,6 +349,9 @@
       (local-set-key (kbd "C-c t") #'go-add-tags)
       (local-set-key (kbd "C-c C-g") #'my-go-gen-tests)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
+      (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
+                               '("go-langserver" "-mode=stdio")
+                               :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
       (if (buffer-file-name) (lsp-mode))
       (go-eldoc-setup)
       (local-set-key (kbd "C-h C-d") #'godoc-at-point)
