@@ -1032,6 +1032,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :bind ("M-i" . imenu))
 
 (use-package projectile
+  :disabled t
   :defer 1
   :config
   (progn
