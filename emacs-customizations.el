@@ -16,6 +16,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(arch-packer-default-command "pacaur")
+ '(blink-cursor-mode nil)
  '(browse-url-browser-function (quote browse-url-chromium))
  '(byte-compile-warnings
    (quote
