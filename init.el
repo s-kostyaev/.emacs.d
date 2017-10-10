@@ -18,28 +18,34 @@
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 ;; Add the macro generated list of package.el loadpaths to load-path.
-(mapc #'(lambda (add) (add-to-list 'load-path add))
-      (eval-when-compile
-        (require 'package)
-        (package-initialize)
-        ;; Install use-package if not installed yet.
-        (unless (package-installed-p 'use-package)
-          (package-refresh-contents)
-          (package-install 'use-package))
-        ;; (require 'use-package)
-        (let ((package-user-dir-real (file-truename package-user-dir)))
-          ;; The reverse is necessary, because outside we mapc
-          ;; add-to-list element-by-element, which reverses.
-          (nreverse (apply #'nconc
-                           ;; Only keep package.el provided loadpaths.
-                           (mapcar #'(lambda (path)
-                                       (if (string-prefix-p package-user-dir-real path)
-                                           (list path)
-                                         nil))
-                                   load-path))))))
+;; (mapc #'(lambda (add) (add-to-list 'load-path add))
+;;       (eval-when-compile
+;;         (require 'package)
+;;         (package-initialize)
+;;         ;; Install use-package if not installed yet.
+;;         (unless (package-installed-p 'use-package)
+;;           (package-refresh-contents)
+;;           (package-install 'use-package))
+;;         ;; (require 'use-package)
+;;         (let ((package-user-dir-real (file-truename package-user-dir)))
+;;           ;; The reverse is necessary, because outside we mapc
+;;           ;; add-to-list element-by-element, which reverses.
+;;           (nreverse (apply #'nconc
+;;                            ;; Only keep package.el provided loadpaths.
+;;                            (mapcar #'(lambda (path)
+;;                                        (if (string-prefix-p package-user-dir-real path)
+;;                                            (list path)
+;;                                          nil))
+;;                                    load-path))))))
 
 ;; (require 'package)
 ;; (package-initialize)
+(require 'package)
+(package-initialize)
+;; Install use-package if not installed yet.
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
@@ -1603,6 +1609,7 @@ the CLI and emacs interface."))
   :commands (pass))
 
 (use-package paradox
+  :disabled t
   :commands (paradox-list-packages))
 
 (eval-after-load 'dash '(dash-enable-font-lock))
