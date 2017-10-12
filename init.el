@@ -69,8 +69,8 @@
   ;; (load-theme 'spacemacs-light t)
   (require 'circadian)
   (circadian-activate-latest-theme)
-  (require 'smart-mode-line)
-  (smart-mode-line-enable)
+  ;; (require 'smart-mode-line)
+  ;; (smart-mode-line-enable)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
@@ -151,6 +151,52 @@
 
 ;; (add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
 
+(setq-default mode-line-format
+              (list
+               "["
+               ;; was this buffer modified since the last save?
+               '(:eval (when (buffer-modified-p)
+                         (propertize "*"
+                                     'face 'font-lock-warning-face
+                                     'help-echo "Buffer has been modified")))
+
+               ;; is this buffer read-only?
+               '(:eval (when buffer-read-only
+                         (propertize "RO"
+                                     'face 'font-lock-type-face
+                                     'help-echo "Buffer is read-only")))
+               "] "
+
+               ;; the buffer name; the file name as a tool tip
+               '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+                                   'help-echo (buffer-file-name)))
+
+               ;; line and column
+               ;; "(" ;; '%02' to set to 2 chars at least; prevents flickering
+               (propertize "%02l" 'face 'font-lock-type-face) ":"
+               (propertize "%02c" 'face 'font-lock-type-face)
+               ;; ") "
+
+               ;; the current major mode for the buffer.
+               "        ["
+
+               '(:eval (propertize "%m" 'face 'font-lock-string-face
+                                   'help-echo buffer-file-coding-system))
+               "] "
+
+               ;; Flycheck errors
+
+               '(:eval (flycheck-mode-line-status-text))
+
+               ;; relative position, size of file
+               "    ["
+               (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+               "/"
+               (propertize "%I" 'face 'font-lock-constant-face) ;; size
+               "] "
+
+               ))
+
 ;; to setup tabs
 (defvar c-basic-indent)
 (setq c-basic-indent 4)
@@ -176,6 +222,12 @@
 
 (advice-add 'scroll-up-line :before 'my-scroll-hook)
 (advice-add 'scroll-down-line :before 'my-scroll-hook)
+(if (> emacs-major-version 25)
+    (progn
+      (pixel-scroll-mode)
+      (setq pixel-resolution-fine-flag nil)
+      (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
+      (advice-add 'pixel-scroll-up :before 'my-scroll-hook)))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
@@ -1602,6 +1654,7 @@ the CLI and emacs interface."))
   :commands (password-store-get))
 
 (use-package rich-minority
+  :disabled t
   :demand t
   :config
   (progn
