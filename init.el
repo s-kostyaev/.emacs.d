@@ -177,6 +177,15 @@
                (propertize "%02c" 'face 'font-lock-type-face)
                ;; ") "
 
+               "        "
+               '(:eval (when (stringp vc-mode)
+                         (let ((noback (replace-regexp-in-string (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode)))
+                           (setq vc-mode
+                                 (propertize vc-mode
+                                             'face  (cond ((string-match "^ -" noback)    'font-lock-keyword-face)
+                                                          ((string-match "^ [:@]" noback) 'font-lock-warning-face)
+                                                          ((string-match "^ [!\\?]" noback) 'font-lock-warning-face)))))))
+
                ;; the current major mode for the buffer.
                "        ["
 
