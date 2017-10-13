@@ -42,10 +42,6 @@
 ;; (package-initialize)
 (require 'package)
 (package-initialize)
-;; Install use-package if not installed yet.
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
@@ -69,8 +65,6 @@
   ;; (load-theme 'spacemacs-light t)
   (require 'circadian)
   (circadian-activate-latest-theme)
-  ;; (require 'smart-mode-line)
-  ;; (smart-mode-line-enable)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
