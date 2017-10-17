@@ -225,12 +225,12 @@
 
 (advice-add 'scroll-up-line :before 'my-scroll-hook)
 (advice-add 'scroll-down-line :before 'my-scroll-hook)
-(if (> emacs-major-version 25)
-    (progn
-      (pixel-scroll-mode)
-      (setq pixel-resolution-fine-flag nil)
-      (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
-      (advice-add 'pixel-scroll-up :before 'my-scroll-hook)))
+;; (if (> emacs-major-version 25)
+;;     (progn
+;;       (pixel-scroll-mode)
+;;       (setq pixel-resolution-fine-flag nil)
+;;       (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
+;;       (advice-add 'pixel-scroll-up :before 'my-scroll-hook)))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
