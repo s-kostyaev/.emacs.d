@@ -1436,6 +1436,15 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar ensime-startup-notification)
 (setq ensime-startup-notification nil)
 
+(defun my-java-hook ()
+  "My java hook."
+  (interactive)
+  (require 'meghanada)
+  (meghanada-mode t)
+  (add-hook 'before-save-hook 'meghanada-code-beautify-before-save))
+
+(add-hook 'java-mode-hook #'my-java-hook)
+
 ;;; Ace link
 (use-package ace-link
   :defer 0.1
