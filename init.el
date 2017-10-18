@@ -1441,6 +1441,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (interactive)
   (require 'meghanada)
   (meghanada-mode t)
+  (local-set-key (kbd "M-?") #'meghanada-reference)
   (add-hook 'before-save-hook 'meghanada-code-beautify-before-save))
 
 (add-hook 'java-mode-hook #'my-java-hook)
