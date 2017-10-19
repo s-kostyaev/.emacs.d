@@ -419,7 +419,7 @@
   (interactive)
   (require 'company-lsp)
   (add-to-list 'company-backends 'company-lsp))
-(add-hook 'lsp-after-diagnostics-hook #'my-lsp-hook)
+(add-hook 'lsp-after-initialize-hook #'my-lsp-hook)
 
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
