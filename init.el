@@ -1413,6 +1413,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar ensime-startup-notification)
 (setq ensime-startup-notification nil)
 
+(declare-function meghanada-reference "ext:meghanada")
 (defun my-java-hook ()
   "My java hook."
   (interactive)
