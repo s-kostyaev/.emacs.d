@@ -320,35 +320,6 @@
   :config
   (global-flycheck-mode))
 
-(defconst my-go-function-regexp "^func \\(([^()]*)\\)?\s*\\(\[A-Za-z0-9_]+\\)\s*\\(([^()]*)\\)")
-
-(defun my-go-functions (start end)
-  "Create list of go functions defined between START & END."
-  (interactive "r")
-  (save-match-data
-    (goto-char start)
-    (let ((functions nil))
-      (while (search-forward-regexp my-go-function-regexp end t)
-        (push (match-string-no-properties 2) functions))
-      functions)))
-
-(defun my-go-gen-tests()
-  "Generate tests for exported functions of current file."
-  (interactive)
-  (message "%s"
-           (shell-command-to-string
-            (if (region-active-p)
-                (format "gotests -w -only %s %s"
-                        (shell-quote-argument
-                         (s-join "|" (my-go-functions (region-beginning) (region-end))))
-                        (buffer-file-name))
-              (format "gotests -w -exported %s" (buffer-file-name)))))
-  (deactivate-mark)
-  (if (s-suffix-p "_test.go" (buffer-file-name))
-      (revert-buffer nil t)
-    (find-file-other-window
-     (format "%s_test.go" (file-name-base (buffer-file-name))))))
-
 (defun go-insert-struct-field-macro (&optional arg)
   "Keyboard macro for insert ARG field in go struct."
   (interactive "p")
@@ -393,6 +364,8 @@
       (require 'godoctor)
       (require 'go-rename)
       (require 'go-add-tags)
+      (require 'lsp-go)
+      (lsp-go-enable)
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       (flycheck-gometalinter-setup)
@@ -404,9 +377,6 @@
       (local-set-key (kbd "C-c t") #'go-add-tags)
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
-                               '("go-langserver" "-mode=stdio")
-                               :ignore-regexps '("^langserver-go: reading on stdin, writing on stdout$"))
       (if (buffer-file-name) (lsp-mode))
       (go-eldoc-setup)
       (local-set-key (kbd "C-h C-d") #'godoc-at-point)
