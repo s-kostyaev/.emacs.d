@@ -402,7 +402,7 @@
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "C-c t") #'go-add-tags)
-      (local-set-key (kbd "C-c C-g") #'my-go-gen-tests)
+      (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (lsp-define-stdio-client 'go-mode "go" 'stdio #'(lambda () default-directory) "Go Language Server"
                                '("go-langserver" "-mode=stdio")
