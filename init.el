@@ -332,7 +332,7 @@
 (use-package go-mode
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
-                              godoc-at-point goimports)
+                              godoc-at-point goimports lsp-go-enable)
   :defines (company-begin-commands company-backends flycheck-gometalinter-deadline)
   :config
   (progn
