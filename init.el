@@ -1770,10 +1770,10 @@ the CLI and emacs interface."))
              (currently-using-underscores-p (progn (goto-char start)
                                                    (re-search-forward "_" end t))))
         (if currently-using-underscores-p
-            (progn
-              (upcase-initials-region start end)
-              (replace-string "_" "" nil start end)
-              (downcase-region start (1+ start)))
+            (let ((res (mapconcat 'capitalize (split-string (buffer-substring-no-properties start end) "_") "")))
+              (progn
+                (kill-region start end)
+                (insert res)))
           (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
           (downcase-region start (cdr (bounds-of-thing-at-point 'symbol))))))))
 
