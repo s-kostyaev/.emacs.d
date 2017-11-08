@@ -1759,6 +1759,24 @@ the CLI and emacs interface."))
      (match-beginning 0) (match-end 0)
      (concat "LC_NUMERIC=C printf \"%'.3f\" " (match-string 0)) (buffer-file-name) t)))
 
+(defun my-toggle-camelcase-underscores ()
+  "Toggle between camelcase and underscore notation for the symbol at point."
+  (interactive)
+  (save-excursion
+    (ignore-errors
+      (let* ((bounds (bounds-of-thing-at-point 'symbol))
+             (start (car bounds))
+             (end (cdr bounds))
+             (currently-using-underscores-p (progn (goto-char start)
+                                                   (re-search-forward "_" end t))))
+        (if currently-using-underscores-p
+            (progn
+              (upcase-initials-region start end)
+              (replace-string "_" "" nil start end)
+              (downcase-region start (1+ start)))
+          (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
+          (downcase-region start (cdr (bounds-of-thing-at-point 'symbol))))))))
+
 (use-package comment-tags
   :config
   (add-hook 'prog-mode-hook #'comment-tags-mode))
