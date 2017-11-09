@@ -1774,7 +1774,7 @@ the CLI and emacs interface."))
               (progn
                 (kill-region start end)
                 (insert res)))
-          (replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
+          (funcall-interactively replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
           (downcase-region start (cdr (bounds-of-thing-at-point 'symbol))))))))
 
 (use-package comment-tags
