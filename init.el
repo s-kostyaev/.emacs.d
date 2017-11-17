@@ -422,12 +422,12 @@
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
-;; (defun my-lsp-hook ()
-;;   "Hook for lsp-mode."
-;;   (interactive)
-;;   (require 'company-lsp)
-;;   (add-to-list 'company-backends 'company-lsp))
-;; (add-hook 'lsp-after-initialize-hook #'my-lsp-hook)
+(defun my-lsp-hook ()
+  "Hook for lsp-mode."
+  (interactive)
+  (require 'company-lsp)
+  (add-to-list 'company-backends 'company-lsp))
+(add-hook 'lsp-after-initialize-hook #'my-lsp-hook)
 
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)

@@ -42,6 +42,8 @@
  '(go-add-tags-style (quote lower-camel-case))
  '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
+ '(godoc-command "godoc")
+ '(godoc-use-completing-read t)
  '(gofmt-command "goimports")
  '(helm-M-x-always-save-history t)
  '(helm-M-x-fuzzy-match t)
