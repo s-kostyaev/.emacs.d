@@ -777,7 +777,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :defer 3
   :after ivy
   :chords ("fm" . multiple-cursors-hydra/body)
-  :functions
+  ;; :functions
   ;; (my-mc-prompt-once my-mc-prompt-once-advice)
   :config
   (progn
