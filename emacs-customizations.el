@@ -40,6 +40,7 @@
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
  '(go-add-tags-style (quote lower-camel-case))
+ '(go-packages-function (quote go-packages-go-list))
  '(go-test-verbose t)
  '(godoc-at-point-function (quote godoc-gogetdoc))
  '(godoc-command "godoc")
