@@ -370,7 +370,7 @@
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
                               godoc-at-point goimports lsp-go-enable)
-  :defines (company-begin-commands company-backends flycheck-gometalinter-deadline)
+  :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args)
   :config
   (progn
     (setenv "GOPATH" "/home/feofan/go")
@@ -402,6 +402,7 @@
       (require 'go-rename)
       (require 'go-add-tags)
       (require 'lsp-go)
+      (setq go-tag-args (list "-transform" "camelcase"))
       (if (buffer-file-name)
           (lsp-go-enable))
       (if (not (featurep 'expanderr))
@@ -412,7 +413,8 @@
       (local-set-key (kbd "<f5>") #'go-insert-struct-field-macro)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
-      (local-set-key (kbd "C-c t") #'go-add-tags)
+      (local-set-key (kbd "C-c t") #'go-tag-add)
+      (local-set-key (kbd "C-c T") #'go-tag-remove)
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'my-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
