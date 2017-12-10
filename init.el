@@ -1367,6 +1367,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package cmake-ide
   :defer 3
+  :disabled t
   :config
   (use-package rtags
     :functions (rtags-eldoc
@@ -1394,26 +1395,39 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
   (cmake-ide-setup))
 
+(set-variable 'ycmd-server-command '("python" "/home/feofan/ycmd/ycmd"))
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
   (require 'cc-mode)
-  (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
-  (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
-  (local-set-key (kbd "M-.") (lambda ()
-                               (interactive)
-                               (xref-push-marker-stack)
-                               (rtags-find-symbol-at-point)))
-  (local-set-key (kbd "M-?") (lambda ()
-                               (interactive)
-                               (xref-push-marker-stack)
-                               (rtags-find-references-at-point)))
-  (local-set-key (kbd "C-'") #'company-irony-c-headers)
-  (rtags-start-process-unless-running)
-  (setq-local eldoc-documentation-function #'rtags-eldoc)
-  (eldoc-mode +1)
-  (irony-mode)
-  (my-flycheck-irony-setup)
-  (add-to-list 'company-backends '(company-irony company-irony-c-headers)))
+  (require 'ycmd)
+  (require 'company-ycmd)
+  (require 'flycheck-ycmd)
+  (ycmd-mode 1)
+  ;; (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
+  ;; (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
+  (local-set-key (kbd "M-.") #'ycmd-goto
+                 ;; (lambda ()
+                 ;;   (interactive)
+                 ;;   (xref-push-marker-stack)
+                 ;;   (rtags-find-symbol-at-point))
+                 )
+  (local-set-key (kbd "M-?") #'ycmd-goto-references
+                 ;; (lambda ()
+                 ;;   (interactive)
+                 ;;   (xref-push-marker-stack)
+                 ;;   (rtags-find-references-at-point))
+                 )
+  ;; (local-set-key (kbd "C-'") #'company-irony-c-headers)
+  ;; (rtags-start-process-unless-running)
+  ;; (setq-local eldoc-documentation-function #'rtags-eldoc)
+  ;; (eldoc-mode +1)
+  (ycmd-eldoc-mode 1)
+  (flycheck-ycmd-setup)
+  ;; (irony-mode)
+  ;; (my-flycheck-irony-setup)
+  (add-to-list 'company-backends ;; '(company-irony company-irony-c-headers)
+               '(company-ycmd)
+               ))
 (add-hook 'c++-mode-hook #'my-cc-mode-hook)
 (add-hook 'c-mode-hook #'my-cc-mode-hook)
 
