@@ -1396,6 +1396,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (cmake-ide-setup))
 
 (set-variable 'ycmd-server-command '("python" "/home/feofan/ycmd/ycmd"))
+(declare-function ycmd-goto "ext:ycmd")
+(declare-function ycmd-goto-references "ext:ycmd")
 (defun my-cc-mode-hook ()
   "My hook for c & c++ modes."
   (require 'cc-mode)
