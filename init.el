@@ -1802,6 +1802,15 @@ the CLI and emacs interface."))
   :config
   (add-hook 'prog-mode-hook #'comment-tags-mode))
 
+(declare-function eww-reload "ext:eww")
+(defun eww-more-readable ()
+  "Makes eww more pleasant to use. Run it after eww buffer is loaded."
+  (interactive)
+  ;; (setq eww-header-line-format nil)               ;; removes page title
+  (set-window-margins (get-buffer-window) 20 20)  ;; increases size of margins
+  (eww-reload 'local))
+(add-hook 'eww-after-render-hook #'eww-more-readable)
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
