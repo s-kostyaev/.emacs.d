@@ -225,6 +225,7 @@
 
 (advice-add 'scroll-up-line :before 'my-scroll-hook)
 (advice-add 'scroll-down-line :before 'my-scroll-hook)
+(declare-function pixel-scroll-mode "ext:pixel-scroll")
 (if (> emacs-major-version 25)
     (progn
       (pixel-scroll-mode)
