@@ -49,6 +49,7 @@
  '(helm-M-x-always-save-history t)
  '(helm-M-x-fuzzy-match t)
  '(helm-buffers-fuzzy-matching t)
+ '(helm-codesearch-global-csearchindex "/home/feofan/.csearchindex")
  '(helm-completion-in-region-fuzzy-match t)
  '(helm-echo-input-in-header-line t)
  '(helm-file-cache-fuzzy-match t)

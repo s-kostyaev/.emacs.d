@@ -1811,6 +1811,12 @@ the CLI and emacs interface."))
   (eww-reload 'local))
 (add-hook 'eww-after-render-hook #'eww-more-readable)
 
+(define-key global-map (kbd "C-x h") nil)
+(use-package helm-codesearch
+  :bind (("C-x h f" . helm-codesearch-find-file)
+         ("C-x h s" . helm-codesearch-find-pattern)
+         ("C-x h c" . helm-codesearch-create-csearchindex)))
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
