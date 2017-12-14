@@ -226,6 +226,7 @@
 (advice-add 'scroll-up-line :before 'my-scroll-hook)
 (advice-add 'scroll-down-line :before 'my-scroll-hook)
 (declare-function pixel-scroll-mode "ext:pixel-scroll")
+(defvar pixel-resolution-fine-flag)
 (if (> emacs-major-version 25)
     (progn
       (pixel-scroll-mode)
@@ -1795,7 +1796,7 @@ the CLI and emacs interface."))
               (progn
                 (kill-region start end)
                 (insert res)))
-          (funcall-interactively replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
+          (funcall-interactively 'replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
           (downcase-region start (cdr (bounds-of-thing-at-point 'symbol))))))))
 
 (use-package comment-tags
@@ -1804,7 +1805,7 @@ the CLI and emacs interface."))
 
 (declare-function eww-reload "ext:eww")
 (defun eww-more-readable ()
-  "Makes eww more pleasant to use. Run it after eww buffer is loaded."
+  "Better eww.  Run it after eww buffer is loaded."
   (interactive)
   ;; (setq eww-header-line-format nil)               ;; removes page title
   (set-window-margins (get-buffer-window) 20 20)  ;; increases size of margins
