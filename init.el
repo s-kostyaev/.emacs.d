@@ -233,7 +233,7 @@
 (if (> emacs-major-version 25)
     (progn
       (pixel-scroll-mode)
-      (setq pixel-resolution-fine-flag nil)
+      (setq pixel-resolution-fine-flag t)
       (setq mouse-wheel-progressive-speed nil)
       (setq mouse-wheel-scroll-amount '(5 ((shift) . 1) ((control))))
       (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
