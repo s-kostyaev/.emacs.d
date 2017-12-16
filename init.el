@@ -221,7 +221,10 @@
 (defun my-scroll-hook(_)
   "Increase gc-threshold before scroll and set it back after."
   (setq gc-cons-threshold most-positive-fixnum)
-  (run-with-idle-timer 3 nil (lambda () (setq gc-cons-threshold (* 8 1024 1024)))))
+  (internal-show-cursor nil nil)
+  (run-with-idle-timer 1 nil (lambda ()
+                               (internal-show-cursor nil t)
+                               (setq gc-cons-threshold (* 8 1024 1024)))))
 
 (advice-add 'scroll-up-line :before 'my-scroll-hook)
 (advice-add 'scroll-down-line :before 'my-scroll-hook)
