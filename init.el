@@ -232,7 +232,7 @@
       (pixel-scroll-mode)
       (setq pixel-resolution-fine-flag nil)
       (setq mouse-wheel-progressive-speed nil)
-      (setq mouse-wheel-scroll-amount '(10 ((shift) . 1) ((control))))
+      (setq mouse-wheel-scroll-amount '(5 ((shift) . 1) ((control))))
       (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
       (advice-add 'pixel-scroll-up :before 'my-scroll-hook)))
 
