@@ -957,6 +957,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
               (lambda () (helm-attrset 'follow 1 helm-source-grep)))
     (load "helm-autoloads"))
   :config
+  (use-package ace-jump-helm-line
+    :bind
+    (:map helm-map
+          ("C-'" . ace-jump-helm-line)))
   (use-package helm-swoop
     :defines helm-swoop-map
     :functions (helm-swoop)
