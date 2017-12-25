@@ -339,40 +339,6 @@
 
 (require 'json)
 
-(defvar my-current-fillstruct-buf nil
-  "Currently used go buffer for fillstruct.")
-
-(defun my-fill-struct ()
-  "Fill go struct."
-  (interactive)
-  (save-buffer)
-  (setq my-current-fillstruct-buf (buffer-name))
-  (let* ((cmd
-          (format
-           "fillstruct -file %s -offset %s"
-           (shell-quote-argument (buffer-file-name))
-           (- (point) 1)))
-         (proc (start-process-shell-command "fillstruct" "*fillstruct*" cmd))
-         (sentinel (lambda (_proc _state)
-                     (with-current-buffer "*fillstruct*"
-                       (ignore-errors
-                         (let* ((json-object-type 'hash-table)
-                                (json-array-type 'list)
-                                (json-key-type 'string)
-                                (json (json-read-from-string
-                                       (buffer-substring-no-properties (point-min) (point-max))))
-                                (begin (+ (gethash "start" json) 1))
-                                (end (+ (gethash "end" json) 1))
-                                (content (gethash "code" json)))
-                           (with-current-buffer my-current-fillstruct-buf
-                             (delete-region begin end)
-                             (goto-char begin)
-                             (insert content)
-                             (goto-char begin)
-                             (goto-char (line-end-position)))))
-                       (kill-buffer)))))
-    (set-process-sentinel proc sentinel)))
-
 (use-package go-mode
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
@@ -423,7 +389,7 @@
       (local-set-key (kbd "C-c t") #'go-tag-add)
       (local-set-key (kbd "C-c T") #'go-tag-remove)
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
-      (local-set-key (kbd "C-c C-i") #'my-fill-struct)
+      (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (if (buffer-file-name) (lsp-mode))
       (go-eldoc-setup)
