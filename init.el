@@ -327,18 +327,6 @@
   :config
   (global-flycheck-mode))
 
-(defun go-insert-struct-field-macro (&optional arg)
-  "Keyboard macro for insert ARG field in go struct."
-  (interactive "p")
-  (kmacro-exec-ring-item
-   (quote
-    ([25 32 96 106 115 111 110 58 34 25 6 32 98 115 111 110 58
-         34 25 1 6 67108896 6 134217848 117 112 99 97 115 101 45
-         114 101 103 105 111 110 13 134217734 32] 0 "%d"))
-   arg))
-
-(require 'json)
-
 (use-package go-mode
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
