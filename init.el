@@ -371,7 +371,6 @@
       (flycheck-gometalinter-setup)
       (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
-      (local-set-key (kbd "<f5>") #'go-insert-struct-field-macro)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "C-c t") #'go-tag-add)
