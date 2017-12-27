@@ -447,9 +447,10 @@
   (local-set-key (kbd "<backtab>") #'py-shift-left))
 (add-hook 'python-mode-hook #'my-python-hook)
 
-(use-package octave-mode
-  :mode "\\.m$"
+(use-package octave
+  :mode ("\\.m$" . octave-mode)
   :defines (octave-mode-map)
+  :functions (octave-mode)
   :init
   (defun my-octave-hook ()
     "My hook for octave."
