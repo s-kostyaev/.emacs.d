@@ -342,6 +342,7 @@
       (require 'company-go)
       (require 'go-impl)
       (require 'lsp-mode)
+      (require 'lsp-ui)
       (require 'flycheck-gometalinter)
       (use-package go-direx
         :config
@@ -381,7 +382,10 @@
       (if (buffer-file-name) (lsp-mode))
       (go-eldoc-setup)
       (local-set-key (kbd "C-h C-d") #'godoc-at-point)
-      (setq-local company-backends '(company-go)))
+      (setq-local company-backends '(company-go))
+      (lsp-ui-mode 1)
+      (define-key lsp-ui-peek-mode-map (kbd "C-n") 'lsp-ui-peek--select-next)
+      (define-key lsp-ui-peek-mode-map (kbd "C-p") 'lsp-ui-peek--select-prev))
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
