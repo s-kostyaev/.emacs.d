@@ -62,6 +62,7 @@
  '(helm-session-fuzzy-match t)
  '(helm-swoop-pre-input-function (lambda nil nil))
  '(lsp-ui-doc-enable nil)
+ '(lsp-ui-flycheck-enable nil)
  '(mail-envelope-from (quote header))
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from (quote header))
