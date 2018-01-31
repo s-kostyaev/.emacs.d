@@ -743,7 +743,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package multiple-cursors
   :defer 3
   :after ivy
-  :chords ("fm" . multiple-cursors-hydra/body)
+  :chords (("fm" . multiple-cursors-hydra/body)
+           ("mf" . multiple-cursors-hydra/body))
   ;; :functions
   ;; (my-mc-prompt-once my-mc-prompt-once-advice)
   :config
@@ -762,49 +763,49 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ^ ^               ^ ^              [_j_] Jump for add or remove cursors
 ^ ^               ^ ^              [_k_] Jump for single cursor
 "
-  ("l" mc/edit-lines :exit t)
-  ("a" mc/mark-all-like-this)
-  ("A" mc/mark-all-words-like-this)
-  ("n" mc/mark-next-like-this)
-  ("N" mc/skip-to-next-like-this)
-  ("M-n" mc/unmark-next-like-this)
-  ("p" mc/mark-previous-like-this)
-  ("P" mc/skip-to-previous-like-this)
-  ("M-p" mc/unmark-previous-like-this)
-  ("r" mc/mark-all-in-region-regexp :exit t)
-  ("W" mc/mark-previous-word-like-this)
-  ("w" mc/mark-next-word-like-this)
-  ("h" mc-hide-unmatched-lines-mode)
-  ("j" ace-mc-add-multiple-cursors :exit t)
-  ("k" ace-mc-add-single-cursor :exit t)
-  ("q" nil))
-;; (defun my-mc-prompt-once-advice (fn &rest args) ; needs lexical-binding!
-;;   "Make FN prompt only once with ARGS and multiple cursors."
-;;   (setq mc--this-command (lambda () (interactive) (apply fn args)))
-;;   (apply fn args))
+      ("l" mc/edit-lines :exit t)
+      ("a" mc/mark-all-like-this)
+      ("A" mc/mark-all-words-like-this)
+      ("n" mc/mark-next-like-this)
+      ("N" mc/skip-to-next-like-this)
+      ("M-n" mc/unmark-next-like-this)
+      ("p" mc/mark-previous-like-this)
+      ("P" mc/skip-to-previous-like-this)
+      ("M-p" mc/unmark-previous-like-this)
+      ("r" mc/mark-all-in-region-regexp :exit t)
+      ("W" mc/mark-previous-word-like-this)
+      ("w" mc/mark-next-word-like-this)
+      ("h" mc-hide-unmatched-lines-mode)
+      ("j" ace-mc-add-multiple-cursors :exit t)
+      ("k" ace-mc-add-single-cursor :exit t)
+      ("q" nil))
+    ;; (defun my-mc-prompt-once-advice (fn &rest args) ; needs lexical-binding!
+    ;;   "Make FN prompt only once with ARGS and multiple cursors."
+    ;;   (setq mc--this-command (lambda () (interactive) (apply fn args)))
+    ;;   (apply fn args))
 
-;; (defun my-mc-prompt-once (&rest fns)
-;;   "Make FNS prompt only once with multiple cursors."
-;;   (dolist (fn fns)
-;;     (advice-add fn :around #'my-mc-prompt-once-advice)))
+    ;; (defun my-mc-prompt-once (&rest fns)
+    ;;   "Make FNS prompt only once with multiple cursors."
+    ;;   (dolist (fn fns)
+    ;;     (advice-add fn :around #'my-mc-prompt-once-advice)))
 
-;; (defvar ivy-completion-beg)
-;; (defvar ivy-completion-end)
-;; (defun my-counsel-company ()
-;;   "Complete using `company-candidates'."
-;;   (interactive)
-;;   (company-mode 1)
-;;   (unless company-candidates
-;;     (company-other-backend))
-;;   (when company-point
-;;     (when (looking-back company-prefix (line-beginning-position))
-;;       (setq ivy-completion-beg (match-beginning 0))
-;;       (setq ivy-completion-end (match-end 0)))
-;;     (ivy-read "company cand: " company-candidates
-;;               :action #'ivy-completion-in-region-action)))
+    ;; (defvar ivy-completion-beg)
+    ;; (defvar ivy-completion-end)
+    ;; (defun my-counsel-company ()
+    ;;   "Complete using `company-candidates'."
+    ;;   (interactive)
+    ;;   (company-mode 1)
+    ;;   (unless company-candidates
+    ;;     (company-other-backend))
+    ;;   (when company-point
+    ;;     (when (looking-back company-prefix (line-beginning-position))
+    ;;       (setq ivy-completion-beg (match-beginning 0))
+    ;;       (setq ivy-completion-end (match-end 0)))
+    ;;     (ivy-read "company cand: " company-candidates
+    ;;               :action #'ivy-completion-in-region-action)))
 
-;; (my-mc-prompt-once 'my-counsel-company #'helm-company)
-))
+    ;; (my-mc-prompt-once 'my-counsel-company #'helm-company)
+    ))
 
 (declare-function check-expansion "ext:config")
 (declare-function company-complete-common "ext:company")
