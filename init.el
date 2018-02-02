@@ -7,6 +7,19 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
+(let ((trustfile
+       (replace-regexp-in-string
+        "\\\\" "/"
+        (replace-regexp-in-string
+         "\n" ""
+         (shell-command-to-string "python -m certifi")))))
+  (setq tls-program
+        (list
+         (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+                 (if (eq window-system 'w32) ".exe" "") trustfile)))
+  (setq gnutls-verify-error t)
+  (setq gnutls-trustfiles (list trustfile)))
+
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
 ;; initizlization in case of byte-compiled .emacs.elc.
@@ -331,7 +344,7 @@
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
                               godoc-at-point goimports lsp-go-enable lsp-ui-mode)
-  :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args)
+  :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args lsp-ui-peek-mode-map)
   :config
   (progn
     (setenv "GOPATH" "/home/feofan/go")
