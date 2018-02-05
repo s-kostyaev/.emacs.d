@@ -7,6 +7,10 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
+(defvar network-security-level)
+(defvar tls-program)
+(defvar gnutls-verify-error)
+(defvar gnutls-trustfiles)
 (if (> emacs-major-version 24)
     (progn
       (setq network-security-level 'high)
