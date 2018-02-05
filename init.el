@@ -7,19 +7,22 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
-(let ((trustfile
-       (replace-regexp-in-string
-        "\\\\" "/"
-        (replace-regexp-in-string
-         "\n" ""
-         (shell-command-to-string "python -m certifi")))))
-  (setq tls-program
-        (list
-         (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
-                 (if (eq window-system 'w32) ".exe" "") trustfile)))
-  (setq gnutls-verify-error t)
-  (setq gnutls-trustfiles (list trustfile)))
-
+(if (> emacs-major-version 24)
+    (progn
+      (setq network-security-level 'high)
+      (setq gnutls-verify-error t))
+  (let ((trustfile
+         (replace-regexp-in-string
+          "\\\\" "/"
+          (replace-regexp-in-string
+           "\n" ""
+           (shell-command-to-string "python -m certifi")))))
+    (setq tls-program
+          (list
+           (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+                   (if (eq window-system 'w32) ".exe" "") trustfile)))
+    (setq gnutls-verify-error t)
+    (setq gnutls-trustfiles (list trustfile))))
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
 ;; initizlization in case of byte-compiled .emacs.elc.
@@ -662,49 +665,49 @@ the end of the line, then comment current line.  Replaces default behaviour of
       ("k" js2r-kill)
       ("q" nil)
       ))
-(use-package json-snatcher
-  :config
-  (defun js-mode-bindings ()
-    "Sets a hotkey for using the json-snatcher plugin"
-    (when (string-match  "\\.json$" (buffer-name))
-      (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
-  (add-hook 'js2-mode-hook 'js-mode-bindings))
-(use-package xref-js2
-  :config
+  (use-package json-snatcher
+    :config
+    (defun js-mode-bindings ()
+      "Sets a hotkey for using the json-snatcher plugin"
+      (when (string-match  "\\.json$" (buffer-name))
+        (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
+    (add-hook 'js2-mode-hook 'js-mode-bindings))
+  (use-package xref-js2
+    :config
 
-  ;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
-  ;; unbind it.
-  (define-key js-mode-map (kbd "M-.") nil)
+    ;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
+    ;; unbind it.
+    (define-key js-mode-map (kbd "M-.") nil)
 
-  (add-hook 'js2-mode-hook (lambda ()
-                             (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
+    (add-hook 'js2-mode-hook (lambda ()
+                               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
 
-;; indium: javascript awesome development environment
-;; https://github.com/NicolasPetton/indium
-(use-package indium
-  :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
-(use-package tern
-  :init
-  (add-hook 'js2-mode-hook #'my-js-mode-hook)
-  (add-hook 'js-mode-hook #'my-js-mode-hook)
-  (add-hook 'web-mode-hook #'my-js-mode-hook)
-  :functions
-  (my-js-mode-hook)
-  :config
-  (defun my-js-mode-hook ()
-    "Hook for `js-mode'."
-    (tern-mode)
-    (define-key tern-mode-keymap (kbd "M-.") nil)
-    (define-key tern-mode-keymap (kbd "M-,") nil)
-    (set (make-local-variable 'company-backends)
-         '((company-tern company-files))))
-  (add-hook 'js2-mode-hook 'my-js-mode-hook))
+  ;; indium: javascript awesome development environment
+  ;; https://github.com/NicolasPetton/indium
+  (use-package indium
+    :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
+  (use-package tern
+    :init
+    (add-hook 'js2-mode-hook #'my-js-mode-hook)
+    (add-hook 'js-mode-hook #'my-js-mode-hook)
+    (add-hook 'web-mode-hook #'my-js-mode-hook)
+    :functions
+    (my-js-mode-hook)
+    :config
+    (defun my-js-mode-hook ()
+      "Hook for `js-mode'."
+      (tern-mode)
+      (define-key tern-mode-keymap (kbd "M-.") nil)
+      (define-key tern-mode-keymap (kbd "M-,") nil)
+      (set (make-local-variable 'company-backends)
+           '((company-tern company-files))))
+    (add-hook 'js2-mode-hook 'my-js-mode-hook))
 
-;; turn off all warnings in js2-mode
-(setq js2-mode-show-parse-errors t)
-(setq js2-mode-show-strict-warnings nil)
+  ;; turn off all warnings in js2-mode
+  (setq js2-mode-show-parse-errors t)
+  (setq js2-mode-show-strict-warnings nil)
 
-(use-package company-tern))
+  (use-package company-tern))
 
 (use-package rjsx-mode
   :mode ("\\.jsx$" . rjsx-mode))
