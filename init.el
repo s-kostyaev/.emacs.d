@@ -373,7 +373,7 @@
         (defun my-direx-hook()
           "My hook for direx."
           (interactive)
-          (local-set-key (kbd "s") #'helm-swoop)
+          (local-set-key (kbd "s") #'swiper-helm)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
@@ -941,6 +941,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (:map helm-map
           ("C-'" . ace-jump-helm-line)))
   (use-package helm-swoop
+    :disabled t
     :defines helm-swoop-map
     :functions (helm-swoop)
     :config
@@ -1714,32 +1715,37 @@ the CLI and emacs interface."))
          ("C-c e r" . evalator-resume)
          ("C-c e i" . evalator-insert-equiv-expr)))
 
+(use-package swiper-helm
+  :bind (:map isearch-mode-map
+              ("M-i" . swiper-helm-from-isearch)))
+
 (use-package ace-isearch
-  :after helm-swoop
-  :bind (:map helm-swoop-map
-              ("C-s" . swoop-action-goto-line-next)
-              ("C-r" . swoop-action-goto-line-prev)
-              ("C-w" . nil)
-              ("M-n" . my-swoop-next)
-              :map isearch-mode-map
-              ("M-n" . my-isearch-next))
+  :after swiper-helm
+  :bind (;; :map helm-swoop-map
+         ;;      ("C-s" . swoop-action-goto-line-next)
+         ;;      ("C-r" . swoop-action-goto-line-prev)
+         ;;      ("C-w" . nil)
+         ;;      ("M-n" . my-swoop-next)
+         :map isearch-mode-map
+         ("M-n" . my-isearch-next))
   :config
   (defun my-isearch-next ()
     "Isearch symbol at point or next isearch history item."
     (interactive)
     (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
-  (defun my-swoop-next ()
-    "Swoop symbol at point or next isearch history item."
-    (interactive)
-    (if (s-equals-p "" helm-pattern)
-        (helm-swoop-yank-thing-at-point)
-      (next-history-element 1)))
+  ;; (defun my-swoop-next ()
+  ;;   "Swoop symbol at point or next isearch history item."
+  ;;   (interactive)
+  ;;   (if (s-equals-p "" helm-pattern)
+  ;;       (helm-swoop-yank-thing-at-point)
+  ;;     (next-history-element 1)))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
-  (setq ace-isearch-function-from-isearch 'helm-swoop-or-grep)
+  (setq ace-isearch-function-from-isearch 'swiper-helm-from-isearch)
   (setq ace-isearch-use-jump nil)
-  (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
-  (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev))
+  ;; (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
+  ;; (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev)
+  )
 
 ;;; plantuml
 (org-babel-do-load-languages
