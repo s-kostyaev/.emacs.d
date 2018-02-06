@@ -373,7 +373,7 @@
         (defun my-direx-hook()
           "My hook for direx."
           (interactive)
-          (local-set-key (kbd "s") #'swiper-helm)
+          (local-set-key (kbd "s") #'swiper)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
@@ -889,18 +889,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar company-point)
 (defvar company-prefix)
 (declare-function company-other-backend "ext:company")
-(use-package counsel
-  :disabled t
-  :init
-  (define-key lisp-interaction-mode-map (kbd "C-M-i") #'my-counsel-company)
-  :bind*
-  (("C-c C-s" . counsel-rg)
-   ("C-x l" . counsel-locate))
-  :bind
-  (("C-s" . counsel-grep-or-swiper)
-   ("C-M-i" . my-counsel-company))
-  :config
-  (counsel-mode t))
+;; (use-package counsel
+;;   :disabled t
+;;   :init
+;;   (define-key lisp-interaction-mode-map (kbd "C-M-i") #'my-counsel-company)
+;;   :bind*
+;;   (("C-c C-s" . counsel-rg)
+;;    ("C-x l" . counsel-locate))
+;;   :bind
+;;   (("C-s" . counsel-grep-or-swiper)
+;;    ("C-M-i" . my-counsel-company))
+;;   :config
+;;   (counsel-mode t))
 
 (use-package helm-files
   :functions (helm-find-files-up-one-level))
@@ -1715,12 +1715,23 @@ the CLI and emacs interface."))
          ("C-c e r" . evalator-resume)
          ("C-c e i" . evalator-insert-equiv-expr)))
 
-(use-package swiper-helm
+(use-package counsel
   :bind (:map isearch-mode-map
-              ("M-i" . swiper-helm-from-isearch)))
+              ("M-i" . swiper-from-isearch))
+  :functions (swiper-from-isearch)
+  :config
+  (defun swiper-from-isearch ()
+    "Invoke `swiper' from isearch."
+    (interactive)
+    (let ((query (if isearch-regexp
+                     isearch-string
+                   (regexp-quote isearch-string))))
+      (isearch-exit)
+      (counsel-grep-or-swiper query)))
+  (setq ivy-height 20))
 
 (use-package ace-isearch
-  :after swiper-helm
+  :after counsel
   :bind (;; :map helm-swoop-map
          ;;      ("C-s" . swoop-action-goto-line-next)
          ;;      ("C-r" . swoop-action-goto-line-prev)
@@ -1741,7 +1752,7 @@ the CLI and emacs interface."))
   ;;     (next-history-element 1)))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
-  (setq ace-isearch-function-from-isearch 'swiper-helm-from-isearch)
+  (setq ace-isearch-function-from-isearch 'counsel-grep-or-swiper)
   (setq ace-isearch-use-jump nil)
   ;; (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
   ;; (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev)
