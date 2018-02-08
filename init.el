@@ -1824,6 +1824,11 @@ the CLI and emacs interface."))
 ;; helm charts support
 (defvar company-dabbrev-code-modes)
 (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
+(add-hook 'yaml-mode-hook #'highlight-indentation-mode)
+(add-hook 'yaml-mode-hook #'highlight-indentation-current-column-mode)
+(global-smart-shift-mode 1)
+(key-chord-define-global "<<" 'smart-shift-left)
+(key-chord-define-global ">>" 'smart-shift-right)
 
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
