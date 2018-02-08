@@ -1821,6 +1821,10 @@ the CLI and emacs interface."))
          ("C-c h s" . helm-codesearch-find-pattern)
          ("C-c h c" . helm-codesearch-create-csearchindex)))
 
+;; helm charts support
+(defvar company-dabbrev-code-modes)
+(add-to-list 'company-dabbrev-code-modes 'yaml-mode)
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
