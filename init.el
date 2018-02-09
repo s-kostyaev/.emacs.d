@@ -1822,7 +1822,7 @@ the CLI and emacs interface."))
          ("C-c h c" . helm-codesearch-create-csearchindex)))
 
 ;; helm charts support
-(defvar company-dabbrev-code-modes)
+(require 'company-dabbrev-code)
 (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
 (add-hook 'yaml-mode-hook #'highlight-indentation-mode)
 (add-hook 'yaml-mode-hook #'highlight-indentation-current-column-mode)
@@ -1905,6 +1905,7 @@ the CLI and emacs interface."))
   (declare-function  helm-make-source "ext:somewhere")
   (declare-function  helm-grep-ag "ext:somewhere")
   (declare-function  dash-enable-font-lock "ext:somewhere")
+  (declare-function ibuffer-vc-set-filter-groups-by-vc-root "ext:somewhere")
 
   (defun insert-declare-funcs (fl)
     (cl-mapc (lambda (in) (insert (format "(declare-function  %s \"ext:somewhere\")\n" in))) fl)))
