@@ -32,6 +32,7 @@
 ;; initizlization in case of byte-compiled .emacs.elc.
 (setq package-enable-at-startup nil)
 ;; Ask package.el to not add (package-initialize) to .emacs.
+(defvar package--init-file-ensured)
 (setq package--init-file-ensured t)
 ;; set use-package-verbose to t for interpreted .emacs,
 ;; and to nil for byte-compiled .emacs.elc
@@ -68,6 +69,7 @@
 
 (eval-when-compile
   (require 'package)
+  (package-initialize)
   (if (not (package-installed-p 'async))
       (progn
         (package-refresh-contents)
@@ -410,7 +412,7 @@
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
 (defun my-lsp-hook ()
-  "Hook for lsp-mode."
+  "Hook for 'lsp-mode."
   (interactive)
   (require 'company-lsp)
   (add-to-list 'company-backends 'company-lsp))
@@ -1906,8 +1908,57 @@ the CLI and emacs interface."))
   (declare-function  helm-grep-ag "ext:somewhere")
   (declare-function  dash-enable-font-lock "ext:somewhere")
   (declare-function ibuffer-vc-set-filter-groups-by-vc-root "ext:somewhere")
+  (declare-function  swiper "ext:somewhere")
+  (declare-function  flycheck-gometalinter-setup "ext:somewhere")
+  (declare-function  gofmt-before-save "ext:somewhere")
+  (declare-function  go-test-current-project "ext:somewhere")
+  (declare-function  go-tag-add "ext:somewhere")
+  (declare-function  go-tag-remove "ext:somewhere")
+  (declare-function  go-gen-test-dwim "ext:somewhere")
+  (declare-function  go-fill-struct "ext:somewhere")
+  (declare-function  go-direx-switch-to-buffer "ext:somewhere")
+  (declare-function  lsp-mode "ext:somewhere")
+  (declare-function  go-eldoc-setup "ext:somewhere")
+  (declare-function  anaconda-mode "ext:somewhere")
+  (declare-function  global-company-mode "ext:somewhere")
+  (declare-function  js2-imenu-extras-mode "ext:somewhere")
+  (declare-function  js2r-add-keybindings-with-prefix "ext:somewhere")
+  (declare-function  js2r-extract-var "ext:somewhere")
+  (declare-function  fci-mode "ext:somewhere")
+  (declare-function  mc/edit-lines "ext:somewhere")
+  (declare-function  mc/mark-all-like-this "ext:somewhere")
+  (declare-function  mc/mark-all-words-like-this "ext:somewhere")
+  (declare-function  mc/mark-next-like-this "ext:somewhere")
+  (declare-function  mc/skip-to-next-like-this "ext:somewhere")
+  (declare-function  mc/unmark-next-like-this "ext:somewhere")
+  (declare-function  mc/mark-previous-like-this "ext:somewhere")
+  (declare-function  mc/skip-to-previous-like-this "ext:somewhere")
+  (declare-function  mc/unmark-previous-like-this "ext:somewhere")
+  (declare-function  mc/mark-all-in-region-regexp "ext:somewhere")
+  (declare-function  mc/mark-previous-word-like-this "ext:somewhere")
+  (declare-function  mc/mark-next-word-like-this "ext:somewhere")
+  (declare-function  mc-hide-unmatched-lines-mode "ext:somewhere")
+  (declare-function  ace-mc-add-multiple-cursors "ext:somewhere")
+  (declare-function  ace-mc-add-single-cursor "ext:somewhere")
+  (declare-function  helm-mode "ext:somewhere")
+  (declare-function  helm-fuzzier-mode "ext:somewhere")
+  (declare-function  helm-flx-mode "ext:somewhere")
+  (declare-function  pandoc-mode "ext:somewhere")
+  (declare-function  company-erlang-init "ext:somewhere")
+  (declare-function  link-hint-open-multiple-links "ext:somewhere")
+  (declare-function  flycheck-clang-analyzer-setup "ext:somewhere")
+  (declare-function  ycmd-mode "ext:somewhere")
+  (declare-function  ycmd-eldoc-mode "ext:somewhere")
+  (declare-function  flycheck-ycmd-setup "ext:somewhere")
+  (declare-function  meghanada-mode "ext:somewhere")
+  (declare-function  embrace-commander "ext:somewhere")
+  (declare-function  global-ace-isearch-mode "ext:somewhere")
+  (declare-function  highlight-indentation-mode "ext:somewhere")
+  (declare-function  highlight-indentation-current-column-mode "ext:somewhere")
+  (declare-function  global-smart-shift-mode "ext:somewhere")
 
   (defun insert-declare-funcs (fl)
+    "Insert declaration for functions from FL."
     (cl-mapc (lambda (in) (insert (format "(declare-function  %s \"ext:somewhere\")\n" in))) fl)))
 
 (load custom-file 'noerror)
