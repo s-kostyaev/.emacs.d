@@ -1969,6 +1969,8 @@ the CLI and emacs interface."))
   (declare-function  highlight-indentation-mode "ext:somewhere")
   (declare-function  highlight-indentation-current-column-mode "ext:somewhere")
   (declare-function  global-smart-shift-mode "ext:somewhere")
+  (declare-function  godef-jump "ext:somewhere")
+  (declare-function  counsel-git-grep "ext:somewhere")
 
   (defun insert-declare-funcs (fl)
     "Insert declaration for functions from FL."
