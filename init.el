@@ -1718,8 +1718,9 @@ the CLI and emacs interface."))
          ("C-c e i" . evalator-insert-equiv-expr)))
 
 (use-package counsel
-  :bind (:map isearch-mode-map
-              ("M-i" . swiper-from-isearch))
+  :bind (("C-c g" . my-counsel-git-grep)
+         :map isearch-mode-map
+         ("M-i" . swiper-from-isearch))
   :functions (swiper-from-isearch)
   :config
   (defun swiper-from-isearch ()
@@ -1730,6 +1731,15 @@ the CLI and emacs interface."))
                    (regexp-quote isearch-string))))
       (isearch-exit)
       (counsel-grep-or-swiper query)))
+  (defun my-counsel-git-grep ()
+    "My git grep."
+    (interactive)
+    (counsel-git-grep
+     nil
+     (let ((symb (symbol-at-point)))
+       (if symb
+           (prin1-to-string symb)
+         ""))))
   (setq ivy-height 20))
 
 (use-package ace-isearch
