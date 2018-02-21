@@ -767,7 +767,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package multiple-cursors
   :defer 3
-  :after ivy
   :chords (("fm" . multiple-cursors-hydra/body)
            ("mf" . multiple-cursors-hydra/body))
   ;; :functions
@@ -836,8 +835,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (declare-function company-complete-common "ext:company")
 (declare-function tab-indent-or-complete "ext:config")
 (use-package yasnippet
+  :functions (tab-indent-or-complete)
+  :bind (([tab] . tab-indent-or-complete))
   :defer 3
-  :after company
   :config
   (progn
     (yas-global-mode 1)
@@ -860,9 +860,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
                 (null (yas-expand)))
             (if (check-expansion)
                 (company-complete-common)
-              (indent-for-tab-command)))))
-
-    (global-set-key [tab] #'tab-indent-or-complete)))
+              (indent-for-tab-command)))))))
 
 ;;for faster toggle key-chord-mode
 (global-set-key [f9] #'key-chord-mode)
@@ -1746,7 +1744,6 @@ the CLI and emacs interface."))
   (setq ivy-height 20))
 
 (use-package ace-isearch
-  :after counsel
   :bind (;; :map helm-swoop-map
          ;;      ("C-s" . swoop-action-goto-line-next)
          ;;      ("C-r" . swoop-action-goto-line-prev)
