@@ -238,18 +238,19 @@
 (setq frame-title-format "emacs - %b")
 ;; Make the mouse wheel scroll Emacs
 (mouse-wheel-mode t)
+(setq auto-window-vscroll nil)
 (global-set-key (kbd "M-J") #'scroll-up-line)
 (global-set-key (kbd "M-K") #'scroll-down-line)
-(defun my-scroll-hook(_)
-  "Increase gc-threshold before scroll and set it back after."
-  (setq gc-cons-threshold most-positive-fixnum)
-  (internal-show-cursor nil nil)
-  (run-with-idle-timer 1 nil (lambda ()
-                               (internal-show-cursor nil t)
-                               (setq gc-cons-threshold (* 8 1024 1024)))))
+;; (defun my-scroll-hook(_)
+;;   "Increase gc-threshold before scroll and set it back after."
+;;   (setq gc-cons-threshold most-positive-fixnum)
+;;   ;; (internal-show-cursor nil nil)
+;;   (run-with-idle-timer 1 nil (lambda ()
+;;                                ;; (internal-show-cursor nil t)
+;;                                (setq gc-cons-threshold (* 8 1024 1024)))))
 
-(advice-add 'scroll-up-line :before 'my-scroll-hook)
-(advice-add 'scroll-down-line :before 'my-scroll-hook)
+;; (advice-add 'scroll-up-line :before 'my-scroll-hook)
+;; (advice-add 'scroll-down-line :before 'my-scroll-hook)
 (declare-function pixel-scroll-mode "ext:pixel-scroll")
 (defvar pixel-resolution-fine-flag)
 (if (> emacs-major-version 25)
@@ -258,8 +259,9 @@
       (setq pixel-resolution-fine-flag t)
       (setq mouse-wheel-progressive-speed nil)
       (setq mouse-wheel-scroll-amount '(5 ((shift) . 1) ((control))))
-      (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
-      (advice-add 'pixel-scroll-up :before 'my-scroll-hook)))
+      ;; (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
+      ;; (advice-add 'pixel-scroll-up :before 'my-scroll-hook)
+      ))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
