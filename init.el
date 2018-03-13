@@ -121,6 +121,16 @@
          (no-confirm 'package-refresh-contents)
          (no-confirm 'package-install-selected-packages)))
      (lambda (res)
+       (require 'yasnippet)
+       (defvar yasnippet-snippets-dir)
+       (let ((new-snip-dir (concat (s-chomp
+                                    (shell-command-to-string
+                                     "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
+                                   "/snippets")))
+         (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
+             nil
+           (setq yasnippet-snippets-dir new-snip-dir)
+           (yas-reload-all)))
        (seq-do #'load-file
                (split-string
                 (shell-command-to-string
@@ -135,16 +145,6 @@
                (split-string
                 (shell-command-to-string
                  "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
-       (require 'yasnippet)
-       (defvar yasnippet-snippets-dir)
-       (let ((new-snip-dir (concat (s-chomp
-                                    (shell-command-to-string
-                                     "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
-                                   "/snippets")))
-         (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
-             nil
-           (setq yasnippet-snippets-dir new-snip-dir)
-           (yas-reload-all)))
        (my-set-themes-hook)
        (message "packages bootstrap success: %s" res))))
 
