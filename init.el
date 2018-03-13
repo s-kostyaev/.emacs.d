@@ -85,8 +85,14 @@
   ;; (load-theme 'solarized-light t)
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
-  (require 'circadian)
-  (circadian-activate-latest-theme)
+  ;; (require 'circadian)
+  ;; (circadian-activate-latest-theme)
+  (load-theme 'spacemacs-light t)
+  (load-theme 'solarized-light t)
+
+  ;; (load-theme 'spacemacs-dark t)
+  ;; (load-theme 'solarized-dark t)
+
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
@@ -195,12 +201,14 @@
 
                "        "
                '(:eval (when (stringp vc-mode)
-                         (let ((noback (replace-regexp-in-string (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode)))
-                           (setq vc-mode
-                                 (propertize vc-mode
-                                             'face  (cond ((string-match "^ -" noback)    'font-lock-keyword-face)
-                                                          ((string-match "^ [:@]" noback) 'font-lock-warning-face)
-                                                          ((string-match "^ [!\\?]" noback) 'font-lock-warning-face)))))))
+                         vc-mode
+                         ;; (let ((noback (replace-regexp-in-string (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode)))
+                         ;;   (setq vc-mode
+                         ;;         (propertize vc-mode
+                         ;;                     'face  (cond ((string-match "^ -" noback)    'font-lock-keyword-face)
+                         ;;                                  ((string-match "^ [:@]" noback) 'font-lock-warning-face)
+                         ;;                                  ((string-match "^ [!\\?]" noback) 'font-lock-warning-face)))))
+                         ))
 
                ;; the current major mode for the buffer.
                "        ["
@@ -221,6 +229,19 @@
                "] "
 
                ))
+
+(defun my-update-vc-mode ()
+  "Update variable `vc-mode' for modeline."
+  (when (stringp vc-mode)
+    (let ((noback (replace-regexp-in-string (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode)))
+      (setq vc-mode
+            (propertize vc-mode
+                        'face  (cond ((string-match "^ -" noback)    'font-lock-keyword-face)
+                                     ((string-match "^ [:@]" noback) 'font-lock-warning-face)
+                                     ((string-match "^ [!\\?]" noback) 'font-lock-warning-face)))))))
+
+(add-hook 'after-revert-hook #'my-update-vc-mode)
+(add-hook 'after-find-file #'my-update-vc-mode)
 
 ;; to setup tabs
 (defvar c-basic-indent)
@@ -1783,6 +1804,7 @@ the CLI and emacs interface."))
 (put 'upcase-region 'disabled nil)
 
 (use-package circadian
+  :disabled t
   :config
   (require 'spacemacs-light-theme)
   (require 'spacemacs-dark-theme)
