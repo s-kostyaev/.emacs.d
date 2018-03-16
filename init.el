@@ -1874,6 +1874,11 @@ the CLI and emacs interface."))
 (key-chord-define-global "<<" 'smart-shift-left)
 (key-chord-define-global ">>" 'smart-shift-right)
 
+;; auto-yasnippet
+(use-package auto-yasnippet
+  :bind (("C-c y" . aya-create)
+         ("C-." . aya-expand)))
+
 (eval-when-compile
   (declare-function  key-chord-mode "ext:somewhere")
   (declare-function  hydra-default-pre "ext:somewhere")
