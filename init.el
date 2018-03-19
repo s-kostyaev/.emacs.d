@@ -1879,7 +1879,7 @@ the CLI and emacs interface."))
   :bind (("C-c y" . aya-create)
          ("C-." . aya-expand))
   :config
-  (setq aya-field-regex "\\sw\\|\\s_\\|\\*"))
+  (setq aya-field-regex "\\sw\\|\\s_\\|\\*\\|\\&"))
 
 (eval-when-compile
   (declare-function  key-chord-mode "ext:somewhere")
