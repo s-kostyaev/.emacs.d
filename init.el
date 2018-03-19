@@ -1877,7 +1877,9 @@ the CLI and emacs interface."))
 ;; auto-yasnippet
 (use-package auto-yasnippet
   :bind (("C-c y" . aya-create)
-         ("C-." . aya-expand)))
+         ("C-." . aya-expand))
+  :config
+  (setq aya-field-regex "\\sw\\|\\s_\\|\\*"))
 
 (eval-when-compile
   (declare-function  key-chord-mode "ext:somewhere")
