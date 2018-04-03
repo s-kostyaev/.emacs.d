@@ -952,9 +952,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-fuzzier-deactivate
               helm-ido-like-fuzzier-activate
               helm-ido-like-fix-fuzzy-files
-              my-helm-rg)
+              ;; my-helm-rg
+              )
   :bind*
-  (("C-c C-s" . my-helm-rg)
+  (;; ("C-c C-s" . my-helm-rg)
    ("C-x l" . helm-locate)
    ("C-x b" . helm-mini))
   :bind
@@ -1076,15 +1077,16 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (helm-ido-like-load-file-nav)
   (helm-ido-like-fix-fuzzy-files)
 
-  (defun my-helm-rg ()
-    (interactive)
-    (let ((dir (if current-prefix-arg
-                   (read-directory-name "select directory for search: " default-directory)
-                 default-directory)))
-      (helm-grep-ag dir (if (and current-prefix-arg
-                                 (> (car current-prefix-arg) 4))
-                            t
-                          nil)))))
+  ;; (defun my-helm-rg ()
+  ;;   (interactive)
+  ;;   (let ((dir (if current-prefix-arg
+  ;;                  (read-directory-name "select directory for search: " default-directory)
+  ;;                default-directory)))
+  ;;     (helm-grep-ag dir (if (and current-prefix-arg
+  ;;                                (> (car current-prefix-arg) 4))
+  ;;                           t
+  ;;                         nil))))
+  )
 
 (use-package wgrep
   :defer t
@@ -1753,6 +1755,9 @@ the CLI and emacs interface."))
   :bind (("C-c g" . my-counsel-git-grep)
          :map isearch-mode-map
          ("M-i" . swiper-from-isearch))
+  :bind*
+  (("C-c C-s" . counsel-rg)
+   ("C-x l" . counsel-locate))
   :functions (swiper-from-isearch)
   :config
   (defun swiper-from-isearch ()
