@@ -68,10 +68,10 @@
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
 
 (eval-when-compile
-  (require 'package)
-  (package-initialize)
+  ;; (require 'package)
+  ;; (package-initialize)
   (if (not (package-installed-p 'async))
-      (progn
+      (let ((custom-file "/dev/null"))
         (package-refresh-contents)
         (package-install 'async))))
 
@@ -88,7 +88,7 @@
   ;; (require 'circadian)
   ;; (circadian-activate-latest-theme)
   (load-theme 'spacemacs-light t)
-  (load-theme 'solarized-light t)
+  ;; (load-theme 'solarized-light t)
 
   ;; (load-theme 'spacemacs-dark t)
   ;; (load-theme 'solarized-dark t)
