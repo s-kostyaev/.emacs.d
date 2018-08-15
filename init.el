@@ -280,17 +280,17 @@
 
 ;; (advice-add 'scroll-up-line :before 'my-scroll-hook)
 ;; (advice-add 'scroll-down-line :before 'my-scroll-hook)
-(declare-function pixel-scroll-mode "ext:pixel-scroll")
-(defvar pixel-resolution-fine-flag)
-(if (> emacs-major-version 25)
-    (progn
-      (pixel-scroll-mode)
-      (setq pixel-resolution-fine-flag t)
-      (setq mouse-wheel-progressive-speed nil)
-      (setq mouse-wheel-scroll-amount '(5 ((shift) . 1) ((control))))
-      ;; (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
-      ;; (advice-add 'pixel-scroll-up :before 'my-scroll-hook)
-      ))
+;; (declare-function pixel-scroll-mode "ext:pixel-scroll")
+;; (defvar pixel-resolution-fine-flag)
+;; (if (> emacs-major-version 25)
+;;     (progn
+;;       (pixel-scroll-mode)
+;;       (setq pixel-resolution-fine-flag t)
+;;       (setq mouse-wheel-progressive-speed nil)
+;;       (setq mouse-wheel-scroll-amount '(5 ((shift) . 1) ((control))))
+;;       ;; (advice-add 'pixel-scroll-down :before 'my-scroll-hook)
+;;       ;; (advice-add 'pixel-scroll-up :before 'my-scroll-hook)
+;;       ))
 
 ;; Always end a file with a newline
 (setq require-final-newline t)
@@ -380,6 +380,9 @@
   :config
   (global-flycheck-mode))
 
+(use-package flycheck-golangci-lint
+  :hook (go-mode . flycheck-golangci-lint-setup))
+
 (use-package go-mode
   :mode "\\.go\\'"
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
@@ -387,8 +390,9 @@
   :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args lsp-ui-peek-mode-map)
   :config
   (progn
-    (setenv "GOPATH" "/home/feofan/go")
-    (setq exec-path (append exec-path '("~/go/bin")))
+    (setenv "GOPATH" (concat (getenv "HOME") "/go"))
+    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin:" (getenv "GOPATH") "/bin"))
+    (setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin")))
 
     (defun my-go-mode-hook ()
       "Setup for go."
@@ -396,7 +400,7 @@
       (require 'go-impl)
       ;; (require 'lsp-mode)
       ;; (require 'lsp-ui)
-      (require 'flycheck-gometalinter)
+      ;; (require 'flycheck-gometalinter)
       (use-package go-direx
         :config
         (defun my-kill-prev-buf (_)
@@ -422,8 +426,8 @@
       ;;     (lsp-go-enable))
       (if (not (featurep 'expanderr))
           (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
-      (flycheck-gometalinter-setup)
-      (setq flycheck-gometalinter-deadline "30s")
+      ;; (flycheck-gometalinter-setup)
+      ;; (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
@@ -586,6 +590,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (add-hook 'window-setup-hook #'delete-other-windows)
 
 (use-package pkgbuild-mode
+  :disabled t
   :functions (pkgbuild-mode)
   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
@@ -731,6 +736,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'js2-mode-hook #'my-js-mode-hook)
     (add-hook 'js-mode-hook #'my-js-mode-hook)
     (add-hook 'web-mode-hook #'my-js-mode-hook)
+    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+    (setq exec-path (append exec-path '("/usr/local/bin")))
+
     :functions
     (my-js-mode-hook)
     :config
@@ -1110,17 +1118,17 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;
 (setq select-enable-primary t)
 (setq select-enable-clipboard t)
-(when (getenv "DISPLAY")
-  (defun xclip-cut-function (text &optional _push)
-    (with-temp-buffer
-      (insert text)
-      (call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
-  (defun xclip-paste-function()
-    (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
-      (unless (string= (car kill-ring) xclip-output)
-        xclip-output )))
-  (setq interprogram-cut-function 'xclip-cut-function)
-  (setq interprogram-paste-function 'xclip-paste-function))
+;; (when (getenv "DISPLAY")
+;;   (defun xclip-cut-function (text &optional _push)
+;;     (with-temp-buffer
+;;       (insert text)
+;;       (call-process-region (point-min) (point-max) "xclip" nil 0 nil "-i" "-selection" "clipboard")))
+;;   (defun xclip-paste-function()
+;;     (let ((xclip-output (shell-command-to-string "xclip -o -selection clipboard")))
+;;       (unless (string= (car kill-ring) xclip-output)
+;;         xclip-output )))
+;;   (setq interprogram-cut-function 'xclip-cut-function)
+;;   (setq interprogram-paste-function 'xclip-paste-function))
 
 (require 'mouse)
 (xterm-mouse-mode t)
@@ -1885,6 +1893,8 @@ the CLI and emacs interface."))
          ("C-." . aya-expand))
   :config
   (setq aya-field-regex "\\sw\\|\\s_\\|\\*\\|\\&"))
+
+(global-set-key "\C-cff" 'toggle-frame-fullscreen)
 
 (eval-when-compile
   (declare-function  key-chord-mode "ext:somewhere")
