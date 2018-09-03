@@ -123,7 +123,8 @@
      (lambda (res)
        (require 'yasnippet)
        (defvar yasnippet-snippets-dir)
-       (let ((new-snip-dir (concat (s-chomp
+       (let ((yas-snippet-dirs (yas-snippet-dirs))
+             (new-snip-dir (concat (s-chomp
                                     (shell-command-to-string
                                      "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
                                    "/snippets")))
@@ -131,20 +132,20 @@
              nil
            (setq yasnippet-snippets-dir new-snip-dir)
            (yas-reload-all)))
-       (seq-do #'load-file
-               (split-string
-                (shell-command-to-string
-                 "find ~/.emacs.d/elpa -name '*autoloads.el' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
-       (seq-do (lambda (filename)
-                 (let* ((pac (file-name-base filename))
-                        (pac-sym (intern pac)))
-                   (if (featurep pac-sym)
-                       (progn
-                         (message "reloading %s" pac)
-                         (load-file filename)))))
-               (split-string
-                (shell-command-to-string
-                 "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
+       ;; (seq-do #'load-file
+       ;;         (split-string
+       ;;          (shell-command-to-string
+       ;;           "find ~/.emacs.d/elpa -name '*autoloads.el'") "\n" t))
+       ;; (seq-do (lambda (filename)
+       ;;           (let* ((pac (file-name-base filename))
+       ;;                  (pac-sym (intern pac)))
+       ;;             (if (featurep pac-sym)
+       ;;                 (progn
+       ;;                   (message "reloading %s" pac)
+       ;;                   (load-file filename)))))
+       ;;         (split-string
+       ;;          (shell-command-to-string
+       ;;           "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
        (my-set-themes-hook)
        (message "packages bootstrap success: %s" res))))
 
@@ -636,10 +637,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq eval-expression-debug-on-error t)
 
 ;;;; Web developement
+(use-package json-mode
+  :mode (("\\.json$" . json-mode)))
+
 (use-package js2-mode
   :mode
-  (("\\.js$" . js2-mode)
-   ("\\.json$" . js-mode))
+  (("\\.js$" . js2-mode))
   :bind (:map js2-mode-map
               ("C-c C-l" . indium-eval-buffer))
   :config
