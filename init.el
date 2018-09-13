@@ -1879,7 +1879,9 @@ the CLI and emacs interface."))
 (use-package helm-codesearch
   :bind (("C-c h f" . helm-codesearch-find-file)
          ("C-c h s" . helm-codesearch-find-pattern)
-         ("C-c h c" . helm-codesearch-create-csearchindex)))
+         ("C-c h c" . helm-codesearch-create-csearchindex))
+  :config
+  (setq helm-codesearch-global-csearchindex (concat (getenv "HOME") "/.csearchindex")))
 
 ;; helm charts support
 (require 'company-dabbrev-code)
