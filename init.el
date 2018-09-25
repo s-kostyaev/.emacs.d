@@ -87,10 +87,10 @@
   ;; (load-theme 'spacemacs-light t)
   ;; (require 'circadian)
   ;; (circadian-activate-latest-theme)
-  (load-theme 'spacemacs-light t)
+  ;; (load-theme 'spacemlacs-light t)
   ;; (load-theme 'solarized-light t)
 
-  ;; (load-theme 'spacemacs-dark t)
+  (load-theme 'spacemacs-dark t)
   ;; (load-theme 'solarized-dark t)
 
   (tool-bar-mode -1)
@@ -1185,8 +1185,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (require 'speed-type)
 
 ;; magit
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns))
+  :config
+  (exec-path-from-shell-initialize))
+
 (use-package
-  magit
+    magit
   :defines (auto-revert-check-vc-info)
   :functions (my-magit-diff-hook)
   :defer t
