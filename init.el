@@ -979,8 +979,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (progn
     (setq helm-source-grep (helm-build-dummy-source "init_grep" :follow 1))
     (add-hook 'helm-before-initialize-hook
-              (lambda () (helm-attrset 'follow 1 helm-source-grep)))
-    (load "helm-autoloads"))
+              (lambda () (helm-attrset 'follow 1 helm-source-grep))))
   :config
   (use-package ace-jump-helm-line
     :bind
@@ -1714,8 +1713,6 @@ the CLI and emacs interface."))
   (setq notmuch-hello-sections '(notmuch-hello-insert-header my-notmuch-hello-insert-searches notmuch-hello-insert-search notmuch-hello-insert-recent-searches notmuch-hello-insert-alltags notmuch-hello-insert-footer)))
 
 (use-package rust-mode
-  :init
-  (load "rust-mode-autoloads")
   :config
   (use-package racer
     :functions (racer-mode))
