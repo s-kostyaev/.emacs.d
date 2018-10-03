@@ -491,7 +491,7 @@
 
 ;;; Python mode
 (add-hook 'python-mode-hook #'anaconda-mode)
-(add-hook 'python-mode-hook #'eldoc-mode)
+(add-hook 'python-mode-hook #'anaconda-eldoc-mode)
 
 (setenv "PYMACS_PYTHON" "python2")
 (setenv "PYTHONPATH" "/usr/bin/python2")
@@ -1191,12 +1191,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
   (exec-path-from-shell-initialize))
 
 (use-package
-    magit
+  magit
   :defines (auto-revert-check-vc-info)
   :functions (my-magit-diff-hook)
   :defer t
-  :init
-  (load "magit-autoloads")
   :config
   (progn
     (defun my-magit-diff-hook ()
