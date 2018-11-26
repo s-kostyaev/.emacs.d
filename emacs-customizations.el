@@ -31,12 +31,12 @@
  '(dtrt-indent-active-mode-line-info "")
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
- '(flycheck-disabled-checkers (quote (erlang-rebar3)))
+ '(flycheck-disabled-checkers (quote (erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert)))
  '(flycheck-gometalinter-deadline "30s")
  '(flycheck-gometalinter-disable-linters (quote ("gotype")))
  '(flycheck-vale-modes
    (quote
-    (text-mode markdown-mode rst-mode gfm-mode web-mode)))
+    (text-mode markdown-mode rst-mode gfm-mode web-mode)) t)
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
  '(go-add-tags-style (quote lower-camel-case))
@@ -73,7 +73,7 @@
      ("melpa-stable" . "https://stable.melpa.org/packages/"))))
  '(package-selected-packages
    (quote
-    (docker-tramp exec-path-from-shell json-mode flycheck-golangci-lint pyvenv pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm lsp-go lsp-ui go-fill-struct edit-server ace-jump-helm-line helm-codesearch company-ycmd flycheck-ycmd python-mode go-tag sicp go-gen-test company-lsp meghanada paradox go-add-tags go-rename helm-dash circadian comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-swoop helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv godoctor go-playground color-theme lsp-mode company-racer cargo flycheck-rust racer rust-mode rust-playground flycheck-clang-analyzer feature-mode reverse-im flycheck-irony flycheck-rtags json-navigator zygospore hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay aurel arch-packer ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-mode web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rtags rjsx-mode restclient react-snippets pandoc-mode pacmacs package-lint noflet nlinum monokai-theme markdown-mode lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl go-eldoc go-autocomplete geiser fuzzy fsm flymd flycheck-gometalinter flycheck-dialyzer flx fill-column-indicator esup eopengrok ensime embrace edit-indirect darkokai-theme counsel-projectile composable company-tern company-statistics company-quickhelp company-irony-c-headers company-irony company-go company-erlang company-c-headers company-anaconda column-marker column-enforce-mode cmake-ide cmake-font-lock cask-mode camcorder auto-complete-clang ace-window ace-mc ace-link ac-js2 ac-emmet ac-cider)))
+    (docker-tramp exec-path-from-shell json-mode pyvenv pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm lsp-go lsp-ui go-fill-struct edit-server ace-jump-helm-line helm-codesearch company-ycmd flycheck-ycmd python-mode go-tag sicp go-gen-test company-lsp meghanada paradox go-add-tags go-rename helm-dash circadian comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-swoop helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv godoctor go-playground color-theme lsp-mode company-racer cargo flycheck-rust racer rust-mode rust-playground flycheck-clang-analyzer feature-mode reverse-im flycheck-irony flycheck-rtags json-navigator zygospore hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay aurel arch-packer ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-mode web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rtags rjsx-mode restclient react-snippets pandoc-mode pacmacs package-lint noflet nlinum monokai-theme markdown-mode lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl go-eldoc go-autocomplete geiser fuzzy fsm flymd flycheck-dialyzer flx fill-column-indicator esup eopengrok ensime embrace edit-indirect darkokai-theme counsel-projectile composable company-tern company-statistics company-quickhelp company-irony-c-headers company-irony company-go company-erlang company-c-headers company-anaconda column-marker column-enforce-mode cmake-ide cmake-font-lock cask-mode camcorder auto-complete-clang ace-window ace-mc ace-link ac-js2 ac-emmet ac-cider)))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)

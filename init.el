@@ -379,13 +379,18 @@
   :defer 3
   :bind ("C-c r" . flycheck-list-errors)
   :config
-  (global-flycheck-mode))
+  (global-flycheck-mode)
+  ;; :init
+  ;; (-map (lambda (c) (add-to-list 'flycheck-disabled-checkers c))
+  ;;       (-filter (lambda (s) (s-prefix? "go-" (prin1-to-string s))) flycheck-checkers))
+  )
 
-(use-package flycheck-golangci-lint
-  :hook (go-mode . flycheck-golangci-lint-setup))
+;; (use-package flycheck-golangci-lint
+;;   :hook (go-mode . flycheck-golangci-lint-setup))
 
 (use-package go-mode
-  :mode "\\.go\\'"
+  :mode (("\\.go\\'" . go-mode)
+         ("go.mod$" . go-mode))
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
                               godoc-at-point goimports lsp-go-enable lsp-ui-mode)
   :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args lsp-ui-peek-mode-map)
@@ -425,8 +430,8 @@
       (setq go-tag-args (list "-transform" "camelcase"))
       ;; (if (buffer-file-name)
       ;;     (lsp-go-enable))
-      (if (not (featurep 'expanderr))
-          (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
+      ;; (if (not (featurep 'expanderr))
+      ;;     (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       ;; (flycheck-gometalinter-setup)
       ;; (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)

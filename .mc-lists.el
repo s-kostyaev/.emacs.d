@@ -39,6 +39,7 @@
         ace-mc-do-keyboard-reset
         ace-window
         avy-goto-word-1
+        aya-expand
         beginning-of-buffer
         company-complete-selection
         counsel-M-x
