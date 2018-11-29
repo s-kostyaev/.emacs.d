@@ -31,7 +31,9 @@
  '(dtrt-indent-active-mode-line-info "")
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
- '(flycheck-disabled-checkers (quote (erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert)))
+ '(flycheck-disabled-checkers
+   (quote
+    (erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert)))
  '(flycheck-gometalinter-deadline "30s")
  '(flycheck-gometalinter-disable-linters (quote ("gotype")))
  '(flycheck-vale-modes

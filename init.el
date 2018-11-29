@@ -390,7 +390,7 @@
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
-         ("go.mod$" . go-mode))
+         ("go.mod$" . text-mode))
   :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
                               godoc-at-point goimports lsp-go-enable lsp-ui-mode)
   :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args lsp-ui-peek-mode-map)
@@ -402,7 +402,7 @@
 
     (defun my-go-mode-hook ()
       "Setup for go."
-      (require 'company-go)
+      ;; (require 'company-go)
       (require 'go-impl)
       ;; (require 'lsp-mode)
       ;; (require 'lsp-ui)
@@ -422,9 +422,9 @@
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
       (require 'gotest)
       (require 'go-playground)
-      (require 'go-eldoc)
-      (require 'godoctor)
-      (require 'go-rename)
+      ;; (require 'go-eldoc)
+      ;; (require 'godoctor)
+      ;; (require 'go-rename)
       (require 'go-add-tags)
       ;; (require 'lsp-go)
       (setq go-tag-args (list "-transform" "camelcase"))
@@ -434,7 +434,7 @@
       ;;     (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       ;; (flycheck-gometalinter-setup)
       ;; (setq flycheck-gometalinter-deadline "30s")
-      (add-hook 'before-save-hook #'gofmt-before-save)
+      ;; (add-hook 'before-save-hook #'gofmt-before-save)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "C-c t") #'go-tag-add)
@@ -1628,6 +1628,7 @@ A prefix arg makes KEEP-TIME non-nil."
   (reverse-im-activate "russian-computer"))
 
 (use-package notmuch
+  :disabled t
   :functions (notmuch-tag-completions notmuch-logged-error)
   :defines (notmuch-hello-thousands-separator
             notmuch-command
@@ -1637,6 +1638,7 @@ A prefix arg makes KEEP-TIME non-nil."
   :commands notmuch)
 
 (use-package notmuch-hello
+  :disabled t
   :functions (my-count-query
               my-notmuch-hello-query-insert
               notmuch-hello-nice-number
