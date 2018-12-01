@@ -388,6 +388,34 @@
 ;; (use-package flycheck-golangci-lint
 ;;   :hook (go-mode . flycheck-golangci-lint-setup))
 
+(setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
+                              (python-mode . ("pyls"))
+                              ((js-mode
+                                js2-mode
+                                rjsx-mode) . ("javascript-typescript-stdio"))
+                              (sh-mode . ("bash-language-server" "start"))
+                              ((c++-mode c-mode) . ("ccls"))
+                              ((caml-mode tuareg-mode reason-mode)
+                               . ("ocaml-language-server" "--stdio"))
+                              (ruby-mode
+                               . ("solargraph" "socket" "--port"
+                                  :autoport))
+                              (php-mode . ("php" "vendor/felixfbecker/\
+language-server/bin/php-language-server.php"))
+                              (haskell-mode . ("hie-wrapper"))
+                              (kotlin-mode . ("kotlin-language-server"))
+                              (go-mode . ("bingo" "-mode=stdio" "-logfile=/tmp/bingo.log"))
+                              ((R-mode ess-r-mode) . ("R" "--slave" "-e"
+                                                      "languageserver::run()"))
+                              (java-mode . eglot--eclipse-jdt-contact)))
+
+(require 'lsp)
+(setq lsp-response-timeout 1000)
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection "bingo")
+                  :major-modes '(go-mode)
+                  :server-id 'bingo))
+
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
@@ -404,7 +432,7 @@
       "Setup for go."
       ;; (require 'company-go)
       (require 'go-impl)
-      ;; (require 'lsp-mode)
+      (require 'lsp)
       ;; (require 'lsp-ui)
       ;; (require 'flycheck-gometalinter)
       (use-package go-direx
@@ -434,7 +462,7 @@
       ;;     (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
       ;; (flycheck-gometalinter-setup)
       ;; (setq flycheck-gometalinter-deadline "30s")
-      ;; (add-hook 'before-save-hook #'gofmt-before-save)
+      (add-hook 'before-save-hook #'gofmt-before-save)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "C-c t") #'go-tag-add)
@@ -442,12 +470,12 @@
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      (local-set-key (kbd "M-?") #'my-counsel-git-grep)
-      (local-set-key (kbd "M-.") #'godef-jump)
-      ;; (if (buffer-file-name) (lsp-mode))
-      (go-eldoc-setup)
-      (local-set-key (kbd "C-h C-d") #'godoc-at-point)
-      (setq-local company-backends '(company-go))
+      ;; (local-set-key (kbd "M-?") #'my-counsel-git-grep)
+      ;; (local-set-key (kbd "M-.") #'godef-jump)
+      (if (buffer-file-name) (lsp))
+      ;; (go-eldoc-setup)
+      ;; (local-set-key (kbd "C-h C-d") #'lsp-describe-thing-at-point)
+      (setq-local company-backends '(company-lsp))
       ;; (lsp-ui-mode 1)
       ;; (define-key lsp-ui-peek-mode-map (kbd "C-n") 'lsp-ui-peek--select-next)
       ;; (define-key lsp-ui-peek-mode-map (kbd "C-p") 'lsp-ui-peek--select-prev)
@@ -639,7 +667,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     ;; fix for infinite eating RAM
     (add-hook 'rjsx-mode-hook #'my-disable-fci)))
 
-(setq eval-expression-debug-on-error t)
+;; (setq eval-expression-debug-on-error nil)
 
 ;;;; Web developement
 (use-package json-mode

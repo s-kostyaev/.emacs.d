@@ -28,6 +28,7 @@
    (quote
     ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(debug-on-error nil)
+ '(debug-on-quit nil)
  '(dtrt-indent-active-mode-line-info "")
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
@@ -63,7 +64,8 @@
  '(helm-session-fuzzy-match t)
  '(helm-swoop-pre-input-function (lambda nil nil))
  '(lsp-ui-doc-enable nil)
- '(lsp-ui-flycheck-enable nil)
+ '(lsp-ui-flycheck-enable t)
+ '(lsp-ui-sideline-enable nil)
  '(mail-envelope-from (quote header))
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from (quote header))
@@ -83,7 +85,40 @@
  '(plantuml-jar-path (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
  '(pyenv-mode t)
  '(racer-rust-src-path "/usr/src/rust/src")
- '(safe-local-variable-values (quote ((eval c-set-offset (quote innamespace) 0))))
+ '(safe-local-variable-values
+   (quote
+    ((checkdoc-minor-mode . 1)
+     (eval when
+           (and
+            (buffer-file-name)
+            (file-regular-p
+             (buffer-file-name))
+            (string-match-p "^[^.]"
+                            (buffer-file-name)))
+           (unless
+               (featurep
+                (quote package-build))
+             (let
+                 ((load-path
+                   (cons "../package-build" load-path)))
+               (require
+                (quote package-build))))
+           (package-build-minor-mode)
+           (set
+            (make-local-variable
+             (quote package-build-working-dir))
+            (expand-file-name "../working/"))
+           (set
+            (make-local-variable
+             (quote package-build-archive-dir))
+            (expand-file-name "../packages/"))
+           (set
+            (make-local-variable
+             (quote package-build-recipes-dir))
+            default-directory))
+     (eval c-set-offset
+           (quote innamespace)
+           0))))
  '(send-mail-function (quote sendmail-send-it))
  '(sendmail-program "/usr/bin/msmtp")
  '(sml/theme (quote respectful))
