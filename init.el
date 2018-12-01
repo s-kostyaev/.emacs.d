@@ -414,7 +414,8 @@ language-server/bin/php-language-server.php"))
 (lsp-register-client
  (make-lsp-client :new-connection (lsp-stdio-connection "bingo")
                   :major-modes '(go-mode)
-                  :server-id 'bingo))
+                  :server-id 'bingo
+                  :use-native-json t))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -475,7 +476,7 @@ language-server/bin/php-language-server.php"))
       (if (buffer-file-name) (lsp))
       ;; (go-eldoc-setup)
       ;; (local-set-key (kbd "C-h C-d") #'lsp-describe-thing-at-point)
-      (setq-local company-backends '(company-lsp))
+      ;; (setq-local company-backends '(company-lsp))
       ;; (lsp-ui-mode 1)
       ;; (define-key lsp-ui-peek-mode-map (kbd "C-n") 'lsp-ui-peek--select-next)
       ;; (define-key lsp-ui-peek-mode-map (kbd "C-p") 'lsp-ui-peek--select-prev)
@@ -483,12 +484,12 @@ language-server/bin/php-language-server.php"))
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
-(defun my-lsp-hook ()
-  "Hook for 'lsp-mode."
-  (interactive)
-  (require 'company-lsp)
-  (add-to-list 'company-backends 'company-lsp))
-(add-hook 'lsp-after-initialize-hook #'my-lsp-hook)
+;; (defun my-lsp-hook ()
+;;   "Hook for 'lsp-mode."
+;;   (interactive)
+;;   (require 'company-lsp)
+;;   (add-to-list 'company-backends 'company-lsp))
+;; (add-hook 'lsp-after-initialize-hook #'my-lsp-hook)
 
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
