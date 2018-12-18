@@ -410,12 +410,54 @@ language-server/bin/php-language-server.php"))
                               (java-mode . eglot--eclipse-jdt-contact)))
 
 (require 'lsp)
-(setq lsp-response-timeout 1000)
+;; (require 'lsp-clients)
+;; (setq lsp-response-timeout 1000)
 (lsp-register-client
- (make-lsp-client :new-connection (lsp-stdio-connection "bingo")
+ (make-lsp-client :new-connection (lsp-stdio-connection '("bingo" "-disable-diagnostics"))
                   :major-modes '(go-mode)
                   :server-id 'bingo
                   :use-native-json t))
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection "golsp")
+;;                   :major-modes '(go-mode)
+;;                   :server-id 'golsp
+;;                   :use-native-json t))
+
+(setq company-lsp-enable-snippet t)
+(setq company-lsp-enable-recompletion t)
+
+(defun my-split-go-args (input)
+  "Splits INPUT to list of args."
+  (let* ((splitted (s-split "," input))
+         (counter 0)
+         (res '())
+         (prev ""))
+    (seq-doseq (el splitted)
+      (setq prev (if (s-blank? prev) el (concat prev "," el)))
+      (if (s-contains? "(" el) (setq counter (+ counter 1)))
+      (if (s-contains? ")" el) (setq counter (- counter 1)))
+      (if (= counter 0) (progn
+                          (setq res (append res (list prev)))
+                          (setq prev ""))))
+    res))
+
+(defun company-lsp--go-completion-snippet (item)
+  "Function providing snippet with the go language.
+It parses the function's signature in ITEM (a CompletionItem)
+to expand its arguments."
+  (let* ((detail (gethash "detail" item))
+         (snippet
+          (-some-->
+           detail
+           (s-trim it)
+           (substring it (1+ (s-index-of "(" it)) (- (seq-length it) 1))
+           (and (not (s-blank-str? it)) it)
+           (my-split-go-args it)
+           (mapconcat (lambda (x) (format "${%s}" (s-trim x))) it ", "))))
+    (if (s-index-of "(" detail) (concat "(" (or snippet "$1") ")$0") nil)))
+
+(setq company-lsp--snippet-functions '(("rust" . company-lsp--rust-completion-snippet)
+                                       ("go" . company-lsp--go-completion-snippet)))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -473,10 +515,10 @@ language-server/bin/php-language-server.php"))
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       ;; (local-set-key (kbd "M-?") #'my-counsel-git-grep)
       ;; (local-set-key (kbd "M-.") #'godef-jump)
-      (if (buffer-file-name) (lsp))
+      (lsp)
       ;; (go-eldoc-setup)
       ;; (local-set-key (kbd "C-h C-d") #'lsp-describe-thing-at-point)
-      ;; (setq-local company-backends '(company-lsp))
+      ;; (setq-local company-backends '(company-go))
       ;; (lsp-ui-mode 1)
       ;; (define-key lsp-ui-peek-mode-map (kbd "C-n") 'lsp-ui-peek--select-next)
       ;; (define-key lsp-ui-peek-mode-map (kbd "C-p") 'lsp-ui-peek--select-prev)

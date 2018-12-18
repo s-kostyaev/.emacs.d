@@ -90,4 +90,5 @@
         my-counsel-company
         save-buffers-kill-terminal
         scroll-up-line
+        tab-indent-or-complete
         ))
