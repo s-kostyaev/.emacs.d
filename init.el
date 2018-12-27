@@ -570,27 +570,27 @@ language-server/bin/php-language-server.php"))
 (put 'downcase-region 'disabled nil)
 
 ;;; Python mode
-(add-hook 'python-mode-hook #'anaconda-mode)
-(add-hook 'python-mode-hook #'anaconda-eldoc-mode)
+;; (add-hook 'python-mode-hook #'anaconda-mode)
+;; (add-hook 'python-mode-hook #'anaconda-eldoc-mode)
 
-(setenv "PYMACS_PYTHON" "python2")
-(setenv "PYTHONPATH" "/usr/bin/python2")
-(autoload 'python-mode "python-mode.el" "Python Mode." t)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
-(defvar python-indent)
-(declare-function py-shift-right "ext:python-mode")
-(declare-function py-shift-left "ext:python-mode")
-(defvar python-indent-offset)
-(defun my-python-hook ()
-  "Setup for python."
-  (add-to-list 'company-backends 'company-anaconda)
-  (setq indent-tabs-mode nil)
-  (setq python-indent-offset 4)
-  (setq tab-width 8)
-  (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
-  (local-set-key (kbd "<backtab>") #'py-shift-left))
-(add-hook 'python-mode-hook #'my-python-hook)
+;; (setenv "PYMACS_PYTHON" "python2")
+;; (setenv "PYTHONPATH" "/usr/bin/python2")
+;; (autoload 'python-mode "python-mode.el" "Python Mode." t)
+;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+;; (add-to-list 'interpreter-mode-alist '("python" . python-mode))
+;; (defvar python-indent)
+;; (declare-function py-shift-right "ext:python-mode")
+;; (declare-function py-shift-left "ext:python-mode")
+;; (defvar python-indent-offset)
+;; (defun my-python-hook ()
+;;   "Setup for python."
+;;   (add-to-list 'company-backends 'company-anaconda)
+;;   (setq indent-tabs-mode nil)
+;;   (setq python-indent-offset 4)
+;;   (setq tab-width 8)
+;;   (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
+;;   (local-set-key (kbd "<backtab>") #'py-shift-left))
+;; (add-hook 'python-mode-hook #'my-python-hook)
 
 (use-package octave
   :mode ("\\.m$" . octave-mode)
@@ -670,10 +670,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook #'delete-other-windows)
 
-(use-package pkgbuild-mode
-  :disabled t
-  :functions (pkgbuild-mode)
-  :mode ("/PKGBUILD$" . pkgbuild-mode))
+;; (use-package pkgbuild-mode
+;;   :disabled t
+;;   :functions (pkgbuild-mode)
+;;   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package markdown-mode
   :mode (("\\.text\\'" . markdown-mode)
@@ -814,50 +814,51 @@ the end of the line, then comment current line.  Replaces default behaviour of
   ;; https://github.com/NicolasPetton/indium
   (use-package indium
     :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
-  (use-package tern
-    :init
-    (add-hook 'js2-mode-hook #'my-js-mode-hook)
-    (add-hook 'js-mode-hook #'my-js-mode-hook)
-    (add-hook 'web-mode-hook #'my-js-mode-hook)
-    (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-    (setq exec-path (append exec-path '("/usr/local/bin")))
+  ;; (use-package tern
+  ;;   :init
+  ;;   (add-hook 'js2-mode-hook #'my-js-mode-hook)
+  ;;   (add-hook 'js-mode-hook #'my-js-mode-hook)
+  ;;   (add-hook 'web-mode-hook #'my-js-mode-hook)
+  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+  ;;   (setq exec-path (append exec-path '("/usr/local/bin")))
 
-    :functions
-    (my-js-mode-hook)
-    :config
-    (defun my-js-mode-hook ()
-      "Hook for `js-mode'."
-      (tern-mode)
-      (define-key tern-mode-keymap (kbd "M-.") nil)
-      (define-key tern-mode-keymap (kbd "M-,") nil)
-      (set (make-local-variable 'company-backends)
-           '((company-tern company-files))))
-    (add-hook 'js2-mode-hook 'my-js-mode-hook))
+  ;;   :functions
+  ;;   (my-js-mode-hook)
+  ;;   :config
+  ;;   (defun my-js-mode-hook ()
+  ;;     "Hook for `js-mode'."
+  ;;     (tern-mode)
+  ;;     (define-key tern-mode-keymap (kbd "M-.") nil)
+  ;;     (define-key tern-mode-keymap (kbd "M-,") nil)
+  ;;     (set (make-local-variable 'company-backends)
+  ;;          '((company-tern company-files))))
+  ;;   (add-hook 'js2-mode-hook 'my-js-mode-hook))
 
   ;; turn off all warnings in js2-mode
   (setq js2-mode-show-parse-errors t)
   (setq js2-mode-show-strict-warnings nil)
 
-  (use-package company-tern))
+  ;; (use-package company-tern)
+  )
 
 (use-package rjsx-mode
   :mode ("\\.jsx$" . rjsx-mode))
 
-(use-package web-mode
-  :init
-  (add-hook 'web-mode-hook  #'my-web-mode-hook)
-  :mode (("\\.htm[l]?$" . web-mode)
-         ("\\.dtl$" . web-mode))
-  :functions (my-web-mode-hook)
-  :config
-  (defun my-web-mode-hook ()
-    "Hooks for Web mode.  Adjust `indent's."
-    ;; http://web-mode.org/
-    (setq web-mode-markup-indent-offset 2)
-    (setq web-mode-css-indent-offset 2)
-    (setq web-mode-code-indent-offset 2)
-    (setq web-mode-enable-current-element-highlight t)
-    (fci-mode -1)))
+;; (use-package web-mode
+;;   :init
+;;   (add-hook 'web-mode-hook  #'my-web-mode-hook)
+;;   :mode (("\\.htm[l]?$" . web-mode)
+;;          ("\\.dtl$" . web-mode))
+;;   :functions (my-web-mode-hook)
+;;   :config
+;;   (defun my-web-mode-hook ()
+;;     "Hooks for Web mode.  Adjust `indent's."
+;;     ;; http://web-mode.org/
+;;     (setq web-mode-markup-indent-offset 2)
+;;     (setq web-mode-css-indent-offset 2)
+;;     (setq web-mode-code-indent-offset 2)
+;;     (setq web-mode-enable-current-element-highlight t)
+;;     (fci-mode -1)))
 
 (defvar company-tooltip-align-annotations)
 (setq company-tooltip-align-annotations t)
@@ -1248,18 +1249,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;      (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
 
 ;;;; OpenGrok
-(defvar eopengrok-jar)
-(setq eopengrok-jar
-      (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
-(defvar eopengrok-ctags)
-(setq eopengrok-ctags "/usr/bin/ctags")
-;; (require 'eopengrok)
-(defun my-opengrok-hook ()
-  "Hook for eopengrok."
-  (local-set-key (kbd "o") #'(lambda ()
-                               (interactive)
-                               (other-window 1))))
-(add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
+;; (defvar eopengrok-jar)
+;; (setq eopengrok-jar
+;;       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
+;; (defvar eopengrok-ctags)
+;; (setq eopengrok-ctags "/usr/bin/ctags")
+;; ;; (require 'eopengrok)
+;; (defun my-opengrok-hook ()
+;;   "Hook for eopengrok."
+;;   (local-set-key (kbd "o") #'(lambda ()
+;;                                (interactive)
+;;                                (other-window 1))))
+;; (add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
 
 ;; speed-typing
 ;; (require 'speed-type)
@@ -1457,115 +1458,115 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 
 ;;;; C, C++ Development
-(use-package flycheck-clang-analyzer
-  :after flycheck-irony
-  :config
-  (flycheck-clang-analyzer-setup))
+;; (use-package flycheck-clang-analyzer
+;;   :after flycheck-irony
+;;   :config
+;;   (flycheck-clang-analyzer-setup))
 
-(use-package xah-lookup
-  :bind (:map c++-mode-map
-              ("C-c b" . xah-lookup-boost)
-              ("C-c d" . xah-lookup-cppreference))
-  :functions (xah-lookup-word-on-internet xah-lookup-cppreference xah-lookup-boost)
-  :defines (xah-lookup-browser-function)
-  :config
-  (defun xah-lookup-cppreference (&optional word)
-    "Lookup definition of current WORD or text selection in URL."
-    (interactive)
-    (xah-lookup-word-on-internet
-     word
-     ;; Use � as a placeholder in the query URL.
-     "http://en.cppreference.com/mwiki/index.php?search=�"
-     xah-lookup-browser-function))
+;; (use-package xah-lookup
+;;   :bind (:map c++-mode-map
+;;               ("C-c b" . xah-lookup-boost)
+;;               ("C-c d" . xah-lookup-cppreference))
+;;   :functions (xah-lookup-word-on-internet xah-lookup-cppreference xah-lookup-boost)
+;;   :defines (xah-lookup-browser-function)
+;;   :config
+;;   (defun xah-lookup-cppreference (&optional word)
+;;     "Lookup definition of current WORD or text selection in URL."
+;;     (interactive)
+;;     (xah-lookup-word-on-internet
+;;      word
+;;      ;; Use � as a placeholder in the query URL.
+;;      "http://en.cppreference.com/mwiki/index.php?search=�"
+;;      xah-lookup-browser-function))
 
-  (defun xah-lookup-boost (&optional word)
-    "Lookup definition of current WORD or text selection in URL."
-    (interactive)
-    (xah-lookup-word-on-internet
-     word
-     "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
-     xah-lookup-browser-function)))
+;;   (defun xah-lookup-boost (&optional word)
+;;     "Lookup definition of current WORD or text selection in URL."
+;;     (interactive)
+;;     (xah-lookup-word-on-internet
+;;      word
+;;      "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
+;;      xah-lookup-browser-function)))
 
-(use-package cmake-ide
-  :defer 3
-  :disabled t
-  :config
-  (use-package rtags
-    :functions (rtags-eldoc
-                rtags-call-rc
-                rtags-symbol-type
-                rtags-print-symbol-info
-                rtags-find-symbol-at-point
-                rtags-find-references-at-point)
-    :config
-    (require 'package)
-    (require 'pkg-info)
-    (setq rtags-completions-enabled nil))
+;; (use-package cmake-ide
+;;   :defer 3
+;;   :disabled t
+;;   :config
+;;   (use-package rtags
+;;     :functions (rtags-eldoc
+;;                 rtags-call-rc
+;;                 rtags-symbol-type
+;;                 rtags-print-symbol-info
+;;                 rtags-find-symbol-at-point
+;;                 rtags-find-references-at-point)
+;;     :config
+;;     (require 'package)
+;;     (require 'pkg-info)
+;;     (setq rtags-completions-enabled nil))
 
-  (use-package irony
-    :functions (irony-cdb-json-add-compile-commands-path my-flycheck-irony-setup)
-    :config
-    (use-package irony-cdb)
-    (use-package irony-cdb-json)
-    (defun my-flycheck-irony-setup ()
-      "Setup irony checker."
-      (use-package flycheck-irony)
-      (flycheck-select-checker 'irony))
+;;   (use-package irony
+;;     :functions (irony-cdb-json-add-compile-commands-path my-flycheck-irony-setup)
+;;     :config
+;;     (use-package irony-cdb)
+;;     (use-package irony-cdb-json)
+;;     (defun my-flycheck-irony-setup ()
+;;       "Setup irony checker."
+;;       (use-package flycheck-irony)
+;;       (flycheck-select-checker 'irony))
 
-    (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
+;;     (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
 
-  (cmake-ide-setup))
+;;   (cmake-ide-setup))
 
-(set-variable 'ycmd-server-command '("python" "/home/feofan/ycmd/ycmd"))
-(declare-function ycmd-goto "ext:ycmd")
-(declare-function ycmd-goto-references "ext:ycmd")
-(defun my-cc-mode-hook ()
-  "My hook for c & c++ modes."
-  (require 'cc-mode)
-  (require 'ycmd)
-  (require 'company-ycmd)
-  (require 'flycheck-ycmd)
-  (ycmd-mode 1)
-  ;; (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
-  ;; (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
-  (local-set-key (kbd "M-.") #'ycmd-goto
-                 ;; (lambda ()
-                 ;;   (interactive)
-                 ;;   (xref-push-marker-stack)
-                 ;;   (rtags-find-symbol-at-point))
-                 )
-  (local-set-key (kbd "M-?") #'ycmd-goto-references
-                 ;; (lambda ()
-                 ;;   (interactive)
-                 ;;   (xref-push-marker-stack)
-                 ;;   (rtags-find-references-at-point))
-                 )
-  ;; (local-set-key (kbd "C-'") #'company-irony-c-headers)
-  ;; (rtags-start-process-unless-running)
-  ;; (setq-local eldoc-documentation-function #'rtags-eldoc)
-  ;; (eldoc-mode +1)
-  (ycmd-eldoc-mode 1)
-  (flycheck-ycmd-setup)
-  ;; (irony-mode)
-  ;; (my-flycheck-irony-setup)
-  (add-to-list 'company-backends ;; '(company-irony company-irony-c-headers)
-               '(company-ycmd)
-               ))
-(add-hook 'c++-mode-hook #'my-cc-mode-hook)
-(add-hook 'c-mode-hook #'my-cc-mode-hook)
+;; (set-variable 'ycmd-server-command '("python" "/home/feofan/ycmd/ycmd"))
+;; (declare-function ycmd-goto "ext:ycmd")
+;; (declare-function ycmd-goto-references "ext:ycmd")
+;; (defun my-cc-mode-hook ()
+;;   "My hook for c & c++ modes."
+;;   (require 'cc-mode)
+;;   (require 'ycmd)
+;;   (require 'company-ycmd)
+;;   (require 'flycheck-ycmd)
+;;   (ycmd-mode 1)
+;;   ;; (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
+;;   ;; (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
+;;   (local-set-key (kbd "M-.") #'ycmd-goto
+;;                  ;; (lambda ()
+;;                  ;;   (interactive)
+;;                  ;;   (xref-push-marker-stack)
+;;                  ;;   (rtags-find-symbol-at-point))
+;;                  )
+;;   (local-set-key (kbd "M-?") #'ycmd-goto-references
+;;                  ;; (lambda ()
+;;                  ;;   (interactive)
+;;                  ;;   (xref-push-marker-stack)
+;;                  ;;   (rtags-find-references-at-point))
+;;                  )
+;;   ;; (local-set-key (kbd "C-'") #'company-irony-c-headers)
+;;   ;; (rtags-start-process-unless-running)
+;;   ;; (setq-local eldoc-documentation-function #'rtags-eldoc)
+;;   ;; (eldoc-mode +1)
+;;   (ycmd-eldoc-mode 1)
+;;   (flycheck-ycmd-setup)
+;;   ;; (irony-mode)
+;;   ;; (my-flycheck-irony-setup)
+;;   (add-to-list 'company-backends ;; '(company-irony company-irony-c-headers)
+;;                '(company-ycmd)
+;;                ))
+;; (add-hook 'c++-mode-hook #'my-cc-mode-hook)
+;; (add-hook 'c-mode-hook #'my-cc-mode-hook)
 
-(use-package cmake-mode
-  :mode
-  (("CMakeLists\\.txt\\'" . cmake-mode)
-   ("\\.cmake\\'" . cmake-mode)))
+;; (use-package cmake-mode
+;;   :mode
+;;   (("CMakeLists\\.txt\\'" . cmake-mode)
+;;    ("\\.cmake\\'" . cmake-mode)))
 
-(use-package cmake-font-lock
-  :functions (cmake-font-lock-activate))
+;; (use-package cmake-font-lock
+;;   :functions (cmake-font-lock-activate))
 
-(defun my-cmake-font-lock ()
-  "Activate font lock for cmake."
-  (cmake-font-lock-activate))
-(add-hook 'cmake-mode-hook #'my-cmake-font-lock)
+;; (defun my-cmake-font-lock ()
+;;   "Activate font lock for cmake."
+;;   (cmake-font-lock-activate))
+;; (add-hook 'cmake-mode-hook #'my-cmake-font-lock)
 
 ;; Semantic
 ;; (require 'cc-mode)
@@ -1591,16 +1592,16 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar ensime-startup-notification)
 (setq ensime-startup-notification nil)
 
-(declare-function meghanada-reference "ext:meghanada")
-(defun my-java-hook ()
-  "My java hook."
-  (interactive)
-  (require 'meghanada)
-  (meghanada-mode t)
-  (local-set-key (kbd "M-?") #'meghanada-reference)
-  (add-hook 'before-save-hook 'meghanada-code-beautify-before-save))
+;; (declare-function meghanada-reference "ext:meghanada")
+;; (defun my-java-hook ()
+;;   "My java hook."
+;;   (interactive)
+;;   (require 'meghanada)
+;;   (meghanada-mode t)
+;;   (local-set-key (kbd "M-?") #'meghanada-reference)
+;;   (add-hook 'before-save-hook 'meghanada-code-beautify-before-save))
 
-(add-hook 'java-mode-hook #'my-java-hook)
+;; (add-hook 'java-mode-hook #'my-java-hook)
 
 ;;; Ace link
 (use-package ace-link
@@ -1703,108 +1704,108 @@ A prefix arg makes KEEP-TIME non-nil."
   :config
   (reverse-im-activate "russian-computer"))
 
-(use-package notmuch
-  :disabled t
-  :functions (notmuch-tag-completions notmuch-logged-error)
-  :defines (notmuch-hello-thousands-separator
-            notmuch-command
-            notmuch-search-oldest-first
-            notmuch-hello-sections
-            notmuch-saved-searches)
-  :commands notmuch)
+;; (use-package notmuch
+;;   :disabled t
+;;   :functions (notmuch-tag-completions notmuch-logged-error)
+;;   :defines (notmuch-hello-thousands-separator
+;;             notmuch-command
+;;             notmuch-search-oldest-first
+;;             notmuch-hello-sections
+;;             notmuch-saved-searches)
+;;   :commands notmuch)
 
-(use-package notmuch-hello
-  :disabled t
-  :functions (my-count-query
-              my-notmuch-hello-query-insert
-              notmuch-hello-nice-number
-              notmuch-hello-widget-search
-              my-gen-notmuch-ss
-              my-notmuch-update-ss)
-  :after notmuch
-  :config
-  (defun my-gen-notmuch-ss (tag)
-    (let ((key (downcase (or (and (let ((case-fold-search nil))
-                                    (string-match "[[:upper:]]" tag))
-                                  (match-string 0 tag))
-                             (substring tag 0 1)))))
-      (list :key key :name tag :query (format "tag:%s" tag)
-            :search-type 'tree :sort-order 'newest-first)))
-  (defun my-notmuch-update-ss ()
-    (setq notmuch-saved-searches
-          (cons '(:key "e" :name "licEnse" :query "to:sergey.kostyaev@eltex.loc and lic"
-                       :search-type 'tree :sort-order 'newest-first)
-                (seq-map #'my-gen-notmuch-ss (notmuch-tag-completions)))))
-  (my-notmuch-update-ss)
-  (advice-add 'notmuch-jump-search :before 'my-notmuch-update-ss)
-  (setq notmuch-hello-thousands-separator ".")
+;; (use-package notmuch-hello
+;;   :disabled t
+;;   :functions (my-count-query
+;;               my-notmuch-hello-query-insert
+;;               notmuch-hello-nice-number
+;;               notmuch-hello-widget-search
+;;               my-gen-notmuch-ss
+;;               my-notmuch-update-ss)
+;;   :after notmuch
+;;   :config
+;;   (defun my-gen-notmuch-ss (tag)
+;;     (let ((key (downcase (or (and (let ((case-fold-search nil))
+;;                                     (string-match "[[:upper:]]" tag))
+;;                                   (match-string 0 tag))
+;;                              (substring tag 0 1)))))
+;;       (list :key key :name tag :query (format "tag:%s" tag)
+;;             :search-type 'tree :sort-order 'newest-first)))
+;;   (defun my-notmuch-update-ss ()
+;;     (setq notmuch-saved-searches
+;;           (cons '(:key "e" :name "licEnse" :query "to:sergey.kostyaev@eltex.loc and lic"
+;;                        :search-type 'tree :sort-order 'newest-first)
+;;                 (seq-map #'my-gen-notmuch-ss (notmuch-tag-completions)))))
+;;   (my-notmuch-update-ss)
+;;   (advice-add 'notmuch-jump-search :before 'my-notmuch-update-ss)
+;;   (setq notmuch-hello-thousands-separator ".")
 
-  (defun my-count-query (query)
-    (with-temp-buffer
-      (insert query "\n")
-      (unless (= (call-process-region (point-min) (point-max) notmuch-command
-                                      t t nil "count" "--batch") 0)
-        (notmuch-logged-error "Command \"notmuch count --batch\" failed"
-                              "Please check that the notmuch CLI is new enough to support `count
---batch'. In general we recommend running matching versions of
-the CLI and emacs interface."))
+;;   (defun my-count-query (query)
+;;     (with-temp-buffer
+;;       (insert query "\n")
+;;       (unless (= (call-process-region (point-min) (point-max) notmuch-command
+;;                                       t t nil "count" "--batch") 0)
+;;         (notmuch-logged-error "Command \"notmuch count --batch\" failed"
+;;                               "Please check that the notmuch CLI is new enough to support `count
+;; --batch'. In general we recommend running matching versions of
+;; the CLI and emacs interface."))
 
-      (goto-char (point-min))
-      (let ((n (read (current-buffer))))
-        (if (= n 0)
-            nil
-          (notmuch-hello-nice-number n)))))
+;;       (goto-char (point-min))
+;;       (let ((n (read (current-buffer))))
+;;         (if (= n 0)
+;;             nil
+;;           (notmuch-hello-nice-number n)))))
 
-  (defun my-notmuch-hello-query-insert (cnt query elem)
-    (if cnt
-        (let* ((str (format "%s" cnt))
-               (widget-push-button-prefix "")
-               (widget-push-button-suffix "")
-               (oldest-first (case (plist-get elem :sort-order)
-                               (newest-first nil)
-                               (oldest-first t)
-                               (otherwise notmuch-search-oldest-first))))
-          (widget-create 'push-button
-                         :notify #'notmuch-hello-widget-search
-                         :notmuch-search-terms query
-                         :notmuch-search-oldest-first oldest-first
-                         :notmuch-search-type 'tree
-                         str)
-          (widget-insert (make-string (- 8 (length str)) ? )))
-      (widget-insert "        ")))
+;;   (defun my-notmuch-hello-query-insert (cnt query elem)
+;;     (if cnt
+;;         (let* ((str (format "%s" cnt))
+;;                (widget-push-button-prefix "")
+;;                (widget-push-button-suffix "")
+;;                (oldest-first (case (plist-get elem :sort-order)
+;;                                (newest-first nil)
+;;                                (oldest-first t)
+;;                                (otherwise notmuch-search-oldest-first))))
+;;           (widget-create 'push-button
+;;                          :notify #'notmuch-hello-widget-search
+;;                          :notmuch-search-terms query
+;;                          :notmuch-search-oldest-first oldest-first
+;;                          :notmuch-search-type 'tree
+;;                          str)
+;;           (widget-insert (make-string (- 8 (length str)) ? )))
+;;       (widget-insert "        ")))
 
-  (defun my-notmuch-hello-insert-searches ()
-    "Insert the saved-searches section."
-    (widget-insert (propertize "New     Total      Key  List\n" 'face 'my-notmuch-hello-header-face))
-    (mapc (lambda (elem)
-            (when elem
-              (let* ((q_tot (plist-get elem :query))
-                     (q_new (concat q_tot " AND tag:unread"))
-                     (n_tot (my-count-query q_tot))
-                     (n_new (my-count-query q_new)))
-                (my-notmuch-hello-query-insert n_new q_new elem)
-                (my-notmuch-hello-query-insert n_tot q_tot elem)
-                (widget-insert "   ")
-                (widget-insert (plist-get elem :key))
-                (widget-insert "    ")
-                (widget-insert (plist-get elem :name))
-                (widget-insert "\n")
-                ))
-            )
-          notmuch-saved-searches))
+;;   (defun my-notmuch-hello-insert-searches ()
+;;     "Insert the saved-searches section."
+;;     (widget-insert (propertize "New     Total      Key  List\n" 'face 'my-notmuch-hello-header-face))
+;;     (mapc (lambda (elem)
+;;             (when elem
+;;               (let* ((q_tot (plist-get elem :query))
+;;                      (q_new (concat q_tot " AND tag:unread"))
+;;                      (n_tot (my-count-query q_tot))
+;;                      (n_new (my-count-query q_new)))
+;;                 (my-notmuch-hello-query-insert n_new q_new elem)
+;;                 (my-notmuch-hello-query-insert n_tot q_tot elem)
+;;                 (widget-insert "   ")
+;;                 (widget-insert (plist-get elem :key))
+;;                 (widget-insert "    ")
+;;                 (widget-insert (plist-get elem :name))
+;;                 (widget-insert "\n")
+;;                 ))
+;;             )
+;;           notmuch-saved-searches))
 
-  (setq notmuch-hello-sections '(notmuch-hello-insert-header my-notmuch-hello-insert-searches notmuch-hello-insert-search notmuch-hello-insert-recent-searches notmuch-hello-insert-alltags notmuch-hello-insert-footer)))
+;;   (setq notmuch-hello-sections '(notmuch-hello-insert-header my-notmuch-hello-insert-searches notmuch-hello-insert-search notmuch-hello-insert-recent-searches notmuch-hello-insert-alltags notmuch-hello-insert-footer)))
 
-(use-package rust-mode
-  :config
-  (use-package racer
-    :functions (racer-mode))
+;; (use-package rust-mode
+;;   :config
+;;   (use-package racer
+;;     :functions (racer-mode))
 
-  (use-package flycheck-rust
-    :functions (flycheck-rust-setup))
+;;   (use-package flycheck-rust
+;;     :functions (flycheck-rust-setup))
 
-  (add-hook 'rust-mode-hook #'flycheck-rust-setup)
-  (add-hook 'rust-mode-hook #'racer-mode))
+;;   (add-hook 'rust-mode-hook #'flycheck-rust-setup)
+;;   (add-hook 'rust-mode-hook #'racer-mode))
 
 ;;; Prose linting
 (use-package flycheck-vale
