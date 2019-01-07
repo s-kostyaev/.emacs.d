@@ -38,29 +38,6 @@
 ;; and to nil for byte-compiled .emacs.elc
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
-;; Add the macro generated list of package.el loadpaths to load-path.
-;; (mapc #'(lambda (add) (add-to-list 'load-path add))
-;;       (eval-when-compile
-;;         (require 'package)
-;;         (package-initialize)
-;;         ;; Install use-package if not installed yet.
-;;         (unless (package-installed-p 'use-package)
-;;           (package-refresh-contents)
-;;           (package-install 'use-package))
-;;         ;; (require 'use-package)
-;;         (let ((package-user-dir-real (file-truename package-user-dir)))
-;;           ;; The reverse is necessary, because outside we mapc
-;;           ;; add-to-list element-by-element, which reverses.
-;;           (nreverse (apply #'nconc
-;;                            ;; Only keep package.el provided loadpaths.
-;;                            (mapcar #'(lambda (path)
-;;                                        (if (string-prefix-p package-user-dir-real path)
-;;                                            (list path)
-;;                                          nil))
-;;                                    load-path))))))
-
-;; (require 'package)
-;; (package-initialize)
 (require 'package)
 (package-initialize)
 
@@ -131,20 +108,6 @@
              nil
            (setq yasnippet-snippets-dir new-snip-dir)
            (yas-reload-all)))
-       ;; (seq-do #'load-file
-       ;;         (split-string
-       ;;          (shell-command-to-string
-       ;;           "find ~/.emacs.d/elpa -name '*autoloads.el'") "\n" t))
-       ;; (seq-do (lambda (filename)
-       ;;           (let* ((pac (file-name-base filename))
-       ;;                  (pac-sym (intern pac)))
-       ;;             (if (featurep pac-sym)
-       ;;                 (progn
-       ;;                   (message "reloading %s" pac)
-       ;;                   (load-file filename)))))
-       ;;         (split-string
-       ;;          (shell-command-to-string
-       ;;           "find ~/.emacs.d/elpa -name '*.elc' -newermt $(date +%Y-%m-%d -d '1 hour ago')") "\n" t))
        (my-set-themes-hook)
        (message "packages bootstrap success: %s" res))))
 
@@ -165,21 +128,6 @@
   :config
   (progn
     (my-set-themes-hook)))
-
-;; (defun my-solarized-dark-workaround (frame)
-;;   "Fix solarized-dark theme for terminal FRAME."
-;;   (with-selected-frame frame
-;;     (if (and (featurep 'color-theme)
-;;              (not window-system))
-;;         (set-face-background 'default "none" frame))))
-
-;; (defun my-solarized-dark-on-focus ()
-;;   "Fix solarized-dark theme for terminal on focus."
-;;   (my-solarized-dark-workaround (selected-frame)))
-
-;; (add-hook 'focus-in-hook #'my-solarized-dark-on-focus)
-
-;; (add-hook 'after-make-frame-functions #'my-solarized-dark-workaround)
 
 (setq-default mode-line-format
               (list
@@ -384,89 +332,18 @@
   ;;       (-filter (lambda (s) (s-prefix? "go-" (prin1-to-string s))) flycheck-checkers))
   )
 
-;; (use-package flycheck-golangci-lint
-;;   :hook (go-mode . flycheck-golangci-lint-setup))
-
+(require 'eglot)
 (defvar eglot-connect-timeout)
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
-(setq eglot-server-programs '((rust-mode . (eglot-rls "rls"))
-                              (python-mode . ("pyls"))
-                              ((js-mode
-                                js2-mode
-                                rjsx-mode) . ("javascript-typescript-stdio"))
-                              (sh-mode . ("bash-language-server" "start"))
-                              ((c++-mode c-mode) . ("ccls"))
-                              ((caml-mode tuareg-mode reason-mode)
-                               . ("ocaml-language-server" "--stdio"))
-                              (ruby-mode
-                               . ("solargraph" "socket" "--port"
-                                  :autoport))
-                              (php-mode . ("php" "vendor/felixfbecker/\
-language-server/bin/php-language-server.php"))
-                              (haskell-mode . ("hie-wrapper"))
-                              (kotlin-mode . ("kotlin-language-server"))
-                              (go-mode . ("bingo" "-mode=stdio" "-disable-diagnostics" "-freeosmemory" "180"))
-                              ((R-mode ess-r-mode) . ("R" "--slave" "-e"
-                                                      "languageserver::run()"))
-                              (java-mode . eglot--eclipse-jdt-contact)))
-
-;; (require 'lsp)
-;; (require 'lsp-clients)
-;; (setq lsp-response-timeout 1000)
-;; (lsp-register-client
-;;  (make-lsp-client :new-connection (lsp-stdio-connection '("bingo" "-disable-diagnostics" "-freeosmemory" "180"))
-;;                   :major-modes '(go-mode)
-;;                   :server-id 'bingo
-;;                   :use-native-json t))
-;; (lsp-register-client
-;;  (make-lsp-client :new-connection (lsp-stdio-connection "golsp")
-;;                   :major-modes '(go-mode)
-;;                   :server-id 'golsp
-;;                   :use-native-json t))
-
-;; (setq company-lsp-enable-snippet t)
-;; (setq company-lsp-enable-recompletion t)
-
-;; (defun my-split-go-args (input)
-;;   "Splits INPUT to list of args."
-;;   (let* ((splitted (s-split "," input))
-;;          (counter 0)
-;;          (res '())
-;;          (prev ""))
-;;     (seq-doseq (el splitted)
-;;       (setq prev (if (s-blank? prev) el (concat prev "," el)))
-;;       (if (s-contains? "(" el) (setq counter (+ counter 1)))
-;;       (if (s-contains? ")" el) (setq counter (- counter 1)))
-;;       (if (= counter 0) (progn
-;;                           (setq res (append res (list prev)))
-;;                           (setq prev ""))))
-;;     res))
-
-;; (defun company-lsp--go-completion-snippet (item)
-;;   "Function providing snippet with the go language.
-;; It parses the function's signature in ITEM (a CompletionItem)
-;; to expand its arguments."
-;;   (let* ((detail (gethash "detail" item))
-;;          (snippet
-;;           (-some-->
-;;            detail
-;;            (s-trim it)
-;;            (substring it (1+ (s-index-of "(" it)) (- (seq-length it) 1))
-;;            (and (not (s-blank-str? it)) it)
-;;            (my-split-go-args it)
-;;            (mapconcat (lambda (x) (format "${%s}" (s-trim x))) it ", "))))
-;;     (if (s-index-of "(" detail) (concat "(" (or snippet "$1") ")$0") nil)))
-
-;; (setq company-lsp--snippet-functions '(("rust" . company-lsp--rust-completion-snippet)
-;;                                        ("go" . company-lsp--go-completion-snippet)))
+(map-put eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-golist-duration=30" "-freeosmemory=180"))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
-  :functions (my-go-mode-hook go-goto-imports lsp-define-stdio-client
-                              godoc-at-point goimports lsp-go-enable lsp-ui-mode)
-  :defines (company-begin-commands company-backends flycheck-gometalinter-deadline go-tag-args lsp-ui-peek-mode-map)
+  :functions (my-go-mode-hook go-goto-imports
+                              godoc-at-point goimports)
+  :defines (company-backends go-tag-args)
   :config
   (progn
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
@@ -475,11 +352,7 @@ language-server/bin/php-language-server.php"))
 
     (defun my-go-mode-hook ()
       "Setup for go."
-      ;; (require 'company-go)
       (require 'go-impl)
-      ;; (require 'lsp)
-      ;; (require 'lsp-ui)
-      ;; (require 'flycheck-gometalinter)
       (use-package go-direx
         :config
         (defun my-kill-prev-buf (_)
@@ -495,18 +368,8 @@ language-server/bin/php-language-server.php"))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
       (require 'gotest)
       (require 'go-playground)
-      ;; (require 'go-eldoc)
-      ;; (require 'godoctor)
-      ;; (require 'go-rename)
       (require 'go-add-tags)
-      ;; (require 'lsp-go)
       (setq go-tag-args (list "-transform" "camelcase"))
-      ;; (if (buffer-file-name)
-      ;;     (lsp-go-enable))
-      ;; (if (not (featurep 'expanderr))
-      ;;     (load "~/go/src/github.com/stapelberg/expanderr/expanderr.el"))
-      ;; (flycheck-gometalinter-setup)
-      ;; (setq flycheck-gometalinter-deadline "30s")
       (add-hook 'before-save-hook #'gofmt-before-save)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
@@ -515,27 +378,10 @@ language-server/bin/php-language-server.php"))
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      ;; (local-set-key (kbd "M-?") #'my-counsel-git-grep)
-      ;; (local-set-key (kbd "M-.") #'godef-jump)
-      ;; (lsp)
       (eglot-ensure)
-      ;; (go-eldoc-setup)
-      ;; (local-set-key (kbd "C-h C-d") #'lsp-describe-thing-at-point)
-      ;; (setq-local company-backends '(company-go))
-      (setq-local company-backends '(company-capf))
-      ;; (lsp-ui-mode 1)
-      ;; (define-key lsp-ui-peek-mode-map (kbd "C-n") 'lsp-ui-peek--select-next)
-      ;; (define-key lsp-ui-peek-mode-map (kbd "C-p") 'lsp-ui-peek--select-prev)
-      )
+      (setq-local company-backends '(company-capf)))
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
-
-;; (defun my-lsp-hook ()
-;;   "Hook for 'lsp-mode."
-;;   (interactive)
-;;   (require 'company-lsp)
-;;   (add-to-list 'company-backends 'company-lsp))
-;; (add-hook 'lsp-after-initialize-hook #'my-lsp-hook)
 
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
