@@ -40,6 +40,12 @@
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 (require 'package)
 (package-initialize)
+(unless (require 'quelpa nil t)
+  (with-temp-buffer
+    (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
+    (eval-buffer)))
+(setq quelpa-upgrade-p t)
+
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
@@ -89,6 +95,8 @@
        (setq custom-file "~/.emacs.d/emacs-customizations.el")
        (package-initialize)
        (ignore-errors (load custom-file 'noerror))
+       (require 'quelpa)
+       (quelpa-self-upgrade)
        (require 'cl-lib)
        (cl-flet ((always-yes (&rest _) t))
          (defun no-confirm (fun &rest args)
@@ -96,20 +104,23 @@
            (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
                      ((symbol-function 'yes-or-no-p) #'always-yes))
              (apply fun args)))
-         (no-confirm 'package-refresh-contents)
-         (no-confirm 'package-install-selected-packages)))
+         (cl-mapcar 'quelpa package-selected-packages)
+         ;; (no-confirm 'package-refresh-contents)
+         ;; (no-confirm 'package-install-selected-packages)
+         ))
      (lambda (res)
        (require 'yasnippet)
-       (let ((new-snip-dir (concat (s-chomp
-                                    (shell-command-to-string
-                                     "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
-                                   "/snippets")))
-         (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
-             nil
-           (setq yasnippet-snippets-dir new-snip-dir)
-           (yas-reload-all)))
+       (package-initialize)
+       ;; (let ((new-snip-dir (concat (s-chomp
+       ;;                              (shell-command-to-string
+       ;;                               "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
+       ;;                             "/snippets")))
+       ;;   (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
+       ;;       nil
+       ;;     (setq yasnippet-snippets-dir new-snip-dir)
+       ;;     (yas-reload-all)))
        (my-set-themes-hook)
-       (message "packages bootstrap success: %s" res))))
+       (message "packages bootstrap success for %s packages" (length res)))))
 
   (my-bootstrap))
 
@@ -1114,6 +1125,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; magit
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
+  :defer 15
   :config
   (exec-path-from-shell-initialize))
 
@@ -1748,12 +1760,12 @@ A prefix arg makes KEEP-TIME non-nil."
   )
 
 ;;; plantuml
-(org-babel-do-load-languages
- 'org-babel-load-languages
- '((plantuml . t)))
-(defvar org-plantuml-jar-path)
-(setq org-plantuml-jar-path
-      (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
+;; (org-babel-do-load-languages
+;;  'org-babel-load-languages
+;;  '((plantuml . t)))
+;; (defvar org-plantuml-jar-path)
+;; (setq org-plantuml-jar-path
+;;       (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
 
 (put 'upcase-region 'disabled nil)
 
