@@ -352,6 +352,7 @@
 (defvar eglot-connect-timeout)
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
+(setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 100)))
 (map-put eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-golist-duration=30" "-freeosmemory=180"))
 
 (use-package go-mode
@@ -394,6 +395,7 @@
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
+      ;; (setq-local eglot-ignored-server-capabilites '(:signatureHelpProvider))
       (eglot-ensure)
       (setq-local company-backends '(company-capf)))
 
