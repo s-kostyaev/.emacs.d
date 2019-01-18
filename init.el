@@ -101,6 +101,7 @@
          (ignore-errors (load custom-file 'noerror))
          (require 'quelpa)
          (quelpa-self-upgrade)
+         (setq quelpa-upgrade-p t)
          (require 'cl-lib)
          (cl-flet ((always-yes (&rest _) t))
            (defun no-confirm (fun &rest args)
@@ -113,7 +114,7 @@
            ;; (no-confirm 'package-install-selected-packages)
            ))
        (lambda (res)
-         (require 'yasnippet)
+         ;; (require 'yasnippet)
          (package-initialize)
          ;; (let ((new-snip-dir (concat (s-chomp
          ;;                              (shell-command-to-string
@@ -353,7 +354,7 @@
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
 (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 100)))
-(map-put eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-golist-duration=30" "-freeosmemory=180"))
+(map-put eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-golist-duration=30" "-freeosmemory=180" "-enhance-signature-help"))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
