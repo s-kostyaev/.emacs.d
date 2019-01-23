@@ -354,7 +354,7 @@
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
 (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 100)))
-(map-put eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-golist-duration=30" "-freeosmemory=180" "-enhance-signature-help"))
+(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-golist-duration=30" "-freeosmemory=180" "-enhance-signature-help"))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -1852,6 +1852,19 @@ A prefix arg makes KEEP-TIME non-nil."
   (setq aya-field-regex "\\sw\\|\\s_\\|\\*\\|\\&"))
 
 (global-set-key "\C-cff" 'toggle-frame-fullscreen)
+
+
+(defun open-this-file-as-root ()
+  "Edit current file as root, using `tramp' and `sudo'.  If the current
+buffer is not visiting a file, prompt for a file name."
+  (interactive)
+  (let* ((filename (or buffer-file-name
+                       (read-file-name "Find file (as root): ")))
+         (tramp-path (concat "/sudo:root@localhost:" filename)))
+    (if buffer-file-name
+        (find-alternate-file tramp-path)
+      (find-file tramp-path))))
+(global-set-key (kbd "C-c C-r") 'open-this-file-as-root)
 
 (eval-when-compile
   (declare-function  key-chord-mode "ext:somewhere")
