@@ -1866,6 +1866,8 @@ buffer is not visiting a file, prompt for a file name."
       (find-file tramp-path))))
 (global-set-key (kbd "C-c C-r") 'open-this-file-as-root)
 
+(magit-todos-mode 1)
+
 (eval-when-compile
   (declare-function  key-chord-mode "ext:somewhere")
   (declare-function  hydra-default-pre "ext:somewhere")

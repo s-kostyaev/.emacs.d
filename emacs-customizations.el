@@ -17,36 +17,31 @@
  ;; If there is more than one, they won't work right.
  '(arch-packer-default-command "pacaur")
  '(blink-cursor-mode nil)
- '(browse-url-browser-function (quote browse-url-chromium))
+ '(browse-url-browser-function 'browse-url-chromium)
  '(byte-compile-warnings
-   (quote
-    (redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical)))
+   '(redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
  '(counsel-rg-base-command
    "rg -i -u --no-heading --line-number --max-columns 150 %s .")
  '(custom-safe-themes
-   (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
+   '("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(debug-on-error nil)
  '(debug-on-quit nil)
  '(dtrt-indent-active-mode-line-info "")
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
  '(flycheck-disabled-checkers
-   (quote
-    (erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert)))
+   '(erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert))
  '(flycheck-gometalinter-deadline "30s")
- '(flycheck-gometalinter-disable-linters (quote ("gotype")))
- '(flycheck-vale-modes
-   (quote
-    (text-mode markdown-mode rst-mode gfm-mode web-mode)) t)
+ '(flycheck-gometalinter-disable-linters '("gotype"))
+ '(flycheck-vale-modes '(text-mode markdown-mode rst-mode gfm-mode web-mode) t)
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
- '(go-add-tags-style (quote lower-camel-case))
- '(go-packages-function (quote go-packages-go-list))
- '(go-tag-args (quote ("-transform" "snakecase")) t)
+ '(go-add-tags-style 'lower-camel-case)
+ '(go-packages-function 'go-packages-go-list)
+ '(go-tag-args '("-transform" "snakecase") t)
  '(go-test-verbose t)
- '(godoc-at-point-function (quote godoc-gogetdoc))
+ '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
  '(godoc-use-completing-read t)
  '(gofmt-command "goimports")
@@ -56,7 +51,7 @@
  '(helm-completion-in-region-fuzzy-match t)
  '(helm-echo-input-in-header-line t)
  '(helm-file-cache-fuzzy-match t)
- '(helm-grep-file-path-style (quote relative))
+ '(helm-grep-file-path-style 'relative)
  '(helm-lisp-fuzzy-completion t)
  '(helm-locate-command "locate %s -e -A --regex %s")
  '(helm-mode t)
@@ -67,28 +62,25 @@
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-flycheck-enable t)
  '(lsp-ui-sideline-enable nil)
- '(mail-envelope-from (quote header))
+ '(mail-envelope-from 'header)
  '(mail-specify-envelope-from t)
- '(message-sendmail-envelope-from (quote header))
+ '(message-sendmail-envelope-from 'header)
  '(notmuch-search-oldest-first nil)
  '(package-archives
-   (quote
-    (("gnu" . "https://elpa.gnu.org/packages/")
+   '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")
-     ("melpa-stable" . "https://stable.melpa.org/packages/"))))
+     ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   (quote
-    (quelpa docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag sicp go-gen-test go-add-tags helm-dash circadian comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-swoop helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv go-playground color-theme flycheck-rust rust-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rjsx-mode restclient react-snippets pandoc-mode pacmacs noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx fill-column-indicator esup ensime embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp company-go company-erlang column-marker column-enforce-mode cmake-font-lock cask-mode camcorder auto-complete-clang ace-mc ace-link ac-js2 ac-emmet ac-cider)))
+   '(magit-todos pcre2el hl-todo quelpa docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag sicp go-gen-test go-add-tags helm-dash circadian comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-swoop helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv go-playground color-theme flycheck-rust rust-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rjsx-mode restclient react-snippets pandoc-mode pacmacs noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx fill-column-indicator esup ensime embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp company-go company-erlang column-marker column-enforce-mode cmake-font-lock cask-mode camcorder auto-complete-clang ace-mc ace-link ac-js2 ac-emmet ac-cider))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)
- '(paradox-spinner-type (quote progress-bar))
+ '(paradox-spinner-type 'progress-bar)
  '(plantuml-jar-path (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
  '(pyenv-mode t)
  '(racer-rust-src-path "/usr/src/rust/src")
  '(safe-local-variable-values
-   (quote
-    ((checkdoc-minor-mode . 1)
+   '((checkdoc-minor-mode . 1)
      (eval when
            (and
             (buffer-file-name)
@@ -97,32 +89,25 @@
             (string-match-p "^[^.]"
                             (buffer-file-name)))
            (unless
-               (featurep
-                (quote package-build))
+               (featurep 'package-build)
              (let
                  ((load-path
                    (cons "../package-build" load-path)))
-               (require
-                (quote package-build))))
+               (require 'package-build)))
            (package-build-minor-mode)
            (set
-            (make-local-variable
-             (quote package-build-working-dir))
+            (make-local-variable 'package-build-working-dir)
             (expand-file-name "../working/"))
            (set
-            (make-local-variable
-             (quote package-build-archive-dir))
+            (make-local-variable 'package-build-archive-dir)
             (expand-file-name "../packages/"))
            (set
-            (make-local-variable
-             (quote package-build-recipes-dir))
+            (make-local-variable 'package-build-recipes-dir)
             default-directory))
-     (eval c-set-offset
-           (quote innamespace)
-           0))))
- '(send-mail-function (quote sendmail-send-it))
+     (eval c-set-offset 'innamespace 0)))
+ '(send-mail-function 'sendmail-send-it)
  '(sendmail-program "/usr/bin/msmtp")
- '(sml/theme (quote respectful))
+ '(sml/theme 'respectful)
  '(smtpmail-smtp-server (password-store-get "smtp-server"))
  '(smtpmail-smtp-service 25)
  '(symbol-overlay-global-mode t)
