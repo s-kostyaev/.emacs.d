@@ -353,8 +353,8 @@
 (defvar eglot-connect-timeout)
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
-(setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 100)))
-(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-freeosmemory=180" "-enhance-signature-help" "-disable-func-snippet"))
+(setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
+(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-enhance-signature-help" "-disable-func-snippet"))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
