@@ -354,7 +354,8 @@
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
 (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
-(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-diagnostics-style=none" "-enhance-signature-help" "-disable-func-snippet"))
+(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help" ;; "-disable-func-snippet"
+                                           ))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -397,7 +398,15 @@
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (eglot-ensure)
-      (setq-local company-backends '(company-capf)))
+      (setq-local company-backends '(company-capf))
+
+      (defvar my-go-packages nil)
+      (defun go-packages-go-list ()
+        my-go-packages)
+      (async-start (lambda ()
+                     (process-lines "go" "list" "-e" "all"))
+                   (lambda (res)
+                     (setq my-go-packages res))))
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
