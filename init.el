@@ -357,6 +357,21 @@
 (map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help"))
 ;; (map-put! eglot-server-programs 'go-mode '("gopls"))
 
+(defun my-try-go-mod (dir)
+  "Find go project root for DIR."
+  (if dir
+      (let
+          ((result nil)
+           (cur-dir dir))
+        (while (or (not result) (f-equal-p cur-dir "/"))
+          (if (f-exists-p (concat cur-dir "/go.mod"))
+              (setq result cur-dir)
+            (setq cur-dir (f-dirname cur-dir))))
+        (if result
+            (cons 'vc result)
+          nil))
+    nil))
+
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
@@ -398,8 +413,11 @@
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       ;; (eglot-ensure)
-      (lsp)
       ;; (setq-local company-backends '(company-capf))
+
+      (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
+      (setq-local lsp-auto-guess-root t)
+      (lsp)
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
@@ -2007,25 +2025,6 @@ buffer is not visiting a file, prompt for a file name."
   (defun insert-declare-funcs (fl)
     "Insert declaration for functions from FL."
     (cl-mapc (lambda (in) (insert (format "(declare-function  %s \"ext:somewhere\")\n" in))) fl)))
-
-(defun my-try-go-mod (dir)
-  "Find go project root for DIR."
-  (if dir
-      (let
-          ((result nil)
-           (cur-dir dir))
-        (while (or (not result) (f-equal-p cur-dir "/"))
-          (if (f-exists-p (concat cur-dir "/go.mod"))
-              (setq result cur-dir)
-            (setq cur-dir (f-dirname cur-dir))))
-        (if result
-            (cons 'vc result)
-          nil))
-    nil))
-
-(setq project-find-functions (list #'my-try-go-mod #'project-try-vc))
-
-(setq lsp-auto-guess-root t)
 
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
