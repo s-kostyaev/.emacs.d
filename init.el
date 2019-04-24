@@ -140,11 +140,11 @@
   :config
   (key-chord-mode 1))
 
-(use-package color-theme
-  :defer 0.1
-  :config
-  (progn
-    (my-set-themes-hook)))
+;; (use-package color-theme
+;;   :defer 0.1
+;;   :config
+;;   (progn
+;;     (my-set-themes-hook)))
 
 (setq-default mode-line-format
               (list
@@ -354,8 +354,8 @@
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
 (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
-(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help" ;; "-disable-func-snippet"
-                                           ))
+(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help"))
+;; (map-put! eglot-server-programs 'go-mode '("gopls"))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -397,8 +397,9 @@
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      (eglot-ensure)
-      (setq-local company-backends '(company-capf))
+      ;; (eglot-ensure)
+      (lsp)
+      ;; (setq-local company-backends '(company-capf))
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
@@ -1005,10 +1006,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
     (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
 
-  (with-eval-after-load 'helm-regexp
-    (setq helm-source-occur
-          (helm-make-source "Occur" 'helm-source-multi-occur
-            :follow 1)))
+  ;; (with-eval-after-load 'helm-regexp
+  ;;   (setq helm-source-occur
+  ;;         (helm-make-source "Occur" 'helm-source-multi-occur
+  ;;           :follow 1)))
 
   (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number -M 150 %s %s %s")
   (defun helm-ido-like-find-files-up-one-level-maybe ()
@@ -2007,8 +2008,29 @@ buffer is not visiting a file, prompt for a file name."
     "Insert declaration for functions from FL."
     (cl-mapc (lambda (in) (insert (format "(declare-function  %s \"ext:somewhere\")\n" in))) fl)))
 
+(defun my-try-go-mod (dir)
+  "Find go project root for DIR."
+  (if dir
+      (let
+          ((result nil)
+           (cur-dir dir))
+        (while (or (not result) (f-equal-p cur-dir "/"))
+          (if (f-exists-p (concat cur-dir "/go.mod"))
+              (setq result cur-dir)
+            (setq cur-dir (f-dirname cur-dir))))
+        (if result
+            (cons 'vc result)
+          nil))
+    nil))
+
+(setq project-find-functions (list #'my-try-go-mod #'project-try-vc))
+
+(setq lsp-auto-guess-root t)
+
 (load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
+
+(my-set-themes-hook)
 
 (provide 'init)
 ;;; init.el ends here
