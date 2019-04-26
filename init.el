@@ -65,7 +65,7 @@
   (interactive)
   ;; (load-theme 'spacemacs-dark t)
   ;; (require 'solarized)
-  ;; (load-theme 'solarized-light t)
+  (load-theme 'solarized-light t)
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
   ;; (require 'circadian)
@@ -73,7 +73,7 @@
   ;; (load-theme 'spacemlacs-light t)
   ;; (load-theme 'solarized-light t)
 
-  (load-theme 'spacemacs-dark t)
+  ;; (load-theme 'spacemacs-dark t)
   ;; (load-theme 'solarized-dark t)
 
   (tool-bar-mode -1)

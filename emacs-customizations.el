@@ -9,7 +9,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 160 :width normal :family "Go Mono")))))
+ '(default ((t (:height 130 :width normal :family "Go Mono")))))
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -59,9 +59,26 @@
  '(helm-recentf-fuzzy-match t)
  '(helm-session-fuzzy-match t)
  '(helm-swoop-pre-input-function (lambda nil nil))
- '(lsp-ui-doc-enable nil)
+ '(hl-todo-keyword-faces
+   '(("TODO" . "#dc752f")
+     ("NEXT" . "#dc752f")
+     ("THEM" . "#2d9574")
+     ("PROG" . "#4f97d7")
+     ("OKAY" . "#4f97d7")
+     ("DONT" . "#f2241f")
+     ("FAIL" . "#f2241f")
+     ("DONE" . "#86dc2f")
+     ("NOTE" . "#b1951d")
+     ("KLUDGE" . "#b1951d")
+     ("HACK" . "#b1951d")
+     ("TEMP" . "#b1951d")
+     ("FIXME" . "#dc752f")
+     ("XXX" . "#dc752f")
+     ("XXXX" . "#dc752f")
+     ("???" . "#dc752f")))
+ '(lsp-ui-doc-enable t)
  '(lsp-ui-flycheck-enable t)
- '(lsp-ui-sideline-enable nil)
+ '(lsp-ui-sideline-enable t)
  '(mail-envelope-from 'header)
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from 'header)
@@ -76,6 +93,7 @@
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)
  '(paradox-spinner-type 'progress-bar)
+ '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(plantuml-jar-path (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
  '(pyenv-mode t)
  '(racer-rust-src-path "/usr/src/rust/src")
