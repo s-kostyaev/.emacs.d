@@ -354,8 +354,8 @@
 (defvar eglot-server-programs)
 (setq eglot-connect-timeout 300)
 (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
-(map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help"))
-;; (map-put! eglot-server-programs 'go-mode '("gopls"))
+;; (map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help"))
+(map-put! eglot-server-programs 'go-mode '("gopls"))
 
 (defun my-try-go-mod (dir)
   "Find go project root for DIR."
@@ -416,13 +416,13 @@
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      (local-set-key (kbd "M-?") #'lsp-ui-peek-find-references)
-      ;; (eglot-ensure)
-      ;; (setq-local company-backends '(company-capf))
+      ;; (local-set-key (kbd "M-?") #'lsp-ui-peek-find-references)
+      (eglot-ensure)
+      (setq-local company-backends '(company-capf))
 
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
-      (setq-local lsp-auto-guess-root t)
-      (lsp)
+      ;; (setq-local lsp-auto-guess-root t)
+      ;; (lsp)
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()

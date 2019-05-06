@@ -76,6 +76,8 @@
      ("XXX" . "#dc752f")
      ("XXXX" . "#dc752f")
      ("???" . "#dc752f")))
+ '(lsp-clients-go-server "gopls")
+ '(lsp-enable-on-type-formatting nil)
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-flycheck-enable t)
  '(lsp-ui-sideline-enable t)
