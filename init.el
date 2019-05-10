@@ -416,13 +416,13 @@
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      ;; (local-set-key (kbd "M-?") #'lsp-ui-peek-find-references)
-      (eglot-ensure)
-      (setq-local company-backends '(company-capf))
+      (local-set-key (kbd "M-?") #'lsp-ui-peek-find-references)
+      ;; (eglot-ensure)
+      ;; (setq-local company-backends '(company-capf))
 
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
-      ;; (setq-local lsp-auto-guess-root t)
-      ;; (lsp)
+      (setq-local lsp-auto-guess-root t)
+      (lsp)
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
