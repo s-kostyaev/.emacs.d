@@ -359,7 +359,9 @@
 
 (defun my-try-go-mod (dir)
   "Find go project root for DIR."
-  (if dir
+  (if (and dir
+           (not (f-descendant-of-p dir (or (getenv "GOPATH")
+                                           (concat (getenv "HOME") "/go")))))
       (let
           ((result nil)
            (cur-dir dir))
@@ -369,8 +371,10 @@
             (setq cur-dir (f-dirname cur-dir))))
         (if result
             (cons 'vc result)
-          nil))
-    nil))
+          (cons 'vc dir)))
+    (if dir
+        (cons 'vc dir)
+      nil)))
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
