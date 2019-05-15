@@ -1170,6 +1170,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :defer 15
+  :bind ("C-x C-j" . magit-find-file-other-frame)
   :init
   (setq exec-path-from-shell-check-startup-files nil)
   :config
