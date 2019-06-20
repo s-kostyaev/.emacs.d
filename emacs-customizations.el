@@ -22,7 +22,7 @@
    '(redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
  '(counsel-rg-base-command
-   "rg -i -u --no-heading --line-number --max-columns 150 %s .")
+   "/opt/local/bin/rg -i -u --no-heading --line-number --max-columns 150 %s .")
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(debug-on-error nil)
@@ -39,7 +39,7 @@
  '(global-flycheck-mode t)
  '(go-add-tags-style 'lower-camel-case)
  '(go-packages-function 'go-packages-go-list)
- '(go-tag-args '("-transform" "snakecase") t)
+ '(go-tag-args '("-transform" "snakecase"))
  '(go-test-verbose t)
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
@@ -90,7 +90,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo quelpa docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag sicp go-gen-test go-add-tags helm-dash circadian comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-swoop helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv go-playground color-theme flycheck-rust rust-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rjsx-mode restclient react-snippets pandoc-mode pacmacs noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx fill-column-indicator esup ensime embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp company-go company-erlang column-marker column-enforce-mode cmake-font-lock cask-mode camcorder auto-complete-clang ace-mc ace-link ac-js2 ac-emmet ac-cider))
+   '(deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo quelpa docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag sicp go-gen-test go-add-tags helm-dash circadian comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-swoop helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv go-playground color-theme flycheck-rust rust-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent all-the-icons-dired all-the-icons-ivy symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rjsx-mode restclient react-snippets pandoc-mode pacmacs noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx fill-column-indicator esup ensime embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp company-go company-erlang column-marker column-enforce-mode cmake-font-lock cask-mode camcorder auto-complete-clang ace-mc ace-link ac-js2 ac-emmet ac-cider))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)

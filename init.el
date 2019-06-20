@@ -1751,12 +1751,15 @@ A prefix arg makes KEEP-TIME non-nil."
          ("C-c e r" . evalator-resume)
          ("C-c e i" . evalator-insert-equiv-expr)))
 
+(use-package deadgrep
+  :bind* (("C-c C-s" . deadgrep)))
+
 (use-package counsel
   :bind (("C-c g" . my-counsel-git-grep)
          :map isearch-mode-map
          ("M-i" . swiper-from-isearch))
   :bind*
-  (("C-c C-s" . counsel-rg)
+  (;; ("C-c C-s" . counsel-rg)
    ("C-x l" . counsel-locate))
   :functions (swiper-from-isearch)
   :config
