@@ -1172,7 +1172,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package exec-path-from-shell
   :if (memq window-system '(mac ns))
   :defer 15
-  :bind ("C-x C-j" . magit-find-file-other-frame)
   :init
   (setq exec-path-from-shell-check-startup-files nil)
   :config
@@ -1181,15 +1180,37 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package
   magit
   :defines (auto-revert-check-vc-info)
-  :functions (my-magit-diff-hook)
+  :functions (my-magit-diff-hook my-magit-find-file-other-frame my-magit-find-file)
   :defer t
+  :bind ("C-x C-j" . my-magit-find-file-other-frame)
   :config
   (progn
     (defun my-magit-diff-hook ()
       "My hook for improve magit diff."
       (local-set-key (kbd "h") #'diff-refine-hunk))
     (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
-    (setq auto-revert-check-vc-info t)))
+    (setq auto-revert-check-vc-info t)
+    (defun my-magit-find-file-other-frame (file)
+      "View FILE from worktree, in another frame.
+Switch to a buffer visiting blob FILE, creating one if none
+already exists.  If prior to calling this command the current
+buffer and/or cursor position is about the same file, then go to
+the line and column corresponding to that location."
+      (interactive (my-magit-find-file-read-args "Find file in other frame"))
+      (magit-find-file--internal "HEAD" file #'switch-to-buffer-other-frame))
+
+    (defun my-magit-find-file (file)
+      "View FILE from worktree.
+Switch to a buffer visiting blob FILE, creating one if none
+already exists.  If prior to calling this command the current
+buffer and/or cursor position is about the same file, then go
+to the line and column corresponding to that location."
+      (interactive (my-magit-find-file-read-args "Find file"))
+      (magit-find-file--internal "HEAD" file #'pop-to-buffer-same-window))
+
+
+    (defun my-magit-find-file-read-args (prompt)
+      (list (magit-read-file-from-rev "HEAD" prompt)))))
 
 (use-package diff-mode
   :functions
