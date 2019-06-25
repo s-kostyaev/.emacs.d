@@ -380,7 +380,7 @@
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
   :functions (my-go-mode-hook go-goto-imports
-                              godoc-at-point goimports)
+                              godoc-at-point goimports lsp-ui-peek-find-references)
   :defines (company-backends go-tag-args)
   :config
   (progn
@@ -404,7 +404,8 @@
         (defun my-direx-hook()
           "My hook for direx."
           (interactive)
-          (local-set-key (kbd "s") #'swiper)
+          ;; (local-set-key (kbd "s") #'swiper)
+          (local-set-key (kbd "s") #'swiper-helm)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
@@ -893,6 +894,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq x-hyper-keysym 'meta)
 
 (use-package ivy
+  :disabled t
   :bind* ("C-c s k" . ivy-resume)
   :defines (ivy-completion-beg ivy-completion-end)
   :functions (ivy-completion-in-region-action)
@@ -1297,6 +1299,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (slime 'kawa))))
 
 (use-package erlang
+  :disabled t
   :functions
   (my-erlang-hook my-format-erlang-record)
   :mode (("\\.erl$" . erlang-mode)
@@ -1755,6 +1758,7 @@ A prefix arg makes KEEP-TIME non-nil."
   :bind* (("C-c C-s" . deadgrep)))
 
 (use-package counsel
+  :disabled t
   :bind (("C-c g" . my-counsel-git-grep)
          :map isearch-mode-map
          ("M-i" . swiper-from-isearch))
@@ -1789,8 +1793,10 @@ A prefix arg makes KEEP-TIME non-nil."
          ;;      ("C-w" . nil)
          ;;      ("M-n" . my-swoop-next)
          :map isearch-mode-map
-         ("M-n" . my-isearch-next))
+         ("M-n" . my-isearch-next)
+         ("M-i" . swiper-helm-from-isearch))
   :config
+  (require 'swiper-helm)
   (defun my-isearch-next ()
     "Isearch symbol at point or next isearch history item."
     (interactive)
@@ -1803,7 +1809,7 @@ A prefix arg makes KEEP-TIME non-nil."
   ;;     (next-history-element 1)))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
-  (setq ace-isearch-function-from-isearch 'swiper-from-isearch)
+  (setq ace-isearch-function-from-isearch 'swiper-helm-from-isearch)
   (setq ace-isearch-use-jump nil)
   ;; (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
   ;; (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev)
