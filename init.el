@@ -1197,7 +1197,7 @@ already exists.  If prior to calling this command the current
 buffer and/or cursor position is about the same file, then go to
 the line and column corresponding to that location."
       (interactive (my-magit-find-file-read-args "Find file in other frame"))
-      (magit-find-file--internal "HEAD" file #'switch-to-buffer-other-frame))
+      (find-file-other-frame (f-join (vc-root-dir) file)))
 
     (defun my-magit-find-file (file)
       "View FILE from worktree.
@@ -1206,7 +1206,7 @@ already exists.  If prior to calling this command the current
 buffer and/or cursor position is about the same file, then go
 to the line and column corresponding to that location."
       (interactive (my-magit-find-file-read-args "Find file"))
-      (magit-find-file--internal "HEAD" file #'pop-to-buffer-same-window))
+      (find-file (f-join (vc-root-dir) file)))
 
 
     (defun my-magit-find-file-read-args (prompt)
