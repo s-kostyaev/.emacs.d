@@ -147,6 +147,14 @@
 ;;   (progn
 ;;     (my-set-themes-hook)))
 
+(use-package flymake
+  :bind (("C-x `" . flymake-goto-next-error)
+         ("C-c r" . flymake-show-diagnostics-buffer)))
+
+(add-hook 'prog-mode-hook #'flymake-mode)
+(add-hook 'emacs-lisp-mode-hook #'flymake-mode)
+
+(require 'flymake)
 (setq-default mode-line-format
               (list
                "["
@@ -342,12 +350,6 @@
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
-
-(use-package flymake
-  :bind (("C-x `" . flymake-goto-next-error)
-         ("C-c r" . flymake-show-diagnostics-buffer))
-  :init
-  (flymake-mode t))
 
 (use-package flycheck
   :disabled t
