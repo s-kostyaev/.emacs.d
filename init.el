@@ -40,12 +40,12 @@
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 (require 'package)
 (package-initialize)
-(unless (require 'quelpa nil t)
-  (with-temp-buffer
-    (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
-    (eval-buffer)))
-(defvar quelpa-upgrade-p)
-(setq quelpa-upgrade-p t)
+;; (unless (require 'quelpa nil t)
+;;   (with-temp-buffer
+;;     (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
+;;     (eval-buffer)))
+;; (defvar quelpa-upgrade-p)
+;; (setq quelpa-upgrade-p t)
 
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
@@ -83,53 +83,53 @@
   ;; (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame))
   )
 
-(defvar yasnippet-snippets-dir)
-(defvar my-bootstrap-is-running nil)
-(eval-when-compile
-  (defun my-bootstrap ()
-    "Async install all needed packages."
-    (interactive)
-    (if my-bootstrap-is-running
-        nil
-      (setq my-bootstrap-is-running t)
-      (require 'async)
-      (async-start
-       (lambda ()
-         ;; Melpa
-         (require 'package)
-         (setq custom-file "~/.emacs.d/emacs-customizations.el")
-         (package-initialize)
-         (ignore-errors (load custom-file 'noerror))
-         (require 'quelpa)
-         (quelpa-self-upgrade)
-         (setq quelpa-upgrade-p t)
-         (require 'cl-lib)
-         (cl-flet ((always-yes (&rest _) t))
-           (defun no-confirm (fun &rest args)
-             "Apply FUN to ARGS, skipping user confirmations."
-             (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
-                       ((symbol-function 'yes-or-no-p) #'always-yes))
-               (apply fun args)))
-           (cl-mapcar 'quelpa package-selected-packages)
-           ;; (no-confirm 'package-refresh-contents)
-           ;; (no-confirm 'package-install-selected-packages)
-           ))
-       (lambda (res)
-         ;; (require 'yasnippet)
-         (package-initialize)
-         ;; (let ((new-snip-dir (concat (s-chomp
-         ;;                              (shell-command-to-string
-         ;;                               "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
-         ;;                             "/snippets")))
-         ;;   (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
-         ;;       nil
-         ;;     (setq yasnippet-snippets-dir new-snip-dir)
-         ;;     (yas-reload-all)))
-         (my-set-themes-hook)
-         (message "packages bootstrap success for %s packages" (length res))
-         (setq my-bootstrap-is-running nil)))))
+;; (defvar yasnippet-snippets-dir)
+;; (defvar my-bootstrap-is-running nil)
+;; (eval-when-compile
+;;   (defun my-bootstrap ()
+;;     "Async install all needed packages."
+;;     (interactive)
+;;     (if my-bootstrap-is-running
+;;         nil
+;;       (setq my-bootstrap-is-running t)
+;;       (require 'async)
+;;       (async-start
+;;        (lambda ()
+;;          ;; Melpa
+;;          (require 'package)
+;;          (setq custom-file "~/.emacs.d/emacs-customizations.el")
+;;          (package-initialize)
+;;          (ignore-errors (load custom-file 'noerror))
+;;          (require 'quelpa)
+;;          (quelpa-self-upgrade)
+;;          (setq quelpa-upgrade-p t)
+;;          (require 'cl-lib)
+;;          (cl-flet ((always-yes (&rest _) t))
+;;            (defun no-confirm (fun &rest args)
+;;              "Apply FUN to ARGS, skipping user confirmations."
+;;              (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
+;;                        ((symbol-function 'yes-or-no-p) #'always-yes))
+;;                (apply fun args)))
+;;            (cl-mapcar 'quelpa package-selected-packages)
+;;            ;; (no-confirm 'package-refresh-contents)
+;;            ;; (no-confirm 'package-install-selected-packages)
+;;            ))
+;;        (lambda (res)
+;;          ;; (require 'yasnippet)
+;;          (package-initialize)
+;;          ;; (let ((new-snip-dir (concat (s-chomp
+;;          ;;                              (shell-command-to-string
+;;          ;;                               "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
+;;          ;;                             "/snippets")))
+;;          ;;   (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
+;;          ;;       nil
+;;          ;;     (setq yasnippet-snippets-dir new-snip-dir)
+;;          ;;     (yas-reload-all)))
+;;          (my-set-themes-hook)
+;;          (message "packages bootstrap success for %s packages" (length res))
+;;          (setq my-bootstrap-is-running nil)))))
 
-  (my-bootstrap))
+;;   (my-bootstrap))
 
 (eval-when-compile
   (require 'use-package)
@@ -362,13 +362,12 @@
   ;;       (-filter (lambda (s) (s-prefix? "go-" (prin1-to-string s))) flycheck-checkers))
   )
 
-(require 'eglot)
-(defvar eglot-connect-timeout)
-(defvar eglot-server-programs)
-(setq eglot-connect-timeout 300)
-(setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
-;; (map-put! eglot-server-programs 'go-mode '("bingo" "-mode=stdio" "-freeosmemory=300" "-diagnostics-style=none" "-enhance-signature-help"))
-(map-put! eglot-server-programs 'go-mode '("gopls"))
+;; (require 'eglot)
+;; (defvar eglot-connect-timeout)
+;; (defvar eglot-server-programs)
+;; (setq eglot-connect-timeout 300)
+;; (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
+;; (map-put! eglot-server-programs 'go-mode '("gopls"))
 
 (defun my-try-go-mod (dir)
   "Find go project root for DIR."
@@ -388,8 +387,6 @@
     (if dir
         (cons 'vc dir)
       nil)))
-
-(setq lsp-prefer-flymake t)
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -443,6 +440,7 @@
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
       (setq-local lsp-auto-guess-root t)
       (setq lsp-ui-sideline-ignore-duplicate t)
+      (company-statistics-mode -1)
       (require 'yasnippet)
       (lsp)
 
@@ -459,10 +457,8 @@
 (global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
 (global-set-key "\C-xv" #'quoted-insert)
-(global-set-key "\C-xg" #'goto-line)
 (global-set-key "\C-xf" #'search-forward)
 (global-set-key "\C-xc" #'compile)
-;; (global-set-key "\C-xt" #'text-mode)
 (global-set-key "\C-xr" #'replace-string)
 (global-set-key "\C-xa" #'repeat-complex-command)
 (global-set-key "\C-xm" #'manual-entry)
@@ -512,6 +508,7 @@
 ;; (add-hook 'python-mode-hook #'my-python-hook)
 
 (use-package octave
+  :disabled t
   :mode ("\\.m$" . octave-mode)
   :defines (octave-mode-map)
   :functions (octave-mode)
@@ -541,9 +538,16 @@
 (setq company-minimum-prefix-length 3)
 
 (use-package company-statistics
+  :disabled t
   :functions (company-statistics-mode)
   :init
   (add-hook 'after-init-hook 'company-statistics-mode))
+
+(autoload 'bash-completion-dynamic-complete
+  "bash-completion"
+  "BASH completion hook")
+(add-hook 'shell-dynamic-complete-functions
+          'bash-completion-dynamic-complete)
 
 ;;; ElDoc
 (add-hook 'emacs-lisp-mode-hook #'eldoc-mode)
@@ -582,7 +586,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; (defvar cider-repl-history-size)
 ;; (setq cider-repl-history-size 1000) ; the default is 500
 
-(setq browse-url-browser-function #'browse-url-chromium)
+(use-package browse-url
+  :functions (browse-url-default-browser))
+(setq browse-url-browser-function #'browse-url-default-browser)
 
 (kill-buffer "*Messages*")
 
@@ -640,6 +646,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :mode (("\\.json$" . json-mode)))
 
 (use-package js2-mode
+  :disabled t
   :mode
   (("\\.js$" . js2-mode))
   :bind (:map js2-mode-map
@@ -761,6 +768,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   )
 
 (use-package rjsx-mode
+  :disabled t
   :mode ("\\.jsx$" . rjsx-mode))
 
 ;; (use-package web-mode
@@ -783,6 +791,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (setq company-tooltip-align-annotations t)
 
 (use-package emmet-mode
+  :disabled t
   :functions (emmet-mode)
   :init
   (add-hook 'sgml-mode-hook #'emmet-mode)
@@ -998,30 +1007,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
         (require 'jka-compr nil t)
         (jka-compr-build-file-regexp))
       "Store the regex for compressed file names.")
-    (defvar my-swoop-limit 300000
-      "When the buffer is larger than this, use `my-helm-rg' instead of `helm-swoop'.")
-    (require 'helm-grep)
-    (defun helm-swoop-or-grep ()
-      "Call `helm-swoop' for small buffers and `helm-do-grep' for large ones."
-      (interactive)
-      (let ((fname (buffer-file-name)))
-        (if (and fname
-                 (not (buffer-narrowed-p))
-                 (not (ignore-errors
-                        (file-remote-p fname)))
-                 (not (string-match
-                       my-compressed-file-regex
-                       fname))
-                 (> (buffer-size)
-                    (if (eq major-mode 'org-mode)
-                        (/ my-swoop-limit 4)
-                      my-swoop-limit)))
-            (progn
-              (when (file-writable-p fname)
-                (save-buffer))
-              (let ((input isearch-string))
-                (helm-do-grep-1 (list (buffer-file-name)) nil nil nil nil input)))
-          (helm-swoop :$query isearch-string)))))
+    (require 'helm-grep))
   (require 'helm-config)
   (helm-mode +1)
   (require 'helm-fuzzier)
@@ -1788,6 +1774,7 @@ A prefix arg makes KEEP-TIME non-nil."
 (eval-after-load 'dash '(dash-enable-font-lock))
 
 (use-package evalator
+  :disabled t
   :bind (("C-c e e" . evalator)
          ("C-c e x" . evalator-explicit)
          ("C-c e r" . evalator-resume)
