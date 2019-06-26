@@ -78,6 +78,7 @@
      ("???" . "#dc752f")))
  '(lsp-clients-go-server "gopls")
  '(lsp-enable-on-type-formatting nil)
+ '(lsp-prefer-flymake t)
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-flycheck-enable t)
  '(lsp-ui-sideline-enable t)
@@ -90,7 +91,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(frog-jump-buffer deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo quelpa docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag sicp go-gen-test go-add-tags helm-dash comment-tags flycheck-plantuml plantuml-mode org-mind-map ace-isearch evalator helm-fuzzier helm-flx helm-flycheck helm-company indium json-snatcher docker-compose-mode flycheck-vale go-direx go-dlv go-playground flycheck-rust rust-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rjsx-mode restclient react-snippets pandoc-mode pacmacs noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup ensime embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link ac-js2 ac-emmet ac-cider))
+   '(frog-jump-buffer deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo quelpa docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag sicp go-gen-test go-add-tags helm-dash comment-tags plantuml-mode org-mind-map ace-isearch evalator helm-fuzzier helm-flx helm-company indium json-snatcher docker-compose-mode go-direx go-dlv go-playground rust-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xref-js2 xah-lookup which-key wgrep web-beautify timp tagedit sublime-themes speed-type spacemacs-theme solarized-theme smex slime-company rjsx-mode restclient react-snippets pandoc-mode pacmacs noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc js2-refactor jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup ensime embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link ac-js2 ac-emmet ac-cider))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)

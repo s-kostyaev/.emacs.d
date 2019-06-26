@@ -44,6 +44,7 @@
   (with-temp-buffer
     (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
     (eval-buffer)))
+(defvar quelpa-upgrade-p)
 (setq quelpa-upgrade-p t)
 
 
@@ -192,7 +193,10 @@
 
                ;; Flycheck errors
 
-               '(:eval (flycheck-mode-line-status-text))
+               ;; '(:eval (flycheck-mode-line-status-text))
+
+               ;; flymake errors
+               flymake--mode-line-format
 
                ;; relative position, size of file
                "    ["
@@ -339,9 +343,16 @@
           (select-window first-win)
           (if this-win-2nd (other-window 1))))))
 
+(use-package flymake
+  :bind (("C-x `" . flymake-goto-next-error)
+         ("C-c r" . flymake-show-diagnostics-buffer))
+  :init
+  (flymake-mode t))
+
 (use-package flycheck
+  :disabled t
   :defer 3
-  :bind ("C-c r" . flycheck-list-errors)
+  :bind ("C-c r" . flymake-show-diagnostics-buffer)
   :config
   (global-flycheck-mode)
   ;; :init
@@ -375,6 +386,8 @@
     (if dir
         (cons 'vc dir)
       nil)))
+
+(setq lsp-prefer-flymake t)
 
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
@@ -427,6 +440,8 @@
 
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
       (setq-local lsp-auto-guess-root t)
+      (setq lsp-ui-sideline-ignore-duplicate t)
+      (require 'yasnippet)
       (lsp)
 
       (defvar my-go-packages nil)
@@ -1738,6 +1753,7 @@ A prefix arg makes KEEP-TIME non-nil."
 
 ;;; Prose linting
 (use-package flycheck-vale
+  :disabled t
   :after flycheck
   :config (flycheck-vale-setup))
 
@@ -1922,8 +1938,8 @@ A prefix arg makes KEEP-TIME non-nil."
 
 
 (defun open-this-file-as-root ()
-  "Edit current file as root, using `tramp' and `sudo'.  If the current
-buffer is not visiting a file, prompt for a file name."
+  "Edit current file as root, using `tramp' and `sudo'.
+If the current buffer is not visiting a file, prompt for a file name."
   (interactive)
   (let* ((filename (or buffer-file-name
                        (read-file-name "Find file (as root): ")))
