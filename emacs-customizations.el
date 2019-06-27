@@ -25,8 +25,13 @@
  '(column-number-mode t)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
+ '(compilation-message-face 'default)
  '(counsel-rg-base-command
    "/opt/local/bin/rg -i -u --no-heading --line-number --max-columns 150 %s .")
+ '(cua-global-mark-cursor-color "#2aa198")
+ '(cua-normal-cursor-color "#657b83")
+ '(cua-overwrite-cursor-color "#b58900")
+ '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
    '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(debug-on-error nil)
@@ -34,6 +39,7 @@
  '(dtrt-indent-active-mode-line-info "")
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(electric-indent-mode t)
+ '(fci-rule-color "#eee8d5")
  '(flycheck-disabled-checkers
    '(erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert))
  '(flycheck-gometalinter-deadline "30s")
@@ -63,6 +69,26 @@
  '(helm-recentf-fuzzy-match t)
  '(helm-session-fuzzy-match t)
  '(helm-swoop-pre-input-function (lambda nil nil))
+ '(highlight-changes-colors '("#d33682" "#6c71c4"))
+ '(highlight-symbol-colors
+   (--map
+    (solarized-color-blend it "#fdf6e3" 0.25)
+    '("#b58900" "#2aa198" "#dc322f" "#6c71c4" "#859900" "#cb4b16" "#268bd2")))
+ '(highlight-symbol-foreground-color "#586e75")
+ '(highlight-tail-colors
+   '(("#eee8d5" . 0)
+     ("#B4C342" . 20)
+     ("#69CABF" . 30)
+     ("#69B7F0" . 50)
+     ("#DEB542" . 60)
+     ("#F2804F" . 70)
+     ("#F771AC" . 85)
+     ("#eee8d5" . 100)))
+ '(hl-bg-colors
+   '("#DEB542" "#F2804F" "#FF6E64" "#F771AC" "#9EA0E5" "#69B7F0" "#69CABF" "#B4C342"))
+ '(hl-fg-colors
+   '("#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3" "#fdf6e3"))
+ '(hl-paren-colors '("#2aa198" "#b58900" "#268bd2" "#6c71c4" "#859900"))
  '(hl-todo-keyword-faces
    '(("TODO" . "#dc752f")
      ("NEXT" . "#dc752f")
@@ -86,22 +112,27 @@
  '(lsp-ui-doc-enable nil)
  '(lsp-ui-flycheck-enable t)
  '(lsp-ui-sideline-enable t)
+ '(magit-diff-use-overlays nil)
  '(mail-envelope-from 'header)
  '(mail-specify-envelope-from t)
  '(message-sendmail-envelope-from 'header)
  '(notmuch-search-oldest-first nil)
+ '(nrepl-message-colors
+   '("#dc322f" "#cb4b16" "#b58900" "#546E00" "#B4C342" "#00629D" "#2aa198" "#d33682" "#6c71c4"))
  '(package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(moe-theme bash-completion frog-jump-buffer deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag go-gen-test go-add-tags comment-tags plantuml-mode org-mind-map ace-isearch helm-fuzzier helm-flx helm-company indium json-snatcher docker-compose-mode go-direx go-dlv go-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme solarized-theme smex restclient react-snippets pandoc-mode noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme composable company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link))
+   '(moe-theme bash-completion deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag go-gen-test go-add-tags comment-tags plantuml-mode org-mind-map ace-isearch helm-fuzzier helm-flx helm-company indium json-snatcher docker-compose-mode go-direx go-dlv go-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme solarized-theme smex restclient react-snippets pandoc-mode noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme composable company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)
  '(paradox-spinner-type 'progress-bar)
  '(pdf-view-midnight-colors '("#b2b2b2" . "#292b2e"))
  '(plantuml-jar-path (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
+ '(pos-tip-background-color "#eee8d5")
+ '(pos-tip-foreground-color "#586e75")
  '(pyenv-mode t)
  '(racer-rust-src-path "/usr/src/rust/src")
  '(safe-local-variable-values
@@ -132,11 +163,42 @@
      (eval c-set-offset 'innamespace 0)))
  '(send-mail-function 'sendmail-send-it)
  '(sendmail-program "/usr/bin/msmtp")
+ '(smartrep-mode-line-active-bg (solarized-color-blend "#859900" "#eee8d5" 0.2))
  '(sml/theme 'respectful)
  '(smtpmail-smtp-server (password-store-get "smtp-server"))
  '(smtpmail-smtp-service 25)
  '(symbol-overlay-global-mode t)
- '(tls-checktrust t))
+ '(term-default-bg-color "#fdf6e3")
+ '(term-default-fg-color "#657b83")
+ '(tls-checktrust t)
+ '(vc-annotate-background nil)
+ '(vc-annotate-background-mode nil)
+ '(vc-annotate-color-map
+   '((20 . "#dc322f")
+     (40 . "#c9485ddd1797")
+     (60 . "#bf7e73b30bcb")
+     (80 . "#b58900")
+     (100 . "#a5a58ee30000")
+     (120 . "#9d9d91910000")
+     (140 . "#9595943e0000")
+     (160 . "#8d8d96eb0000")
+     (180 . "#859900")
+     (200 . "#67119c4632dd")
+     (220 . "#57d79d9d4c4c")
+     (240 . "#489d9ef365ba")
+     (260 . "#3963a04a7f29")
+     (280 . "#2aa198")
+     (300 . "#288e98cbafe2")
+     (320 . "#27c19460bb87")
+     (340 . "#26f38ff5c72c")
+     (360 . "#268bd2")))
+ '(vc-annotate-very-old-color nil)
+ '(weechat-color-list
+   '(unspecified "#fdf6e3" "#eee8d5" "#990A1B" "#dc322f" "#546E00" "#859900" "#7B6000" "#b58900" "#00629D" "#268bd2" "#93115C" "#d33682" "#00736F" "#2aa198" "#657b83" "#839496"))
+ '(xterm-color-names
+   ["#eee8d5" "#dc322f" "#859900" "#b58900" "#268bd2" "#d33682" "#2aa198" "#073642"])
+ '(xterm-color-names-bright
+   ["#fdf6e3" "#cb4b16" "#93a1a1" "#839496" "#657b83" "#6c71c4" "#586e75" "#002b36"]))
 
 (provide 'emacs-customizations)
 ;;; emacs-customizations.el ends here
