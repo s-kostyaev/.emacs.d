@@ -248,6 +248,8 @@
 (setq auto-window-vscroll nil)
 (global-set-key (kbd "M-J") #'scroll-up-line)
 (global-set-key (kbd "M-K") #'scroll-down-line)
+(global-set-key (kbd "<mouse-5>") #'scroll-up-line)
+(global-set-key (kbd "<mouse-4>") #'scroll-down-line)
 ;; (defun my-scroll-hook(_)
 ;;   "Increase gc-threshold before scroll and set it back after."
 ;;   (setq gc-cons-threshold most-positive-fixnum)
@@ -887,7 +889,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (declare-function tab-indent-or-complete "ext:config")
 (use-package yasnippet
   :functions (tab-indent-or-complete)
-  :bind (([tab] . tab-indent-or-complete))
+  :bind (([tab] . tab-indent-or-complete)
+         ("TAB" . tab-indent-or-complete))
   :defer 3
   :config
   (progn
