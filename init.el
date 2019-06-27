@@ -66,7 +66,6 @@
   (interactive)
   ;; (load-theme 'spacemacs-dark t)
   ;; (require 'solarized)
-  (load-theme 'solarized-light t)
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
   ;; (require 'circadian)
@@ -76,6 +75,8 @@
 
   ;; (load-theme 'spacemacs-dark t)
   ;; (load-theme 'solarized-dark t)
+  (require 'moe-theme)
+  (moe-light)
 
   (tool-bar-mode -1)
   (menu-bar-mode -1)
@@ -440,7 +441,6 @@
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
       (setq-local lsp-auto-guess-root t)
       (setq lsp-ui-sideline-ignore-duplicate t)
-      (company-statistics-mode -1)
       (require 'yasnippet)
       (lsp)
 

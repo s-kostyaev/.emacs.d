@@ -15,12 +15,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
  '(arch-packer-default-command "pacaur")
  '(blink-cursor-mode nil)
  '(browse-url-browser-function 'browse-url-chromium)
  '(byte-compile-warnings
    '(redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
+ '(company-quickhelp-color-background "#4F4F4F")
+ '(company-quickhelp-color-foreground "#DCDCCC")
  '(counsel-rg-base-command
    "/opt/local/bin/rg -i -u --no-heading --line-number --max-columns 150 %s .")
  '(custom-safe-themes
@@ -91,7 +95,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(bash-completion frog-jump-buffer deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag go-gen-test go-add-tags comment-tags plantuml-mode org-mind-map ace-isearch helm-fuzzier helm-flx helm-company indium json-snatcher docker-compose-mode go-direx go-dlv go-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme solarized-theme smex restclient react-snippets pandoc-mode noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme composable company-statistics company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link))
+   '(moe-theme bash-completion frog-jump-buffer deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag go-gen-test go-add-tags comment-tags plantuml-mode org-mind-map ace-isearch helm-fuzzier helm-flx helm-company indium json-snatcher docker-compose-mode go-direx go-dlv go-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme solarized-theme smex restclient react-snippets pandoc-mode noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme composable company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)
