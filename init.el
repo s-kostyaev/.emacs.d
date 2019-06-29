@@ -391,6 +391,7 @@
         (cons 'vc dir)
       nil)))
 
+(setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin")))
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
@@ -401,7 +402,6 @@
   (progn
     (setenv "GOPATH" (concat (getenv "HOME") "/go"))
     (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin:" (getenv "GOPATH") "/bin"))
-    (setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin")))
 
     (defun my-go-mode-hook ()
       "Setup for go."
@@ -420,14 +420,13 @@
           "My hook for direx."
           (interactive)
           ;; (local-set-key (kbd "s") #'swiper)
-          (local-set-key (kbd "s") #'swiper-helm)
+          (local-set-key (kbd "s") #'helm-occur)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
       (require 'gotest)
       (require 'go-playground)
-      (require 'go-add-tags)
-      (setq go-tag-args (list "-transform" "camelcase"))
+      (setq go-tag-args (list "-transform" "snakecase"))
       (add-hook 'before-save-hook #'gofmt-before-save)
       (local-set-key (kbd "C-c i") #'go-goto-imports)
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
@@ -1090,6 +1089,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   )
 
 (use-package wgrep
+  :bind ("C-c C-p" . wgrep-change-to-wgrep-mode)
   :defer t
   :config
   (setq wgrep-auto-save-buffer t))
@@ -1823,13 +1823,14 @@ A prefix arg makes KEEP-TIME non-nil."
          ;;      ("M-n" . my-swoop-next)
          :map isearch-mode-map
          ("M-n" . my-isearch-next)
-         ("M-i" . swiper-helm-from-isearch))
-  :config
-  (require 'swiper-helm)
+         ("M-i" . helm-occur-from-isearch))
+  :init
   (defun my-isearch-next ()
     "Isearch symbol at point or next isearch history item."
     (interactive)
     (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
+  :config
+  ;; (require 'swiper-helm)
   ;; (defun my-swoop-next ()
   ;;   "Swoop symbol at point or next isearch history item."
   ;;   (interactive)
@@ -1838,7 +1839,7 @@ A prefix arg makes KEEP-TIME non-nil."
   ;;     (next-history-element 1)))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
-  (setq ace-isearch-function-from-isearch 'swiper-helm-from-isearch)
+  (setq ace-isearch-function-from-isearch 'helm-occur-from-isearch)
   (setq ace-isearch-use-jump nil)
   ;; (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
   ;; (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev)

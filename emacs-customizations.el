@@ -19,7 +19,7 @@
    [default default default italic underline success warning error])
  '(arch-packer-default-command "pacaur")
  '(blink-cursor-mode nil)
- '(browse-url-browser-function 'browse-url-chromium)
+ '(browse-url-browser-function 'browse-url-default-browser)
  '(byte-compile-warnings
    '(redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
@@ -47,7 +47,6 @@
  '(flycheck-vale-modes '(text-mode markdown-mode rst-mode gfm-mode web-mode) t)
  '(global-aggressive-indent-mode t)
  '(global-flycheck-mode t)
- '(go-add-tags-style 'lower-camel-case)
  '(go-packages-function 'go-packages-go-list)
  '(go-tag-args '("-transform" "snakecase") t)
  '(go-test-verbose t)
@@ -124,7 +123,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(moe-theme bash-completion deadgrep company-lsp lsp-mode lsp-ui magit-todos pcre2el hl-todo docker ace-window package-lint rust-mode markdown-mode magit python-mode eglot ht docker-tramp exec-path-from-shell json-mode pyenv-mode virtualenvwrapper define-word auto-yasnippet gif-screencast go-snippets yasnippet-snippets smart-shift highlight-indentation swiper-helm go-fill-struct edit-server ace-jump-helm-line helm-codesearch go-tag go-gen-test go-add-tags comment-tags plantuml-mode org-mind-map ace-isearch helm-fuzzier helm-flx helm-company indium json-snatcher docker-compose-mode go-direx go-dlv go-playground feature-mode reverse-im json-navigator zygospore hungry-delete aggressive-indent dtrt-indent symbol-overlay ibuffer-vc rainbow-mode pass password-store use-package use-package-chords async zenburn-theme xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme solarized-theme smex restclient react-snippets pandoc-mode noflet nlinum monokai-theme lua-mode link-hint key-chord json-rpc jquery-doc ivy-hydra ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme composable company-quickhelp column-marker cmake-font-lock cask-mode camcorder ace-mc ace-link))
+   '(deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-fuzzier helm-flx helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc rainbow-mode use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex react-snippets pandoc-mode noflet nlinum monokai-theme key-chord json-rpc jquery-doc ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme company-quickhelp column-marker cask-mode))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)
