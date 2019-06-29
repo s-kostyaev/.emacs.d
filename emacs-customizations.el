@@ -67,7 +67,6 @@
  '(helm-mode-fuzzy-match t)
  '(helm-recentf-fuzzy-match t)
  '(helm-session-fuzzy-match t)
- '(helm-swoop-pre-input-function (lambda nil nil))
  '(highlight-changes-colors '("#d33682" "#6c71c4"))
  '(highlight-symbol-colors
    (--map

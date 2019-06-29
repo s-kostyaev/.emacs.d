@@ -997,18 +997,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
     :bind
     (:map helm-map
           ("C-'" . ace-jump-helm-line)))
-  (use-package helm-swoop
-    :disabled t
-    :defines helm-swoop-map
-    :functions (helm-swoop)
-    :config
-    (add-hook 'after-revert-hook #'helm-swoop--clear-cache)
-    (defvar my-compressed-file-regex
-      (progn
-        (require 'jka-compr nil t)
-        (jka-compr-build-file-regexp))
-      "Store the regex for compressed file names.")
-    (require 'helm-grep))
   (require 'helm-config)
   (helm-mode +1)
   (require 'helm-fuzzier)
@@ -1815,34 +1803,19 @@ A prefix arg makes KEEP-TIME non-nil."
   (setq ivy-height 20))
 
 (use-package ace-isearch
-  :bind (;; :map helm-swoop-map
-         ;;      ("C-s" . swoop-action-goto-line-next)
-         ;;      ("C-r" . swoop-action-goto-line-prev)
-         ;;      ("C-w" . nil)
-         ;;      ("M-n" . my-swoop-next)
-         :map isearch-mode-map
-         ("M-n" . my-isearch-next)
-         ("M-i" . helm-occur-from-isearch))
+  :bind (:map isearch-mode-map
+              ("M-n" . my-isearch-next)
+              ("M-i" . helm-occur-from-isearch))
   :init
   (defun my-isearch-next ()
     "Isearch symbol at point or next isearch history item."
     (interactive)
     (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
   :config
-  ;; (require 'swiper-helm)
-  ;; (defun my-swoop-next ()
-  ;;   "Swoop symbol at point or next isearch history item."
-  ;;   (interactive)
-  ;;   (if (s-equals-p "" helm-pattern)
-  ;;       (helm-swoop-yank-thing-at-point)
-  ;;     (next-history-element 1)))
   (global-ace-isearch-mode +1)
   (setq ace-isearch-function 'avy-goto-word-1)
   (setq ace-isearch-function-from-isearch 'helm-occur-from-isearch)
-  (setq ace-isearch-use-jump nil)
-  ;; (define-key helm-swoop-map (kbd "C-s") 'swoop-action-goto-line-next)
-  ;; (define-key helm-swoop-map (kbd "C-r") 'swoop-action-goto-line-prev)
-  )
+  (setq ace-isearch-use-jump nil))
 
 ;;; plantuml
 ;; (org-babel-do-load-languages
