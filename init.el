@@ -722,7 +722,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-fix-fuzzy-files)
   :bind*
   (("C-x l" . helm-locate)
-   ("C-x b" . helm-mini))
+   ("C-x b" . helm-mini)
+   ("C-c C-s" . my-helm-do-grep-ag-repo))
   :bind
   (("C-x C-f" . helm-find-files)
    ("M-x" . helm-M-x)
@@ -769,7 +770,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
     (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
   
-  (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number -M 150 %s %s %s")
+  (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")
   (defun helm-ido-like-find-files-up-one-level-maybe ()
     (interactive)
     (if (looking-back "/" 1)
@@ -796,6 +797,22 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
     (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
     (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
+
+  (defun my-helm-do-grep-ag-project (arg)
+    "Preconfigured helm for grepping with AG in `default-directory'.
+With prefix-arg prompt for type if available with your AG version."
+    (interactive "P")
+    (require 'helm-files)
+    (helm-grep-ag (expand-file-name (if (project-current)
+                                        (car (project-roots (project-current)))
+                                      default-directory)) arg))
+
+  (defun my-helm-do-grep-ag-repo (arg)
+    "Preconfigured helm for grepping with AG in `default-directory'.
+With prefix-arg prompt for type if available with your AG version."
+    (interactive "P")
+    (require 'helm-files)
+    (helm-grep-ag (expand-file-name (or (vc-root-dir) default-directory)) arg))
 
   (helm-ido-like-load-fuzzy-enhancements)
   (helm-ido-like-load-file-nav)
@@ -1242,6 +1259,7 @@ to the line and column corresponding to that location."
 (eval-after-load 'dash '(dash-enable-font-lock))
 
 (use-package deadgrep
+  :disabled t
   :bind* (("C-c C-s" . deadgrep)))
 
 (use-package counsel
