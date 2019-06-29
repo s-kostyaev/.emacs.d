@@ -68,21 +68,12 @@
   ;; (require 'solarized)
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
-  ;; (require 'circadian)
-  ;; (circadian-activate-latest-theme)
-  ;; (load-theme 'spacemlacs-light t)
-  ;; (load-theme 'solarized-light t)
-
-  ;; (load-theme 'spacemacs-dark t)
-  ;; (load-theme 'solarized-dark t)
   (require 'moe-theme)
   (moe-light)
 
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-  (scroll-bar-mode -1)
-  ;; (seq-doseq (frame (frame-list)) (my-solarized-dark-workaround frame))
-  )
+  (scroll-bar-mode -1))
 
 ;; (defvar yasnippet-snippets-dir)
 ;; (defvar my-bootstrap-is-running nil)
@@ -184,14 +175,7 @@
 
                "        "
                '(:eval (when (stringp vc-mode)
-                         vc-mode
-                         ;; (let ((noback (replace-regexp-in-string (format "^ %s" (vc-backend buffer-file-name)) " " vc-mode)))
-                         ;;   (setq vc-mode
-                         ;;         (propertize vc-mode
-                         ;;                     'face  (cond ((string-match "^ -" noback)    'font-lock-keyword-face)
-                         ;;                                  ((string-match "^ [:@]" noback) 'font-lock-warning-face)
-                         ;;                                  ((string-match "^ [!\\?]" noback) 'font-lock-warning-face)))))
-                         ))
+                         vc-mode))
 
                ;; the current major mode for the buffer.
                "        ["
@@ -359,11 +343,7 @@
   :defer 3
   :bind ("C-c r" . flymake-show-diagnostics-buffer)
   :config
-  (global-flycheck-mode)
-  ;; :init
-  ;; (-map (lambda (c) (add-to-list 'flycheck-disabled-checkers c))
-  ;;       (-filter (lambda (s) (s-prefix? "go-" (prin1-to-string s))) flycheck-checkers))
-  )
+  (global-flycheck-mode))
 
 ;; (require 'eglot)
 ;; (defvar eglot-connect-timeout)
@@ -419,7 +399,6 @@
         (defun my-direx-hook()
           "My hook for direx."
           (interactive)
-          ;; (local-set-key (kbd "s") #'swiper)
           (local-set-key (kbd "s") #'helm-occur)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
@@ -485,29 +464,6 @@
 
 (put 'downcase-region 'disabled nil)
 
-;;; Python mode
-;; (add-hook 'python-mode-hook #'anaconda-mode)
-;; (add-hook 'python-mode-hook #'anaconda-eldoc-mode)
-
-;; (setenv "PYMACS_PYTHON" "python2")
-;; (setenv "PYTHONPATH" "/usr/bin/python2")
-;; (autoload 'python-mode "python-mode.el" "Python Mode." t)
-;; (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-;; (add-to-list 'interpreter-mode-alist '("python" . python-mode))
-;; (defvar python-indent)
-;; (declare-function py-shift-right "ext:python-mode")
-;; (declare-function py-shift-left "ext:python-mode")
-;; (defvar python-indent-offset)
-;; (defun my-python-hook ()
-;;   "Setup for python."
-;;   (add-to-list 'company-backends 'company-anaconda)
-;;   (setq indent-tabs-mode nil)
-;;   (setq python-indent-offset 4)
-;;   (setq tab-width 8)
-;;   (local-set-key (kbd "<M-iso-lefttab>") #'py-shift-right)
-;;   (local-set-key (kbd "<backtab>") #'py-shift-left))
-;; (add-hook 'python-mode-hook #'my-python-hook)
-
 (use-package octave
   :disabled t
   :mode ("\\.m$" . octave-mode)
@@ -571,22 +527,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (comment-dwim arg)))
 (global-set-key "\M-;" #'comment-dwim-line)
 
-
-;; Clojure
-
-;; (declare-function cider-turn-on-eldoc-mode "ext:cider")
-;; (add-hook 'cider-mode-hook #'cider-turn-on-eldoc-mode)
-;; (defvar nrepl-hide-special-buffers)
-;; (setq nrepl-hide-special-buffers t)
-;; (defvar cider-repl-print-length)
-;; (setq cider-repl-print-length 100) ; the default is nil, no limit
-;; ;; (set cider-repl-result-prefix ";; => ")
-;; ;; (set cider-interactive-eval-result-prefix ";; => ")
-;; (defvar cider-repl-wrap-history)
-;; (setq cider-repl-wrap-history t)
-;; (defvar cider-repl-history-size)
-;; (setq cider-repl-history-size 1000) ; the default is 500
-
 (use-package browse-url
   :functions (browse-url-default-browser))
 (setq browse-url-browser-function #'browse-url-default-browser)
@@ -640,154 +580,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
     ;; fix for infinite eating RAM
     (add-hook 'rjsx-mode-hook #'my-disable-fci)))
 
-;; (setq eval-expression-debug-on-error nil)
-
-;;;; Web developement
-(use-package json-mode
-  :mode (("\\.json$" . json-mode)))
-
-(use-package js2-mode
-  :disabled t
-  :mode
-  (("\\.js$" . js2-mode))
-  :bind (:map js2-mode-map
-              ("C-c C-l" . indium-eval-buffer))
-  :config
-  ;; extra features for imenu
-  (add-hook 'js2-mode-hook (lambda ()
-                             (js2-imenu-extras-mode)))
-
-  (defvar js2-highlight-level)
-  (setq js2-highlight-level 3)
-  (defvar js2-idle-timer-delay)
-  (setq js2-idle-timer-delay 2)
-  (setq blink-matching-paren nil)
-  (use-package js2-refactor
-    :functions
-    (js2r-expand-node-at-point
-     js2r-contract-node-at-point
-     js2r-extract-function js2r-extract-method
-     js2r-toggle-function-expression-and-declaration
-     js2r-toggle-arrow-function-and-expression
-     js2r-introduce-parameter js2r-localize-parameter
-     js2r-wrap-buffer-in-iife js2r-inject-global-in-iife
-     js2r-add-to-globals-annotation js2r-inline-var js2r-rename-var
-     js2r-var-to-this js2r-arguments-to-object js2r-ternary-to-if
-     js2r-split-var-declaration js2r-split-string js2r-unwrap
-     js2r-log-this js2r-debug-this js2r-forward-slurp
-     js2r-forward-barf js2r-kill)
-    :bind
-    (:map js2-mode-map
-          ("C-c h r" . js2-refactor-hydra/body))
-    :config (js2r-add-keybindings-with-prefix "C-c C-r")
-
-    (defhydra js2-refactor-hydra (:color blue :hint nil)
-      "
-^Functions^                    ^Variables^               ^Buffer^                      ^sexp^               ^Debugging^
-------------------------------------------------------------------------------------------------------------------------------
-[_lp_] Localize Parameter      [_ev_] Extract variable   [_wi_] Wrap buffer in IIFE    [_k_]  js2 kill      [_lt_] log this
-[_ef_] Extract function        [_iv_] Inline variable    [_ig_] Inject global in IIFE  [_ss_] split string  [_dt_] debug this
-[_ip_] Introduce parameter     [_rv_] Rename variable    [_ee_] Expand node at point   [_sl_] forward slurp
-[_em_] Extract method          [_vt_] Var to this        [_cc_] Contract node at point [_ba_] forward barf
-[_ao_] Arguments to object     [_sv_] Split var decl.    [_uw_] unwrap
-[_tf_] Toggle fun exp and decl [_ag_] Add var to globals
-[_ta_] Toggle fun expr and =>  [_ti_] Ternary to if
-[_q_]  quit"
-      ("ee" js2r-expand-node-at-point)
-      ("cc" js2r-contract-node-at-point)
-      ("ef" js2r-extract-function)
-      ("em" js2r-extract-method)
-      ("tf" js2r-toggle-function-expression-and-declaration)
-      ("ta" js2r-toggle-arrow-function-and-expression)
-      ("ip" js2r-introduce-parameter)
-      ("lp" js2r-localize-parameter)
-      ("wi" js2r-wrap-buffer-in-iife)
-      ("ig" js2r-inject-global-in-iife)
-      ("ag" js2r-add-to-globals-annotation)
-      ("ev" js2r-extract-var)
-      ("iv" js2r-inline-var)
-      ("rv" js2r-rename-var)
-      ("vt" js2r-var-to-this)
-      ("ao" js2r-arguments-to-object)
-      ("ti" js2r-ternary-to-if)
-      ("sv" js2r-split-var-declaration)
-      ("ss" js2r-split-string)
-      ("uw" js2r-unwrap)
-      ("lt" js2r-log-this)
-      ("dt" js2r-debug-this)
-      ("sl" js2r-forward-slurp)
-      ("ba" js2r-forward-barf)
-      ("k" js2r-kill)
-      ("q" nil)
-      ))
-  (use-package json-snatcher
-    :config
-    (defun js-mode-bindings ()
-      "Sets a hotkey for using the json-snatcher plugin"
-      (when (string-match  "\\.json$" (buffer-name))
-        (local-set-key (kbd "C-c C-g") 'jsons-print-path)))
-    (add-hook 'js2-mode-hook 'js-mode-bindings))
-  (use-package xref-js2
-    :config
-
-    ;; js-mode (which js2 is based on) binds "M-." which conflicts with xref, so
-    ;; unbind it.
-    (define-key js-mode-map (kbd "M-.") nil)
-
-    (add-hook 'js2-mode-hook (lambda ()
-                               (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))))
-
-  ;; indium: javascript awesome development environment
-  ;; https://github.com/NicolasPetton/indium
-  (use-package indium
-    :config (add-hook 'js2-mode-hook 'indium-interaction-mode))
-  ;; (use-package tern
-  ;;   :init
-  ;;   (add-hook 'js2-mode-hook #'my-js-mode-hook)
-  ;;   (add-hook 'js-mode-hook #'my-js-mode-hook)
-  ;;   (add-hook 'web-mode-hook #'my-js-mode-hook)
-  ;;   (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
-  ;;   (setq exec-path (append exec-path '("/usr/local/bin")))
-
-  ;;   :functions
-  ;;   (my-js-mode-hook)
-  ;;   :config
-  ;;   (defun my-js-mode-hook ()
-  ;;     "Hook for `js-mode'."
-  ;;     (tern-mode)
-  ;;     (define-key tern-mode-keymap (kbd "M-.") nil)
-  ;;     (define-key tern-mode-keymap (kbd "M-,") nil)
-  ;;     (set (make-local-variable 'company-backends)
-  ;;          '((company-tern company-files))))
-  ;;   (add-hook 'js2-mode-hook 'my-js-mode-hook))
-
-  ;; turn off all warnings in js2-mode
-  (setq js2-mode-show-parse-errors t)
-  (setq js2-mode-show-strict-warnings nil)
-
-  ;; (use-package company-tern)
-  )
-
-(use-package rjsx-mode
-  :disabled t
-  :mode ("\\.jsx$" . rjsx-mode))
-
-;; (use-package web-mode
-;;   :init
-;;   (add-hook 'web-mode-hook  #'my-web-mode-hook)
-;;   :mode (("\\.htm[l]?$" . web-mode)
-;;          ("\\.dtl$" . web-mode))
-;;   :functions (my-web-mode-hook)
-;;   :config
-;;   (defun my-web-mode-hook ()
-;;     "Hooks for Web mode.  Adjust `indent's."
-;;     ;; http://web-mode.org/
-;;     (setq web-mode-markup-indent-offset 2)
-;;     (setq web-mode-css-indent-offset 2)
-;;     (setq web-mode-code-indent-offset 2)
-;;     (setq web-mode-enable-current-element-highlight t)
-;;     (fci-mode -1)))
-
 (defvar company-tooltip-align-annotations)
 (setq company-tooltip-align-annotations t)
 
@@ -820,8 +612,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package multiple-cursors
   :defer 3
   :chords (("mf" . multiple-cursors-hydra/body))
-  ;; :functions
-  ;; (my-mc-prompt-once my-mc-prompt-once-advice)
   :config
   (progn
     (require 'hydra)
@@ -853,34 +643,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
       ("h" mc-hide-unmatched-lines-mode)
       ("j" ace-mc-add-multiple-cursors :exit t)
       ("k" ace-mc-add-single-cursor :exit t)
-      ("q" nil))
-    ;; (defun my-mc-prompt-once-advice (fn &rest args) ; needs lexical-binding!
-    ;;   "Make FN prompt only once with ARGS and multiple cursors."
-    ;;   (setq mc--this-command (lambda () (interactive) (apply fn args)))
-    ;;   (apply fn args))
-
-    ;; (defun my-mc-prompt-once (&rest fns)
-    ;;   "Make FNS prompt only once with multiple cursors."
-    ;;   (dolist (fn fns)
-    ;;     (advice-add fn :around #'my-mc-prompt-once-advice)))
-
-    ;; (defvar ivy-completion-beg)
-    ;; (defvar ivy-completion-end)
-    ;; (defun my-counsel-company ()
-    ;;   "Complete using `company-candidates'."
-    ;;   (interactive)
-    ;;   (company-mode 1)
-    ;;   (unless company-candidates
-    ;;     (company-other-backend))
-    ;;   (when company-point
-    ;;     (when (looking-back company-prefix (line-beginning-position))
-    ;;       (setq ivy-completion-beg (match-beginning 0))
-    ;;       (setq ivy-completion-end (match-end 0)))
-    ;;     (ivy-read "company cand: " company-candidates
-    ;;               :action #'ivy-completion-in-region-action)))
-
-    ;; (my-mc-prompt-once 'my-counsel-company #'helm-company)
-    ))
+      ("q" nil))))
 
 (declare-function check-expansion "ext:config")
 (declare-function company-complete-common "ext:company")
@@ -931,12 +694,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (setq ivy-re-builders-alist
           '((counsel-M-x . ivy--regex-fuzzy)
             (swiper . ivy--regex-plus)
-            ;; (t . ivy--regex-ignore-order)
-            (t . ivy--regex-fuzzy)
-            ))
-    ;; (setq completion-in-region-function 'ivy-completion-in-region)
-    ;; (ivy-mode 1)
-    ))
+            (t . ivy--regex-fuzzy)))))
 
 (use-package swiper
   :disabled t
@@ -946,25 +704,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (defvar company-point)
 (defvar company-prefix)
 (declare-function company-other-backend "ext:company")
-;; (use-package counsel
-;;   :disabled t
-;;   :init
-;;   (define-key lisp-interaction-mode-map (kbd "C-M-i") #'my-counsel-company)
-;;   :bind*
-;;   (("C-c C-s" . counsel-rg)
-;;    ("C-x l" . counsel-locate))
-;;   :bind
-;;   (("C-s" . counsel-grep-or-swiper)
-;;    ("C-M-i" . my-counsel-company))
-;;   :config
-;;   (counsel-mode t))
 
 (use-package helm-files
   :functions (helm-find-files-up-one-level))
 
 (use-package helm
   :defines (helm-grep-ag-command
-            helm-source-occur
             helm-read-file-map
             helm-find-files-map)
   :functions (helm-ido-like-higher-gc
@@ -974,12 +719,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-load-fuzzy-enhancements
               helm-ido-like-fuzzier-deactivate
               helm-ido-like-fuzzier-activate
-              helm-ido-like-fix-fuzzy-files
-              ;; my-helm-rg
-              )
+              helm-ido-like-fix-fuzzy-files)
   :bind*
-  (;; ("C-c C-s" . my-helm-rg)
-   ("C-x l" . helm-locate)
+  (("C-x l" . helm-locate)
    ("C-x b" . helm-mini))
   :bind
   (("C-x C-f" . helm-find-files)
@@ -1026,12 +768,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
     (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
     (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
-
-  ;; (with-eval-after-load 'helm-regexp
-  ;;   (setq helm-source-occur
-  ;;         (helm-make-source "Occur" 'helm-source-multi-occur
-  ;;           :follow 1)))
-
+  
   (setq helm-grep-ag-command "rg -uu --smart-case --no-heading --line-number -M 150 %s %s %s")
   (defun helm-ido-like-find-files-up-one-level-maybe ()
     (interactive)
@@ -1062,36 +799,13 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
   (helm-ido-like-load-fuzzy-enhancements)
   (helm-ido-like-load-file-nav)
-  (helm-ido-like-fix-fuzzy-files)
-
-  ;; (defun my-helm-rg ()
-  ;;   (interactive)
-  ;;   (let ((dir (if current-prefix-arg
-  ;;                  (read-directory-name "select directory for search: " default-directory)
-  ;;                default-directory)))
-  ;;     (helm-grep-ag dir (if (and current-prefix-arg
-  ;;                                (> (car current-prefix-arg) 4))
-  ;;                           t
-  ;;                         nil))))
-  )
+  (helm-ido-like-fix-fuzzy-files))
 
 (use-package wgrep
   :bind ("C-c C-p" . wgrep-change-to-wgrep-mode)
   :defer t
   :config
   (setq wgrep-auto-save-buffer t))
-
-;;
-;; ash integration
-;;
-;; (require 'helm-ash)
-;; (global-set-key (kbd "C-x c C-r") 'helm-ash-inbox)
-
-;; disable italic
-(mapc
- #'(lambda (face)
-     (set-face-attribute face nil :slant 'normal))
- (face-list))
 
 ;;
 ;; keyboard selection
@@ -1118,48 +832,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package imenu
   :defer t
   :bind ("M-i" . imenu))
-
-(use-package projectile
-  :disabled t
-  :defer 1
-  :config
-  (progn
-    (setq projectile-completion-system 'ivy)
-    (projectile-mode 1)))
-
-;;;; Gnu global
-
-;; key bindings
-;; (defvar helm-gtags-mode-map)
-;; (eval-after-load "helm-gtags"
-;;   '(progn
-;;      (define-key helm-gtags-mode-map (kbd "M-t d") #'helm-gtags-dwim)
-;;      (define-key helm-gtags-mode-map (kbd "M-t t") #'helm-gtags-find-tag)
-;;      (define-key helm-gtags-mode-map (kbd "M-t r") #'helm-gtags-find-rtag)
-;;      (define-key helm-gtags-mode-map (kbd "M-t s") #'helm-gtags-find-symbol)
-;;      (define-key helm-gtags-mode-map (kbd "M-t u") #'helm-gtags-update-tags)
-;;      (define-key helm-gtags-mode-map (kbd "M-t c") #'helm-gtags-create-tags)
-;;      (define-key helm-gtags-mode-map (kbd "M-g M-p") #'helm-gtags-parse-file)
-;;      (define-key helm-gtags-mode-map (kbd "C-c <") #'helm-gtags-previous-history)
-;;      (define-key helm-gtags-mode-map (kbd "C-c >") #'helm-gtags-next-history)
-;;      (define-key helm-gtags-mode-map (kbd "M-,") #'helm-gtags-pop-stack)))
-
-;;;; OpenGrok
-;; (defvar eopengrok-jar)
-;; (setq eopengrok-jar
-;;       (expand-file-name "~/.emacs.d/opengrok/clj-opengrok-0.3.0-standalone.jar"))
-;; (defvar eopengrok-ctags)
-;; (setq eopengrok-ctags "/usr/bin/ctags")
-;; ;; (require 'eopengrok)
-;; (defun my-opengrok-hook ()
-;;   "Hook for eopengrok."
-;;   (local-set-key (kbd "o") #'(lambda ()
-;;                                (interactive)
-;;                                (other-window 1))))
-;; (add-hook 'eopengrok-mode-hook #'my-opengrok-hook)
-
-;; speed-typing
-;; (require 'speed-type)
 
 ;; magit
 (use-package exec-path-from-shell
@@ -1210,18 +882,18 @@ to the line and column corresponding to that location."
   (diff-refine-hunk))
 
 ;; org-mode
-(define-key global-map "\C-cl" 'org-store-link)
-;; (define-key global-map "\C-ca" 'org-agenda)
-(defvar org-log-done)
-(setq org-log-done t)
-;; ditaa
-(defun my-org-hook ()
-  "My hook for `org-mode'."
-  (require 'org-mind-map)
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((ditaa . t) (dot . t))))
-(add-hook 'org-mode-hook #'my-org-hook)
+;; (define-key global-map "\C-cl" 'org-store-link)
+;; ;; (define-key global-map "\C-ca" 'org-agenda)
+;; (defvar org-log-done)
+;; (setq org-log-done t)
+;; ;; ditaa
+;; (defun my-org-hook ()
+;;   "My hook for `org-mode'."
+;;   (require 'org-mind-map)
+;;   (org-babel-do-load-languages
+;;    'org-babel-load-languages
+;;    '((ditaa . t) (dot . t))))
+;; (add-hook 'org-mode-hook #'my-org-hook)
 
 
 (use-package edit-indirect
@@ -1233,14 +905,14 @@ to the line and column corresponding to that location."
 (declare-function pandoc-load-default-settings "ext:pandoc")
 (add-hook 'pandoc-mode-hook #'pandoc-load-default-settings)
 
-;; guile support
-(defvar geiser-chez-binary)
-(setq geiser-chez-binary "scheme")
-;; (require 'geiser-impl)
-(defvar geiser-active-implementations)
-(eval-after-load "geiser-impl"
-  (lambda ()
-    (add-to-list 'geiser-active-implementations 'chez)))
+;; ;; guile support
+;; (defvar geiser-chez-binary)
+;; (setq geiser-chez-binary "scheme")
+;; ;; (require 'geiser-impl)
+;; (defvar geiser-active-implementations)
+;; (eval-after-load "geiser-impl"
+;;   (lambda ()
+;;     (add-to-list 'geiser-active-implementations 'chez)))
 
 ;; slime
 (use-package slime
@@ -1366,138 +1038,13 @@ to the line and column corresponding to that location."
       (local-set-key (kbd "C-M-i") #'ivy-erlang-complete))
 
     (add-hook 'after-save-hook #'ivy-erlang-complete-reparse)))
-;; (require 'flycheck-dialyzer)
 
 ;; fast open url
 (global-set-key (kbd "C-x u") #'link-hint-open-multiple-links)
 
-;;;; Lua
-;; (require 'lua-mode)
-
 ;; nXML mode customization
 (add-to-list 'auto-mode-alist '("\\.xsd\\'" . xml-mode))
 (add-to-list 'auto-mode-alist '("\\.xslt\\'" . xml-mode))
-
-
-;;;; C, C++ Development
-;; (use-package flycheck-clang-analyzer
-;;   :after flycheck-irony
-;;   :config
-;;   (flycheck-clang-analyzer-setup))
-
-;; (use-package xah-lookup
-;;   :bind (:map c++-mode-map
-;;               ("C-c b" . xah-lookup-boost)
-;;               ("C-c d" . xah-lookup-cppreference))
-;;   :functions (xah-lookup-word-on-internet xah-lookup-cppreference xah-lookup-boost)
-;;   :defines (xah-lookup-browser-function)
-;;   :config
-;;   (defun xah-lookup-cppreference (&optional word)
-;;     "Lookup definition of current WORD or text selection in URL."
-;;     (interactive)
-;;     (xah-lookup-word-on-internet
-;;      word
-;;      ;; Use � as a placeholder in the query URL.
-;;      "http://en.cppreference.com/mwiki/index.php?search=�"
-;;      xah-lookup-browser-function))
-
-;;   (defun xah-lookup-boost (&optional word)
-;;     "Lookup definition of current WORD or text selection in URL."
-;;     (interactive)
-;;     (xah-lookup-word-on-internet
-;;      word
-;;      "https://cse.google.com/cse?cx=011577717147771266991:jigzgqluebe&q=�"
-;;      xah-lookup-browser-function)))
-
-;; (use-package cmake-ide
-;;   :defer 3
-;;   :disabled t
-;;   :config
-;;   (use-package rtags
-;;     :functions (rtags-eldoc
-;;                 rtags-call-rc
-;;                 rtags-symbol-type
-;;                 rtags-print-symbol-info
-;;                 rtags-find-symbol-at-point
-;;                 rtags-find-references-at-point)
-;;     :config
-;;     (require 'package)
-;;     (require 'pkg-info)
-;;     (setq rtags-completions-enabled nil))
-
-;;   (use-package irony
-;;     :functions (irony-cdb-json-add-compile-commands-path my-flycheck-irony-setup)
-;;     :config
-;;     (use-package irony-cdb)
-;;     (use-package irony-cdb-json)
-;;     (defun my-flycheck-irony-setup ()
-;;       "Setup irony checker."
-;;       (use-package flycheck-irony)
-;;       (flycheck-select-checker 'irony))
-
-;;     (add-hook 'irony-mode-hook #'irony-cdb-autosetup-compile-options))
-
-;;   (cmake-ide-setup))
-
-;; (set-variable 'ycmd-server-command '("python" "/home/feofan/ycmd/ycmd"))
-;; (declare-function ycmd-goto "ext:ycmd")
-;; (declare-function ycmd-goto-references "ext:ycmd")
-;; (defun my-cc-mode-hook ()
-;;   "My hook for c & c++ modes."
-;;   (require 'cc-mode)
-;;   (require 'ycmd)
-;;   (require 'company-ycmd)
-;;   (require 'flycheck-ycmd)
-;;   (ycmd-mode 1)
-;;   ;; (local-set-key (kbd "C-c C-t") #'rtags-symbol-type)
-;;   ;; (local-set-key (kbd "C-c C-d") #'rtags-print-symbol-info)
-;;   (local-set-key (kbd "M-.") #'ycmd-goto
-;;                  ;; (lambda ()
-;;                  ;;   (interactive)
-;;                  ;;   (xref-push-marker-stack)
-;;                  ;;   (rtags-find-symbol-at-point))
-;;                  )
-;;   (local-set-key (kbd "M-?") #'ycmd-goto-references
-;;                  ;; (lambda ()
-;;                  ;;   (interactive)
-;;                  ;;   (xref-push-marker-stack)
-;;                  ;;   (rtags-find-references-at-point))
-;;                  )
-;;   ;; (local-set-key (kbd "C-'") #'company-irony-c-headers)
-;;   ;; (rtags-start-process-unless-running)
-;;   ;; (setq-local eldoc-documentation-function #'rtags-eldoc)
-;;   ;; (eldoc-mode +1)
-;;   (ycmd-eldoc-mode 1)
-;;   (flycheck-ycmd-setup)
-;;   ;; (irony-mode)
-;;   ;; (my-flycheck-irony-setup)
-;;   (add-to-list 'company-backends ;; '(company-irony company-irony-c-headers)
-;;                '(company-ycmd)
-;;                ))
-;; (add-hook 'c++-mode-hook #'my-cc-mode-hook)
-;; (add-hook 'c-mode-hook #'my-cc-mode-hook)
-
-;; (use-package cmake-mode
-;;   :mode
-;;   (("CMakeLists\\.txt\\'" . cmake-mode)
-;;    ("\\.cmake\\'" . cmake-mode)))
-
-;; (use-package cmake-font-lock
-;;   :functions (cmake-font-lock-activate))
-
-;; (defun my-cmake-font-lock ()
-;;   "Activate font lock for cmake."
-;;   (cmake-font-lock-activate))
-;; (add-hook 'cmake-mode-hook #'my-cmake-font-lock)
-
-;; Semantic
-;; (require 'cc-mode)
-;; (require 'semantic)
-;; (global-semanticdb-minor-mode 1)
-;; (global-semantic-idle-scheduler-mode 1)
-;; (semantic-mode 1)
-;; (global-set-key (kbd "C-c C-j") 'semantic-ia-fast-jump)
-;; (global-semantic-idle-summary-mode 1)
 
 ;; hungry deletion
 (use-package hungry-delete
@@ -1508,22 +1055,6 @@ to the line and column corresponding to that location."
 (show-paren-mode 1)
 
 (electric-pair-mode 1)
-
-;;;; Scala & Java development
-;; (require 'ensime)
-(defvar ensime-startup-notification)
-(setq ensime-startup-notification nil)
-
-;; (declare-function meghanada-reference "ext:meghanada")
-;; (defun my-java-hook ()
-;;   "My java hook."
-;;   (interactive)
-;;   (require 'meghanada)
-;;   (meghanada-mode t)
-;;   (local-set-key (kbd "M-?") #'meghanada-reference)
-;;   (add-hook 'before-save-hook 'meghanada-code-beautify-before-save))
-
-;; (add-hook 'java-mode-hook #'my-java-hook)
 
 ;;; Ace link
 (use-package ace-link
@@ -1568,36 +1099,6 @@ to the line and column corresponding to that location."
                       (unless (eq ibuffer-sorting-mode 'alphabetic)
                         (ibuffer-do-sort-by-alphabetic))))
   :bind* ("C-x C-b" . ibuffer))
-
-(use-package counsel-dash
-  :disabled t
-  :defer 2
-  :config
-  (defun url-copy-file (url newname &optional _ok-if-already-exists
-                            _keep-time _preserve-uid-gid)
-    "Copy URL to NEWNAME.  Both args must be strings.
-Signals a `file-already-exists' error if file NEWNAME already exists,
-unless a third argument OK-IF-ALREADY-EXISTS is supplied and non-nil.
-A number as third arg means request confirmation if NEWNAME already exists.
-This is what happens in interactive use with M-x.
-Fourth arg KEEP-TIME non-nil means give the new file the same
-last-modified time as the old one.  (This works on only some systems.)
-Fifth arg PRESERVE-UID-GID is ignored.
-A prefix arg makes KEEP-TIME non-nil."
-    (shell-command-to-string
-     (format "curl -L -o \"%s\" \"%s\"" (expand-file-name newname) url))))
-
-(use-package all-the-icons-ivy
-  :disabled t
-  :defer 2
-  :config
-  (all-the-icons-ivy-setup))
-
-(use-package all-the-icons-dired
-  :disabled t
-  :defer 2
-  :config
-  (add-hook 'dired-mode-hook 'all-the-icons-dired-mode))
 
 (use-package symbol-overlay
   :defer 2
@@ -1718,17 +1219,6 @@ A prefix arg makes KEEP-TIME non-nil."
 
 ;;   (setq notmuch-hello-sections '(notmuch-hello-insert-header my-notmuch-hello-insert-searches notmuch-hello-insert-search notmuch-hello-insert-recent-searches notmuch-hello-insert-alltags notmuch-hello-insert-footer)))
 
-;; (use-package rust-mode
-;;   :config
-;;   (use-package racer
-;;     :functions (racer-mode))
-
-;;   (use-package flycheck-rust
-;;     :functions (flycheck-rust-setup))
-
-;;   (add-hook 'rust-mode-hook #'flycheck-rust-setup)
-;;   (add-hook 'rust-mode-hook #'racer-mode))
-
 ;;; Prose linting
 (use-package flycheck-vale
   :disabled t
@@ -1746,29 +1236,10 @@ A prefix arg makes KEEP-TIME non-nil."
 (use-package password-store
   :commands (password-store-get))
 
-(use-package rich-minority
-  :disabled t
-  :demand t
-  :config
-  (progn
-    (setq rm-whitelist "FlyC.*")
-    (rich-minority-mode 1)))
-
 (use-package pass
   :commands (pass))
 
-(use-package paradox
-  :disabled t
-  :commands (paradox-list-packages))
-
 (eval-after-load 'dash '(dash-enable-font-lock))
-
-(use-package evalator
-  :disabled t
-  :bind (("C-c e e" . evalator)
-         ("C-c e x" . evalator-explicit)
-         ("C-c e r" . evalator-resume)
-         ("C-c e i" . evalator-insert-equiv-expr)))
 
 (use-package deadgrep
   :bind* (("C-c C-s" . deadgrep)))
@@ -1779,8 +1250,7 @@ A prefix arg makes KEEP-TIME non-nil."
          :map isearch-mode-map
          ("M-i" . swiper-from-isearch))
   :bind*
-  (;; ("C-c C-s" . counsel-rg)
-   ("C-x l" . counsel-locate))
+  (("C-x l" . counsel-locate))
   :functions (swiper-from-isearch)
   :config
   (defun swiper-from-isearch ()
@@ -1811,8 +1281,8 @@ A prefix arg makes KEEP-TIME non-nil."
     "Isearch symbol at point or next isearch history item."
     (interactive)
     (isearch-yank-string (format "%s" (or (symbol-at-point) ""))))
-  :config
   (global-ace-isearch-mode +1)
+  :config
   (setq ace-isearch-function 'avy-goto-word-1)
   (setq ace-isearch-function-from-isearch 'helm-occur-from-isearch)
   (setq ace-isearch-use-jump nil))
@@ -1827,41 +1297,32 @@ A prefix arg makes KEEP-TIME non-nil."
 
 (put 'upcase-region 'disabled nil)
 
-(use-package circadian
-  :disabled t
-  :config
-  (require 'spacemacs-light-theme)
-  (require 'spacemacs-dark-theme)
-  (setq circadian-themes '(("8:00" . spacemacs-light)
-                           ("21:00" . spacemacs-dark)))
-  (circadian-setup))
+;; (defun my-format-decimal ()
+;;   "Replace java decimals to regular floats."
+;;   (interactive)
+;;   (goto-char (point-min))
+;;   (while (search-forward-regexp "[0-9.]+E[+-][0-9]+" (point-max) t)
+;;     (shell-command-on-region
+;;      (match-beginning 0) (match-end 0)
+;;      (concat "LC_NUMERIC=C printf \"%'.3f\" " (match-string 0)) (buffer-file-name) t)))
 
-(defun my-format-decimal ()
-  "Replace java decimals to regular floats."
-  (interactive)
-  (goto-char (point-min))
-  (while (search-forward-regexp "[0-9.]+E[+-][0-9]+" (point-max) t)
-    (shell-command-on-region
-     (match-beginning 0) (match-end 0)
-     (concat "LC_NUMERIC=C printf \"%'.3f\" " (match-string 0)) (buffer-file-name) t)))
-
-(defun my-toggle-camelcase-underscores ()
-  "Toggle between camelcase and underscore notation for the symbol at point."
-  (interactive)
-  (save-excursion
-    (ignore-errors
-      (let* ((bounds (bounds-of-thing-at-point 'symbol))
-             (start (car bounds))
-             (end (cdr bounds))
-             (currently-using-underscores-p (progn (goto-char start)
-                                                   (re-search-forward "_" end t))))
-        (if currently-using-underscores-p
-            (let ((res (mapconcat 'capitalize (split-string (buffer-substring-no-properties start end) "_") "")))
-              (progn
-                (kill-region start end)
-                (insert res)))
-          (funcall-interactively 'replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
-          (downcase-region start (cdr (bounds-of-thing-at-point 'symbol))))))))
+;; (defun my-toggle-camelcase-underscores ()
+;;   "Toggle between camelcase and underscore notation for the symbol at point."
+;;   (interactive)
+;;   (save-excursion
+;;     (ignore-errors
+;;       (let* ((bounds (bounds-of-thing-at-point 'symbol))
+;;              (start (car bounds))
+;;              (end (cdr bounds))
+;;              (currently-using-underscores-p (progn (goto-char start)
+;;                                                    (re-search-forward "_" end t))))
+;;         (if currently-using-underscores-p
+;;             (let ((res (mapconcat 'capitalize (split-string (buffer-substring-no-properties start end) "_") "")))
+;;               (progn
+;;                 (kill-region start end)
+;;                 (insert res)))
+;;           (funcall-interactively 'replace-regexp "\\([A-Z]\\)" "_\\1" nil (1+ start) end)
+;;           (downcase-region start (cdr (bounds-of-thing-at-point 'symbol))))))))
 
 (use-package comment-tags
   :config
@@ -1877,6 +1338,7 @@ A prefix arg makes KEEP-TIME non-nil."
 (add-hook 'eww-after-render-hook #'eww-more-readable)
 
 (use-package helm-codesearch
+  :disabled t
   :bind (("C-c h f" . helm-codesearch-find-file)
          ("C-c h s" . helm-codesearch-find-pattern)
          ("C-c h c" . helm-codesearch-create-csearchindex))
@@ -1916,138 +1378,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (magit-todos-mode 1)
 
-(eval-when-compile
-  (declare-function  key-chord-mode "ext:somewhere")
-  (declare-function  hydra-default-pre "ext:somewhere")
-  (declare-function  hydra-keyboard-quit "ext:somewhere")
-  (declare-function  hydra--call-interactively-remap-maybe "ext:somewhere")
-  (declare-function  hydra-show-hint "ext:somewhere")
-  (declare-function  hydra-set-transient-map "ext:somewhere")
-  (declare-function  global-flycheck-mode "ext:somewhere")
-  (declare-function  go-goto-imports "ext:somewhere")
-  (declare-function  godoc-at-point "ext:somewhere")
-  (declare-function  run-octave "ext:somewhere")
-  (declare-function  js2r-expand-node-at-point "ext:somewhere")
-  (declare-function  js2r-contract-node-at-point "ext:somewhere")
-  (declare-function  js2r-extract-function "ext:somewhere")
-  (declare-function  js2r-extract-method "ext:somewhere")
-  (declare-function  js2r-toggle-function-expression-and-declaration "ext:somewhere")
-  (declare-function  js2r-toggle-arrow-function-and-expression "ext:somewhere")
-  (declare-function  js2r-introduce-parameter "ext:somewhere")
-  (declare-function  js2r-localize-parameter "ext:somewhere")
-  (declare-function  js2r-wrap-buffer-in-iife "ext:somewhere")
-  (declare-function  js2r-inject-global-in-iife "ext:somewhere")
-  (declare-function  js2r-add-to-globals-annotation "ext:somewhere")
-  (declare-function  js2r-inline-var "ext:somewhere")
-  (declare-function  js2r-rename-var "ext:somewhere")
-  (declare-function  js2r-var-to-this "ext:somewhere")
-  (declare-function  js2r-arguments-to-object "ext:somewhere")
-  (declare-function  js2r-ternary-to-if "ext:somewhere")
-  (declare-function  js2r-split-var-declaration "ext:somewhere")
-  (declare-function  js2r-split-string "ext:somewhere")
-  (declare-function  js2r-unwrap "ext:somewhere")
-  (declare-function  js2r-log-this "ext:somewhere")
-  (declare-function  js2r-debug-this "ext:somewhere")
-  (declare-function  js2r-forward-slurp "ext:somewhere")
-  (declare-function  js2r-forward-barf "ext:somewhere")
-  (declare-function  js2r-kill "ext:somewhere")
-  (declare-function  xref-js2-xref-backend "ext:somewhere")
-  (declare-function  tern-mode "ext:somewhere")
-  (declare-function  emmet-mode "ext:somewhere")
-  (declare-function  avy-isearch "ext:somewhere")
-  (declare-function  yas-global-mode "ext:somewhere")
-  (declare-function  yas-expand "ext:somewhere")
-  (declare-function  helm-attrset "ext:somewhere")
-  (declare-function  helm-find-files-up-one-level "ext:somewhere")
-  (declare-function  er/expand-region "ext:somewhere")
-  (declare-function  ivy-erlang-complete-init "ext:somewhere")
-  (declare-function  ivy-erlang-complete "ext:somewhere")
-  (declare-function  ivy-erlang-complete-reparse "ext:somewhere")
-  (declare-function  xah-lookup-word-on-internet "ext:somewhere")
-  (declare-function  cmake-font-lock-activate "ext:somewhere")
-  (declare-function  global-hungry-delete-mode "ext:somewhere")
-  (declare-function  ace-link-setup-default "ext:somewhere")
-  (declare-function  which-key-mode "ext:somewhere")
-  (declare-function  composable-mode "ext:somewhere")
-  (declare-function  composable-mark-mode "ext:somewhere")
-  (declare-function  ibuffer-do-sort-by-alphabetic "ext:somewhere")
-  (declare-function  symbol-overlay-mode "ext:somewhere")
-  (declare-function  smie-config-guess "ext:somewhere")
-  (declare-function  reverse-im-activate "ext:somewhere")
-  (declare-function  notmuch-tag-completions "ext:somewhere")
-  (declare-function  notmuch-logged-error "ext:somewhere")
-  (declare-function  notmuch-hello-nice-number "ext:somewhere")
-  (declare-function  notmuch-hello-widget-search "ext:somewhere")
-  (declare-function  flycheck-rust-setup "ext:somewhere")
-  (declare-function  racer-mode "ext:somewhere")
-  (declare-function  flycheck-vale-setup "ext:somewhere")
-  (declare-function  aggressive-indent-global-mode "ext:somewhere")
-  (declare-function  counsel-grep-or-swiper "ext:somewhere")
-  (declare-function  circadian-setup "ext:somewhere")
-  (declare-function  comment-tags-mode "ext:somewhere")
-  (declare-function  key-chord-define-global "ext:somewhere")
-  (declare-function  circadian-activate-latest-theme "ext:somewhere")
-  (declare-function  indium-eval-buffer "ext:somewhere")
-  (declare-function  helm-make-source "ext:somewhere")
-  (declare-function  helm-grep-ag "ext:somewhere")
-  (declare-function  dash-enable-font-lock "ext:somewhere")
-  (declare-function ibuffer-vc-set-filter-groups-by-vc-root "ext:somewhere")
-  (declare-function  swiper "ext:somewhere")
-  (declare-function  flycheck-gometalinter-setup "ext:somewhere")
-  (declare-function  gofmt-before-save "ext:somewhere")
-  (declare-function  go-test-current-project "ext:somewhere")
-  (declare-function  go-tag-add "ext:somewhere")
-  (declare-function  go-tag-remove "ext:somewhere")
-  (declare-function  go-gen-test-dwim "ext:somewhere")
-  (declare-function  go-fill-struct "ext:somewhere")
-  (declare-function  go-direx-switch-to-buffer "ext:somewhere")
-  (declare-function  lsp-mode "ext:somewhere")
-  (declare-function  go-eldoc-setup "ext:somewhere")
-  (declare-function  anaconda-mode "ext:somewhere")
-  (declare-function  global-company-mode "ext:somewhere")
-  (declare-function  js2-imenu-extras-mode "ext:somewhere")
-  (declare-function  js2r-add-keybindings-with-prefix "ext:somewhere")
-  (declare-function  js2r-extract-var "ext:somewhere")
-  (declare-function  fci-mode "ext:somewhere")
-  (declare-function  mc/edit-lines "ext:somewhere")
-  (declare-function  mc/mark-all-like-this "ext:somewhere")
-  (declare-function  mc/mark-all-words-like-this "ext:somewhere")
-  (declare-function  mc/mark-next-like-this "ext:somewhere")
-  (declare-function  mc/skip-to-next-like-this "ext:somewhere")
-  (declare-function  mc/unmark-next-like-this "ext:somewhere")
-  (declare-function  mc/mark-previous-like-this "ext:somewhere")
-  (declare-function  mc/skip-to-previous-like-this "ext:somewhere")
-  (declare-function  mc/unmark-previous-like-this "ext:somewhere")
-  (declare-function  mc/mark-all-in-region-regexp "ext:somewhere")
-  (declare-function  mc/mark-previous-word-like-this "ext:somewhere")
-  (declare-function  mc/mark-next-word-like-this "ext:somewhere")
-  (declare-function  mc-hide-unmatched-lines-mode "ext:somewhere")
-  (declare-function  ace-mc-add-multiple-cursors "ext:somewhere")
-  (declare-function  ace-mc-add-single-cursor "ext:somewhere")
-  (declare-function  helm-mode "ext:somewhere")
-  (declare-function  helm-fuzzier-mode "ext:somewhere")
-  (declare-function  helm-flx-mode "ext:somewhere")
-  (declare-function  pandoc-mode "ext:somewhere")
-  (declare-function  company-erlang-init "ext:somewhere")
-  (declare-function  link-hint-open-multiple-links "ext:somewhere")
-  (declare-function  flycheck-clang-analyzer-setup "ext:somewhere")
-  (declare-function  ycmd-mode "ext:somewhere")
-  (declare-function  ycmd-eldoc-mode "ext:somewhere")
-  (declare-function  flycheck-ycmd-setup "ext:somewhere")
-  (declare-function  meghanada-mode "ext:somewhere")
-  (declare-function  embrace-commander "ext:somewhere")
-  (declare-function  global-ace-isearch-mode "ext:somewhere")
-  (declare-function  highlight-indentation-mode "ext:somewhere")
-  (declare-function  highlight-indentation-current-column-mode "ext:somewhere")
-  (declare-function  global-smart-shift-mode "ext:somewhere")
-  (declare-function  godef-jump "ext:somewhere")
-  (declare-function  counsel-git-grep "ext:somewhere")
+(load-file custom-file)
 
-  (defun insert-declare-funcs (fl)
-    "Insert declaration for functions from FL."
-    (cl-mapc (lambda (in) (insert (format "(declare-function  %s \"ext:somewhere\")\n" in))) fl)))
-
-(load custom-file 'noerror)
 (setq gc-cons-threshold (* 8 1024 1024))
 
 (my-set-themes-hook)

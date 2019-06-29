@@ -20,8 +20,9 @@
  '(arch-packer-default-command "pacaur")
  '(blink-cursor-mode nil)
  '(browse-url-browser-function 'browse-url-default-browser)
+ '(byte-compile-verbose nil)
  '(byte-compile-warnings
-   '(redefine callargs unresolved obsolete interactive-only make-local mapcar constants suspicious lexical))
+   '(redefine callargs obsolete interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
  '(company-quickhelp-color-background "#4F4F4F")
  '(company-quickhelp-color-foreground "#DCDCCC")
