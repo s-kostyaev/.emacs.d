@@ -819,8 +819,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package multiple-cursors
   :defer 3
-  :chords (("fm" . multiple-cursors-hydra/body)
-           ("mf" . multiple-cursors-hydra/body))
+  :chords (("mf" . multiple-cursors-hydra/body))
   ;; :functions
   ;; (my-mc-prompt-once my-mc-prompt-once-advice)
   :config
