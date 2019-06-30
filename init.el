@@ -352,6 +352,7 @@
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (local-set-key (kbd "M-?") #'lsp-ui-peek-find-references)
+      (local-set-key (kbd "C-c C-c") #'helm-make)
       ;; (eglot-ensure)
       ;; (setq-local company-backends '(company-capf))
 
@@ -1330,6 +1331,11 @@ If the current buffer is not visiting a file, prompt for a file name."
         (find-alternate-file tramp-path)
       (find-file tramp-path))))
 (global-set-key (kbd "C-c C-r") 'open-this-file-as-root)
+
+(use-package helm-make
+  :config
+  (setq helm-make-directory-functions-list
+        '(helm-make-project-directory helm-make-current-directory)))
 
 (magit-todos-mode 1)
 
