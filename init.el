@@ -361,6 +361,7 @@
       (setq lsp-ui-sideline-ignore-duplicate t)
       (require 'yasnippet)
       (lsp)
+      (flymake-go-staticcheck-enable)
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
