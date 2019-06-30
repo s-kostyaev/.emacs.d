@@ -38,8 +38,7 @@
  '(debug-on-error nil)
  '(debug-on-quit nil)
  '(dtrt-indent-active-mode-line-info "")
- '(dtrt-indent-mode t nil (dtrt-indent))
- '(electric-indent-mode t)
+ '(dtrt-indent-mode t)
  '(fci-rule-color "#eee8d5")
  '(flycheck-disabled-checkers
    '(erlang-rebar3 go-gofmt go-golint go-vet go-build go-test go-errcheck go-unconvert))
@@ -123,7 +122,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-fuzzier helm-flx helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc rainbow-mode use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex react-snippets pandoc-mode noflet nlinum monokai-theme key-chord json-rpc jquery-doc ido-vertical-mode header2 go-impl geiser fuzzy fsm flymd flx esup embrace edit-indirect darkokai-theme company-quickhelp column-marker cask-mode))
+   '(dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-fuzzier helm-flx helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex react-snippets pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc ido-vertical-mode header2 go-impl geiser fuzzy flymd flx esup embrace edit-indirect darkokai-theme company-quickhelp column-marker cask-mode))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)

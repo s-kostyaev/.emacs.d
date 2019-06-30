@@ -40,24 +40,9 @@
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 (require 'package)
 (package-initialize)
-;; (unless (require 'quelpa nil t)
-;;   (with-temp-buffer
-;;     (url-insert-file-contents "https://framagit.org/steckerhalter/quelpa/raw/master/bootstrap.el")
-;;     (eval-buffer)))
-;; (defvar quelpa-upgrade-p)
-;; (setq quelpa-upgrade-p t)
-
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
-
-(eval-when-compile
-  ;; (require 'package)
-  ;; (package-initialize)
-  (if (not (package-installed-p 'async))
-      (let ((custom-file "/dev/null"))
-        (package-refresh-contents)
-        (package-install 'async))))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
@@ -74,54 +59,6 @@
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1))
-
-;; (defvar yasnippet-snippets-dir)
-;; (defvar my-bootstrap-is-running nil)
-;; (eval-when-compile
-;;   (defun my-bootstrap ()
-;;     "Async install all needed packages."
-;;     (interactive)
-;;     (if my-bootstrap-is-running
-;;         nil
-;;       (setq my-bootstrap-is-running t)
-;;       (require 'async)
-;;       (async-start
-;;        (lambda ()
-;;          ;; Melpa
-;;          (require 'package)
-;;          (setq custom-file "~/.emacs.d/emacs-customizations.el")
-;;          (package-initialize)
-;;          (ignore-errors (load custom-file 'noerror))
-;;          (require 'quelpa)
-;;          (quelpa-self-upgrade)
-;;          (setq quelpa-upgrade-p t)
-;;          (require 'cl-lib)
-;;          (cl-flet ((always-yes (&rest _) t))
-;;            (defun no-confirm (fun &rest args)
-;;              "Apply FUN to ARGS, skipping user confirmations."
-;;              (cl-letf (((symbol-function 'y-or-n-p) #'always-yes)
-;;                        ((symbol-function 'yes-or-no-p) #'always-yes))
-;;                (apply fun args)))
-;;            (cl-mapcar 'quelpa package-selected-packages)
-;;            ;; (no-confirm 'package-refresh-contents)
-;;            ;; (no-confirm 'package-install-selected-packages)
-;;            ))
-;;        (lambda (res)
-;;          ;; (require 'yasnippet)
-;;          (package-initialize)
-;;          ;; (let ((new-snip-dir (concat (s-chomp
-;;          ;;                              (shell-command-to-string
-;;          ;;                               "ls -1 -d ~/.emacs.d/elpa/yasnippet-snippets-*"))
-;;          ;;                             "/snippets")))
-;;          ;;   (if (s-equals-p yasnippet-snippets-dir new-snip-dir)
-;;          ;;       nil
-;;          ;;     (setq yasnippet-snippets-dir new-snip-dir)
-;;          ;;     (yas-reload-all)))
-;;          (my-set-themes-hook)
-;;          (message "packages bootstrap success for %s packages" (length res))
-;;          (setq my-bootstrap-is-running nil)))))
-
-;;   (my-bootstrap))
 
 (eval-when-compile
   (require 'use-package)
