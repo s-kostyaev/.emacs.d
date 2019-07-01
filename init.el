@@ -737,21 +737,54 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
     (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
 
-  (defun my-helm-do-grep-ag-project (arg)
-    "Preconfigured helm for grepping with AG in `default-directory'.
-With prefix-arg prompt for type if available with your AG version."
-    (interactive "P")
+  (defun my--helm-do-grep-ag-repo (arg)
+    "My grepping implementation."
+    (message "helm-grep-ag-pipe-cmd-switches: %s" helm-grep-ag-pipe-cmd-switches)
+    (require 'helm-files)
+    (helm-grep-ag (expand-file-name (if (vc-root-dir)
+                                        (vc-root-dir)
+                                      default-directory)) arg))
+
+  (defun my--helm-do-grep-ag-project (arg)
+    "My grepping implementation."
+    (message "helm-grep-ag-pipe-cmd-switches: %s" helm-grep-ag-pipe-cmd-switches)
     (require 'helm-files)
     (helm-grep-ag (expand-file-name (if (project-current)
                                         (car (project-roots (project-current)))
                                       default-directory)) arg))
 
+
   (defun my-helm-do-grep-ag-repo (arg)
     "Preconfigured helm for grepping with AG in `default-directory'.
 With prefix-arg prompt for type if available with your AG version."
     (interactive "P")
-    (require 'helm-files)
-    (helm-grep-ag (expand-file-name (or (vc-root-dir) default-directory)) arg))
+    (if (and arg (< 4 (car arg)))
+        (progn (unwind-protect
+                   (progn
+                     (setq
+                      helm-grep-ag-command
+                      "rg -uu --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")
+                     (my--helm-do-grep-ag-repo arg))
+                 (setq
+                  helm-grep-ag-command
+                  "rg --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")))
+      (my--helm-do-grep-ag-repo arg)))
+
+  (defun my-helm-do-grep-ag-project (arg)
+    "Preconfigured helm for grepping with AG in `default-directory'.
+With prefix-arg prompt for type if available with your AG version."
+    (interactive "P")
+    (if (and arg (< 4 (car arg)))
+        (progn (unwind-protect
+                   (progn
+                     (setq
+                      helm-grep-ag-command
+                      "rg -uu --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")
+                     (my--helm-do-grep-ag-project arg))
+                 (setq
+                  helm-grep-ag-command
+                  "rg --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")))
+      (my--helm-do-grep-ag-project arg)))
 
   (helm-ido-like-load-fuzzy-enhancements)
   (helm-ido-like-load-file-nav)
