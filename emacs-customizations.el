@@ -134,7 +134,13 @@
  '(pyenv-mode t)
  '(racer-rust-src-path "/usr/src/rust/src")
  '(safe-local-variable-values
-   '((checkdoc-minor-mode . 1)
+   '((eval progn
+           (make-local-variable 'process-environment)
+           (setq process-environment
+                 (copy-sequence process-environment))
+           (setenv "GOOS" "js")
+           (setenv "GOARCH" "wasm"))
+     (checkdoc-minor-mode . 1)
      (eval when
            (and
             (buffer-file-name)
