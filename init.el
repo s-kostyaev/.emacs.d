@@ -662,7 +662,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :bind*
   (("C-x l" . helm-locate)
    ("C-x b" . helm-mini)
-   ("C-c C-s" . my-helm-do-grep-ag-repo))
+   ("C-c C-s" . my-helm-rg-repo))
   :bind
   (("C-x C-f" . helm-find-files)
    ("M-x" . helm-M-x)
@@ -754,36 +754,36 @@ the end of the line, then comment current line.  Replaces default behaviour of
                                       default-directory)) arg))
 
 
-  (defun my-helm-do-grep-ag-repo (arg)
+  (defun my-helm-rg-repo (arg)
     "Preconfigured helm for grepping with AG in `default-directory'.
 With prefix-arg prompt for type if available with your AG version."
     (interactive "P")
-    (if (and arg (< 4 (car arg)))
-        (progn (unwind-protect
-                   (progn
-                     (setq
-                      helm-grep-ag-command
-                      "rg -uu --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")
-                     (my--helm-do-grep-ag-repo arg))
-                 (setq
-                  helm-grep-ag-command
-                  "rg --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")))
+    (if arg
+        (progn
+          (require 's)
+          (unwind-protect
+              (progn
+                (setq
+                 helm-grep-ag-command (s-concat helm-grep-ag-command " -u"))
+                (my--helm-do-grep-ag-repo arg))
+            (setq
+             helm-grep-ag-command (s-chop-suffix " -u" helm-grep-ag-command))))
       (my--helm-do-grep-ag-repo arg)))
 
-  (defun my-helm-do-grep-ag-project (arg)
+  (defun my-helm-rg-project (arg)
     "Preconfigured helm for grepping with AG in `default-directory'.
 With prefix-arg prompt for type if available with your AG version."
     (interactive "P")
-    (if (and arg (< 4 (car arg)))
-        (progn (unwind-protect
-                   (progn
-                     (setq
-                      helm-grep-ag-command
-                      "rg -uu --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")
-                     (my--helm-do-grep-ag-project arg))
-                 (setq
-                  helm-grep-ag-command
-                  "rg --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")))
+    (if arg
+        (progn
+          (require 's)
+          (unwind-protect
+              (progn
+                (setq
+                 helm-grep-ag-command (s-concat helm-grep-ag-command " -u"))
+                (my--helm-do-grep-ag-project arg))
+            (setq
+             helm-grep-ag-command (s-chop-suffix " -u" helm-grep-ag-command))))
       (my--helm-do-grep-ag-project arg)))
 
   (helm-ido-like-load-fuzzy-enhancements)
