@@ -313,7 +313,7 @@
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
   :functions (my-go-mode-hook go-goto-imports
-                              godoc-at-point goimports lsp-ui-peek-find-references)
+                              godoc-at-point goimports)
   :defines (company-backends go-tag-args)
   :config
   (progn
@@ -351,7 +351,7 @@
       (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
-      (local-set-key (kbd "M-?") #'lsp-ui-peek-find-references)
+      (local-set-key (kbd "M-?") #'lsp-find-references)
       (local-set-key (kbd "C-c C-c") #'helm-make)
       ;; (eglot-ensure)
       ;; (setq-local company-backends '(company-capf))
