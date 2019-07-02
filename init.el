@@ -53,8 +53,9 @@
   ;; (require 'solarized)
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
-  (require 'moe-theme)
-  (load-theme 'moe-light t)
+  ;; (require 'moe-theme)
+  ;; (load-theme 'moe-light t)
+  (load-theme 'ample-light t)
 
   (tool-bar-mode -1)
   (menu-bar-mode -1)
