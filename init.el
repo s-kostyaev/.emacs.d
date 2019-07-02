@@ -54,7 +54,7 @@
   ;; (require 'spacemacs-light-theme)
   ;; (load-theme 'spacemacs-light t)
   (require 'moe-theme)
-  (moe-light)
+  (load-theme 'moe-light t)
 
   (tool-bar-mode -1)
   (menu-bar-mode -1)
