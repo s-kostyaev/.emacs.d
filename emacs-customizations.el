@@ -34,7 +34,7 @@
  '(cua-overwrite-cursor-color "#b58900")
  '(cua-read-only-cursor-color "#859900")
  '(custom-safe-themes
-   '("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
+   '("37ba833442e0c5155a46df21446cadbe623440ccb6bbd61382eb869a2b9e9bf9" "bd7b7c5df1174796deefce5debc2d976b264585d51852c962362be83932873d9" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default))
  '(debug-on-error nil)
  '(debug-on-quit nil)
  '(dtrt-indent-active-mode-line-info "")
@@ -122,7 +122,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(lsp-ui company-lsp flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-fuzzier helm-flx helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex react-snippets pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc ido-vertical-mode header2 go-impl geiser fuzzy flymd flx esup embrace edit-indirect darkokai-theme company-quickhelp column-marker cask-mode))
+   '(magit-libgit lsp-ui company-lsp flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-fuzzier helm-flx helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex react-snippets pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc ido-vertical-mode header2 go-impl geiser fuzzy flymd flx esup embrace edit-indirect darkokai-theme company-quickhelp column-marker cask-mode))
  '(paradox-automatically-star nil)
  '(paradox-execute-asynchronously t)
  '(paradox-github-token t)
