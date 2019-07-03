@@ -27,19 +27,9 @@
                    (if (eq window-system 'w32) ".exe" "") trustfile)))
     (setq gnutls-verify-error t)
     (setq gnutls-trustfiles (list trustfile))))
-;; Disable package initialize after us.  We either initialize it
-;; anyway in case of interpreted .emacs, or we don't want slow
-;; initizlization in case of byte-compiled .emacs.elc.
-(setq package-enable-at-startup nil)
-;; Ask package.el to not add (package-initialize) to .emacs.
-(defvar package--init-file-ensured)
-(setq package--init-file-ensured t)
-;; set use-package-verbose to t for interpreted .emacs,
-;; and to nil for byte-compiled .emacs.elc
+
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
-(require 'package)
-(package-initialize)
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
@@ -71,18 +61,84 @@
   :config
   (key-chord-mode 1))
 
-;; (use-package color-theme
-;;   :defer 0.1
-;;   :config
-;;   (progn
-;;     (my-set-themes-hook)))
-
 (use-package flymake
   :bind (("C-x `" . flymake-goto-next-error)
          ("C-c r" . flymake-show-diagnostics-buffer)))
 
 (add-hook 'prog-mode-hook #'flymake-mode)
 (add-hook 'emacs-lisp-mode-hook #'flymake-mode)
+
+(defun my-flymake--mode-line-format ()
+  "Produce a pretty minor mode indicator."
+  (let* ((known (hash-table-keys flymake--backend-state))
+         (running (flymake-running-backends))
+         (disabled (flymake-disabled-backends))
+         (diags-by-type (make-hash-table))
+         (all-disabled (and disabled (null running))))
+    (maphash (lambda (_b state)
+               (mapc (lambda (diag)
+                       (push diag
+                             (gethash (flymake--diag-type diag)
+                                      diags-by-type)))
+                     (flymake--backend-state-diags state)))
+             flymake--backend-state)
+    `(,@(unless (or all-disabled
+                    (null known))
+          (cl-loop
+           with types = (hash-table-keys diags-by-type)
+           with _augmented = (cl-loop for extra in '(:error :warning)
+                                      do (cl-pushnew extra types
+                                                     :key #'flymake--severity))
+           for type in (cl-sort types #'> :key #'flymake--severity)
+           for diags = (gethash type diags-by-type)
+           for face = (flymake--lookup-type-property type
+                                                     'mode-line-face
+                                                     'compilation-error)
+           when (or diags
+                    (cond ((eq flymake-suppress-zero-counters t)
+                           nil)
+                          (flymake-suppress-zero-counters
+                           (>= (flymake--severity type)
+                               (warning-numeric-level
+                                flymake-suppress-zero-counters)))
+                          (t t)))
+           collect `(:propertize
+                     ,(format "%d" (length diags))
+                     face ,face
+                     mouse-face mode-line-highlight
+                     keymap
+                     ,(let ((map (make-sparse-keymap))
+                            (type type))
+                        (define-key map (vector 'mode-line
+                                                mouse-wheel-down-event)
+                          (lambda (event)
+                            (interactive "e")
+                            (with-selected-window (posn-window (event-start event))
+                              (flymake-goto-prev-error 1 (list type) t))))
+                        (define-key map (vector 'mode-line
+                                                mouse-wheel-up-event)
+                          (lambda (event)
+                            (interactive "e")
+                            (with-selected-window (posn-window (event-start event))
+                              (flymake-goto-next-error 1 (list type) t))))
+                        map)
+                     help-echo
+                     ,(concat (format "%s diagnostics of type %s\n"
+                                      (propertize (format "%d"
+                                                          (length diags))
+                                                  'face face)
+                                      (propertize (format "%s" type)
+                                                  'face face))
+                              (format "%s/%s: previous/next of this type"
+                                      mouse-wheel-down-event
+                                      mouse-wheel-up-event)))
+           into forms
+           finally return
+           `((:propertize "[")
+             ,@(cl-loop for (a . rest) on forms by #'cdr
+                        collect a when rest collect
+                        '(:propertize " "))
+             (:propertize "]")))))))
 
 (require 'flymake)
 (setq-default mode-line-format
@@ -127,7 +183,7 @@
                ;; '(:eval (flycheck-mode-line-status-text))
 
                ;; flymake errors
-               flymake--mode-line-format
+               '(:eval (my-flymake--mode-line-format))
 
                ;; relative position, size of file
                "    ["
