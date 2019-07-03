@@ -1432,6 +1432,12 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (load-file custom-file)
 
+(defun my-go-home()
+  "Go to home dir."
+  (cd (getenv "HOME")))
+
+(add-hook 'after-init-hook #'my-go-home)
+
 (setq gc-cons-threshold (* 8 1024 1024))
 
 (my-set-themes-hook)
