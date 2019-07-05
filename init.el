@@ -349,6 +349,14 @@
 ;; (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
 ;; (map-put! eglot-server-programs 'go-mode '("gopls"))
 
+(defun my-disable-aggressive-indent ()
+  "Disable aggressive indent mode in current buffer."
+  (interactive)
+  (aggressive-indent-mode -1))
+
+;; aggressive-indent-mode breaks interaction with lsp-server
+(add-hook 'lsp-mode-hook #'my-disable-aggressive-indent)
+
 (defun my-try-go-mod (dir)
   "Find go project root for DIR."
   (if (and dir
