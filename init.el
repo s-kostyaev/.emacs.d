@@ -28,6 +28,7 @@
   ;;   (setq gnutls-verify-error t)
   ;;   (setq gnutls-trustfiles (list trustfile)))
   )
+(package-initialize)
 
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
@@ -777,7 +778,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
     (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
   
-  (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number -M 150 %s %s %s")
+  (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number -M 170 --max-columns-preview %s %s %s")
   (defun helm-ido-like-find-files-up-one-level-maybe ()
     (interactive)
     (if (looking-back "/" 1)
@@ -1448,6 +1449,8 @@ If the current buffer is not visiting a file, prompt for a file name."
   (cd (getenv "HOME")))
 
 (add-hook 'after-init-hook #'my-go-home)
+
+(require 'libgit)
 
 (setq gc-cons-threshold (* 8 1024 1024))
 
