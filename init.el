@@ -1136,6 +1136,8 @@ to the line and column corresponding to that location."
 (show-paren-mode 1)
 
 (electric-pair-mode 1)
+(add-hook 'prog-mode-hook #'electric-spacing-mode)
+(add-hook 'emacs-lisp-mode-hook #'electric-spacing-mode)
 
 ;;; Ace link
 (use-package ace-link
