@@ -44,7 +44,12 @@
   ;; (load-theme 'spacemacs-dark t)
   ;; (require 'solarized)
   ;; (require 'spacemacs-light-theme)
-  (load-theme 'spacemacs-light t)
+  (let ((cur-hour (nth 2 (decode-time))))
+    (if (and (>  cur-hour 9)
+             (<  cur-hour 20))
+        (load-theme 'spacemacs-light t)
+      (load-theme 'spacemacs-dark t)))
+
   ;; (require 'moe-theme)
   ;; (load-theme 'moe-light t)
   ;; (load-theme 'ample-light t)
@@ -431,6 +436,24 @@
       (require 'yasnippet)
       (lsp)
       (flymake-go-staticcheck-enable)
+
+      (electric-spacing-mode 1)
+      (setq-local electric-spacing-rules
+                  (cl-remove-if
+                   (lambda (el) (or (= (car el) ?.)
+                                    (= (car el) ?=)))
+                   electric-spacing-rules))
+
+      (defun my-electric-spacing-= ()
+        "Fix := for go-mode."
+        (cond
+         ((looking-back ": " (line-beginning-position))
+          (delete-char -2)
+          (insert " := "))
+         (t (electric-spacing-self-insert-command))))
+
+      (add-to-list 'electric-spacing-rules
+                   '(?= . my-electric-spacing-=))
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
