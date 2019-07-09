@@ -444,10 +444,11 @@
       (setq-local electric-spacing-rules
                   (cl-remove-if
                    (lambda (el) (or (= (car el) ?.)
-                                    (= (car el) ?=)))
+                                    (= (car el) ?=)
+                                    (= (car el) ?*)))
                    electric-spacing-rules))
 
-      (defun my-electric-spacing-= ()
+      (defun my-go-electric-spacing-= ()
         "Fix := for go-mode."
         (cond
          ((looking-back ": " (line-beginning-position))
@@ -455,8 +456,15 @@
           (insert " := "))
          (t (electric-spacing-self-insert-command))))
 
+      (defun my-go-electric-spacing-* ()
+        "Fix * for go-mode."
+        (insert " *"))
+
       (add-to-list 'electric-spacing-rules
-                   '(?= . my-electric-spacing-=))
+                   '(?= . my-go-electric-spacing-=))
+
+      (add-to-list 'electric-spacing-rules
+                   '(?* .  my-go-electric-spacing-*))
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
