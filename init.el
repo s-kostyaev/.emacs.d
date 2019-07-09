@@ -58,6 +58,9 @@
   (menu-bar-mode -1)
   (scroll-bar-mode -1))
 
+(add-hook 'after-init-hook #'my-set-themes-hook)
+
+
 (eval-when-compile
   (require 'use-package)
   (require 'use-package-chords))
@@ -313,7 +316,7 @@
 
 (global-set-key (kbd "C-x t") #'toggle-window-split)
 
-(windmove-default-keybindings)
+;; (windmove-default-keybindings)
 
 (defun toggle-window-split ()
   "Toggle window split vertically or horizontally."
@@ -488,10 +491,10 @@
 (setq auto-mode-alist (cons '("\\.tex$" . latex-mode) auto-mode-alist))
 
                                         ; http://nex-3.com/posts/45-efficient-window-switching-in-emacs#comments
-(global-set-key [M-left] #'windmove-left)          ; move to left windnow
-(global-set-key [M-right] #'windmove-right)        ; move to right window
-(global-set-key [M-up] #'windmove-up)              ; move to upper window
-(global-set-key [M-down] #'windmove-down)          ; move to downer window
+;; (global-set-key [M-left] #'windmove-left)          ; move to left windnow
+;; (global-set-key [M-right] #'windmove-right)        ; move to right window
+;; (global-set-key [M-up] #'windmove-up)              ; move to upper window
+;; (global-set-key [M-down] #'windmove-down)          ; move to downer window
 
 (put 'downcase-region 'disabled nil)
 
@@ -730,11 +733,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package swiper
   :disabled t
   :defer t)
-
-(defvar company-candidates)
-(defvar company-point)
-(defvar company-prefix)
-(declare-function company-other-backend "ext:company")
 
 (use-package helm-files
   :functions (helm-find-files-up-one-level))
@@ -1478,8 +1476,6 @@ If the current buffer is not visiting a file, prompt for a file name."
 (require 'libgit)
 
 (setq gc-cons-threshold (* 8 1024 1024))
-
-(my-set-themes-hook)
 
 (provide 'init)
 ;;; init.el ends here
