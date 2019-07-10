@@ -425,7 +425,7 @@
       (local-set-key (kbd "C-c C-t") #'go-test-current-project)
       (local-set-key (kbd "C-c t") #'go-tag-add)
       (local-set-key (kbd "C-c T") #'go-tag-remove)
-      (local-set-key (kbd "C-c C-g") #'go-gen-test-dwim)
+      (local-set-key (kbd "C-c g") #'go-gen-test-dwim)
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (local-set-key (kbd "M-?") #'lsp-find-references)
