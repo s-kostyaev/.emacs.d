@@ -267,8 +267,6 @@
 ;; Stop emacs from arbitrarily adding lines to the end of a file when the
 ;; cursor is moved past the end of it:
 (setq next-line-add-newlines nil)
-;; Flash instead of that annoying bell
-(setq visible-bell t)
 ;; Remove icons toolbar
 ;; Use y or n instead of yes or not
 (fset 'yes-or-no-p 'y-or-n-p)

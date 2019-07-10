@@ -87,6 +87,7 @@
  '(plantuml-jar-path (expand-file-name "~/.emacs.d/plantuml/plantuml.jar"))
  '(pyenv-mode t)
  '(racer-rust-src-path "/usr/src/rust/src")
+ '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((eval progn
            (make-local-variable 'process-environment)
