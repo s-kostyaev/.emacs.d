@@ -440,31 +440,38 @@
       (lsp)
       (flymake-go-staticcheck-enable)
 
-      (electric-spacing-mode 1)
-      (setq-local electric-spacing-rules
-                  (cl-remove-if
-                   (lambda (el) (or (= (car el) ?.)
-                                    (= (car el) ?=)
-                                    (= (car el) ?*)))
-                   electric-spacing-rules))
+      ;; (electric-spacing-mode 1)
+      ;; (setq-local electric-spacing-rules
+      ;;             (cl-remove-if
+      ;;              (lambda (el) (or (= (car el) ?.)
+      ;;                               (= (car el) ?=)
+      ;;                               (= (car el) ?*)))
+      ;;              electric-spacing-rules))
 
-      (defun my-go-electric-spacing-= ()
-        "Fix := for go-mode."
-        (cond
-         ((looking-back ": " (line-beginning-position))
-          (delete-char -2)
-          (insert " := "))
-         (t (electric-spacing-self-insert-command))))
+      ;; (defun my-go-electric-spacing-= ()
+      ;;   "Fix := for go-mode."
+      ;;   (cond
+      ;;    ((looking-back ": " (line-beginning-position))
+      ;;     (delete-char -2)
+      ;;     (insert " := "))
+      ;;    (t (electric-spacing-self-insert-command))))
 
-      (defun my-go-electric-spacing-* ()
-        "Fix * for go-mode."
-        (insert " *"))
+      ;; (defun my-go-electric-spacing-* ()
+      ;;   "Fix * for go-mode."
+      ;;   (insert " *"))
 
-      (add-to-list 'electric-spacing-rules
-                   '(?= . my-go-electric-spacing-=))
+      ;; (defun my-go-electric-spacing-! ()
+      ;;   "Fix ! for go-mode."
+      ;;   (insert " !"))
 
-      (add-to-list 'electric-spacing-rules
-                   '(?* .  my-go-electric-spacing-*))
+      ;; (add-to-list 'electric-spacing-rules
+      ;;              '(?= . my-go-electric-spacing-=))
+
+      ;; (add-to-list 'electric-spacing-rules
+      ;;              '(?* .  my-go-electric-spacing-*))
+
+      ;; (add-to-list 'electric-spacing-rules
+      ;;              '(?! . my-go-electric-spacing-!))
 
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
@@ -1142,8 +1149,8 @@ to the line and column corresponding to that location."
 (show-paren-mode 1)
 
 (electric-pair-mode 1)
-(add-hook 'prog-mode-hook #'electric-spacing-mode)
-(add-hook 'emacs-lisp-mode-hook #'electric-spacing-mode)
+;; (add-hook 'prog-mode-hook #'electric-spacing-mode)
+;; (add-hook 'emacs-lisp-mode-hook #'electric-spacing-mode)
 
 ;;; Ace link
 (use-package ace-link
