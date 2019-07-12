@@ -42,7 +42,7 @@
   "Hook for setting themes after init."
   (interactive)
   (let ((light-theme 'ample-light)
-        (dark-theme 'spacemacs-dark)
+        (dark-theme 'zenburn)
         (cur-hour (nth 2 (decode-time))))
     (if (and (>  cur-hour 9)
              (<  cur-hour 20))
@@ -389,6 +389,8 @@
       nil)))
 
 (setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin")))
+(require 's)
+(setenv "PATH" (s-join ":" exec-path))
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
@@ -439,7 +441,6 @@
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
       (setq-local lsp-auto-guess-root t)
       (setq lsp-ui-sideline-ignore-duplicate t)
-      (require 'yasnippet)
       (lsp)
       (flymake-go-staticcheck-enable)
 
@@ -932,6 +933,7 @@ With prefix-arg prompt for type if available with your AG version."
 
 ;; magit
 (use-package exec-path-from-shell
+  :disabled t
   :if (memq window-system '(mac ns))
   :defer 15
   :init
@@ -1480,6 +1482,15 @@ If the current buffer is not visiting a file, prompt for a file name."
   :config
   (setq helm-make-directory-functions-list
         '(helm-make-project-directory helm-make-current-directory)))
+
+(use-package lsp-mode
+  :config
+  (require 'yasnippet))
+
+(use-package reason-mode
+  :config
+  (add-hook 'before-save-hook #'refmt-before-save)
+  (add-hook 'reason-mode-hook #'lsp))
 
 (magit-todos-mode 1)
 
