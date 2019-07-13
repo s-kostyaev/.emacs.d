@@ -42,7 +42,7 @@
   "Hook for setting themes after init."
   (interactive)
   (let ((light-theme 'ample-light)
-        (dark-theme 'zenburn)
+        (dark-theme 'spacemacs-dark)
         (cur-hour (nth 2 (decode-time))))
     (if (and (>  cur-hour 9)
              (<  cur-hour 20))
@@ -1204,7 +1204,8 @@ to the line and column corresponding to that location."
   :defer 2
   :config
   (setq-default symbol-overlay-temp-in-scope t)
-  (add-hook 'prog-mode-hook #'symbol-overlay-mode))
+  (add-hook 'prog-mode-hook #'symbol-overlay-mode)
+  (add-hook 'emacs-lisp-mode-hook #'symbol-overlay-mode))
 
 ;; auto configure indent with SMIE
 (use-package smie
