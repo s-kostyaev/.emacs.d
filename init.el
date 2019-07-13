@@ -233,7 +233,7 @@
 
 ;; Text and the such
 ;; Use colors to highlight commands, etc.
-(global-font-lock-mode t)
+(add-hook 'after-init-hook #'global-font-lock-mode)
 ;; Disable the welcome message
 (setq inhibit-startup-message t)
 ;; Format the title-bar to always include the buffer name
@@ -487,7 +487,6 @@
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
-(global-font-lock-mode t)
 (global-set-key "\C-xs" #'save-buffer)
 (global-set-key "\C-xv" #'quoted-insert)
 (global-set-key "\C-xf" #'search-forward)
@@ -1503,6 +1502,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 (add-hook 'after-init-hook #'my-go-home)
 
 (require 'libgit)
+
+(add-hook 'after-init-hook #'global-so-long-mode)
 
 (setq gc-cons-threshold (* 8 1024 1024))
 
