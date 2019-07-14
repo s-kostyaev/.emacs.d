@@ -1487,6 +1487,8 @@ If the current buffer is not visiting a file, prompt for a file name."
   :config
   (require 'yasnippet))
 
+(add-hook 'dart-mode-hook #'lsp)
+
 (use-package reason-mode
   :config
   (add-hook 'before-save-hook #'refmt-before-save)
