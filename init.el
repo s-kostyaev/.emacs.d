@@ -388,7 +388,7 @@
         (cons 'vc dir)
       nil)))
 
-(setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin")))
+(setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin" "/opt/local/bin")))
 (require 's)
 (setenv "PATH" (s-join ":" exec-path))
 (use-package go-mode
