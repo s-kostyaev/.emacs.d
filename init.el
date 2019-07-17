@@ -44,7 +44,7 @@
   (let ((light-theme 'ample-light)
         (dark-theme 'spacemacs-dark)
         (cur-hour (nth 2 (decode-time))))
-    (if (and (>  cur-hour 9)
+    (if (and (>  cur-hour 7)
              (<  cur-hour 20))
         (progn
           (disable-theme dark-theme)
