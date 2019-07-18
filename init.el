@@ -41,6 +41,7 @@
 (defun my-set-themes-hook ()
   "Hook for setting themes after init."
   (interactive)
+  (require 'lsp-ui-sideline)
   (let ((light-theme 'ample-light)
         (dark-theme 'spacemacs-dark)
         (cur-hour (nth 2 (decode-time))))
