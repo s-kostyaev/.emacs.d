@@ -374,18 +374,12 @@
   (if (and dir
            (not (f-descendant-of-p dir (or (getenv "GOPATH")
                                            (concat (getenv "HOME") "/go")))))
-      (let
-          ((result nil)
-           (cur-dir dir))
-        (while (or (not result) (f-equal-p cur-dir "/"))
-          (if (f-exists-p (concat cur-dir "/go.mod"))
-              (setq result cur-dir)
-            (setq cur-dir (f-dirname cur-dir))))
+      (let ((result (locate-dominating-file dir "go.mod")))
         (if result
-            (cons 'vc result)
-          (cons 'vc dir)))
+            (cons 'transient (expand-file-name result))
+          (cons 'transient dir)))
     (if dir
-        (cons 'vc dir)
+        (cons 'transient dir)
       nil)))
 
 (setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin" "/opt/local/bin")))
