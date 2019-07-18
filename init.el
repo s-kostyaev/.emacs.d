@@ -48,9 +48,15 @@
              (<  cur-hour 20))
         (progn
           (disable-theme dark-theme)
-          (load-theme light-theme t))
+          (load-theme light-theme t)
+          (mapcar
+           (lambda (f) (set-face-foreground f "gray"))
+           '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info)))
       (disable-theme light-theme)
-      (load-theme dark-theme t)))
+      (load-theme dark-theme t)
+      (mapcar
+       (lambda (f) (set-face-foreground f "dim gray"))
+       '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))))
 
   ;; (load-theme 'moe-light t)
   ;; (load-theme 'monokai t)
