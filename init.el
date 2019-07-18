@@ -49,12 +49,12 @@
         (progn
           (disable-theme dark-theme)
           (load-theme light-theme t)
-          (mapcar
-           (lambda (f) (set-face-foreground f "gray"))
+          (mapc
+           (lambda (f) (set-face-foreground f "#959595"))
            '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info)))
       (disable-theme light-theme)
       (load-theme dark-theme t)
-      (mapcar
+      (mapc
        (lambda (f) (set-face-foreground f "dim gray"))
        '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))))
 
