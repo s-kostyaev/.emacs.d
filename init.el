@@ -378,9 +378,8 @@
         (if result
             (cons 'transient (expand-file-name result))
           (cons 'transient dir)))
-    (if dir
-        (cons 'transient dir)
-      nil)))
+    (when dir
+      (cons 'transient dir))))
 
 (setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin" "/opt/local/bin")))
 (require 's)
