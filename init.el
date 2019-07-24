@@ -43,7 +43,7 @@
   (interactive)
   (require 'lsp-ui-sideline)
   (let ((light-theme 'ample-light)
-        (dark-theme 'spacemacs-dark)
+        (dark-theme 'chocolate)
         (cur-hour (nth 2 (decode-time))))
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
@@ -1507,6 +1507,10 @@ If the current buffer is not visiting a file, prompt for a file name."
 (require 'libgit)
 
 (add-hook 'after-init-hook #'global-so-long-mode)
+
+(global-set-key (kbd "C-;") #'hippie-expand)
+
+(add-hook 'company-mode-hook #'company-prescient-mode)
 
 (setq gc-cons-threshold (* 8 1024 1024))
 
