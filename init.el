@@ -388,7 +388,7 @@
     (when dir
       (cons 'transient dir))))
 
-(setq exec-path (append exec-path '("~/go/bin" "/usr/local/bin" "/opt/local/bin")))
+(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin")))
 (require 's)
 (setenv "PATH" (s-join ":" exec-path))
 (use-package go-mode
