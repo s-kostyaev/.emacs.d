@@ -30,6 +30,10 @@
   )
 (package-initialize)
 
+(require 'benchmark-init)
+;; To disable collection of benchmark data after init is done.
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
+
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 
@@ -946,6 +950,7 @@ With prefix-arg prompt for type if available with your AG version."
   :functions (my-magit-diff-hook my-magit-find-file-other-frame my-magit-find-file)
   :defer t
   :bind ("C-x C-j" . my-magit-find-file-other-frame)
+  :bind* ("C-x g" . magit-status)
   :config
   (progn
     (defun my-magit-diff-hook ()
@@ -1494,7 +1499,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   (add-hook 'before-save-hook #'refmt-before-save)
   (add-hook 'reason-mode-hook #'lsp))
 
-(magit-todos-mode 1)
+;; (magit-todos-mode 1)
 
 (load-file custom-file)
 
@@ -1504,9 +1509,11 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (add-hook 'after-init-hook #'my-go-home)
 
-(require 'libgit)
+(if (featurep 'libgit)
+    (require 'libgit))
 
-(add-hook 'after-init-hook #'global-so-long-mode)
+(if (>= emacs-major-version 27)
+    (add-hook 'after-init-hook #'global-so-long-mode))
 
 (global-set-key (kbd "C-;") #'hippie-expand)
 
