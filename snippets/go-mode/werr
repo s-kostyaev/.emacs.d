@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: werr
+# key: werr
+# --
+xerrors.Errorf("${message}: %w", ${...val, }${err})$0
