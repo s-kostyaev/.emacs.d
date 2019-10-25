@@ -1509,7 +1509,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (add-hook 'after-init-hook #'my-go-home)
 
-(if (featurep 'libgit)
+(if (package-installed-p 'libgit)
     (require 'libgit))
 
 (if (>= emacs-major-version 27)
