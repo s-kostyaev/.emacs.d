@@ -42,7 +42,7 @@
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
-(defun my-set-themes-hook ()
+(defun my-set-themes ()
   "Hook for setting themes after init."
   (interactive)
   (require 'lsp-ui-sideline)
@@ -74,7 +74,7 @@
   (menu-bar-mode -1)
   (scroll-bar-mode -1))
 
-(add-hook 'after-init-hook #'my-set-themes-hook)
+(add-hook 'after-init-hook #'my-set-themes)
 
 
 (eval-when-compile
@@ -1518,6 +1518,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 (global-set-key (kbd "C-;") #'hippie-expand)
 
 (add-hook 'company-mode-hook #'company-prescient-mode)
+
+(add-hook 'prog-mode-hook #'dtrt-indent-mode)
 
 (setq gc-cons-threshold (* 8 1024 1024))
 
