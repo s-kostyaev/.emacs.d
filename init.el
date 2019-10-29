@@ -774,7 +774,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :bind*
   (("C-x l" . helm-locate)
    ("C-x b" . helm-mini)
-   ("C-c C-s" . my-helm-rg-repo))
+   ;; ("C-c C-s" . my-helm-rg-repo)
+   )
   :bind
   (("C-x C-f" . helm-find-files)
    ("M-x" . helm-M-x)
@@ -1348,7 +1349,6 @@ to the line and column corresponding to that location."
 (eval-after-load 'dash '(dash-enable-font-lock))
 
 (use-package deadgrep
-  :disabled t
   :bind* (("C-c C-s" . deadgrep)))
 
 (use-package counsel
