@@ -1349,7 +1349,11 @@ to the line and column corresponding to that location."
 (eval-after-load 'dash '(dash-enable-font-lock))
 
 (use-package deadgrep
-  :bind* (("C-c C-s" . deadgrep)))
+  :bind* (("C-c C-s" . deadgrep))
+  :bind (:map deadgrep-mode-map
+              ("C-x C-r" . deadgrep-edit-mode)
+              :map deadgrep-edit-mode-map
+              ("C-x C-r" . deadgrep-mode)))
 
 (use-package counsel
   :disabled t
