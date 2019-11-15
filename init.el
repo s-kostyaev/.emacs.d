@@ -4,8 +4,6 @@
 
 ;;; Code:
 
-(setq gc-cons-threshold (* 80 1024 1024))
-(setq gc-cons-percentage 0.5)
 
 (defvar network-security-level)
 (defvar tls-program)
@@ -42,26 +40,39 @@
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
+(defun my-load-custom-file ()
+  "Load my custom file."
+  (load-file custom-file))
+
+(add-hook 'after-init-hook #'my-load-custom-file)
+
 (defun my-set-themes ()
   "Hook for setting themes after init."
   (interactive)
-  (require 'lsp-ui-sideline)
-  (let ((light-theme 'ample-light)
-        (dark-theme 'chocolate)
+  ;; (require 'lsp-ui-sideline)
+  (let ((light-theme
+         ;; 'spacemacs-light
+         ;; 'tsdh-light
+         'ample-light)
+        (dark-theme ;; 'chocolate
+         ;; 'zenburn
+         'tsdh-dark)
         (cur-hour (nth 2 (decode-time))))
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
         (progn
           (disable-theme dark-theme)
           (load-theme light-theme t)
-          (mapc
-           (lambda (f) (set-face-foreground f "#959595"))
-           '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info)))
+          ;; (mapc
+          ;;  (lambda (f) (set-face-foreground f "#959595"))
+          ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
+          )
       (disable-theme light-theme)
       (load-theme dark-theme t)
-      (mapc
-       (lambda (f) (set-face-foreground f "dim gray"))
-       '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))))
+      ;; (mapc
+      ;;  (lambda (f) (set-face-foreground f "dim gray"))
+      ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
+      ))
 
   ;; (load-theme 'moe-light t)
   ;; (load-theme 'monokai t)
@@ -70,9 +81,7 @@
   ;; (load-theme 'zenburn t)
   ;; (load-theme 'ample-light t)
 
-  (tool-bar-mode -1)
-  (menu-bar-mode -1)
-  (scroll-bar-mode -1))
+  )
 
 (add-hook 'after-init-hook #'my-set-themes)
 
@@ -371,6 +380,15 @@
 ;; (setq eglot-connect-timeout 300)
 ;; (setq eglot-put-doc-in-help-buffer (lambda (s) (> (length s) 250)))
 ;; (map-put! eglot-server-programs 'go-mode '("gopls"))
+(defvar eglot-workspace-configuration)
+(setq-default
+ eglot-workspace-configuration
+ '((:gopls . (:usePlaceholders t :staticcheck t :completeUnimported t))))
+(defvar eglot-strict-mode)
+(setq eglot-strict-mode nil)
+(eval-after-load 'eglot (lambda ()
+                          (bind-key (kbd "C-c C-h") 'eglot-help-at-point eglot-mode-map)))
+
 
 (defun my-disable-aggressive-indent ()
   "Disable aggressive indent mode in current buffer."
@@ -439,14 +457,18 @@
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (local-set-key (kbd "M-?") #'lsp-find-references)
       (local-set-key (kbd "C-c C-c") #'helm-make)
+      (lsp-register-custom-settings '(("gopls.completeUnimported" t)))
+      (lsp-register-custom-settings '(("gopls.staticcheck" t)))
+      (lsp-deferred)
+      ;; (require 'yasnippet)
       ;; (eglot-ensure)
       ;; (setq-local company-backends '(company-capf))
 
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
-      (setq-local lsp-auto-guess-root t)
-      (setq lsp-ui-sideline-ignore-duplicate t)
-      (lsp)
-      (flymake-go-staticcheck-enable)
+      ;; (setq-local lsp-auto-guess-root t)
+      ;; (setq lsp-ui-sideline-ignore-duplicate t)
+      ;; (lsp)
+      ;; (flymake-go-staticcheck-enable)
 
       ;; (electric-spacing-mode 1)
       ;; (setq-local electric-spacing-rules
@@ -1332,9 +1354,6 @@ to the line and column corresponding to that location."
   :after flycheck
   :config (flycheck-vale-setup))
 
-(use-package esup
-  :functions (esup))
-
 (use-package aggressive-indent
   :demand t
   :config
@@ -1493,19 +1512,19 @@ If the current buffer is not visiting a file, prompt for a file name."
         '(helm-make-project-directory helm-make-current-directory)))
 
 (use-package lsp-mode
+  :defer t
   :config
   (require 'yasnippet))
 
 (add-hook 'dart-mode-hook #'lsp)
 
 (use-package reason-mode
+  :disabled t
   :config
   (add-hook 'before-save-hook #'refmt-before-save)
   (add-hook 'reason-mode-hook #'lsp))
 
 ;; (magit-todos-mode 1)
-
-(load-file custom-file)
 
 (defun my-go-home()
   "Go to home dir."
@@ -1524,8 +1543,6 @@ If the current buffer is not visiting a file, prompt for a file name."
 (add-hook 'company-mode-hook #'company-prescient-mode)
 
 (add-hook 'prog-mode-hook #'dtrt-indent-mode)
-
-(setq gc-cons-threshold (* 8 1024 1024))
 
 (provide 'init)
 ;;; init.el ends here
