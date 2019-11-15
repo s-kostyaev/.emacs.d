@@ -4,6 +4,11 @@
 
 ;;; Code:
 
+(eval-and-compile
+  (if (< emacs-major-version 27)
+      (add-to-list load-path (expand-file-name "~/.emacs.d/"))
+    (require 'early-init)))
+
 
 (defvar network-security-level)
 (defvar tls-program)
@@ -571,12 +576,6 @@
 (setq company-echo-delay 0)                          ; remove annoying blinking
 (defvar company-minimum-prefix-length)
 (setq company-minimum-prefix-length 3)
-
-(use-package company-statistics
-  :disabled t
-  :functions (company-statistics-mode)
-  :init
-  (add-hook 'after-init-hook 'company-statistics-mode))
 
 (autoload 'bash-completion-dynamic-complete
   "bash-completion"
