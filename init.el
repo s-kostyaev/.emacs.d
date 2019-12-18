@@ -6,31 +6,33 @@
 
 (eval-and-compile
   (if (< emacs-major-version 27)
-      (add-to-list load-path (expand-file-name "~/.emacs.d/"))
-    (require 'early-init)))
+      (progn
+	(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
+	(require 'early-init))))
 
 
-(defvar network-security-level)
-(defvar tls-program)
-(defvar gnutls-verify-error)
-(defvar gnutls-trustfiles)
-(if (> emacs-major-version 24)
-    (progn
-      (setq network-security-level 'high)
-      (setq gnutls-verify-error t))
-  ;; (let ((trustfile
-  ;;        (replace-regexp-in-string
-  ;;         "\\\\" "/"
-  ;;         (replace-regexp-in-string
-  ;;          "\n" ""
-  ;;          (shell-command-to-string "python -m certifi")))))
-  ;;   (setq tls-program
-  ;;         (list
-  ;;          (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
-  ;;                  (if (eq window-system 'w32) ".exe" "") trustfile)))
-  ;;   (setq gnutls-verify-error t)
-  ;;   (setq gnutls-trustfiles (list trustfile)))
-  )
+(eval-and-compile
+  (defvar network-security-level)
+  (defvar tls-program)
+  (defvar gnutls-verify-error)
+  (defvar gnutls-trustfiles)
+  (if (> emacs-major-version 24)
+      (progn
+        (setq network-security-level 'high)
+        (setq gnutls-verify-error t))
+    ;; (let ((trustfile
+    ;;        (replace-regexp-in-string
+    ;;         "\\\\" "/"
+    ;;         (replace-regexp-in-string
+    ;;          "\n" ""
+    ;;          (shell-command-to-string "python -m certifi")))))
+    ;;   (setq tls-program
+    ;;         (list
+    ;;          (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
+    ;;                  (if (eq window-system 'w32) ".exe" "") trustfile)))
+    ;;   (setq gnutls-verify-error t)
+    ;;   (setq gnutls-trustfiles (list trustfile)))
+    ))
 (package-initialize)
 
 (require 'benchmark-init)
@@ -415,7 +417,7 @@
     (when dir
       (cons 'transient dir))))
 
-(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin")))
+(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin")))
 (require 's)
 (setenv "PATH" (s-join ":" exec-path))
 (use-package go-mode
@@ -464,7 +466,7 @@
       (local-set-key (kbd "C-c C-c") #'helm-make)
       (lsp-register-custom-settings '(("gopls.completeUnimported" t)))
       (lsp-register-custom-settings '(("gopls.staticcheck" t)))
-      (lsp-deferred)
+      ;; (lsp-deferred)
       ;; (require 'yasnippet)
       ;; (eglot-ensure)
       ;; (setq-local company-backends '(company-capf))
@@ -472,7 +474,7 @@
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
-      ;; (lsp)
+      (lsp)
       ;; (flymake-go-staticcheck-enable)
 
       ;; (electric-spacing-mode 1)
@@ -777,6 +779,18 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :disabled t
   :defer t)
 
+(eval-and-compile
+  (require 'fuz)
+  (unless (require 'fuz-core nil t)
+    (fuz-build-and-load-dymod)))
+
+(with-eval-after-load 'helm
+  ;; workaround for removed custom
+  (require 'helm-utils)
+  (setq helm-M-x-default-sort-fn 'helm-generic-sort-fn)
+  (require 'helm-fuz)
+  (helm-fuz-mode))
+
 (use-package helm-files
   :functions (helm-find-files-up-one-level))
 
@@ -791,7 +805,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
               helm-ido-like-load-fuzzy-enhancements
               helm-ido-like-fuzzier-deactivate
               helm-ido-like-fuzzier-activate
-              helm-ido-like-fix-fuzzy-files)
+              ;; helm-ido-like-fix-fuzzy-files
+              )
   :bind*
   (("C-x l" . helm-locate)
    ("C-x b" . helm-mini)
@@ -799,7 +814,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
    )
   :bind
   (("C-x C-f" . helm-find-files)
-   ("M-x" . helm-M-x)
+   ("M-x" . helm-smex)
    ("M-y". helm-show-kill-ring)
    :map helm-map
    ([tab] . helm-select-action))
@@ -815,10 +830,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
           ("C-'" . ace-jump-helm-line)))
   (require 'helm-config)
   (helm-mode +1)
-  (require 'helm-fuzzier)
-  (helm-fuzzier-mode 1)
-  (require 'helm-flx)
-  (helm-flx-mode +1)
+  ;; (require 'helm-fuzzier)
+  ;; (helm-fuzzier-mode 1)
+  ;; (require 'helm-flx)
+  ;; (helm-flx-mode +1)
   (defvar helm-ido-like-user-gc-setting nil)
 
   (defun helm-ido-like-higher-gc ()
@@ -855,21 +870,21 @@ the end of the line, then comment current line.  Replaces default behaviour of
       (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
       (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
 
-  (defun helm-ido-like-fuzzier-deactivate (&rest _)
-    (helm-fuzzier-mode -1))
+  ;; (defun helm-ido-like-fuzzier-deactivate (&rest _)
+  ;;   (helm-fuzzier-mode -1))
 
 
-  (defun helm-ido-like-fuzzier-activate (&rest _)
-    (unless helm-fuzzier-mode
-      (helm-fuzzier-mode 1)))
+  ;; (defun helm-ido-like-fuzzier-activate (&rest _)
+  ;;   (unless helm-fuzzier-mode
+  ;;     (helm-fuzzier-mode 1)))
 
 
-  (defun helm-ido-like-fix-fuzzy-files ()
-    (add-hook 'helm-find-files-before-init-hook #'helm-ido-like-fuzzier-deactivate)
-    (advice-add 'helm--generic-read-file-name :before #'helm-ido-like-fuzzier-deactivate)
-    (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
-    (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
-    (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
+  ;; (defun helm-ido-like-fix-fuzzy-files ()
+  ;;   (add-hook 'helm-find-files-before-init-hook #'helm-ido-like-fuzzier-deactivate)
+  ;;   (advice-add 'helm--generic-read-file-name :before #'helm-ido-like-fuzzier-deactivate)
+  ;;   (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
+  ;;   (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
+  ;;   (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
 
   (defun my--helm-do-grep-ag-repo (arg)
     "My grepping implementation."
@@ -922,7 +937,8 @@ With prefix-arg prompt for type if available with your AG version."
 
   (helm-ido-like-load-fuzzy-enhancements)
   (helm-ido-like-load-file-nav)
-  (helm-ido-like-fix-fuzzy-files))
+  ;; (helm-ido-like-fix-fuzzy-files)
+  )
 
 (use-package wgrep
   :bind ("C-c C-p" . wgrep-change-to-wgrep-mode)
