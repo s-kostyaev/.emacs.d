@@ -513,10 +513,22 @@
       (defvar my-go-packages nil)
       (defun go-packages-go-list ()
         my-go-packages)
+      (require 'cl-lib)
       (async-start (lambda ()
                      (process-lines "go" "list" "-e" "all"))
                    (lambda (res)
-                     (setq my-go-packages res))))
+                     (setq my-go-packages
+                           (cl-mapcar
+                            (lambda (s)
+                              (replace-regexp-in-string
+                               "@[^/]*" ""
+                               (string-remove-prefix
+                                "mod/"
+                                (string-remove-prefix
+                                 "vendor/"
+                                 s))))
+                            (cl-remove-if
+                             (lambda (s) (string-prefix-p "warning:" s)) res))))))
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
