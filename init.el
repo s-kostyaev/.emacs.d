@@ -420,6 +420,7 @@
 (setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin")))
 (require 's)
 (setenv "PATH" (s-join ":" exec-path))
+(defvar-local my-go-packages nil)
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
          ("go.mod$" . text-mode))
@@ -464,6 +465,7 @@
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (local-set-key (kbd "M-?") #'lsp-find-references)
       (local-set-key (kbd "C-c C-c") #'helm-make)
+      (require 'lsp-mode)
       (lsp-register-custom-settings '(("gopls.completeUnimported" t)))
       (lsp-register-custom-settings '(("gopls.staticcheck" t)))
       ;; (lsp-deferred)
@@ -510,25 +512,32 @@
       ;; (add-to-list 'electric-spacing-rules
       ;;              '(?! . my-go-electric-spacing-!))
 
-      (defvar my-go-packages nil)
-      (defun go-packages-go-list ()
+      (defun my-go-packages-go-list ()
         my-go-packages)
+      (setq go-packages-function 'my-go-packages-go-list)
       (require 'cl-lib)
-      (async-start (lambda ()
-                     (process-lines "go" "list" "-e" "all"))
-                   (lambda (res)
-                     (setq my-go-packages
-                           (cl-mapcar
-                            (lambda (s)
-                              (replace-regexp-in-string
-                               "@[^/]*" ""
-                               (string-remove-prefix
-                                "mod/"
-                                (string-remove-prefix
-                                 "vendor/"
-                                 s))))
-                            (cl-remove-if
-                             (lambda (s) (string-prefix-p "warning:" s)) res))))))
+      (defun my-refresh-go-packages-list ()
+        "Refresh go packages list."
+        (if (string-equal "go-mode" major-mode)
+            (let ((cur-buf (buffer-name)))
+              (async-start (lambda ()
+                             (process-lines "go" "list" "-e" "all"))
+                           (lambda (res)
+                             (with-current-buffer cur-buf
+                               (setq my-go-packages
+                                     (cl-mapcar
+                                      (lambda (s)
+                                        (replace-regexp-in-string
+                                         "@[^/]*" ""
+                                         (string-remove-prefix
+                                          "mod/"
+                                          (string-remove-prefix
+                                           "vendor/"
+                                           s))))
+                                      (cl-remove-if
+                                       (lambda (s) (string-prefix-p "warning:" s)) res)))))))))
+      (my-refresh-go-packages-list)
+      (add-hook 'after-save-hook #'my-refresh-go-packages-list))
 
     (add-hook 'go-mode-hook #'my-go-mode-hook)))
 
@@ -1399,7 +1408,49 @@ to the line and column corresponding to that location."
   :bind (:map deadgrep-mode-map
               ("C-x C-r" . deadgrep-edit-mode)
               :map deadgrep-edit-mode-map
-              ("C-x C-r" . deadgrep-mode)))
+              ("C-x C-r" . deadgrep-mode))
+  :config
+  (defun my-deadgrep--start (search-term search-type case)
+    "Start a ripgrep search."
+    (setq deadgrep--spinner (spinner-create 'progress-bar t))
+    (setq deadgrep--running t)
+    (spinner-start deadgrep--spinner)
+    (let* ((command (read-string "command: "
+                                 (deadgrep--format-command
+                                  search-term search-type case
+                                  deadgrep--context)))
+           (process
+            (start-file-process-shell-command
+             (format "rg %s" search-term)
+             (current-buffer)
+             command)))
+      (setq deadgrep--debug-command command)
+      (set-process-filter process #'deadgrep--process-filter)
+      (set-process-sentinel process #'deadgrep--process-sentinel)))
+
+  (defun my-deadgrep-restart ()
+    "Restart deadgrep search with changed command."
+    (interactive)
+    (when (and deadgrep--postpone-start
+               (called-interactively-p 'interactive))
+      (setq deadgrep--postpone-start nil))
+
+    (deadgrep--stop-and-reset)
+
+    (let ((start-point (point))
+          (inhibit-read-only t))
+      (deadgrep--write-heading)
+      ;; If the point was in the heading, ensure that we restore its
+      ;; position.
+      (goto-char (min (point-max) start-point))
+
+      (if deadgrep--postpone-start
+          (deadgrep--write-postponed)
+        (my-deadgrep--start
+         deadgrep--search-term
+         deadgrep--search-type
+         deadgrep--search-case))))
+  (define-key deadgrep-mode-map (kbd "G") 'my-deadgrep-restart))
 
 (use-package counsel
   :disabled t
