@@ -806,9 +806,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (fuz-build-and-load-dymod)))
 
 (with-eval-after-load 'helm
-  ;; workaround for removed custom
-  (require 'helm-utils)
-  (setq helm-M-x-default-sort-fn 'helm-generic-sort-fn)
   (require 'helm-fuz)
   (helm-fuz-mode))
 
