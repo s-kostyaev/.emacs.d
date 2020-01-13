@@ -474,6 +474,7 @@
       ;; (setq-local company-backends '(company-capf))
 
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
+      (setq-local flymake-start-on-save-buffer nil)
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
       (lsp)
