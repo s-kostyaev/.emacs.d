@@ -468,6 +468,7 @@
       (require 'lsp-mode)
       (lsp-register-custom-settings '(("gopls.completeUnimported" t)))
       (lsp-register-custom-settings '(("gopls.staticcheck" t)))
+      (lsp-register-custom-settings '(("gopls.experimentalDisabledAnalyses" ["ST1000"])))
       ;; (lsp-deferred)
       ;; (require 'yasnippet)
       ;; (eglot-ensure)
