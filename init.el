@@ -67,9 +67,9 @@
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
-                                  (shell-command
-                                   "emacs --batch -q -l ~/.emacs.d/dump.el"
-                                   "*dump*" "*dump-error*")))
+                                  (start-process-shell-command
+                                   "dump" "*dump*"
+                                   "emacs --batch -q -l ~/.emacs.d/dump.el")))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
