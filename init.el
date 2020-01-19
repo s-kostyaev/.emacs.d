@@ -33,7 +33,30 @@
     ;;   (setq gnutls-verify-error t)
     ;;   (setq gnutls-trustfiles (list trustfile)))
     ))
-(package-initialize)
+(defvar luna-dumped nil
+  "non-nil when a dump file is loaded (because dump.el sets this variable).")
+
+(defmacro luna-if-dump (then &rest else)
+  "Evaluate IF if running with a dump file, else evaluate ELSE."
+  (declare (indent 1))
+  `(if luna-dumped
+       ,then
+     ,@else))
+
+(defvar luna-dumped-load-path nil)
+(setq load-path luna-dumped-load-path)
+(luna-if-dump
+    (progn
+      (setq load-path luna-dumped-load-path)
+      (global-font-lock-mode)
+      (transient-mark-mode)
+      (defun my-fix-scratch ()
+        (save-excursion
+          (switch-to-buffer "*scratch*")
+          (lisp-interaction-mode)))
+      (add-hook 'after-init-hook 'my-fix-scratch))
+  ;; add load-path’s and load autoload files
+  (package-initialize))
 
 (require 'benchmark-init)
 ;; To disable collection of benchmark data after init is done.
@@ -43,7 +66,10 @@
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
-                                  (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
+                                  (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
+                                  (shell-command
+                                   "emacs --batch -q -l ~/.emacs.d/dump.el"
+                                   "*dump*" "*dump-error*")))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
@@ -63,19 +89,23 @@
          'ample-light)
         (dark-theme ;; 'chocolate
          ;; 'zenburn
-         'tsdh-dark)
+         'spacemacs-dark)
         (cur-hour (nth 2 (decode-time))))
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
         (progn
           (disable-theme dark-theme)
-          (load-theme light-theme t)
+          (luna-if-dump
+              (enable-theme light-theme)
+            (load-theme light-theme t))
           ;; (mapc
           ;;  (lambda (f) (set-face-foreground f "#959595"))
           ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
           )
       (disable-theme light-theme)
-      (load-theme dark-theme t)
+      (luna-if-dump
+          (enable-theme dark-theme)
+        (load-theme dark-theme t))
       ;; (mapc
       ;;  (lambda (f) (set-face-foreground f "dim gray"))
       ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
