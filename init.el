@@ -993,6 +993,15 @@ With prefix-arg prompt for type if available with your AG version."
 (use-package helm-fd
   :bind* ("C-x C-p" . helm-fd-project))
 
+(use-package fzf
+  :bind* ("C-c C-f" . my-fzf-project)
+  :config
+  (defun my-fzf-project ()
+    "Fzf in project directory."
+    (interactive)
+    (fzf/start (or (car (project-roots (project-current)))
+                   default-directory))))
+
 (use-package wgrep
   :bind ("C-c C-p" . wgrep-change-to-wgrep-mode)
   :defer t
