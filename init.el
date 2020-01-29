@@ -508,7 +508,7 @@
       (setq-local flymake-start-on-save-buffer nil)
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
-      (lsp)
+      (lsp-deferred)
       ;; (flymake-go-staticcheck-enable)
 
       ;; (electric-spacing-mode 1)
@@ -989,6 +989,9 @@ With prefix-arg prompt for type if available with your AG version."
   (helm-ido-like-load-file-nav)
   ;; (helm-ido-like-fix-fuzzy-files)
   )
+
+(use-package helm-fd
+  :bind* ("C-x C-p" . helm-fd-project))
 
 (use-package wgrep
   :bind ("C-c C-p" . wgrep-change-to-wgrep-mode)
