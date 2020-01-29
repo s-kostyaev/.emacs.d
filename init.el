@@ -999,7 +999,8 @@ With prefix-arg prompt for type if available with your AG version."
   (defun my-fzf-project ()
     "Fzf in project directory."
     (interactive)
-    (fzf/start (or (car (project-roots (project-current)))
+    (fzf/start (or (if (project-current)
+                       (car (project-roots (project-current))))
                    default-directory))))
 
 (use-package wgrep
