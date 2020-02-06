@@ -1670,18 +1670,19 @@ If the current buffer is not visiting a file, prompt for a file name."
   :bind (("<f7>" . gif-screencast-toggle-pause)
          ("<f8>" . gif-screencast-start-or-stop))
   :config
-  (setq gif-screencast-args '("-x")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
+  (setq gif-screencast-args '("-x" "-o")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
   (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
   (setq gif-screencast-capture-format "ppm") ;; Optional: Required to crop captured images.
   ;; HiDPI display patch
+  (defun my-fix-screencast-hidpi (oldfun &rest r)
+    (apply #'format "%dx%d+%d+%d"
+           (mapcar
+            (lambda (x) (* 2 (string-to-number x)))
+            (split-string (apply oldfun r) "[+x]"))))
   (advice-add
    #'gif-screencast--cropping-region
    :around
-   (lambda (oldfun &rest r)
-     (apply #'format "%dx%d+%d+%d"
-            (mapcar
-             (lambda (x) (* 2 (string-to-number x)))
-             (split-string (apply oldfun r) "[+x]"))))))
+   #'my-fix-screencast-hidpi))
 
 (provide 'init)
 ;;; init.el ends here
