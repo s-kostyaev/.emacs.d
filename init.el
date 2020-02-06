@@ -44,7 +44,6 @@
      ,@else))
 
 (defvar luna-dumped-load-path nil)
-(setq load-path luna-dumped-load-path)
 (luna-if-dump
     (progn
       (setq load-path luna-dumped-load-path)
@@ -56,6 +55,7 @@
           (lisp-interaction-mode)))
       (add-hook 'after-init-hook 'my-fix-scratch))
   ;; add load-path’s and load autoload files
+  (require 'package)
   (package-initialize))
 
 (require 'benchmark-init)
@@ -1663,6 +1663,25 @@ If the current buffer is not visiting a file, prompt for a file name."
 (add-hook 'company-mode-hook #'company-prescient-mode)
 
 (add-hook 'prog-mode-hook #'dtrt-indent-mode)
+
+;;; Screencasts
+
+(use-package gif-screencast
+  :bind (("<f7>" . gif-screencast-toggle-pause)
+         ("<f8>" . gif-screencast-start-or-stop))
+  :config
+  (setq gif-screencast-args '("-x")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
+  (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
+  (setq gif-screencast-capture-format "ppm") ;; Optional: Required to crop captured images.
+  ;; HiDPI display patch
+  (advice-add
+   #'gif-screencast--cropping-region
+   :around
+   (lambda (oldfun &rest r)
+     (apply #'format "%dx%d+%d+%d"
+            (mapcar
+             (lambda (x) (* 2 (string-to-number x)))
+             (split-string (apply oldfun r) "[+x]"))))))
 
 (provide 'init)
 ;;; init.el ends here

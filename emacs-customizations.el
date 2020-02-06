@@ -54,6 +54,7 @@
  '(helm-session-fuzzy-match t)
  '(hippie-expand-try-functions-list
    '(try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill))
+ '(keycast-insert-after "        ")
  '(lsp-auto-guess-root t)
  '(lsp-eldoc-hook '(lsp-hover lsp-signature))
  '(lsp-eldoc-render-all t)
@@ -69,7 +70,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(fzf helm-fd helm-smex helm-flx helm-fuzzier helm-fuz hercules white-sand-theme organic-green-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme reason-mode zenburn-theme magit-libgit solarized-theme use-package flymake libgit ample-theme company-lsp flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc header2 go-impl geiser fuzzy flymd flx esup embrace edit-indirect company-quickhelp column-marker cask-mode))
+   '(gif-screencast keycast fzf helm-fd helm-smex helm-flx helm-fuzzier helm-fuz hercules white-sand-theme organic-green-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme reason-mode zenburn-theme magit-libgit solarized-theme use-package flymake libgit ample-theme company-lsp flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc header2 go-impl geiser fuzzy flymd flx esup embrace edit-indirect company-quickhelp column-marker cask-mode))
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
