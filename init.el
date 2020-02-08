@@ -1457,10 +1457,12 @@ to the line and column corresponding to that location."
     (setq deadgrep--spinner (spinner-create 'progress-bar t))
     (setq deadgrep--running t)
     (spinner-start deadgrep--spinner)
-    (let* ((command (read-string "command: "
-                                 (deadgrep--format-command
-                                  search-term search-type case
-                                  deadgrep--context)))
+    (let* ((command
+            (read-string "command: "
+                         (format "%s %s" deadgrep-executable
+                                 (s-join " "
+                                         (deadgrep--arguments
+                                          search-term search-type case deadgrep--context)))))
            (process
             (start-file-process-shell-command
              (format "rg %s" search-term)
