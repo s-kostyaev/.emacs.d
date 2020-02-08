@@ -34,10 +34,10 @@
     ;;   (setq gnutls-trustfiles (list trustfile)))
     ))
 (defvar luna-dumped nil
-  "non-nil when a dump file is loaded (because dump.el sets this variable).")
+  "Non-nil when a dump file is loaded (because dump.el sets this variable).")
 
 (defmacro luna-if-dump (then &rest else)
-  "Evaluate IF if running with a dump file, else evaluate ELSE."
+  "Evaluate THEN if running with a dump file, else evaluate ELSE."
   (declare (indent 1))
   `(if luna-dumped
        ,then
