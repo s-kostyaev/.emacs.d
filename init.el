@@ -95,21 +95,21 @@
              (<  cur-hour 20))
         (progn
           (disable-theme dark-theme)
-          (luna-if-dump
-              (enable-theme light-theme)
-            (load-theme light-theme t))
-          ;; (mapc
-          ;;  (lambda (f) (set-face-foreground f "#959595"))
-          ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
-          )
-      (disable-theme light-theme)
-      (luna-if-dump
-          (enable-theme dark-theme)
-        (load-theme dark-theme t))
+          ;; (luna-if-dump
+          ;; (enable-theme light-theme)
+          (load-theme light-theme t);; )
       ;; (mapc
-      ;;  (lambda (f) (set-face-foreground f "dim gray"))
+      ;;  (lambda (f) (set-face-foreground f "#959595"))
       ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
-      ))
+      )
+    (disable-theme light-theme)
+    ;; (luna-if-dump
+        ;; (enable-theme dark-theme)
+      (load-theme dark-theme t);; )
+    ;; (mapc
+    ;;  (lambda (f) (set-face-foreground f "dim gray"))
+    ;;  '(lsp-ui-sideline-code-action lsp-ui-sideline-current-symbol lsp-ui-sideline-symbol lsp-ui-sideline-symbol-info))
+    ))
 
   ;; (load-theme 'moe-light t)
   ;; (load-theme 'monokai t)
@@ -121,6 +121,7 @@
   )
 
 (add-hook 'after-init-hook #'my-set-themes)
+(add-hook 'desktop-after-read-hook #'my-set-themes)
 
 
 (eval-when-compile
