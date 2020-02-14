@@ -448,7 +448,7 @@
     (when dir
       (cons 'transient dir))))
 
-(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin")))
+(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin")))
 (require 's)
 (setenv "PATH" (s-join ":" exec-path))
 (defvar-local my-go-packages nil)
@@ -1686,6 +1686,9 @@ If the current buffer is not visiting a file, prompt for a file name."
    #'gif-screencast--cropping-region
    :around
    #'my-fix-screencast-hidpi))
+
+(add-hook 'c-mode-hook #'lsp-deferred)
+(add-hook 'c++-mode-hook #'lsp-deferred)
 
 (provide 'init)
 ;;; init.el ends here
