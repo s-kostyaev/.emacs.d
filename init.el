@@ -1271,7 +1271,7 @@ to the line and column corresponding to that location."
 
 ;;; Ace window
 (use-package ace-window
-  :bind ("M-p" . ace-window)
+  :bind* ("M-p" . ace-window)
   :config (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 ;;; Which key
