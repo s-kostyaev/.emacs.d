@@ -7,32 +7,23 @@
 (eval-and-compile
   (if (< emacs-major-version 27)
       (progn
-	(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
-	(require 'early-init))))
+	    (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
+	    (require 'early-init))))
 
+
+(defvar gnutls-trustfiles)
+(with-eval-after-load 'gnutls
+  (add-to-list 'gnutls-trustfiles "/usr/local/etc/libressl/cert.pem"))
 
 (eval-and-compile
   (defvar network-security-level)
   (defvar tls-program)
   (defvar gnutls-verify-error)
-  (defvar gnutls-trustfiles)
   (if (> emacs-major-version 24)
       (progn
         (setq network-security-level 'high)
-        (setq gnutls-verify-error t))
-    ;; (let ((trustfile
-    ;;        (replace-regexp-in-string
-    ;;         "\\\\" "/"
-    ;;         (replace-regexp-in-string
-    ;;          "\n" ""
-    ;;          (shell-command-to-string "python -m certifi")))))
-    ;;   (setq tls-program
-    ;;         (list
-    ;;          (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
-    ;;                  (if (eq window-system 'w32) ".exe" "") trustfile)))
-    ;;   (setq gnutls-verify-error t)
-    ;;   (setq gnutls-trustfiles (list trustfile)))
-    ))
+        (setq gnutls-verify-error t))))
+
 (defvar luna-dumped nil
   "Non-nil when a dump file is loaded (because dump.el sets this variable).")
 
