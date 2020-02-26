@@ -71,41 +71,41 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(gif-screencast keycast fzf helm-fd helm-smex helm-flx helm-fuzzier helm-fuz hercules white-sand-theme organic-green-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme reason-mode zenburn-theme magit-libgit solarized-theme use-package flymake libgit ample-theme company-lsp flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc header2 go-impl geiser fuzzy flymd flx esup embrace edit-indirect company-quickhelp column-marker cask-mode))
+   '(gif-screencast keycast fzf helm-fd helm-smex helm-flx helm-fuzzier helm-fuz hercules white-sand-theme organic-green-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme reason-mode zenburn-theme magit-libgit solarized-theme use-package flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc header2 go-impl geiser fuzzy flymd flx embrace edit-indirect company-quickhelp column-marker cask-mode))
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
    '((flycheck-disabled-checkers emacs-lisp-checkdoc)
      (eval progn
-           (make-local-variable 'process-environment)
-           (setq process-environment
-                 (copy-sequence process-environment))
-           (setenv "GOOS" "js")
-           (setenv "GOARCH" "wasm"))
+	   (make-local-variable 'process-environment)
+	   (setq process-environment
+		 (copy-sequence process-environment))
+	   (setenv "GOOS" "js")
+	   (setenv "GOARCH" "wasm"))
      (checkdoc-minor-mode . 1)
      (eval when
-           (and
-            (buffer-file-name)
-            (file-regular-p
-             (buffer-file-name))
-            (string-match-p "^[^.]"
-                            (buffer-file-name)))
-           (unless
-               (featurep 'package-build)
-             (let
-                 ((load-path
-                   (cons "../package-build" load-path)))
-               (require 'package-build)))
-           (package-build-minor-mode)
-           (set
-            (make-local-variable 'package-build-working-dir)
-            (expand-file-name "../working/"))
-           (set
-            (make-local-variable 'package-build-archive-dir)
-            (expand-file-name "../packages/"))
-           (set
-            (make-local-variable 'package-build-recipes-dir)
-            default-directory))
+	   (and
+	    (buffer-file-name)
+	    (file-regular-p
+	     (buffer-file-name))
+	    (string-match-p "^[^.]"
+			    (buffer-file-name)))
+	   (unless
+	       (featurep 'package-build)
+	     (let
+		 ((load-path
+		   (cons "../package-build" load-path)))
+	       (require 'package-build)))
+	   (package-build-minor-mode)
+	   (set
+	    (make-local-variable 'package-build-working-dir)
+	    (expand-file-name "../working/"))
+	   (set
+	    (make-local-variable 'package-build-archive-dir)
+	    (expand-file-name "../packages/"))
+	   (set
+	    (make-local-variable 'package-build-recipes-dir)
+	    default-directory))
      (eval c-set-offset 'innamespace 0)))
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
