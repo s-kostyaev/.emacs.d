@@ -6,11 +6,11 @@
 (setq luna-dumped-load-path load-path)
 (setq luna-dumped t)
 
-(dolist (package '(use-package company helm helm-files helm-config helm-command
+(dolist (package '(use-package company helm helm-files helm-config helm-command helm-make
                     which-key aggressive-indent ample-light-theme spacemacs-dark-theme
                     etags expand-region lsp-mode prescient
                     company-capf company-cmake company-clang company-eclim
-                    company-dabbrev-code reverse-im quail))
+                    company-dabbrev-code reverse-im quail smie diff-mode flymake avy comment-tags))
   (require package))
 ;; dump image
 (dump-emacs-portable "~/.emacs.d/emacs.pdmp")
