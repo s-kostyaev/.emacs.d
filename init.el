@@ -791,15 +791,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :disabled t
   :defer t)
 
-(eval-and-compile
-  (require 'fuz)
-  (unless (require 'fuz-core nil t)
-    (fuz-build-and-load-dymod)))
-
-(with-eval-after-load 'helm
-  (require 'helm-fuz)
-  (helm-fuz-mode))
-
 (use-package helm-files
   :functions (helm-find-files-up-one-level))
 
@@ -810,12 +801,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :functions (helm-ido-like-higher-gc
               helm-ido-like-lower-gc
               helm-ido-like-find-files-navigate-forward
-              helm-ido-like-load-file-nav
-              helm-ido-like-load-fuzzy-enhancements
-              helm-ido-like-fuzzier-deactivate
-              helm-ido-like-fuzzier-activate
-              ;; helm-ido-like-fix-fuzzy-files
-              )
+              helm-ido-like-load-file-nav)
   :bind*
   (("C-x l" . helm-locate)
    ("C-x b" . helm-mini)
@@ -839,10 +825,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
           ("C-'" . ace-jump-helm-line)))
   (require 'helm-config)
   (helm-mode +1)
-  ;; (require 'helm-fuzzier)
-  ;; (helm-fuzzier-mode 1)
-  ;; (require 'helm-flx)
-  ;; (helm-flx-mode +1)
   (defvar helm-ido-like-user-gc-setting nil)
 
   (defun helm-ido-like-higher-gc ()
@@ -878,22 +860,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (with-eval-after-load 'helm-files
       (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
       (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
-
-  ;; (defun helm-ido-like-fuzzier-deactivate (&rest _)
-  ;;   (helm-fuzzier-mode -1))
-
-
-  ;; (defun helm-ido-like-fuzzier-activate (&rest _)
-  ;;   (unless helm-fuzzier-mode
-  ;;     (helm-fuzzier-mode 1)))
-
-
-  ;; (defun helm-ido-like-fix-fuzzy-files ()
-  ;;   (add-hook 'helm-find-files-before-init-hook #'helm-ido-like-fuzzier-deactivate)
-  ;;   (advice-add 'helm--generic-read-file-name :before #'helm-ido-like-fuzzier-deactivate)
-  ;;   (add-hook 'helm-exit-minibuffer-hook #'helm-ido-like-fuzzier-activate)
-  ;;   (add-hook 'helm-cleanup-hook #'helm-ido-like-fuzzier-activate)
-  ;;   (advice-add 'helm-keyboard-quit :before #'helm-ido-like-fuzzier-activate))
 
   (defun my--helm-do-grep-ag-repo (arg)
     "My grepping implementation."
@@ -945,9 +911,7 @@ With prefix-arg prompt for type if available with your AG version."
       (my--helm-do-grep-ag-project arg)))
 
   (helm-ido-like-load-fuzzy-enhancements)
-  (helm-ido-like-load-file-nav)
-  ;; (helm-ido-like-fix-fuzzy-files)
-  )
+  (helm-ido-like-load-file-nav))
 
 (use-package helm-fd
   :bind* ("C-x C-p" . helm-fd-project))
@@ -1649,6 +1613,12 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (add-hook 'c-mode-hook #'lsp-deferred)
 (add-hook 'c++-mode-hook #'lsp-deferred)
+
+(setq completion-styles `(basic partial-completion emacs22 initials
+                                ,(if (version<= emacs-version "27.0") 'helm-flex 'flex)))
+(setq completion-ignore-case t)
+
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 
 (provide 'init)
 ;;; init.el ends here
