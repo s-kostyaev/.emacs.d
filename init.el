@@ -501,40 +501,6 @@
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
       (lsp-deferred)
-      ;; (flymake-go-staticcheck-enable)
-
-      ;; (electric-spacing-mode 1)
-      ;; (setq-local electric-spacing-rules
-      ;;             (cl-remove-if
-      ;;              (lambda (el) (or (= (car el) ?.)
-      ;;                               (= (car el) ?=)
-      ;;                               (= (car el) ?*)))
-      ;;              electric-spacing-rules))
-
-      ;; (defun my-go-electric-spacing-= ()
-      ;;   "Fix := for go-mode."
-      ;;   (cond
-      ;;    ((looking-back ": " (line-beginning-position))
-      ;;     (delete-char -2)
-      ;;     (insert " := "))
-      ;;    (t (electric-spacing-self-insert-command))))
-
-      ;; (defun my-go-electric-spacing-* ()
-      ;;   "Fix * for go-mode."
-      ;;   (insert " *"))
-
-      ;; (defun my-go-electric-spacing-! ()
-      ;;   "Fix ! for go-mode."
-      ;;   (insert " !"))
-
-      ;; (add-to-list 'electric-spacing-rules
-      ;;              '(?= . my-go-electric-spacing-=))
-
-      ;; (add-to-list 'electric-spacing-rules
-      ;;              '(?* .  my-go-electric-spacing-*))
-
-      ;; (add-to-list 'electric-spacing-rules
-      ;;              '(?! . my-go-electric-spacing-!))
 
       (defun my-go-packages-go-list ()
         my-go-packages)
