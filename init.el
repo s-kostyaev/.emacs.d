@@ -60,7 +60,8 @@
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
                                   (start-process-shell-command
                                    "dump" "*dump*"
-                                   "emacs --batch -q -l ~/.emacs.d/dump.el")))
+                                   "emacs --batch -q -l ~/.emacs.d/dump.el")
+                                  (package-activate-all)))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
