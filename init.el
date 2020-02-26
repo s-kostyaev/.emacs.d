@@ -274,11 +274,11 @@
 (add-hook 'after-find-file #'my-update-vc-mode)
 
 ;; to setup tabs
-(defvar c-basic-indent)
-(setq c-basic-indent 4)
-(setq tab-width 4)
-(setq tab-stop-list (number-sequence 4 200 4))
-(setq-default indent-tabs-mode nil)
+;; (defvar c-basic-indent)
+;; (setq c-basic-indent 4)
+;; (setq tab-width 4)
+;; (setq tab-stop-list (number-sequence 4 200 4))
+;; (setq-default indent-tabs-mode nil)
 
 ;; Text and the such
 ;; Use colors to highlight commands, etc.
