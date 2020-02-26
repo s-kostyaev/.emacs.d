@@ -1,26 +1,19 @@
 (setq gc-cons-threshold (* 80 1024 1024))
 (setq gc-cons-percentage 0.5)
 
-(defvar network-security-level)
-(defvar tls-program)
-(defvar gnutls-verify-error)
 (defvar gnutls-trustfiles)
-(if (> emacs-major-version 24)
-    (progn
-      (setq network-security-level 'high)
-      (setq gnutls-verify-error t))
-  (let ((trustfile
-         (replace-regexp-in-string
-          "\\\\" "/"
-          (replace-regexp-in-string
-           "\n" ""
-           (shell-command-to-string "python -m certifi")))))
-    (setq tls-program
-          (list
-           (format "gnutls-cli%s --x509cafile %s -p %%p %%h"
-                   (if (eq window-system 'w32) ".exe" "") trustfile)))
-    (setq gnutls-verify-error t)
-    (setq gnutls-trustfiles (list trustfile))))
+(with-eval-after-load 'gnutls
+  (add-to-list 'gnutls-trustfiles "/usr/local/etc/libressl/cert.pem"))
+
+(eval-and-compile
+  (defvar network-security-level)
+  (defvar tls-program)
+  (defvar gnutls-verify-error)
+  (if (> emacs-major-version 24)
+      (progn
+        (setq network-security-level 'high)
+        (setq gnutls-verify-error t))))
+
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
 ;; initizlization in case of byte-compiled .emacs.elc.
