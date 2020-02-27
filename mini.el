@@ -1,3 +1,11 @@
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(scroll-bar-mode -1)
+(blink-cursor-mode -1)
+(load-theme 'tsdh-light)
+(global-font-lock-mode 1)
+(show-paren-mode 1)
+
 (electric-pair-mode 1)
 (fido-mode 1)
 
@@ -46,10 +54,5 @@ of `prot/icomplete-restore-horizontal'."
 
 (global-set-key (kbd "C-;") #'hippie-expand)
 (global-set-key (kbd "M-i") #'imenu)
-(global-font-lock-mode 1)
-(load-theme 'tsdh-light)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(scroll-bar-mode -1)
 (global-set-key "\C-cff" 'toggle-frame-fullscreen)
 (fset 'yes-or-no-p 'y-or-n-p)
