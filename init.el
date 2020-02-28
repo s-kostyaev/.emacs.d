@@ -1621,6 +1621,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (setq completion-styles `(basic partial-completion emacs22 initials
                                 ,(if (version<= emacs-version "27.0") 'helm-flex 'flex)))
 (setq completion-ignore-case t)
+(setq yas-inhibit-overlay-modification-protection t)
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
