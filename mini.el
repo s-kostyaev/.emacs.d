@@ -3,7 +3,7 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
-(load-theme 'tsdh-light)
+(load-theme 'dichromacy)
 (global-font-lock-mode 1)
 (show-paren-mode 1)
 
@@ -37,5 +37,31 @@
 
 (global-set-key (kbd "C-;") #'hippie-expand)
 (global-set-key (kbd "M-i") #'imenu)
-(global-set-key "\C-cff" 'toggle-frame-fullscreen)
+(global-set-key "\C-cff" #'toggle-frame-fullscreen)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(flymake-mode 1)
+(global-set-key (kbd "C-x `") #'flymake-goto-next-error)
+(global-set-key (kbd "C-c r") #'flymake-show-diagnostics-buffer)
+
+(global-set-key (kbd "M-p") #'other-window)
+
+(defun my-set-themes ()
+  "Hook for setting themes after init."
+  (interactive)
+  (let ((light-theme
+         ;; 'tsdh-light
+	 'dichromacy)
+        (dark-theme
+         ;; 'tsdh-dark
+	 'misterioso)
+        (cur-hour (nth 2 (decode-time))))
+    (if (and (>  cur-hour 7)
+             (<  cur-hour 20))
+        (progn
+          (disable-theme dark-theme)
+          (load-theme light-theme t))
+      (disable-theme light-theme)
+      (load-theme dark-theme t))))
+
+(my-set-themes)

@@ -78,10 +78,12 @@
   (let ((light-theme
          ;; 'spacemacs-light
          ;; 'tsdh-light
-         'ample-light)
+         ;; 'ample-light
+	 'dichromacy)
         (dark-theme ;; 'chocolate
          ;; 'zenburn
-         'spacemacs-dark)
+         ;; 'spacemacs-dark
+	 'misterioso)
         (cur-hour (nth 2 (decode-time))))
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
