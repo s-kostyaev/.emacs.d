@@ -504,6 +504,7 @@
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
       (lsp-deferred)
+      (symbol-overlay-mode -1)
 
       (defun my-go-packages-go-list ()
         my-go-packages)
