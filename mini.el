@@ -56,12 +56,10 @@
          ;; 'tsdh-dark
 	 'misterioso)
         (cur-hour (nth 2 (decode-time))))
+    (mapc #'disable-theme custom-enabled-themes)
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
-        (progn
-          (disable-theme dark-theme)
-          (load-theme light-theme t))
-      (disable-theme light-theme)
+        (load-theme light-theme t)
       (load-theme dark-theme t))))
 
 (my-set-themes)
