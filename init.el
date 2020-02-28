@@ -632,11 +632,12 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;;   :functions (pkgbuild-mode)
 ;;   :mode ("/PKGBUILD$" . pkgbuild-mode))
 
-(use-package markdown-mode
-  :mode (("\\.text\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("README\\.md\\'" . gfm-mode)))
+(use-package poly-markdown
+  :defer t
+  :commands (poly-markdown-mode poly-gfm-mode)
+  :mode (("\\.text\\'" . poly-markdown-mode)
+         ("\\.md$" . poly-gfm-mode)
+         ("\\.markdown$" . poly-markdown-mode)))
 
 ;; for over-80-chars line highlightning
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
