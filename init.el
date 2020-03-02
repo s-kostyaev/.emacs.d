@@ -1363,6 +1363,8 @@ to the line and column corresponding to that location."
   :bind* (("C-c C-s" . deadgrep))
   :bind (:map deadgrep-mode-map
               ("C-x C-r" . deadgrep-edit-mode)
+              ("C-j" . next-error-no-select)
+              ("f" . next-error-follow-minor-mode)
               :map deadgrep-edit-mode-map
               ("C-x C-r" . deadgrep-mode))
   :config
@@ -1609,6 +1611,18 @@ If the current buffer is not visiting a file, prompt for a file name."
 (setq yas-inhibit-overlay-modification-protection t)
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
+
+(defun my-hash-intersection-dedup (l1 l2)
+  "Fast hash intersection between L1 and L2."
+  (let ((ht (make-hash-table :test #'equal))
+        (acc nil))
+    (dolist (l l1)
+      (puthash l t ht))
+    (dolist (l l2)
+      (when (gethash l ht nil)
+        (puthash l nil ht)
+        (push l acc)))
+    acc))
 
 (provide 'init)
 ;;; init.el ends here
