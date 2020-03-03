@@ -104,6 +104,8 @@
           (custom-set-faces
            '(default ((t (:background "#fdf6e3" :height 130 :width normal :family "PT Mono")))))))))
 
+(global-set-key (kbd "<f6>") #'my-toggle-themes)
+
 (defun my-set-themes ()
   "Function for setting themes after init."
   (interactive)
