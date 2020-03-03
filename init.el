@@ -71,33 +71,39 @@
 
 (add-hook 'after-init-hook #'my-load-custom-file)
 
-(defun my-set-themes ()
-  "Hook for setting themes after init."
+(setq my-light-theme 'dichromacy
+      ;; 'spacemacs-light
+      ;; 'tsdh-light
+      ;; 'ample-light
+      ;; 'moe-light
+      ;; 'solarized-light
+      my-dark-theme 'misterioso
+      ;; 'zenburn
+      ;; 'spacemacs-dark
+      ;; 'monokai
+      )
+
+(defun my-toggle-themes ()
+  "Toggle light and dark themes."
   (interactive)
-  (let ((light-theme
-         ;; 'spacemacs-light
-         ;; 'tsdh-light
-         ;; 'ample-light
-	     'dichromacy)
-        (dark-theme ;; 'chocolate
-         ;; 'zenburn
-         ;; 'spacemacs-dark
-	     'misterioso)
-        (cur-hour (nth 2 (decode-time))))
+  (let ((cur-theme (if (equal (car custom-enabled-themes)
+                              my-light-theme)
+                       'light
+                     'dark)))
+    (mapc #'disable-theme custom-enabled-themes)
+    (if (equal cur-theme 'light)
+        (load-theme my-dark-theme t)
+      (load-theme my-light-theme t))))
+
+(defun my-set-themes ()
+  "Function for setting themes after init."
+  (interactive)
+  (let ((cur-hour (nth 2 (decode-time))))
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
-        (load-theme light-theme t)
-      (load-theme dark-theme t)))
-
-  ;; (load-theme 'moe-light t)
-  ;; (load-theme 'monokai t)
-  ;; (load-theme 'spacemacs-dark t)
-  ;; (load-theme 'solarized-light t)
-  ;; (load-theme 'zenburn t)
-  ;; (load-theme 'ample-light t)
-
-  )
+        (load-theme my-light-theme t)
+      (load-theme my-dark-theme t))))
 
 (add-hook 'after-init-hook #'my-set-themes)
 (add-hook 'desktop-after-read-hook #'my-set-themes)
