@@ -72,6 +72,7 @@
 (add-hook 'after-init-hook #'my-load-custom-file)
 
 (setq my-light-theme 'dichromacy
+      ;; 'adwaita
       ;; 'spacemacs-light
       ;; 'tsdh-light
       ;; 'ample-light
@@ -107,6 +108,33 @@
 
 (add-hook 'after-init-hook #'my-set-themes)
 (add-hook 'desktop-after-read-hook #'my-set-themes)
+
+(defun my-load-theme ()
+  "Load theme."
+  (interactive)
+  (let ((theme (intern
+                (completing-read "Load custom theme: "
+		                         (mapcar #'symbol-name
+			                             (custom-available-themes))))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme t nil)))
+
+(defun my-load-builtin-theme ()
+  "Load theme."
+  (interactive)
+  (let ((theme (intern
+                (completing-read "Load custom theme: "
+		                         (cl-delete-if
+                                  (lambda (theme)
+                                    (f-ancestor-of?
+                                     (getenv "HOME")
+                                     (locate-file (concat theme "-theme.el")
+                                                  (custom-theme--load-path)
+                                                  '("" "c"))))
+                                  (mapcar #'symbol-name
+			                              (custom-available-themes)))))))
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme theme t nil)))
 
 
 (eval-when-compile
