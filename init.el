@@ -798,7 +798,7 @@ the end of the line, then comment current line.  Replaces default behaviour of
    )
   :bind
   (("C-x C-f" . helm-find-files)
-   ("M-x" . helm-smex)
+   ("M-x" . helm-M-x)
    ("M-y". helm-show-kill-ring)
    :map helm-map
    ([tab] . helm-select-action))
