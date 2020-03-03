@@ -71,7 +71,8 @@
 
 (add-hook 'after-init-hook #'my-load-custom-file)
 
-(setq my-light-theme 'dichromacy
+(setq my-light-theme ;; 'kaolin-valley-light
+      'dichromacy
       ;; 'adwaita
       ;; 'spacemacs-light
       ;; 'tsdh-light
@@ -82,7 +83,7 @@
       ;; 'zenburn
       ;; 'spacemacs-dark
       ;; 'monokai
-      )
+      my-need-fix-bg t)
 
 (defun my-toggle-themes ()
   "Toggle light and dark themes."
@@ -93,8 +94,15 @@
                      'dark)))
     (mapc #'disable-theme custom-enabled-themes)
     (if (equal cur-theme 'light)
-        (load-theme my-dark-theme t)
-      (load-theme my-light-theme t))))
+        (progn
+          (load-theme my-dark-theme t)
+          (if my-need-fix-bg
+              (custom-set-faces
+               '(default ((t (:height 130 :width normal :family "PT Mono")))))))
+      (load-theme my-light-theme t)
+      (if my-need-fix-bg
+          (custom-set-faces
+           '(default ((t (:background "#fdf6e3" :height 130 :width normal :family "PT Mono")))))))))
 
 (defun my-set-themes ()
   "Function for setting themes after init."
@@ -103,8 +111,15 @@
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
-        (load-theme my-light-theme t)
-      (load-theme my-dark-theme t))))
+        (progn
+          (load-theme my-light-theme t)
+          (if my-need-fix-bg
+              (custom-set-faces
+               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "PT Mono")))))))
+      (load-theme my-dark-theme t)
+      (if my-need-fix-bg
+          (custom-set-faces
+           '(default ((t (:height 130 :width normal :family "PT Mono")))))))))
 
 (add-hook 'after-init-hook #'my-set-themes)
 (add-hook 'desktop-after-read-hook #'my-set-themes)

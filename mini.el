@@ -46,20 +46,29 @@
 
 (global-set-key (kbd "M-p") #'other-window)
 
+(setq my-light-theme 'dichromacy
+      ;; 'adwaita
+      ;; 'tsdh-light
+      my-dark-theme 'misterioso
+      ;; 'tsdh-dark
+      my-need-fix-bg t)
+
 (defun my-set-themes ()
-  "Hook for setting themes after init."
+  "Function for setting themes after init."
   (interactive)
-  (let ((light-theme
-         ;; 'tsdh-light
-	 'dichromacy)
-        (dark-theme
-         ;; 'tsdh-dark
-	 'misterioso)
-        (cur-hour (nth 2 (decode-time))))
+  (let ((cur-hour (nth 2 (decode-time))))
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
-        (load-theme light-theme t)
-      (load-theme dark-theme t))))
+        (progn
+          (load-theme my-light-theme t)
+          (if my-need-fix-bg
+              (custom-set-faces
+               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "PT Mono")))))))
+      (load-theme my-dark-theme t)
+      (if my-need-fix-bg
+          (custom-set-faces
+           '(default ((t (:height 130 :width normal :family "PT Mono")))))))))
+
 
 (my-set-themes)
