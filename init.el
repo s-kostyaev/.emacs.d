@@ -60,6 +60,7 @@
                                   (start-process-shell-command
                                    "dump" "*dump*"
                                    "emacs --batch -q -l ~/.emacs.d/dump.el")
+                                  (package-load-all-descriptors)
                                   (package-activate-all)))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
