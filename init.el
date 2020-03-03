@@ -17,7 +17,6 @@
 
 (eval-and-compile
   (defvar network-security-level)
-  (defvar tls-program)
   (defvar gnutls-verify-error)
   (if (> emacs-major-version 24)
       (progn
