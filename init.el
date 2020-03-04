@@ -56,12 +56,16 @@
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
+                                  (dolist (elt (package--alist))
+                                    (condition-case err
+                                        (package-activate (car elt) t)
+                                      ;; Don't let failure of activation of a package arbitrarily stop
+                                      ;; activation of further packages.
+                                      (error (message "%s" (error-message-string err)))))
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
                                   (start-process-shell-command
                                    "dump" "*dump*"
-                                   "emacs --batch -q -l ~/.emacs.d/dump.el")
-                                  (package-load-all-descriptors)
-                                  (package-activate-all)))
+                                   "emacs --batch -q -l ~/.emacs.d/dump.el")))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
