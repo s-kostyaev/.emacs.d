@@ -69,12 +69,6 @@
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
-(defun my-load-custom-file ()
-  "Load my custom file."
-  (load-file custom-file))
-
-(add-hook 'after-init-hook #'my-load-custom-file)
-
 (setq my-light-theme ;; 'kaolin-valley-light
       'dichromacy
       ;; 'adwaita
@@ -129,14 +123,15 @@
 
 (add-hook 'after-init-hook #'my-set-themes)
 (add-hook 'desktop-after-read-hook #'my-set-themes)
+(with-eval-after-load 'emacs-customizations #'my-set-themes)
 
 (defun my-load-theme ()
   "Load theme."
   (interactive)
   (let ((theme (intern
                 (completing-read "Load custom theme: "
-		                         (mapcar #'symbol-name
-			                             (custom-available-themes))))))
+		                 (mapcar #'symbol-name
+			                 (custom-available-themes))))))
     (mapc #'disable-theme custom-enabled-themes)
     (load-theme theme t nil)))
 
@@ -145,7 +140,7 @@
   (interactive)
   (let ((theme (intern
                 (completing-read "Load custom theme: "
-		                         (cl-delete-if
+		                 (cl-delete-if
                                   (lambda (theme)
                                     (f-ancestor-of?
                                      (getenv "HOME")
@@ -153,9 +148,15 @@
                                                   (custom-theme--load-path)
                                                   '("" "c"))))
                                   (mapcar #'symbol-name
-			                              (custom-available-themes)))))))
+			                  (custom-available-themes)))))))
     (mapc #'disable-theme custom-enabled-themes)
     (load-theme theme t nil)))
+
+(defun my-load-custom-file ()
+  "Load my custom file."
+  (load-file custom-file))
+
+(add-hook 'after-init-hook #'my-load-custom-file)
 
 
 (eval-when-compile
