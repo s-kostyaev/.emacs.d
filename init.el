@@ -489,7 +489,7 @@
 (defvar-local my-go-packages nil)
 (use-package go-mode
   :mode (("\\.go\\'" . go-mode)
-         ("go.mod$" . text-mode))
+         ("go.mod$" . go-dot-mod-mode))
   :functions (my-go-mode-hook go-goto-imports
                               godoc-at-point goimports)
   :defines (company-backends go-tag-args)
