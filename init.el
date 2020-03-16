@@ -1020,6 +1020,9 @@ With prefix-arg prompt for type if available with your AG version."
   :defer t
   :bind ("C-x C-j" . my-magit-find-file-other-frame)
   :bind* ("C-x g" . magit-status)
+  :init
+  (if (eq system-type 'darwin)
+      (setq magit-git-executable "/opt/local/bin/git"))
   :config
   (progn
     (defun my-magit-diff-hook ()
