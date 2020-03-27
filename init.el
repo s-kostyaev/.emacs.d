@@ -96,11 +96,11 @@
           (load-theme my-dark-theme t)
           (if my-need-fix-bg
               (custom-set-faces
-               '(default ((t (:height 130 :width normal :family "PT Mono")))))))
+               '(default ((t (:height 130 :width normal :family "Go Mono")))))))
       (load-theme my-light-theme t)
       (if my-need-fix-bg
           (custom-set-faces
-           '(default ((t (:background "#fdf6e3" :height 130 :width normal :family "PT Mono")))))))))
+           '(default ((t (:background "#fdf6e3" :height 130 :width normal :family "Go Mono")))))))))
 
 (global-set-key (kbd "<f6>") #'my-toggle-themes)
 
@@ -115,11 +115,11 @@
           (load-theme my-light-theme t)
           (if my-need-fix-bg
               (custom-set-faces
-               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "PT Mono")))))))
+               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "Go Mono")))))))
       (load-theme my-dark-theme t)
       (if my-need-fix-bg
           (custom-set-faces
-           '(default ((t (:height 130 :width normal :family "PT Mono")))))))))
+           '(default ((t (:height 130 :width normal :family "Go Mono")))))))))
 
 (add-hook 'after-init-hook #'my-set-themes)
 (add-hook 'desktop-after-read-hook #'my-set-themes)

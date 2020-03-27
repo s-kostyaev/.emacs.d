@@ -64,11 +64,11 @@
           (load-theme my-light-theme t)
           (if my-need-fix-bg
               (custom-set-faces
-               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "PT Mono")))))))
+               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "Go Mono")))))))
       (load-theme my-dark-theme t)
       (if my-need-fix-bg
           (custom-set-faces
-           '(default ((t (:height 130 :width normal :family "PT Mono")))))))))
+           '(default ((t (:height 130 :width normal :family "Go Mono")))))))))
 
 
 (my-set-themes)
