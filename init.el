@@ -500,10 +500,11 @@
 
     (defun my-go-mode-hook ()
       "Setup for go."
-      (setenv "GOROOT"
+      (if (eq system-type 'darwin)
+	  (setenv "GOROOT"
               (s-trim
                (shell-command-to-string
-                "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec")))
+                "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec"))))
       (require 'go-impl)
       (use-package go-direx
         :config
