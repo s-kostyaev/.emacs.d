@@ -502,9 +502,9 @@
       "Setup for go."
       (if (eq system-type 'darwin)
 	  (setenv "GOROOT"
-              (s-trim
-               (shell-command-to-string
-                "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec"))))
+                  (s-trim
+                   (shell-command-to-string
+                    "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec"))))
       (require 'go-impl)
       (use-package go-direx
         :config
@@ -545,6 +545,7 @@
       (setq-local flymake-start-on-save-buffer nil)
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
+      (require 'lsp-go)
       (lsp-deferred)
       (symbol-overlay-mode -1)
 
@@ -1683,6 +1684,9 @@ If the current buffer is not visiting a file, prompt for a file name."
         (puthash l nil ht)
         (push l acc)))
     acc))
+
+(use-package string-inflection
+  :bind ("C-c C-u" . #'string-inflection-all-cycle))
 
 (provide 'init)
 ;;; init.el ends here
