@@ -1690,6 +1690,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   :bind ("C-c C-u" . #'string-inflection-all-cycle))
 
 (add-hook 'rust-mode-hook #'lsp-deferred)
+(setq rust-format-on-save t)
 
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
