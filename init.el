@@ -63,9 +63,10 @@
                                       ;; activation of further packages.
                                       (error (message "%s" (error-message-string err)))))
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
-                                  (start-process-shell-command
-                                   "dump" "*dump*"
-                                   "emacs --batch -q -l ~/.emacs.d/dump.el")))
+                                  (if (eq system-type 'darwin)
+                                      (start-process-shell-command
+                                       "dump" "*dump*"
+                                       "emacs --batch -q -l ~/.emacs.d/dump.el"))))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
