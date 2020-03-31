@@ -1691,5 +1691,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (add-hook 'rust-mode-hook #'lsp-deferred)
 
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
 (provide 'init)
 ;;; init.el ends here
