@@ -1689,5 +1689,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (use-package string-inflection
   :bind ("C-c C-u" . #'string-inflection-all-cycle))
 
+(add-hook 'rust-mode-hook #'lsp-deferred)
+
 (provide 'init)
 ;;; init.el ends here
