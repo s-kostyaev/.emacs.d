@@ -59,6 +59,7 @@
  '(lsp-eldoc-hook '(lsp-hover lsp-signature))
  '(lsp-eldoc-render-all t)
  '(lsp-file-watch-threshold 5000)
+ '(lsp-rust-server 'rust-analyzer)
  '(mac-frame-tabbing nil)
  '(mac-pass-command-to-system nil)
  '(magit-diff-use-overlays nil)
