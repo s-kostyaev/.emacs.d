@@ -7,8 +7,8 @@
 (eval-and-compile
   (if (< emacs-major-version 27)
       (progn
-	    (add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
-	    (require 'early-init))))
+	(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
+	(require 'early-init))))
 
 
 (defvar gnutls-trustfiles)
@@ -1244,6 +1244,7 @@ to the line and column corresponding to that location."
 
 ;;; Ace window
 (use-package ace-window
+  :after markdown-mode
   :bind (("M-p" . ace-window)
          :map markdown-mode-map
          ("M-p" . ace-window))
@@ -1421,7 +1422,55 @@ to the line and column corresponding to that location."
 
 (eval-after-load 'dash '(dash-enable-font-lock))
 
+(use-package rg
+  :after wgrep
+  :config
+  (setq rg-group-result t)
+  (setq rg-hide-command t)
+  (setq rg-show-columns nil)
+  (setq rg-show-header t)
+  (setq rg-custom-type-aliases nil)
+  (setq rg-default-alias-fallback "all")
+
+  (rg-define-search my-grep-vc-or-dir
+    :query ask
+    :format regexp
+    :files "everything"
+    :case-fold-search smart
+    :dir (let ((vc (vc-root-dir)))
+           (if vc
+               vc                         ; search root project dir
+             default-directory))          ; or from the current dir
+    :confirm prefix
+    :flags ("--hidden -g !.git"))
+
+  (defun my-rg-save-search-as-name ()
+    "Save `rg' buffer, naming it after the current search query.
+
+This function is meant to be mapped to a key in `rg-mode-map'."
+    (interactive)
+    (let ((pattern (car rg-pattern-history)))
+      (rg-save-search-as-name (concat "«" pattern "»"))))
+
+  (defun my-next-window (_)
+    (other-window 1))
+
+  (advice-add 'my-grep-vc-or-dir :after 'my-next-window)
+
+  :bind* (("C-c C-s" . my-grep-vc-or-dir)
+          :map rg-mode-map
+          ("f" . next-error-follow-minor-mode)
+          ("s" . my-rg-save-search-as-name)
+          ("n" . next-line)
+          ("p" . previous-line)
+          ("C-n" . next-line)
+          ("C-p" . previous-line)
+          ("M-n" . rg-next-file)
+          ("M-p" . rg-prev-file)))
+
+
 (use-package deadgrep
+  :disabled t
   :bind* (("C-c C-s" . deadgrep))
   :bind (:map deadgrep-mode-map
               ("C-x C-r" . deadgrep-edit-mode)
