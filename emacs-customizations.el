@@ -33,7 +33,7 @@
  '(electric-spacing-double-space-docs nil)
  '(global-aggressive-indent-mode t)
  '(go-packages-function 'go-packages-go-list)
- '(go-tag-args '("-transform" "snakecase"))
+ '(go-tag-args '("-transform" "snakecase") t)
  '(go-test-verbose t)
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
@@ -72,7 +72,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("melpa-stable" . "https://stable.melpa.org/packages/")))
  '(package-selected-packages
-   '(rg cargo rust-playground rust-mode string-inflection prism rainbow-mode poly-markdown gif-screencast keycast fzf helm-fd helm-smex hercules white-sand-theme organic-green-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme reason-mode zenburn-theme magit-libgit solarized-theme use-package flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im deadgrep wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl geiser flymd flx embrace edit-indirect company-quickhelp cask-mode))
+   '(vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism rainbow-mode poly-markdown gif-screencast keycast fzf helm-fd helm-smex hercules white-sand-theme organic-green-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme reason-mode zenburn-theme magit-libgit solarized-theme use-package flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link exec-path-from-shell symbol-overlay composable multiple-cursors helm-make go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im wgrep-helm moe-theme bash-completion lsp-mode pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server ace-jump-helm-line go-tag go-gen-test comment-tags org-mind-map ace-isearch helm-company json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc use-package-chords xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme smex pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl geiser flx embrace edit-indirect company-quickhelp cask-mode))
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values

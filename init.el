@@ -674,10 +674,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
 ;; Show only one active window when opening multiple files at the same time.
 (add-hook 'window-setup-hook #'delete-other-windows)
 
-;; (use-package pkgbuild-mode
-;;   :disabled t
-;;   :functions (pkgbuild-mode)
-;;   :mode ("/PKGBUILD$" . pkgbuild-mode))
+(use-package pkgbuild-mode
+  :if (file-exists-p "/etc/pacman.conf")
+  :functions (pkgbuild-mode)
+  :mode ("/PKGBUILD$" . pkgbuild-mode))
 
 (use-package poly-markdown
   :defer t
@@ -685,6 +685,10 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :mode (("\\.text\\'" . poly-markdown-mode)
          ("\\.md$" . poly-gfm-mode)
          ("\\.markdown$" . poly-markdown-mode)))
+
+(use-package vmd-mode
+  :bind (:map gfm-mode-map
+              ("C-c C-c p" . vmd-mode)))
 
 ;; for over-80-chars line highlightning
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
@@ -1256,14 +1260,6 @@ to the line and column corresponding to that location."
   :init
   (add-hook 'after-init-hook #'which-key-mode))
 
-;;; On the fly markdown preview
-(defvar flymd-browser-open-function)
-(defun my-flymd-browser-function (url)
-  "See URL in firefox for flymd."
-  (let ((browse-url-browser-function 'browse-url-firefox))
-    (browse-url url)))
-(setq flymd-browser-open-function 'my-flymd-browser-function)
-
 ;;; embrace
 (global-set-key (kbd "C-,") #'embrace-commander)
 
@@ -1468,60 +1464,6 @@ This function is meant to be mapped to a key in `rg-mode-map'."
           ("M-n" . rg-next-file)
           ("M-p" . rg-prev-file)))
 
-
-(use-package deadgrep
-  :disabled t
-  :bind* (("C-c C-s" . deadgrep))
-  :bind (:map deadgrep-mode-map
-              ("C-x C-r" . deadgrep-edit-mode)
-              ("C-j" . next-error-no-select)
-              ("f" . next-error-follow-minor-mode)
-              :map deadgrep-edit-mode-map
-              ("C-x C-r" . deadgrep-mode))
-  :config
-  (defun my-deadgrep--start (search-term search-type case)
-    "Start a ripgrep search."
-    (setq deadgrep--spinner (spinner-create 'progress-bar t))
-    (setq deadgrep--running t)
-    (spinner-start deadgrep--spinner)
-    (let* ((command
-            (read-string "command: "
-                         (format "%s %s" deadgrep-executable
-                                 (s-join " "
-                                         (deadgrep--arguments
-                                          search-term search-type case deadgrep--context)))))
-           (process
-            (start-file-process-shell-command
-             (format "rg %s" search-term)
-             (current-buffer)
-             command)))
-      (setq deadgrep--debug-command command)
-      (set-process-filter process #'deadgrep--process-filter)
-      (set-process-sentinel process #'deadgrep--process-sentinel)))
-
-  (defun my-deadgrep-restart ()
-    "Restart deadgrep search with changed command."
-    (interactive)
-    (when (and deadgrep--postpone-start
-               (called-interactively-p 'interactive))
-      (setq deadgrep--postpone-start nil))
-
-    (deadgrep--stop-and-reset)
-
-    (let ((start-point (point))
-          (inhibit-read-only t))
-      (deadgrep--write-heading)
-      ;; If the point was in the heading, ensure that we restore its
-      ;; position.
-      (goto-char (min (point-max) start-point))
-
-      (if deadgrep--postpone-start
-          (deadgrep--write-postponed)
-        (my-deadgrep--start
-         deadgrep--search-term
-         deadgrep--search-type
-         deadgrep--search-case))))
-  (define-key deadgrep-mode-map (kbd "G") 'my-deadgrep-restart))
 
 (use-package counsel
   :disabled t
