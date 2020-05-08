@@ -687,8 +687,42 @@ the end of the line, then comment current line.  Replaces default behaviour of
          ("\\.markdown$" . poly-markdown-mode)))
 
 (use-package vmd-mode
-  :bind (:map gfm-mode-map
-              ("C-c C-c p" . vmd-mode)))
+  :after markdown-mode
+  :bind (:map markdown-mode-command-map
+              ("p" . vmd-mode))
+  :init
+  (setq vmd-mode--emojis-file (expand-file-name "~/.emacs.d/.github-emojis"))
+
+  (if (not (file-exists-p vmd-mode--emojis-file))
+      (vmd-mode--update-emojis-file))
+
+  (setq vmd-mode-github-emojis-list
+        (and (file-exists-p vmd-mode--emojis-file)
+             (with-temp-buffer
+               (insert-file-contents vmd-mode--emojis-file)
+               (split-string (buffer-string) "\n" t))))
+  
+  (defun my-github-emojis-complete-at-point ()
+    "My function for complete github emoji at point."
+    (let ((start (or (car (bounds-of-thing-at-point 'symbol)) (point))))
+      (if (char-equal (char-before start) ?:)
+          (list start
+                (point)
+                vmd-mode-github-emojis-list
+                :exit-function (lambda (_candidate _status)
+                                 (insert ":")))
+        nil)))
+
+  (defun my-enable-emojis-completion ()
+    "Enable completion github emojis."
+    (cl-pushnew 'my-github-emojis-complete-at-point completion-at-point-functions))
+
+  (defun my-bind-md-preview-key ()
+    "Rebind markdown preview."
+    (define-key markdown-mode-command-map (kbd "p") 'vmd-mode))
+
+  (add-hook 'markdown-mode-hook #'my-enable-emojis-completion)
+  (add-hook 'markdown-mode-hook #'my-bind-md-preview-key))
 
 ;; for over-80-chars line highlightning
 ;; (add-hook 'prog-mode-hook 'column-enforce-mode)
@@ -1569,6 +1603,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 ;; helm charts support
 (require 'company-dabbrev-code)
 (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
+(add-to-list 'company-dabbrev-code-modes 'protobuf-mode)
 (add-hook 'yaml-mode-hook #'highlight-indentation-mode)
 (add-hook 'yaml-mode-hook #'highlight-indentation-current-column-mode)
 (global-smart-shift-mode 1)
