@@ -63,6 +63,7 @@
                                       ;; activation of further packages.
                                       (error (message "%s" (error-message-string err)))))
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
+                                  (my-recompile-installed-packages)
                                   (if (eq system-type 'darwin)
                                       (start-process-shell-command
                                        "dump" "*dump*"
@@ -1720,6 +1721,22 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
+(defun my-get-env-var-from-shell (variable)
+  "Get `VARIABLE' from shell and set it inside Emacs."
+  (setenv variable
+	  (string-trim
+	   (shell-command-to-string
+	    (format "zsh -c 'source ~/.profile; echo $%s'" variable)))))
+
+(defun my-recompile-installed-packages ()
+  "Native recompile installed packages."
+  (interactive)
+  (if (>= emacs-major-version 28)
+      (progn (my-get-env-var-from-shell "LD_LIBRARY_PATH")
+             (my-get-env-var-from-shell "LIBRARY_PATH")
+             (native-compile-async "~/.emacs.d/elpa" t))))
+
 
 (provide 'init)
 ;;; init.el ends here
