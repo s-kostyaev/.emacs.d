@@ -517,7 +517,7 @@
         (defun my-direx-hook()
           "My hook for direx."
           (interactive)
-          (local-set-key (kbd "s") #'helm-occur)
+          (local-set-key (kbd "s") #'swiper-helm)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
@@ -1452,7 +1452,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 (use-package ace-isearch
   :bind (:map isearch-mode-map
               ("M-n" . my-isearch-next)
-              ("M-i" . helm-occur-from-isearch))
+              ("M-i" . swiper-helm-from-isearch))
   :init
   (defun my-isearch-next ()
     "Isearch symbol at point or next isearch history item."
@@ -1461,8 +1461,11 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (global-ace-isearch-mode +1)
   :config
   (setq ace-isearch-function 'avy-goto-word-1)
-  (setq ace-isearch-function-from-isearch 'helm-occur-from-isearch)
+  (setq ace-isearch-function-from-isearch 'swiper-helm-from-isearch)
   (setq ace-isearch-use-jump nil))
+
+(use-package swiper-helm
+  :functions (swiper-helm-from-isearch))
 
 ;;; plantuml
 ;; (org-babel-do-load-languages
