@@ -1662,9 +1662,13 @@ If the current buffer is not visiting a file, prompt for a file name."
              (my-get-env-var-from-shell "LIBRARY_PATH")
              (native-compile-async "~/.emacs.d/elpa" t))))
 
-(require 'tree-sitter-langs)
+(defun my-enable-tree-sitter ()
+  "Enable tree-sitter."
+  (require 'tree-sitter-langs)
+  (tree-sitter-hl-mode))
+
 (global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)
+(add-hook 'tree-sitter-after-on-hook #'my-enable-tree-sitter)
 
 (provide 'init)
 ;;; init.el ends here
