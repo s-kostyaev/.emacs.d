@@ -72,18 +72,19 @@
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
 (setq my-light-theme ;; 'kaolin-valley-light
-      'dichromacy
+      ;; 'dichromacy
       ;; 'adwaita
       ;; 'spacemacs-light
       ;; 'tsdh-light
-      ;; 'ample-light
+      'ample-light
       ;; 'moe-light
       ;; 'solarized-light
-      my-dark-theme 'misterioso
+      my-dark-theme ;; 'misterioso
       ;; 'zenburn
       ;; 'spacemacs-dark
+      'chocolate
       ;; 'monokai
-      my-need-fix-bg t)
+      my-need-fix-bg nil)
 
 (defun my-toggle-themes ()
   "Toggle light and dark themes."
