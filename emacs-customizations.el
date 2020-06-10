@@ -22,7 +22,7 @@
  '(browse-url-browser-function 'browse-url-default-browser)
  '(byte-compile-verbose nil)
  '(byte-compile-warnings
-   '(redefine callargs obsolete interactive-only make-local mapcar constants suspicious lexical))
+   '(redefine callargs interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
  '(company-backends
    '(company-capf company-cmake company-bbdb company-files
