@@ -1527,11 +1527,19 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (setq helm-codesearch-global-csearchindex (concat (getenv "HOME") "/.csearchindex")))
 
 ;; helm charts support
+(defun my-disable-auto-fill ()
+  "Disable `auto-fill-mode'."
+  (auto-fill-mode -1))
+(defun my-enable-prism ()
+  "Enable `prism-mode'."
+  (prism-mode 1))
 (require 'company-dabbrev-code)
 (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
 (add-to-list 'company-dabbrev-code-modes 'protobuf-mode)
 (add-hook 'yaml-mode-hook #'highlight-indentation-mode)
 (add-hook 'yaml-mode-hook #'highlight-indentation-current-column-mode)
+(add-hook 'yaml-mode-hook #'my-disable-auto-fill)
+(add-hook 'yaml-mode-hook #'my-enable-prism)
 (global-smart-shift-mode 1)
 (key-chord-define-global "<<" 'smart-shift-left)
 (key-chord-define-global ">>" 'smart-shift-right)
