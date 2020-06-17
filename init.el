@@ -532,7 +532,7 @@
                (let ((default-directory (project-root (project-current)))
                      (current-prefix-arg nil))
                  (go-test-current-project)))
-              (t (go-test-current-project)))
+              (_ (go-test-current-project)))
           (go-test-current-project)))
       (setq go-tag-args (list "-transform" "snakecase"))
       (add-hook 'before-save-hook #'gofmt-before-save)
