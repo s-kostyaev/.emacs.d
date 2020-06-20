@@ -1688,5 +1688,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (global-tree-sitter-mode)
 (add-hook 'tree-sitter-after-on-hook #'my-enable-tree-sitter)
 
+(global-set-key (kbd "C-c C-e") #'comby)
+
 (provide 'init)
 ;;; init.el ends here
