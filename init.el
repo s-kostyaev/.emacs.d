@@ -563,6 +563,30 @@
       (lsp-deferred)
       (symbol-overlay-mode -1)
 
+      (defun my-go-extract-function (beg end)
+        (interactive "r")
+        (let ((default-directory (project-root (project-current)))
+              (sel (buffer-substring-no-properties beg end))
+              (name (read-string "function name: "))
+              (comby-show-changes nil))
+          (comby-run (concat "{:[before]" sel ":[after]}")
+                     (concat "{:[before]\n" name "()\n:[after]}\n\n"
+                             "func " name "() {\n" sel "\n}")
+                     ".go"
+                     :changed-file-func (lambda (file)
+                                          (set-process-sentinel
+                                           (start-process-shell-command
+                                            "goimports" "*goimports*"
+                                            (concat "goimports -w " file))
+                                           (lambda (_ _)
+                                             (let ((file-buf (cl-find-if (lambda (buf)
+                                                                           (equal (expand-file-name (buffer-file-name))
+                                                                                  (expand-file-name file)))
+                                                                         (buffer-list))))
+                                               (if file-buf
+                                                   (with-current-buffer file-buf
+                                                     (revert-buffer nil t))))))))))
+
       (defun my-go-packages-go-list ()
         my-go-packages)
       (setq go-packages-function 'my-go-packages-go-list)
