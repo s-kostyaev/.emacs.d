@@ -473,6 +473,7 @@
 
 ;; aggressive-indent-mode breaks interaction with lsp-server
 (add-hook 'lsp-mode-hook #'my-disable-aggressive-indent)
+(setq lsp-use-plists t)
 
 (defun my-try-go-mod (dir)
   "Find go project root for DIR."
@@ -548,7 +549,7 @@
       (require 'lsp-mode)
       (lsp-register-custom-settings '(("gopls.completeUnimported" t)))
       (lsp-register-custom-settings '(("gopls.staticcheck" t)))
-      (lsp-register-custom-settings '(("gopls.experimentalDisabledAnalyses" ["ST1000"])))
+      ;; (lsp-register-custom-settings '(("gopls.experimentalDisabledAnalyses" ["ST1000"])))
       ;; (lsp-deferred)
       ;; (require 'yasnippet)
       ;; (eglot-ensure)
