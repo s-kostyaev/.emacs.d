@@ -1621,19 +1621,23 @@ If the current buffer is not visiting a file, prompt for a file name."
   :bind (("<f7>" . gif-screencast-toggle-pause)
          ("<f8>" . gif-screencast-start-or-stop))
   :config
-  (setq gif-screencast-args '("-x" "-o")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
-  (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
-  (setq gif-screencast-capture-format "ppm") ;; Optional: Required to crop captured images.
-  ;; HiDPI display patch
-  (defun my-fix-screencast-hidpi (oldfun &rest r)
-    (apply #'format "%dx%d+%d+%d"
-           (mapcar
-            (lambda (x) (* 2 (string-to-number x)))
-            (split-string (apply oldfun r) "[+x]"))))
-  (advice-add
-   #'gif-screencast--cropping-region
-   :around
-   #'my-fix-screencast-hidpi))
+  (if (eq system-type 'darwin)
+      (progn  (setq gif-screencast-args '("-x" "-o")) ;; To shut up the shutter sound of `screencapture' (see `gif-screencast-command').
+              (setq gif-screencast-cropping-program "mogrify") ;; Optional: Used to crop the capture to the Emacs frame.
+              (setq gif-screencast-capture-format "ppm") ;; Optional: Required to crop captured images.
+              ;; HiDPI display patch
+              (defun my-fix-screencast-hidpi (oldfun &rest r)
+                (apply #'format "%dx%d+%d+%d"
+                       (mapcar
+                        (lambda (x) (* 2 (string-to-number x)))
+                        (split-string (apply oldfun r) "[+x]"))))
+              (advice-add
+               #'gif-screencast--cropping-region
+               :around
+               #'my-fix-screencast-hidpi))
+    (setq gif-screencast-program "gnome-screenshot"
+          gif-screencast-args '("-w" "-f")
+          gif-screencast-capture-format "png")))
 
 (add-hook 'c-mode-hook #'lsp-deferred)
 (add-hook 'c++-mode-hook #'lsp-deferred)
