@@ -563,6 +563,20 @@
       (lsp-deferred)
       (symbol-overlay-mode -1)
 
+      (defun my-comby-go-after-file-change (file)
+        (set-process-sentinel
+         (start-process-shell-command
+          "goimports" "*goimports*"
+          (concat "goimports -w " file))
+         (lambda (_1 _2)
+           (let ((file-buf (cl-find-if (lambda (buf)
+                                         (equal (expand-file-name (buffer-file-name buf))
+                                                (expand-file-name file)))
+                                       (buffer-list))))
+             (if file-buf
+                 (with-current-buffer file-buf
+                   (revert-buffer nil t)))))))
+
       (defun my-go-extract-function (beg end)
         (interactive "r")
         (let ((default-directory (project-root (project-current)))
@@ -573,19 +587,19 @@
                      (concat "{:[before]\n" name "()\n:[after]}\n\n"
                              "func " name "() {\n" sel "\n}")
                      ".go"
-                     :changed-file-func (lambda (file)
-                                          (set-process-sentinel
-                                           (start-process-shell-command
-                                            "goimports" "*goimports*"
-                                            (concat "goimports -w " file))
-                                           (lambda (_ _)
-                                             (let ((file-buf (cl-find-if (lambda (buf)
-                                                                           (equal (expand-file-name (buffer-file-name))
-                                                                                  (expand-file-name file)))
-                                                                         (buffer-list))))
-                                               (if file-buf
-                                                   (with-current-buffer file-buf
-                                                     (revert-buffer nil t))))))))))
+                     #'my-comby-go-after-file-change)))
+
+      (defun my-go-extract-method (beg end)
+        (interactive "r")
+        (let ((default-directory (project-root (project-current)))
+              (sel (buffer-substring-no-properties beg end))
+              (name (read-string "method name: "))
+              (comby-show-changes nil))
+          (comby-run (concat "func (:[name] :[type]) :[definition] {:[before]" sel ":[after]}")
+                     (concat "func (:[name] :[type]) :[definition] {:[before]\n:[name]." name "()\n:[after]}\n\n"
+                             "func (:[name] :[type]) " name "() {\n" sel "\n}")
+                     ".go"
+                     #'my-comby-go-after-file-change)))
 
       (defun my-go-packages-go-list ()
         my-go-packages)
