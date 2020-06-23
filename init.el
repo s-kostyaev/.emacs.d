@@ -563,6 +563,8 @@
       (lsp-deferred)
       (symbol-overlay-mode -1)
 
+      (require 'comby)
+
       (defun my-comby-go-after-file-change (file)
         (set-process-sentinel
          (start-process-shell-command
@@ -579,7 +581,7 @@
 
       (defun my-go-extract-function (beg end)
         (interactive "r")
-        (let ((default-directory (project-root (project-current)))
+        (let ((file (file-name-nondirectory (buffer-file-name)))
               (sel (buffer-substring-no-properties beg end))
               (name (read-string "function name: "))
               (comby-show-changes nil))
@@ -587,12 +589,12 @@
           (comby-run (concat "{:[before]" sel ":[after]}")
                      (concat "{:[before]\n" name "()\n:[after]}\n\n"
                              "func " name "() {\n" sel "\n}")
-                     ".go"
+                     file
                      #'my-comby-go-after-file-change)))
 
       (defun my-go-extract-method (beg end)
         (interactive "r")
-        (let ((default-directory (project-root (project-current)))
+        (let ((file (file-name-nondirectory (buffer-file-name)))
               (sel (buffer-substring-no-properties beg end))
               (name (read-string "method name: "))
               (comby-show-changes nil))
@@ -600,7 +602,7 @@
           (comby-run (concat "func (:[name] :[type]) :[[method]](:[?args]) :[ret~[\\w\\s,()]*]{:[before]" sel ":[after]}")
                      (concat "func (:[name] :[type]) :[[method]](:[?args]) :[ret] {:[before]\n:[name]." name "()\n:[after]}\n\n"
                              "func (:[name] :[type]) " name "() {\n" sel "\n}")
-                     ".go"
+                     file
                      #'my-comby-go-after-file-change)))
 
       (defun my-go-packages-go-list ()
