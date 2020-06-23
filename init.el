@@ -583,6 +583,7 @@
               (sel (buffer-substring-no-properties beg end))
               (name (read-string "function name: "))
               (comby-show-changes nil))
+          (deactivate-mark)
           (comby-run (concat "{:[before]" sel ":[after]}")
                      (concat "{:[before]\n" name "()\n:[after]}\n\n"
                              "func " name "() {\n" sel "\n}")
@@ -595,8 +596,9 @@
               (sel (buffer-substring-no-properties beg end))
               (name (read-string "method name: "))
               (comby-show-changes nil))
-          (comby-run (concat "func (:[name] :[type]) :[definition] {:[before]" sel ":[after]}")
-                     (concat "func (:[name] :[type]) :[definition] {:[before]\n:[name]." name "()\n:[after]}\n\n"
+          (deactivate-mark)
+          (comby-run (concat "func (:[name] :[type]) :[[method]](:[?args]) :[ret~[\\w\\s,()]*]{:[before]" sel ":[after]}")
+                     (concat "func (:[name] :[type]) :[[method]](:[?args]) :[ret] {:[before]\n:[name]." name "()\n:[after]}\n\n"
                              "func (:[name] :[type]) " name "() {\n" sel "\n}")
                      ".go"
                      #'my-comby-go-after-file-change)))
