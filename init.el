@@ -583,8 +583,7 @@
         (interactive "r")
         (let ((file (file-name-nondirectory (buffer-file-name)))
               (sel (buffer-substring-no-properties beg end))
-              (name (read-string "function name: "))
-              (comby-show-changes nil))
+              (name (read-string "function name: ")))
           (deactivate-mark)
           (comby-run (concat "{:[before]" sel ":[after]}")
                      (concat "{:[before]\n" name "()\n:[after]}\n\n"
@@ -596,8 +595,7 @@
         (interactive "r")
         (let ((file (file-name-nondirectory (buffer-file-name)))
               (sel (buffer-substring-no-properties beg end))
-              (name (read-string "method name: "))
-              (comby-show-changes nil))
+              (name (read-string "method name: ")))
           (deactivate-mark)
           (comby-run (concat "func (:[name] :[type]) :[[method]](:[?args]) :[ret~[\\w\\s,()]*]{:[before]" sel ":[after]}")
                      (concat "func (:[name] :[type]) :[[method]](:[?args]) :[ret] {:[before]\n:[name]." name "()\n:[after]}\n\n"
