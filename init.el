@@ -1735,5 +1735,25 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (global-set-key (kbd "C-c C-e") #'comby)
 
+(defun my-suppress-messages (old-fun &rest args)
+  (cl-flet ((silence (&rest _args1) (ignore)))
+    (advice-add 'message :around #'silence)
+    (advice-add 'make-progress-reporter :around #'silence)
+    (advice-add 'progress-reporter-done :around #'silence)
+    (advice-add 'progress-reporter-update :around #'silence)
+    (advice-add 'progress-reporter-do-update :around #'silence)
+    (advice-add 'progress-reporter-force-update :around #'silence)
+    (unwind-protect
+        (apply old-fun args)
+      (advice-remove 'message #'silence)
+      (advice-remove 'make-progress-reporter #'silence)
+      (advice-remove 'progress-reporter-done #'silence)
+      (advice-remove 'progress-reporter-update #'silence)
+      (advice-remove 'progress-reporter-do-update #'silence)
+      (advice-remove 'progress-reporter-force-update #'silence))))
+
+(advice-add 'indent-region :around #'my-suppress-messages)
+
+
 (provide 'init)
 ;;; init.el ends here
