@@ -1756,6 +1756,35 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (advice-add 'indent-region :around #'my-suppress-messages)
 
+(defun my-vterm-module-compile ()
+  "Compile vterm-module."
+  (interactive)
+  (when (vterm-module--cmake-is-available)
+    (let* ((library-path (locate-library "vterm"))
+           (vterm-directory
+            (shell-quote-argument
+             (if (string= (file-name-extension library-path) "eln")
+                 (expand-file-name (concat
+                                    (directory-file-name
+                                     (file-name-directory library-path))
+                                    "/.."))
+               (file-name-directory library-path))))
+           (make-commands
+            (concat
+             "cd " vterm-directory "; \
+             mkdir -p build; \
+             cd build; \
+             cmake "
+             vterm-module-cmake-args
+             " ..; \
+             make; \
+             cd -"))
+           (buffer (get-buffer-create vterm-install-buffer-name)))
+      (pop-to-buffer buffer)
+      (if (zerop (call-process "sh" nil buffer t "-c" make-commands))
+          (message "Compilation of `emacs-libvterm' module succeeded")
+        (error "Compilation of `emacs-libvterm' module failed!")))))
+
 
 (provide 'init)
 ;;; init.el ends here
