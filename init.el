@@ -76,9 +76,9 @@
       ;; 'adwaita
       ;; 'spacemacs-light
       ;; 'tsdh-light
-      'ample-light
+      ;; 'ample-light
       ;; 'moe-light
-      ;; 'solarized-light
+      'solarized-light
       my-dark-theme ;; 'misterioso
       ;; 'zenburn
       ;; 'spacemacs-dark
