@@ -1653,7 +1653,9 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (add-hook 'company-mode-hook #'company-prescient-mode)
 
+(add-to-list 'dtrt-indent-hook-mapping-list '(protobuf-mode c/c++/java c-basic-offset))
 (add-hook 'prog-mode-hook #'dtrt-indent-mode)
+(add-hook 'protobuf-mode-hook #'dtrt-indent-mode)
 
 ;;; Screencasts
 
