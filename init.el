@@ -1579,7 +1579,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   :init
   (require 'orderless)
   :custom
-  (completion-styles '(orderless-initialism orderless-flex partial-completion substring flex))
+  (completion-styles '(orderless))
   (completion-category-overrides '((file (styles basic substring))))
   (read-file-name-completion-ignore-case t)
   (read-buffer-completion-ignore-case t)
@@ -1702,6 +1702,8 @@ If the current buffer is not visiting a file, prompt for a file name."
   (setq go-translate-target-language "ru")
   (setq go-translate-local-language "en")
   (setq go-translate-extra-directions '(("en" . "ru") ("de" . "ru") ("ru" . "en") ("ru" . "de"))))
+
+(amx-mode 1)
 
 (provide 'init)
 ;;; init.el ends here
