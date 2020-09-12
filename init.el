@@ -55,6 +55,18 @@
 (eval-and-compile
   (setq use-package-verbose (not (bound-and-true-p byte-compile-current-file))))
 
+;; (defvar lsp-use-plists)
+;; (setq lsp-use-plists t)
+
+
+;; (defun my-recompile-installed-packages ()
+;;   "Native recompile installed packages."
+;;   (interactive)
+;;   (if (>= emacs-major-version 28)
+;;       (progn (my-get-env-var-from-shell "LD_LIBRARY_PATH")
+;;              (my-get-env-var-from-shell "LIBRARY_PATH")
+;;              (native-compile-async "~/.emacs.d/elpa" t))))
+
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
                                   (dolist (elt (package--alist))
                                     (condition-case err
@@ -63,7 +75,7 @@
                                       ;; activation of further packages.
                                       (error (message "%s" (error-message-string err)))))
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
-                                  (my-recompile-installed-packages)
+                                  ;; (my-recompile-installed-packages)
                                   (if (eq system-type 'darwin)
                                       (start-process-shell-command
                                        "dump" "*dump*"
@@ -78,12 +90,14 @@
       ;; 'tsdh-light
       ;; 'ample-light
       ;; 'moe-light
-      'solarized-light
+      ;; 'solarized-light
+      'modus-operandi
       my-dark-theme ;; 'misterioso
       ;; 'zenburn
       ;; 'spacemacs-dark
-      'chocolate
+      ;; 'chocolate
       ;; 'monokai
+      'modus-vivendi
       my-need-fix-bg nil)
 
 (defun my-toggle-themes ()
@@ -473,7 +487,6 @@
 
 ;; aggressive-indent-mode breaks interaction with lsp-server
 (add-hook 'lsp-mode-hook #'my-disable-aggressive-indent)
-(setq lsp-use-plists t)
 
 (defun my-try-go-mod (dir)
   "Find go project root for DIR."
@@ -487,7 +500,7 @@
     (when dir
       (cons 'transient dir))))
 
-(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin")))
+(setq exec-path (append exec-path '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin" "~/.local/bin")))
 (require 's)
 (setenv "PATH" (s-join ":" exec-path))
 (defvar-local my-go-packages nil)
@@ -519,7 +532,7 @@
         (defun my-direx-hook()
           "My hook for direx."
           (interactive)
-          (local-set-key (kbd "s") #'swiper-helm)
+          (local-set-key (kbd "s") #'isearch-forward)
           (local-set-key (kbd "q") (lambda () (interactive)(kill-buffer (buffer-name))))
           (advice-add 'direx:find-item :after 'my-kill-prev-buf))
         (add-hook 'direx:direx-mode-hook 'my-direx-hook))
@@ -929,131 +942,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 (use-package swiper
   :disabled t
   :defer t)
-
-(use-package helm-files
-  :functions (helm-find-files-up-one-level))
-
-(use-package helm
-  :defines (helm-grep-ag-command
-            helm-read-file-map
-            helm-find-files-map)
-  :functions (helm-ido-like-higher-gc
-              helm-ido-like-lower-gc
-              helm-ido-like-find-files-navigate-forward
-              helm-ido-like-load-file-nav)
-  :bind*
-  (("C-x l" . helm-locate)
-   ("C-x b" . helm-mini)
-   ;; ("C-c C-s" . my-helm-rg-repo)
-   )
-  :bind
-  (("C-x C-f" . helm-find-files)
-   ("M-x" . helm-M-x)
-   ("M-y". helm-show-kill-ring)
-   :map helm-map
-   ([tab] . helm-select-action))
-  :init
-  (progn
-    (setq helm-source-grep (helm-build-dummy-source "init_grep" :follow 1))
-    (add-hook 'helm-before-initialize-hook
-              (lambda () (helm-attrset 'follow 1 helm-source-grep))))
-  :config
-  (use-package ace-jump-helm-line
-    :bind
-    (:map helm-map
-          ("C-'" . ace-jump-helm-line)))
-  (require 'helm-config)
-  (helm-mode +1)
-  (defvar helm-ido-like-user-gc-setting nil)
-
-  (defun helm-ido-like-higher-gc ()
-    (setq helm-ido-like-user-gc-setting gc-cons-threshold)
-    (setq gc-cons-threshold most-positive-fixnum))
-
-  (defun helm-ido-like-lower-gc ()
-    (setq gc-cons-threshold helm-ido-like-user-gc-setting))
-
-  (defun helm-ido-like-helm-make-source (f &rest args)
-    (let ((source-type (cadr args)))
-      (unless (or (memq source-type '(helm-source-async helm-source-ffiles helm-grep-ag-class helm-grep-class helm-mac-spotlight-source helm-moccur-class))
-                  (eq (plist-get args :filtered-candidate-transformer)
-                      'helm-ff-sort-candidates)
-                  (eq (plist-get args :persistent-action)
-                      'helm-find-files-persistent-action))
-        (nconc args '(:fuzzy-match t))))
-    (apply f args))
-
-  (defun helm-ido-like-load-fuzzy-enhancements ()
-    (add-hook 'minibuffer-setup-hook #'helm-ido-like-higher-gc)
-    (add-hook 'minibuffer-exit-hook #'helm-ido-like-lower-gc)
-    (advice-add 'helm-make-source :around 'helm-ido-like-helm-make-source))
-  
-  (setq helm-grep-ag-command "rg --color=always --smart-case --no-heading --line-number -M 170 --max-columns-preview %s %s %s")
-  (defun helm-ido-like-find-files-up-one-level-maybe ()
-    (interactive)
-    (if (looking-back "/" 1)
-        (helm-find-files-up-one-level 1)
-      (delete-char -1)))
-
-  (defun helm-ido-like-load-file-nav ()
-    (with-eval-after-load 'helm-files
-      (define-key helm-read-file-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)
-      (define-key helm-find-files-map (kbd "<backspace>") 'helm-ido-like-find-files-up-one-level-maybe)))
-
-  (defun my--helm-do-grep-ag-repo (arg)
-    "My grepping implementation."
-    (message "helm-grep-ag-pipe-cmd-switches: %s" helm-grep-ag-pipe-cmd-switches)
-    (require 'helm-files)
-    (helm-grep-ag (expand-file-name (if (vc-root-dir)
-                                        (vc-root-dir)
-                                      default-directory)) arg))
-
-  (defun my--helm-do-grep-ag-project (arg)
-    "My grepping implementation."
-    (message "helm-grep-ag-pipe-cmd-switches: %s" helm-grep-ag-pipe-cmd-switches)
-    (require 'helm-files)
-    (helm-grep-ag (expand-file-name (if (project-current)
-                                        (car (project-roots (project-current)))
-                                      default-directory)) arg))
-
-
-  (defun my-helm-rg-repo (arg)
-    "Preconfigured helm for grepping with AG in `default-directory'.
-With prefix-arg prompt for type if available with your AG version."
-    (interactive "P")
-    (if arg
-        (progn
-          (require 's)
-          (unwind-protect
-              (progn
-                (setq
-                 helm-grep-ag-command (s-concat helm-grep-ag-command " -u"))
-                (my--helm-do-grep-ag-repo arg))
-            (setq
-             helm-grep-ag-command (s-chop-suffix " -u" helm-grep-ag-command))))
-      (my--helm-do-grep-ag-repo arg)))
-
-  (defun my-helm-rg-project (arg)
-    "Preconfigured helm for grepping with AG in `default-directory'.
-With prefix-arg prompt for type if available with your AG version."
-    (interactive "P")
-    (if arg
-        (progn
-          (require 's)
-          (unwind-protect
-              (progn
-                (setq
-                 helm-grep-ag-command (s-concat helm-grep-ag-command " -u"))
-                (my--helm-do-grep-ag-project arg))
-            (setq
-             helm-grep-ag-command (s-chop-suffix " -u" helm-grep-ag-command))))
-      (my--helm-do-grep-ag-project arg)))
-
-  (helm-ido-like-load-fuzzy-enhancements)
-  (helm-ido-like-load-file-nav))
-
-(use-package helm-fd
-  :bind* ("C-x C-p" . helm-fd-project))
 
 (use-package fzf
   :bind* ("C-c C-f" . my-fzf-project)
@@ -1480,16 +1368,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
          ("M-i" . swiper-from-isearch))
   :bind*
   (("C-x l" . counsel-locate))
-  :functions (swiper-from-isearch)
   :config
-  (defun swiper-from-isearch ()
-    "Invoke `swiper' from isearch."
-    (interactive)
-    (let ((query (if isearch-regexp
-                     isearch-string
-                   (regexp-quote isearch-string))))
-      (isearch-exit)
-      (counsel-grep-or-swiper query)))
   (defun my-counsel-git-grep ()
     "My git grep."
     (interactive)
@@ -1501,11 +1380,31 @@ This function is meant to be mapped to a key in `rg-mode-map'."
          ""))))
   (setq ivy-height 20))
 
+(defun my-icomplete-yank-kill-ring ()
+  "Insert the selected `kill-ring' item directly at point."
+  (interactive)
+  (let ((icomplete-separator
+         (concat "\n" (propertize "..................." 'face 'shadow) "\n ")))
+    (insert
+     (completing-read "" kill-ring nil t))))
+
+(global-set-key (kbd "M-y") 'my-icomplete-yank-kill-ring)
+
+
 (use-package ace-isearch
+  :disabled t
   :bind (:map isearch-mode-map
               ("M-n" . my-isearch-next)
-              ("M-i" . swiper-helm-from-isearch))
+              ("M-i" . swiper-from-isearch))
   :init
+  (defun swiper-from-isearch ()
+    "Invoke `swiper' from isearch."
+    (interactive)
+    (let ((query (if isearch-regexp
+                     isearch-string
+                   (regexp-quote isearch-string))))
+      (isearch-exit)
+      (swiper query)))
   (defun my-isearch-next ()
     "Isearch symbol at point or next isearch history item."
     (interactive)
@@ -1513,11 +1412,8 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (global-ace-isearch-mode +1)
   :config
   (setq ace-isearch-function 'avy-goto-word-1)
-  (setq ace-isearch-function-from-isearch 'swiper-helm-from-isearch)
+  (setq ace-isearch-function-from-isearch 'swiper-from-isearch)
   (setq ace-isearch-use-jump nil))
-
-(use-package swiper-helm
-  :functions (swiper-helm-from-isearch))
 
 ;;; plantuml
 ;; (org-babel-do-load-languages
@@ -1568,14 +1464,6 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (set-window-margins (get-buffer-window) 20 20)  ;; increases size of margins
   (eww-reload 'local))
 (add-hook 'eww-after-render-hook #'eww-more-readable)
-
-(use-package helm-codesearch
-  :disabled t
-  :bind (("C-c h f" . helm-codesearch-find-file)
-         ("C-c h s" . helm-codesearch-find-pattern)
-         ("C-c h c" . helm-codesearch-create-csearchindex))
-  :config
-  (setq helm-codesearch-global-csearchindex (concat (getenv "HOME") "/.csearchindex")))
 
 ;; helm charts support
 (defun my-disable-auto-fill ()
@@ -1686,8 +1574,31 @@ If the current buffer is not visiting a file, prompt for a file name."
 (add-hook 'c-mode-hook #'lsp-deferred)
 (add-hook 'c++-mode-hook #'lsp-deferred)
 
-(setq completion-styles `(basic partial-completion emacs22 initials
-                                ,(if (version<= emacs-version "27.0") 'helm-flex 'flex)))
+(use-package icomplete-vertical
+  :demand t
+  :init
+  (require 'orderless)
+  :custom
+  (completion-styles '(orderless-initialism orderless-flex partial-completion substring flex))
+  (completion-category-overrides '((file (styles basic substring))))
+  (read-file-name-completion-ignore-case t)
+  (read-buffer-completion-ignore-case t)
+  (completion-ignore-case t)
+  :config
+  (icomplete-mode)
+  (icomplete-vertical-mode)
+  :bind (:map icomplete-minibuffer-map
+              ("<down>" . icomplete-forward-completions)
+              ("C-n" . icomplete-forward-completions)
+              ("<up>" . icomplete-backward-completions)
+              ("C-p" . icomplete-backward-completions)
+              ("C-v" . icomplete-vertical-toggle)
+              ("<backspace>" . icomplete-fido-backward-updir)
+              ("C-j" . icomplete-force-complete)
+              ("C-M-j". exit-minibuffer)
+              ("<RET>" . icomplete-force-complete-and-exit)))
+
+;; (setq completion-styles '(basic partial-completion emacs22 initials 'flex))
 (setq completion-ignore-case t)
 (setq yas-inhibit-overlay-modification-protection t)
 
@@ -1720,14 +1631,6 @@ If the current buffer is not visiting a file, prompt for a file name."
 	  (string-trim
 	   (shell-command-to-string
 	    (format "zsh -c 'source ~/.profile; echo $%s'" variable)))))
-
-(defun my-recompile-installed-packages ()
-  "Native recompile installed packages."
-  (interactive)
-  (if (>= emacs-major-version 28)
-      (progn (my-get-env-var-from-shell "LD_LIBRARY_PATH")
-             (my-get-env-var-from-shell "LIBRARY_PATH")
-             (native-compile-async "~/.emacs.d/elpa" t))))
 
 (defun my-enable-tree-sitter ()
   "Enable tree-sitter."
@@ -1787,6 +1690,18 @@ If the current buffer is not visiting a file, prompt for a file name."
           (message "Compilation of `emacs-libvterm' module succeeded")
         (error "Compilation of `emacs-libvterm' module failed!")))))
 
+(use-package lsp-pyright
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))
+
+(use-package go-translate
+  :bind (("C-c t" . go-translate)
+         ("C-c T" . go-translate-popup))
+  :config
+  (setq go-translate-target-language "ru")
+  (setq go-translate-local-language "en")
+  (setq go-translate-extra-directions '(("en" . "ru") ("de" . "ru") ("ru" . "en") ("ru" . "de"))))
 
 (provide 'init)
 ;;; init.el ends here
