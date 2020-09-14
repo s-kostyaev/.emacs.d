@@ -702,7 +702,7 @@
 (defvar company-echo-delay)
 (setq company-echo-delay 0)                          ; remove annoying blinking
 (defvar company-minimum-prefix-length)
-(setq company-minimum-prefix-length 3)
+(setq company-minimum-prefix-length 1)
 
 (autoload 'bash-completion-dynamic-complete
   "bash-completion"
