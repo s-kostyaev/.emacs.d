@@ -731,6 +731,8 @@ the end of the line, then comment current line.  Replaces default behaviour of
     (comment-dwim arg)))
 (global-set-key "\M-;" #'comment-dwim-line)
 
+(add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+
 (use-package browse-url
   :functions (browse-url-default-browser))
 (setq browse-url-browser-function #'browse-url-default-browser)
