@@ -689,8 +689,8 @@
 ;;; Auto-complete
 ;; (require 'company)
 (add-hook 'after-init-hook #'global-company-mode)
-(defvar company-etags-ignore-case)
-(setq company-etags-ignore-case nil)
+;; (defvar company-etags-ignore-case)
+;; (setq company-etags-ignore-case nil)
 (defvar company-dabbrev-ignore-case)
 (setq company-dabbrev-ignore-case nil)
 (defvar company-dabbrev-code-ignore-case)
@@ -1135,8 +1135,6 @@ to the line and column corresponding to that location."
 (show-paren-mode 1)
 
 (electric-pair-mode 1)
-;; (add-hook 'prog-mode-hook #'electric-spacing-mode)
-;; (add-hook 'emacs-lisp-mode-hook #'electric-spacing-mode)
 
 ;;; Ace link
 (use-package ace-link
@@ -1388,7 +1386,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (let ((icomplete-separator
          (concat "\n" (propertize "..................." 'face 'shadow) "\n ")))
     (insert
-     (completing-read "" kill-ring nil t))))
+     (completing-read "paste from kill ring:" kill-ring nil t))))
 
 (global-set-key (kbd "M-y") 'my-icomplete-yank-kill-ring)
 
@@ -1508,6 +1506,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (global-set-key (kbd "C-c C-r") 'open-this-file-as-root)
 
 (use-package helm-make
+  :defer t
   :config
   (setq helm-make-directory-functions-list
         '(helm-make-project-directory helm-make-current-directory)))
@@ -1606,17 +1605,17 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 
-(defun my-hash-intersection-dedup (l1 l2)
-  "Fast hash intersection between L1 and L2."
-  (let ((ht (make-hash-table :test #'equal))
-        (acc nil))
-    (dolist (l l1)
-      (puthash l t ht))
-    (dolist (l l2)
-      (when (gethash l ht nil)
-        (puthash l nil ht)
-        (push l acc)))
-    acc))
+;; (defun my-hash-intersection-dedup (l1 l2)
+;;   "Fast hash intersection between L1 and L2."
+;;   (let ((ht (make-hash-table :test #'equal))
+;;         (acc nil))
+;;     (dolist (l l1)
+;;       (puthash l t ht))
+;;     (dolist (l l2)
+;;       (when (gethash l ht nil)
+;;         (puthash l nil ht)
+;;         (push l acc)))
+;;     acc))
 
 (use-package string-inflection
   :bind ("C-c C-u" . #'string-inflection-all-cycle))
@@ -1663,39 +1662,43 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (advice-add 'indent-region :around #'my-suppress-messages)
 
-(defun my-vterm-module-compile ()
-  "Compile vterm-module."
-  (interactive)
-  (when (vterm-module--cmake-is-available)
-    (let* ((library-path (locate-library "vterm"))
-           (vterm-directory
-            (shell-quote-argument
-             (if (string= (file-name-extension library-path) "eln")
-                 (expand-file-name (concat
-                                    (directory-file-name
-                                     (file-name-directory library-path))
-                                    "/.."))
-               (file-name-directory library-path))))
-           (make-commands
-            (concat
-             "cd " vterm-directory "; \
-             mkdir -p build; \
-             cd build; \
-             cmake "
-             vterm-module-cmake-args
-             " ..; \
-             make; \
-             cd -"))
-           (buffer (get-buffer-create vterm-install-buffer-name)))
-      (pop-to-buffer buffer)
-      (if (zerop (call-process "sh" nil buffer t "-c" make-commands))
-          (message "Compilation of `emacs-libvterm' module succeeded")
-        (error "Compilation of `emacs-libvterm' module failed!")))))
+;; (defun my-vterm-module-compile ()
+;;   "Compile vterm-module."
+;;   (interactive)
+;;   (when (vterm-module--cmake-is-available)
+;;     (let* ((library-path (locate-library "vterm"))
+;;            (vterm-directory
+;;             (shell-quote-argument
+;;              (if (string= (file-name-extension library-path) "eln")
+;;                  (expand-file-name (concat
+;;                                     (directory-file-name
+;;                                      (file-name-directory library-path))
+;;                                     "/.."))
+;;                (file-name-directory library-path))))
+;;            (make-commands
+;;             (concat
+;;              "cd " vterm-directory "; \
+;;              mkdir -p build; \
+;;              cd build; \
+;;              cmake "
+;;              vterm-module-cmake-args
+;;              " ..; \
+;;              make; \
+;;              cd -"))
+;;            (buffer (get-buffer-create vterm-install-buffer-name)))
+;;       (pop-to-buffer buffer)
+;;       (if (zerop (call-process "sh" nil buffer t "-c" make-commands))
+;;           (message "Compilation of `emacs-libvterm' module succeeded")
+;;         (error "Compilation of `emacs-libvterm' module failed!")))))
 
 (use-package lsp-pyright
+  :disabled t
+  :defer t
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
                          (lsp))))
+
+(add-hook 'python-mode-hook #'lsp-deffered)
 
 (use-package go-translate
   :bind (("C-c t" . go-translate)
@@ -1705,7 +1708,21 @@ If the current buffer is not visiting a file, prompt for a file name."
   (setq go-translate-local-language "en")
   (setq go-translate-extra-directions '(("en" . "ru") ("de" . "ru") ("ru" . "en") ("ru" . "de"))))
 
-(amx-mode 1)
+;; (amx-mode 1)
+
+(use-package savehist
+  :config
+  (setq savehist-file "~/.emacs.d/savehist")
+  (setq history-length 1000)
+  (setq history-delete-duplicates t)
+  (setq savehist-save-minibuffer-history t)
+  :hook (after-init-hook . savehist-mode))
+
+(use-package saveplace
+  :config
+  (setq save-place-file "~/.emacs.d/saveplace")
+  (setq save-place-forget-unreadable-files t)
+  (save-place-mode 1))
 
 (provide 'init)
 ;;; init.el ends here
