@@ -90,14 +90,14 @@
       ;; 'tsdh-light
       ;; 'ample-light
       ;; 'moe-light
-      ;; 'solarized-light
-      'modus-operandi
+      'solarized-light
+      ;; 'modus-operandi
       my-dark-theme ;; 'misterioso
       ;; 'zenburn
-      ;; 'spacemacs-dark
+      'spacemacs-dark
       ;; 'chocolate
       ;; 'monokai
-      'modus-vivendi
+      ;; 'modus-vivendi
       my-need-fix-bg nil)
 
 (defun my-toggle-themes ()
@@ -353,8 +353,8 @@
 (setq auto-window-vscroll nil)
 (global-set-key (kbd "M-J") #'scroll-up-line)
 (global-set-key (kbd "M-K") #'scroll-down-line)
-(global-set-key (kbd "<mouse-5>") #'scroll-up-line)
-(global-set-key (kbd "<mouse-4>") #'scroll-down-line)
+;; (global-set-key (kbd "<mouse-5>") #'scroll-up-line)
+;; (global-set-key (kbd "<mouse-4>") #'scroll-down-line)
 ;; (defun my-scroll-hook(_)
 ;;   "Increase gc-threshold before scroll and set it back after."
 ;;   (setq gc-cons-threshold most-positive-fixnum)
@@ -957,7 +957,6 @@ the end of the line, then comment current line.  Replaces default behaviour of
 
 (use-package wgrep
   :bind ("C-c C-p" . wgrep-change-to-wgrep-mode)
-  :defer t
   :config
   (setq wgrep-auto-save-buffer t))
 
@@ -1315,8 +1314,8 @@ to the line and column corresponding to that location."
 (eval-after-load 'dash '(dash-enable-font-lock))
 
 (use-package rg
-  :after wgrep
   :config
+  (require 'wgrep)
   (setq rg-group-result t)
   (setq rg-hide-command t)
   (setq rg-show-columns nil)
@@ -1692,13 +1691,15 @@ If the current buffer is not visiting a file, prompt for a file name."
 ;;         (error "Compilation of `emacs-libvterm' module failed!")))))
 
 (use-package lsp-pyright
-  :disabled t
   :defer t
   :hook (python-mode . (lambda ()
                          (require 'lsp-pyright)
-                         (lsp))))
+                         (lsp)))
+  :init
+  (setq lsp-pyright-auto-search-paths t)
+  (setq lsp-pyright-venv-path "/home/feofan/.local/share/virtualenvs/"))
 
-(add-hook 'python-mode-hook #'lsp-deffered)
+;; (add-hook 'python-mode-hook #'lsp-deffered)
 
 (use-package go-translate
   :bind (("C-c t" . go-translate)
