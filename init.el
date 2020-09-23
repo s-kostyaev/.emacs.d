@@ -92,9 +92,9 @@
       ;; 'moe-light
       'solarized-light
       ;; 'modus-operandi
-      my-dark-theme ;; 'misterioso
+      my-dark-theme 'misterioso
       ;; 'zenburn
-      'spacemacs-dark
+      ;; 'spacemacs-dark
       ;; 'chocolate
       ;; 'monokai
       ;; 'modus-vivendi
