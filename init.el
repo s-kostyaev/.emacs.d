@@ -7,7 +7,7 @@
 (eval-and-compile
   (if (< emacs-major-version 27)
       (progn
-	(add-to-list 'load-path (expand-file-name "~/.emacs.d/"))
+	(add-to-list 'load-path user-emacs-directory)
 	(require 'early-init))))
 
 
@@ -558,7 +558,7 @@
       (local-set-key (kbd "C-c C-i") #'go-fill-struct)
       (local-set-key (kbd "M-i") #'go-direx-switch-to-buffer)
       (local-set-key (kbd "M-?") #'lsp-find-references)
-      (local-set-key (kbd "C-c C-c") #'helm-make)
+      (local-set-key (kbd "C-c C-c") #'my-make)
       (require 'lsp-mode)
       (lsp-register-custom-settings '(("gopls.completeUnimported" t)))
       (lsp-register-custom-settings '(("gopls.staticcheck" t)))
@@ -573,8 +573,10 @@
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
       (require 'lsp-go)
-      (lsp-deferred)
       (symbol-overlay-mode -1)
+      (company-prescient-mode -1)
+      (setq-local lsp-completion-filter-on-incomplete nil)
+      (lsp-deferred)
 
       (require 'comby)
 
@@ -753,6 +755,9 @@ the end of the line, then comment current line.  Replaces default behaviour of
   :mode (("\\.text\\'" . poly-markdown-mode)
          ("\\.md$" . poly-gfm-mode)
          ("\\.markdown$" . poly-markdown-mode)))
+
+(add-hook 'markdown-mode-hook #'flymake-proselint-setup)
+(add-hook 'gfm-mode-hook #'flymake-proselint-setup)
 
 (use-package vmd-mode
   :after markdown-mode
@@ -1505,6 +1510,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (global-set-key (kbd "C-c C-r") 'open-this-file-as-root)
 
 (use-package helm-make
+  :disabled t
   :defer t
   :config
   (setq helm-make-directory-functions-list
@@ -1632,13 +1638,13 @@ If the current buffer is not visiting a file, prompt for a file name."
 	   (shell-command-to-string
 	    (format "zsh -c 'source ~/.profile; echo $%s'" variable)))))
 
-(defun my-enable-tree-sitter ()
-  "Enable tree-sitter."
-  (require 'tree-sitter-langs)
-  (tree-sitter-hl-mode))
+;; (defun my-enable-tree-sitter ()
+;;   "Enable tree-sitter."
+;;   (require 'tree-sitter-langs)
+;;   (tree-sitter-hl-mode))
 
-(global-tree-sitter-mode)
-(add-hook 'tree-sitter-after-on-hook #'my-enable-tree-sitter)
+;; (global-tree-sitter-mode)
+;; (add-hook 'tree-sitter-after-on-hook #'my-enable-tree-sitter)
 
 (global-set-key (kbd "C-c C-e") #'comby)
 
@@ -1724,6 +1730,37 @@ If the current buffer is not visiting a file, prompt for a file name."
   (setq save-place-file "~/.emacs.d/saveplace")
   (setq save-place-forget-unreadable-files t)
   (save-place-mode 1))
+
+(package-lint-flymake-setup)
+
+;; from helm-make
+(defun my--make-target-list (makefile)
+  "Return the target list for MAKEFILE by parsing it."
+  (let (targets)
+    (with-temp-buffer
+      (insert-file-contents makefile)
+      (goto-char (point-min))
+      (while (re-search-forward "^\\([^: \n]+\\) *:\\(?: \\|$\\)" nil t)
+        (let ((str (match-string 1)))
+          (unless (string-match "^\\." str)
+            (push str targets)))))
+    (nreverse targets)))
+
+
+(defun my-make (arg)
+  "Make current project with targets selection.
+Use project root as default directory if universal ARG is not set.
+Select it interactively otherwise."
+  (interactive "p")
+  (let* ((project (project-current))
+         (default-directory (if (= arg 4)
+                                (read-directory-name "select directory ")
+                              (if project (project-root project)
+                                default-directory)))
+         (makefile (expand-file-name "Makefile" default-directory))
+         (targets (my--make-target-list makefile))
+         (target (completing-read "make " targets)))
+    (compile (format "make %s" target))))
 
 (provide 'init)
 ;;; init.el ends here
