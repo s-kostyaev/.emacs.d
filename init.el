@@ -68,18 +68,25 @@
 ;;              (native-compile-async "~/.emacs.d/elpa" t))))
 
 (global-set-key (kbd "C-M-r") #'(lambda () (interactive)
-                                  (dolist (elt (package--alist))
-                                    (condition-case err
-                                        (package-activate (car elt) t)
-                                      ;; Don't let failure of activation of a package arbitrarily stop
-                                      ;; activation of further packages.
-                                      (error (message "%s" (error-message-string err)))))
+                                  ;; (dolist (elt (package--alist))
+                                  ;;   (condition-case err
+                                  ;;       (package-activate (car elt) t)
+                                  ;;     ;; Don't let failure of activation of a package arbitrarily stop
+                                  ;;     ;; activation of further packages.
+                                  ;;     (error (message "%s" (error-message-string err)))))
+                                  ;; (dolist (elt features)
+                                  ;;   (condition-case err
+                                  ;;       (progn
+                                  ;;         (unload-feature elt)
+                                  ;;         (ignore-errors (require elt)))
+                                  ;;     (error (message "%s" (error-message-string err)))))
                                   (byte-recompile-file "~/.emacs.d/init.el" t 0 t)
                                   ;; (my-recompile-installed-packages)
-                                  (if (eq system-type 'darwin)
-                                      (start-process-shell-command
-                                       "dump" "*dump*"
-                                       "emacs --batch -q -l ~/.emacs.d/dump.el"))))
+                                  ;; (if (eq system-type 'darwin)
+                                  ;;     (start-process-shell-command
+                                  ;;      "dump" "*dump*"
+                                  ;;      "emacs --batch -q -l ~/.emacs.d/dump.el"))
+                                  ))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
@@ -92,10 +99,10 @@
       ;; 'moe-light
       'solarized-light
       ;; 'modus-operandi
-      my-dark-theme 'misterioso
+      my-dark-theme ;; 'misterioso
       ;; 'zenburn
       ;; 'spacemacs-dark
-      ;; 'chocolate
+      'chocolate
       ;; 'monokai
       ;; 'modus-vivendi
       my-need-fix-bg nil)
@@ -570,6 +577,7 @@
 
       (setq-local project-find-functions (list #'my-try-go-mod #'project-try-vc))
       (setq-local flymake-start-on-save-buffer nil)
+      (setq-local flymake-no-changes-timeout nil)
       ;; (setq-local lsp-auto-guess-root t)
       ;; (setq lsp-ui-sideline-ignore-duplicate t)
       (require 'lsp-go)
@@ -1161,7 +1169,7 @@ to the line and column corresponding to that location."
   (add-hook 'after-init-hook #'which-key-mode))
 
 ;;; embrace
-(global-set-key (kbd "C-,") #'embrace-commander)
+;; (global-set-key (kbd "C-,") #'embrace-commander)
 
 (use-package composable
   :defer 0.1
@@ -1418,6 +1426,16 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (setq ace-isearch-function 'avy-goto-word-1)
   (setq ace-isearch-function-from-isearch 'swiper-from-isearch)
   (setq ace-isearch-use-jump nil))
+
+(defun my-isearch-next (arg)
+  "Isearch symbol at point or next isearch history item."
+  (interactive "p")
+  (if (string= isearch-string "")
+      (isearch-yank-string (format "%s" (or (symbol-at-point) "")))
+    (next-history-element arg)))
+
+(define-key isearch-mode-map (kbd "M-n") #'my-isearch-next)
+
 
 ;;; plantuml
 ;; (org-babel-do-load-languages

@@ -9,6 +9,8 @@
 
 (electric-pair-mode 1)
 
+(setq mouse-wheel-progressive-speed nil)
+
 (require 'icomplete)
 (fido-mode -1)
 (icomplete-mode 1)
@@ -136,6 +138,14 @@ Select it interactively otherwise."
          (target (completing-read "make " targets)))
     (compile (format "make %s" target))))
 
+(defun my-isearch-next (arg)
+  "Isearch symbol at point or next isearch history item."
+  (interactive "p")
+  (if (string= isearch-string "")
+      (isearch-yank-string (format "%s" (or (symbol-at-point) "")))
+    (next-history-element arg)))
+
+(define-key isearch-mode-map (kbd "M-n") #'my-isearch-next)
 
 
 (my-set-themes)
