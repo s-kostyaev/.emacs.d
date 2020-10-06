@@ -1534,10 +1534,12 @@ If the current buffer is not visiting a file, prompt for a file name."
   (setq helm-make-directory-functions-list
         '(helm-make-project-directory helm-make-current-directory)))
 
+(setq lsp-keymap-prefix (kbd "C-x l"))
 (use-package lsp-mode
   :defer t
   :config
   (require 'yasnippet))
+
 
 (add-hook 'dart-mode-hook #'lsp)
 
