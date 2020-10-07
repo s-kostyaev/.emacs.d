@@ -153,6 +153,12 @@
           (load-theme theme t))
         custom-enabled-themes))
 
+(defun my-reload-theme--frame (_frame)
+  "Reload theme after make frame."
+  (my-reload-theme))
+
+(add-to-list 'after-make-frame-functions #'my-reload-theme--frame)
+
 (add-hook 'after-init-hook #'my-set-themes)
 (add-hook 'desktop-after-read-hook #'my-set-themes)
 (with-eval-after-load 'emacs-customizations #'my-set-themes)
