@@ -196,8 +196,7 @@
 
 (add-hook 'after-init-hook #'my-load-custom-file)
 
-(eval-when-compile
-  (require 'dbus))
+(require 'dbus)
 
 (defvar my-gnome-night-light-light-change-callback nil
   "The callback function called on Night Light state change.
