@@ -399,7 +399,7 @@
 
   :bind (("C-c a" . my-align-region-by)))
 
-(leaf hydras
+(leaf hydra
   :preface
   (defun toggle-window-split ()
     "Toggle window split vertically or horizontally."
@@ -441,32 +441,29 @@
 	    (if this-win-2nd
 		(other-window 1))))))
 
-  :bind (("C-x t" . toggle-window-split))
+  :bind (("C-x t" . toggle-window-split)
+	 ("C-x o" . hydra-cycle-windows/body))
   :config
-  (leaf hydra
-    :bind (("C-x o" . hydra-cycle-windows/body))
-    :config
-    (with-eval-after-load 'hydra
-      (defhydra hydra-cycle-windows
-	(:body-pre
-	 (other-window 1))
-	"Windows"
-	("o"
-	 (other-window 1)
-	 "Next")
-	("O"
-	 (other-window -1)
-	 "Previous")
-	("t" toggle-window-split "Toggle split")
-	("]" enlarge-window-horizontally "Enlarge horizontal")
-	("[" shrink-window-horizontally "Shrink horizontal")
-	("=" enlarge-window "Enlarge vertival")
-	("-" shrink-window "Shrink vertical")
-	("b" balance-windows "Balance windows")
-	("m" delete-other-windows "Maximize window")
-	("n" split-window-below "New window")
-	("c" delete-window "Close window")
-	("q" nil "quit")))))
+  (defhydra hydra-cycle-windows
+    (:body-pre
+     (other-window 1))
+    "Windows"
+    ("o"
+     (other-window 1)
+     "Next")
+    ("O"
+     (other-window -1)
+     "Previous")
+    ("t" toggle-window-split "Toggle split")
+    ("]" enlarge-window-horizontally "Enlarge horizontal")
+    ("[" shrink-window-horizontally "Shrink horizontal")
+    ("=" enlarge-window "Enlarge vertival")
+    ("-" shrink-window "Shrink vertical")
+    ("b" balance-windows "Balance windows")
+    ("m" delete-other-windows "Maximize window")
+    ("n" split-window-below "New window")
+    ("c" delete-window "Close window")
+    ("q" nil "quit")))
 
 (leaf eglot
   :defvar eglot-workspace-configuration eglot-strict-mode
@@ -723,7 +720,9 @@
 (leaf poly-markdown
   :mode ("\\.text\\'"
 	 ("\\.md$" . poly-gfm-mode)
-	 "\\.markdown$"))
+	 "\\.markdown$")
+  :bind ((markdown-mode-map
+	  ("M-p" . ace-window))))
 
 (leaf flymake-proselint
   :hook ((markdown-mode-hook . flymake-proselint-setup)
@@ -1050,10 +1049,7 @@
     (ace-link-setup-default)))
 
 (leaf ace-window
-  :after markdown-mode
-  :bind (("M-p" . ace-window)
-	 (markdown-mode-map
-	  ("M-p" . ace-window)))
+  :bind (("M-p" . ace-window))
   :config
   (with-eval-after-load 'ace-window
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
