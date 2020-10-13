@@ -32,6 +32,47 @@
 
 (leaf my-themes
   :preface
+  (defun my-gnome-night-light-light-enabled-p ()
+    "Check if gnome night light enabled."
+    (string= "true"
+	     (string-trim
+	      (shell-command-to-string
+	       "gsettings get org.gnome.settings-daemon.plugins.color night-light-enabled"))))
+
+  (defun my-enable-light-theme ()
+    "Enable light theme."
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes)
+    (progn
+      (load-theme my-light-theme t)
+      (if my-need-fix-bg
+	  (custom-set-faces
+	   '(default
+	      ((t
+		(:background "#fdf6e3" :height 130 :width normal :foundry "nil" :family "Go Mono"))))))))
+
+  (defun my-enable-dark-theme ()
+    "Enable dark theme."
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes)
+    (load-theme my-dark-theme t))
+
+  (defun my-set-themes ()
+    "Function for setting themes after init."
+    (interactive)
+    (if (executable-find "gsettings")
+	(if (my-gnome-night-light-light-enabled-p)
+	    (my-enable-dark-theme)
+	  (my-enable-light-theme))
+      (let ((cur-hour (nth 2
+			   (decode-time))))
+	(mapc #'disable-theme custom-enabled-themes)
+	(if (and
+	     (> cur-hour 7)
+	     (< cur-hour 20))
+	    (my-enable-light-theme)
+	  (my-enable-dark-theme)))))
+
   (defun my-toggle-themes ()
     "Toggle light and dark themes."
     (interactive)
@@ -39,46 +80,9 @@
 			  (car custom-enabled-themes)
 			  my-light-theme)
 			 'light 'dark)))
-      (mapc #'disable-theme custom-enabled-themes)
       (if (equal cur-theme 'light)
-	  (progn
-	    (load-theme my-dark-theme t)
-	    (if my-need-fix-bg
-		(custom-set-faces
-		 '(default
-		    ((t
-		      (:height 130 :width normal :family "Go Mono")))))))
-
-	(load-theme my-light-theme t)
-	(if my-need-fix-bg
-	    (custom-set-faces
-	     '(default
-		((t
-		  (:background "#fdf6e3" :height 130 :width normal :family "Go Mono")))))))))
-
-  (defun my-set-themes ()
-    "Function for setting themes after init."
-    (interactive)
-    (let ((cur-hour (nth 2
-			 (decode-time))))
-      (mapc #'disable-theme custom-enabled-themes)
-      (if (and
-	   (> cur-hour 7)
-	   (< cur-hour 20))
-	  (progn
-	    (load-theme my-light-theme t)
-	    (if my-need-fix-bg
-		(custom-set-faces
-		 '(default
-		    ((t
-		      (:background "#fdf6e3" :height 130 :width normal :foundry "nil" :family "Go Mono")))))))
-
-	(load-theme my-dark-theme t)
-	(if my-need-fix-bg
-	    (custom-set-faces
-	     '(default
-		((t
-		  (:height 130 :width normal :family "Go Mono")))))))))
+	  (my-enable-dark-theme)
+	(my-enable-light-theme))))
 
   (defun my-reload-theme ()
     "Reload current theme."
