@@ -868,6 +868,8 @@
 (leaf ivy
   :defvar ivy-completion-beg ivy-completion-end
   :bind* (("C-c s k" . ivy-resume))
+  :bind (:ivy-mode-map
+	 ("C-;" . ivy-avy))
   :init
   (ivy-mode)
   :config
@@ -877,7 +879,9 @@
       (setq ivy-re-builders-alist '((counsel-M-x . ivy--regex-fuzzy)
 				    (swiper . ivy--regex-plus)
 				    (t . ivy--regex-fuzzy)))))
-  (leaf flx))
+  (leaf flx)
+  (leaf ivy-avy
+    :require t))
 
 (leaf fzf
   :bind* (("C-c C-f" . my-fzf-project))
