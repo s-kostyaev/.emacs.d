@@ -362,9 +362,13 @@
 	     (auto-window-vscroll)
 	     (require-final-newline . t)
 	     (next-line-add-newlines))
-  :config
+  :preface
   (mouse-wheel-mode t)
-  (fset 'yes-or-no-p 'y-or-n-p))
+  (fset 'yes-or-no-p 'y-or-n-p)
+  (put 'downcase-region 'disabled nil)
+  (delete-selection-mode)
+  (show-paren-mode 1)
+  (electric-pair-mode 1))
 
 (leaf my-align-region
   :defvar delimit-columns-extra delimit-columns-format delimit-columns-str-separator delimit-columns-separator
@@ -472,6 +476,13 @@
        (kbd "C-c C-h")
        'eglot-help-at-point eglot-mode-map))))
 
+(leaf exec-path
+  :preface
+  (setq exec-path (append exec-path
+			  '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin" "~/.local/bin")))
+  (require 's)
+  (setenv "PATH"
+	  (s-join ":" exec-path)))
 
 (leaf go
   :preface
@@ -491,14 +502,8 @@
 	    (cons 'transient dir)))
       (when dir
 	(cons 'transient dir))))
-
-  :init
-  (setq exec-path (append exec-path
-			  '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin" "~/.local/bin")))
   :require s
   :config
-  (setenv "PATH"
-	  (s-join ":" exec-path))
   (defvar-local my-go-packages nil)
   (leaf go-mode
     :defvar company-backends go-tag-args
@@ -668,7 +673,6 @@
   (setq auto-mode-alist (cons
 			 '("\\.tex$" . latex-mode)
 			 auto-mode-alist)))
-(put 'downcase-region 'disabled nil)
 
 
 (leaf company
@@ -705,10 +709,8 @@
   :require t
   :setq ((browse-url-browser-function function browse-url-default-browser)))
 
-(kill-buffer "*Messages*")
-
-;; Show only one active window when opening multiple files at the same time.
-(add-hook 'window-setup-hook #'delete-other-windows)
+(leaf my-open-multiple-files
+  :hook ((window-setup-hook . delete-other-windows)))
 
 (leaf pkgbuild-mode
   :when (file-exists-p "/etc/pacman.conf")
@@ -780,14 +782,9 @@
   (define-key isearch-mode-map (kbd "C-'") #'avy-isearch))
 
 
-;;
-;; expand region
-;;
 (leaf expand-region
   :chord (("zj" . er/expand-region)
           ("zk" . er/contract-region)))
-
-(delete-selection-mode)
 
 (leaf multiple-cursors
   :commands (multiple-cursors-hydra/body)
@@ -1041,10 +1038,6 @@
   (run-with-idle-timer 0.5 nil #'require 'hungry-delete nil t)
   (with-eval-after-load 'hungry-delete
     (global-hungry-delete-mode)))
-
-(show-paren-mode 1)
-
-(electric-pair-mode 1)
 
 (leaf ace-link
   :config
@@ -1420,7 +1413,9 @@
 
 
 
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(leaf external-process-improvements
+  :preface
+  (setq read-process-output-max (* 1024 1024)))
 
 (leaf string-inflection
   :bind (("C-c C-u" . string-inflection-all-cycle)))
@@ -1428,14 +1423,6 @@
 (leaf rust
   :hook ((rust-mode-hook . lsp-deferred))
   :setq ((rust-format-on-save . t)))
-
-
-(defun my-get-env-var-from-shell (variable)
-  "Get `VARIABLE' from shell and set it inside Emacs."
-  (setenv variable
-	  (string-trim
-	   (shell-command-to-string
-	    (format "zsh -c 'source ~/.profile; echo $%s'" variable)))))
 
 (leaf tree-sitter
   :disabled t
