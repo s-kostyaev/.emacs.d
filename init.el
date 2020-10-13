@@ -531,6 +531,7 @@
 		       (shell-command-to-string "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec"))))
 	  (require 'go-impl)
 	  (leaf go-direx
+	    :disabled t
             :preface
             (defun my-kill-prev-buf (_)
               "Kill current buffer."
@@ -592,9 +593,9 @@
 	  (local-set-key
 	   (kbd "C-c C-i")
 	   #'go-fill-struct)
-	  (local-set-key
-	   (kbd "M-i")
-	   #'go-direx-switch-to-buffer)
+	  ;; (local-set-key
+	  ;;  (kbd "M-i")
+	  ;;  #'go-direx-switch-to-buffer)
 	  (local-set-key
 	   (kbd "M-?")
 	   #'lsp-find-references)
@@ -865,16 +866,18 @@
   :setq ((x-hyper-keysym quote meta)))
 
 (leaf ivy
-  :disabled t
   :defvar ivy-completion-beg ivy-completion-end
   :bind* (("C-c s k" . ivy-resume))
+  :init
+  (ivy-mode)
   :config
   (with-eval-after-load 'ivy
     (progn
       (setq ivy-initial-inputs-alist nil)
       (setq ivy-re-builders-alist '((counsel-M-x . ivy--regex-fuzzy)
 				    (swiper . ivy--regex-plus)
-				    (t . ivy--regex-fuzzy))))))
+				    (t . ivy--regex-fuzzy)))))
+  (leaf flx))
 
 (leaf fzf
   :bind* (("C-c C-f" . my-fzf-project))
@@ -1168,11 +1171,12 @@
 
 
 (leaf counsel
-  :disabled t
   :bind (("C-c g" . my-counsel-git-grep)
 	 (isearch-mode-map
 	  ("M-i" . swiper-from-isearch)))
   :bind* (("C-x l" . counsel-locate))
+  :init
+  (counsel-mode)
   :config
   (with-eval-after-load 'counsel
     (defun my-counsel-git-grep ()
@@ -1200,7 +1204,6 @@
   :bind (("M-y" . my-icomplete-yank-kill-ring)))
 
 (leaf ace-isearch
-  :disabled t
   :preface
   (defun swiper-from-isearch ()
     "Invoke `swiper' from isearch."
@@ -1387,6 +1390,7 @@
 	 (c++-mode-hook . lsp-deferred)))
 
 (leaf icomplete-vertical
+  :disabled t
   :bind ((icomplete-minibuffer-map
 	  ("<down>" . icomplete-forward-completions)
 	  ("C-n" . icomplete-forward-completions)
