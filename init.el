@@ -884,6 +884,7 @@
     :require t))
 
 (leaf fzf
+  :disabled t
   :bind* (("C-c C-f" . my-fzf-project))
   :config
   (with-eval-after-load 'fzf
@@ -1176,6 +1177,7 @@
 
 (leaf counsel
   :bind (("C-c g" . my-counsel-git-grep)
+	 ("C-c C-f" . counsel-fzf)
 	 (isearch-mode-map
 	  ("M-i" . swiper-from-isearch)))
   :bind* (("C-x l" . counsel-locate))

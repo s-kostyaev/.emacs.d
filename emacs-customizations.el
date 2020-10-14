@@ -47,6 +47,7 @@
  '(gofmt-command "goimports")
  '(hippie-expand-try-functions-list
    '(try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill))
+ '(ivy-rich-mode t)
  '(keycast-insert-after "        ")
  '(lsp-auto-guess-root t)
  '(lsp-eldoc-hook '(lsp-hover lsp-signature))
@@ -68,7 +69,7 @@
      ("melpa-stable" . "https://stable.melpa.org/packages/")
      ("ublt" . "https://elpa.ubolonton.org/packages/")))
  '(package-selected-packages
-   '(ivy-avy flx ace-isearch counsel ivy leaf-convert leaf expand-region flymake-proselint flymake-quickdef package-lint-flymake rainbow-mode icomplete-vertical orderless go-translate modus-operandi-theme modus-vivendi-theme lsp-mode lsp-pyright vterm comby elisp-benchmarks protobuf-mode dumb-jump vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism poly-markdown gif-screencast keycast fzf hercules white-sand-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme zenburn-theme magit-libgit solarized-theme flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link symbol-overlay composable multiple-cursors go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im bash-completion pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server go-tag go-gen-test comment-tags org-mind-map json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl edit-indirect company-quickhelp cask-mode))
+   '(ivy-rich ivy-avy flx ace-isearch counsel ivy leaf-convert leaf expand-region flymake-proselint flymake-quickdef package-lint-flymake rainbow-mode icomplete-vertical orderless go-translate modus-operandi-theme modus-vivendi-theme lsp-mode lsp-pyright vterm comby elisp-benchmarks protobuf-mode dumb-jump vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism poly-markdown gif-screencast keycast fzf hercules white-sand-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme zenburn-theme magit-libgit solarized-theme flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link symbol-overlay composable multiple-cursors go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im bash-completion pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server go-tag go-gen-test comment-tags org-mind-map json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl edit-indirect company-quickhelp cask-mode))
  '(racer-rust-src-path "/usr/src/rust/src")
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
