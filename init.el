@@ -32,12 +32,12 @@
 
 (leaf my-themes
   :preface
-  (defun my-gnome-night-light-light-enabled-p ()
+  (defun my-is-night ()
     "Check if gnome night light enabled."
-    (string= "true"
+    (string= "NIGHT"
 	     (string-trim
 	      (shell-command-to-string
-	       "gsettings get org.gnome.settings-daemon.plugins.color night-light-enabled"))))
+	       (concat "sunwait poll civil " my-pos)))))
 
   (defun my-enable-light-theme ()
     "Enable light theme."
@@ -60,8 +60,8 @@
   (defun my-set-themes ()
     "Function for setting themes after init."
     (interactive)
-    (if (executable-find "gsettings")
-	(if (my-gnome-night-light-light-enabled-p)
+    (if (executable-find "sunwait")
+	(if (my-is-night)
 	    (my-enable-dark-theme)
 	  (my-enable-light-theme))
       (let ((cur-hour (nth 2
@@ -131,7 +131,8 @@
 
   :pre-setq ((my-light-theme quote solarized-light)
 	     (my-dark-theme quote chocolate)
-	     (my-need-fix-bg))
+	     (my-need-fix-bg)
+	     (my-pos "55.01N 82.55E"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
