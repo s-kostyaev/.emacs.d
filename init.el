@@ -1543,5 +1543,10 @@
       (compile
        (format "make %s" target)))))
 
+(leaf smerge-mode
+  :preface
+  (hercules-def :toggle-funs #'smerge-mode
+		:keymap 'smerge-basic-map))
+
 (provide 'init)
 ;;; init.el ends here
