@@ -129,19 +129,19 @@
     "Load my custom file."
     (load-file custom-file))
 
+  (add-to-list 'after-make-frame-functions #'my-reload-theme--frame)
+  (with-eval-after-load 'emacs-customizations #'my-set-themes)
+
   :pre-setq ((my-light-theme quote solarized-light)
 	     (my-dark-theme quote chocolate)
 	     (my-need-fix-bg)
-	     (my-pos "55.05N 82.94E"))
+	     (my-pos quote "55.05N 82.94E"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
   ((after-init-hook . my-set-themes)
    (desktop-after-read-hook . my-set-themes)
-   (after-init-hook . my-load-custom-file))
-  :config
-  (add-to-list 'after-make-frame-functions #'my-reload-theme--frame)
-  (with-eval-after-load 'emacs-customizations #'my-set-themes))
+   (after-init-hook . my-load-custom-file)))
 
 (leaf my-gnome-night-light-light
   :preface
@@ -350,13 +350,6 @@
 
   :hook ((after-revert-hook . my-update-vc-mode)
 	 (after-find-file . my-update-vc-mode)))
-
-;; to setup tabs
-;; (defvar c-basic-indent)
-;; (setq c-basic-indent 4)
-;; (setq tab-width 4)
-;; (setq tab-stop-list (number-sequence 4 200 4))
-;; (setq-default indent-tabs-mode nil)
 
 (leaf text-defaults
   :bind (("M-J" . scroll-up-line)
@@ -1181,7 +1174,6 @@
 	 ("C-c C-f" . counsel-fzf)
 	 (isearch-mode-map
 	  ("M-i" . swiper-from-isearch)))
-  :bind* (("C-x l" . counsel-locate))
   :init
   (counsel-mode)
   :config
