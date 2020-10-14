@@ -132,7 +132,7 @@
   :pre-setq ((my-light-theme quote solarized-light)
 	     (my-dark-theme quote chocolate)
 	     (my-need-fix-bg)
-	     (my-pos "55.01N 82.55E"))
+	     (my-pos "55.05N 82.94E"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
