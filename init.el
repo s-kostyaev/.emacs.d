@@ -862,7 +862,7 @@
 (leaf ivy
   :defvar ivy-completion-beg ivy-completion-end
   :bind* (("C-c s k" . ivy-resume))
-  :bind (:ivy-mode-map
+  :bind (:ivy-minibuffer-map
 	 ("C-;" . ivy-avy))
   :init
   (ivy-mode)
