@@ -133,7 +133,7 @@
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
   :pre-setq ((my-light-theme quote solarized-light)
-	     (my-dark-theme quote chocolate)
+	     (my-dark-theme quote spacemacs-dark)
 	     (my-need-fix-bg)
 	     (my-pos quote "55.05N 82.94E"))
   :bind
