@@ -24,7 +24,7 @@
   :require benchmark-init)
 
 (global-set-key (kbd "C-M-r") (lambda () (interactive)
-                                (byte-recompile-file "~/.emacs.d/init.el" t 0 t)))
+                                (byte-recompile-file "~/.emacs.d/init.el" t 0)))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
@@ -1226,7 +1226,6 @@
 	  ("M-n" . my-isearch-next)
 	  ("M-i" . swiper-from-isearch)))
   :config
-  (global-ace-isearch-mode 1)
   (with-eval-after-load 'ace-isearch
     (setq ace-isearch-function 'avy-goto-word-1)
     (setq ace-isearch-function-from-isearch 'swiper-from-isearch)
@@ -1246,7 +1245,11 @@
       (next-history-element arg)))
 
   :bind ((isearch-mode-map
-	  ("M-n" . my-isearch-next))))
+	  ("M-n" . my-isearch-next)))
+  :config
+  (setq search-whitespace-regexp ".*")
+  (setq isearch-lax-whitespace t)
+  (setq isearch-regexp-lax-whitespace nil))
 
 (leaf upcase-region
   :config
@@ -1327,7 +1330,8 @@
   :after t
   :require yasnippet
   :config
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (add-hook 'lsp-mode-hook #'lsp-completion--enable))
 
 (leaf my-go-home
   :preface
@@ -1382,7 +1386,8 @@
 
       (setq gif-screencast-program "gnome-screenshot"
 	    gif-screencast-args '("-w" "-f")
-	    gif-screencast-capture-format "png"))))
+	    gif-screencast-capture-format "png"))
+    (setq gif-screencast-capture-prefer-internal t)))
 
 (leaf c-cpp-mode
   :hook ((c-mode-hook . lsp-deferred)
@@ -1539,7 +1544,58 @@
 (leaf smerge-mode
   :preface
   (hercules-def :toggle-funs #'smerge-mode
-		:keymap 'smerge-basic-map))
+		:keymap 'smerge-basic-map
+		:show-funs '(smerge-next smerge-prev)
+		:transient t))
+
+(leaf imaxima
+  :init (require 'cl)
+  :commands (imaxima))
+
+(leaf fricas
+  :preface
+  (add-to-list 'load-path "~/projects/fricas/contrib/emacs")
+  ;; (add-to-list 'load-path "/usr/lib/fricas/emacs")
+  (defun my-fricas-setup()
+    "Configure fricas."
+    (process-send-string fricas-process
+                         (concat
+			  ")set output tex on\n"
+			  ")set output algebra off\n")))
+  :commands fricas
+  :config
+  (add-hook 'fricas-mode-hook #'my-fricas-setup))
+
+(leaf axiom
+  :preface
+  (defun my-setup-axiom ()
+    "Setup axiom."
+    (setq-local company-backends '(company-axiom-backend))
+    (aggressive-indent-mode -1))
+  :hook ((axiom-process-mode-hook . my-setup-axiom)))
+
+(leaf my-screenshots
+  :preface
+  (defun my-screenshot-svg ()
+    "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file."
+    (interactive)
+    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+           (data (x-export-frames nil 'svg)))
+      (with-temp-file filename
+	(insert data))
+      (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
+						    (expand-file-name "~/Pictures")) 1)))
+  (defun my-screenshot-png ()
+    "Save a screenshot of the current frame as an PNG image.
+Saves to a temp file."
+    (interactive)
+    (let* ((filename (make-temp-file "Emacs" nil ".png"))
+           (data (x-export-frames nil 'png)))
+      (with-temp-file filename
+	(insert data))
+      (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
+						    (expand-file-name "~/Pictures")) 1))))
 
 (provide 'init)
 ;;; init.el ends here

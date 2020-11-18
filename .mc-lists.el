@@ -70,6 +70,7 @@
 	ivy-wgrep-change-to-wgrep-mode
 	key-chord-mode
 	kmacro-end-macro
+	lsp-mouse-click
 	multiple-cursors-hydra/ace-mc-add-multiple-cursors-and-exit
 	multiple-cursors-hydra/ace-mc-add-single-cursor-and-exit
 	multiple-cursors-hydra/body
