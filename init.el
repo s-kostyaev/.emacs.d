@@ -499,7 +499,7 @@
 	(cons 'transient dir))))
   :require s
   :config
-  (defvar-local my-go-packages nil)
+  (defvar my-go-packages-by-project (ht-create))
   (leaf go-mode
     :defvar company-backends go-tag-args
     :mode ("\\.go\\'"
@@ -611,31 +611,45 @@
 	  (setq-local lsp-completion-filter-on-incomplete nil)
 	  (lsp-deferred)
 	  (defun my-go-packages-go-list ()
-	    my-go-packages)
+	    (ht-get my-go-packages-by-project (project-current)))
 
 	  (setq go-packages-function 'my-go-packages-go-list)
 	  (require 'cl-lib)
-	  (defun my-refresh-go-packages-list ()
-	    "Refresh go packages list."
+	  (defun my-refresh-go-packages-list (&optional force)
+	    "Refresh go packages list.
+If `force' refresh even if package list already exists."
 	    (if (string-equal "go-mode" major-mode)
-		(let ((cur-buf (buffer-name)))
-		  (async-start
-		   (lambda nil
-		     (process-lines "go" "list" "-e" "all"))
-		   (lambda (res)
-		     (with-current-buffer cur-buf
-		       (setq my-go-packages (cl-mapcar
-					     (lambda (s)
-					       (replace-regexp-in-string "@[^/]*" ""
-									 (string-remove-prefix "mod/"
-											       (string-remove-prefix "vendor/" s))))
-					     (cl-remove-if
-					      (lambda (s)
-						(string-prefix-p "warning:" s))
-					      res)))))))))
+		(let ((cur-buf (buffer-name))
+		      (cur-project (project-current)))
+		  (if (not
+		       (f-descendant-of-p (project-root cur-project)
+					  (or
+					   (getenv "GOPATH")
+					   (concat
+					    (getenv "HOME")
+					    "/go/pkg/mod"))))
+		      (if (or (not (cl-find cur-project (ht-keys my-go-packages-by-project)))
+			      force)
+			  (progn
+			    (if (not (cl-find cur-project (ht-keys my-go-packages-by-project)))
+				(ht-set my-go-packages-by-project cur-project '("in progress")))
+			    (async-start
+			     (lambda nil
+			       (process-lines "go" "list" "-e" "all"))
+			     (lambda (res)
+			       (with-current-buffer cur-buf
+				 (ht-set my-go-packages-by-project cur-project (cl-mapcar
+										(lambda (s)
+										  (replace-regexp-in-string "@[^/]*" ""
+													    (string-remove-prefix "mod/"
+																  (string-remove-prefix "vendor/" s))))
+										(cl-remove-if
+										 (lambda (s)
+										   (string-prefix-p "warning:" s))
+										 res))))))))))))
 
 	  (my-refresh-go-packages-list)
-	  (add-hook 'after-save-hook #'my-refresh-go-packages-list))
+	  (add-hook 'after-save-hook #'my-refresh-go-packages-list t))
 
 	(add-hook 'go-mode-hook #'my-go-mode-hook)))))
 
