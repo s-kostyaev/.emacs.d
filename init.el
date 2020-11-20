@@ -130,6 +130,7 @@
     (load-file custom-file))
 
   (add-to-list 'after-make-frame-functions #'my-reload-theme--frame)
+  (add-hook 'server-after-make-frame-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
   :pre-setq ((my-light-theme quote solarized-light)
