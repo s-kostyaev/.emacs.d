@@ -499,6 +499,7 @@
 	(cons 'transient dir))))
   :require s
   :config
+  (require 'ht)
   (defvar my-go-packages-by-project (ht-create))
   (leaf go-mode
     :defvar company-backends go-tag-args
@@ -1492,7 +1493,7 @@ If `force' refresh even if package list already exists."
   (add-hook 'python-mode-hook
 	    #'(lambda nil
 		(require 'lsp-pyright)
-		(lsp))))
+		(lsp-deferred))))
 
 (leaf go-translate
   :bind (("C-c t" . go-translate)

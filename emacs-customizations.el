@@ -168,7 +168,11 @@
      (eval c-set-offset 'innamespace 0)))
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
- '(warning-suppress-types '((bytecomp))))
+ '(warning-suppress-types
+   '((leaf)
+     (comp)
+     (frameset)
+     (bytecomp))))
 
 (provide 'emacs-customizations)
 ;;; emacs-customizations.el ends here
