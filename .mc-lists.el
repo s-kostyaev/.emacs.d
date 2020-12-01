@@ -91,6 +91,7 @@
 	multiple-cursors-hydra/mc/unmark-previous-like-this
 	multiple-cursors-hydra/nil
 	my-counsel-company
+	rg-recompile
 	save-buffers-kill-terminal
 	scroll-up-line
 	tab-indent-or-complete

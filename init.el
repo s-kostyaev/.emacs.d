@@ -719,7 +719,22 @@ If `force' refresh even if package list already exists."
 
 (leaf browse-url
   :require t
-  :setq ((browse-url-browser-function function browse-url-default-browser)))
+  :preface
+  (defun my-browse-url-chromium-wayland (url &optional ignored)
+    "Pass the specified URL to the \"chromium\" command.
+The optional argument IGNORED is not used."
+    (interactive (browse-url-interactive-arg "URL: "))
+    (let ((cmd
+	   (concat
+	    "DISPLAY=:0 HOME=" (getenv "HOME")
+	    " PATH=" (getenv "PATH")
+	    " XAUTHORITY=" (getenv "XAUTHORITY")
+	    " WAYLAND_DISPLAY=" (getenv "WAYLAND_DISPLAY")
+	    " USER=" (getenv "USER")
+	    " GDK_BACKEND=x11 /usr/bin/setsid -w chromium " url)))
+      (start-process-shell-command "browser" "*chromium-open-url*" cmd)))
+
+  :setq ((browse-url-browser-function function my-browse-url-chromium-wayland)))
 
 (leaf my-open-multiple-files
   :hook ((window-setup-hook . delete-other-windows)))
@@ -873,9 +888,14 @@ If `force' refresh even if package list already exists."
 
 (leaf x-hyper-keysym
   :defvar x-hyper-keysym
-  :setq ((x-hyper-keysym quote meta)))
+  :setq ((x-hyper-keysym quote meta)
+	 (mac-option-modifier quote none)
+	 (mac-command-modifier quote meta)
+	 (mac-command-key-is-meta quote t)
+	 (mac-option-key-is-meta nil)))
 
 (leaf ivy
+  :disabled t
   :defvar ivy-completion-beg ivy-completion-end
   :bind* (("C-c s k" . ivy-resume))
   :bind (:ivy-minibuffer-map
@@ -894,7 +914,6 @@ If `force' refresh even if package list already exists."
     :require t))
 
 (leaf fzf
-  :disabled t
   :bind* (("C-c C-f" . my-fzf-project))
   :config
   (with-eval-after-load 'fzf
@@ -935,8 +954,6 @@ If `force' refresh even if package list already exists."
   :config
   (leaf diff-mode
     :require t)
-  (when (eq system-type 'darwin)
-    (setq magit-git-executable "/opt/local/bin/git"))
   (with-eval-after-load 'magit
     (progn
       (defun my-magit-diff-hook ()
@@ -1186,8 +1203,9 @@ If `force' refresh even if package list already exists."
 
 
 (leaf counsel
+  :disabled t
   :bind (("C-c g" . my-counsel-git-grep)
-	 ("C-c C-f" . counsel-fzf)
+	 ("C-c C-f" . my-counsel-fzf-project)
 	 (isearch-mode-map
 	  ("M-i" . swiper-from-isearch)))
   :init
@@ -1202,6 +1220,12 @@ If `force' refresh even if package list already exists."
 			  (if symb
 			      (prin1-to-string symb)
 			    ""))))
+
+    (defun my-counsel-fzf-project ()
+      "Fzf in project."
+      (interactive)
+      (counsel-fzf nil (if (project-current)
+			   (project-root (project-current)))))
 
     (setq ivy-height 20)))
 
@@ -1219,6 +1243,7 @@ If `force' refresh even if package list already exists."
   :bind (("M-y" . my-icomplete-yank-kill-ring)))
 
 (leaf ace-isearch
+  :disabled t
   :preface
   (defun swiper-from-isearch ()
     "Invoke `swiper' from isearch."
@@ -1261,6 +1286,7 @@ If `force' refresh even if package list already exists."
       (next-history-element arg)))
 
   :bind ((isearch-mode-map
+	  ("M-i" . consult-line-from-isearch)
 	  ("M-n" . my-isearch-next)))
   :config
   (setq search-whitespace-regexp ".*")
@@ -1359,6 +1385,7 @@ If `force' refresh even if package list already exists."
   :hook ((after-init-hook . my-go-home)))
 
 (leaf libgit
+  :disabled t
   :when (package-installed-p 'libgit)
   :require libgit)
 
@@ -1410,7 +1437,6 @@ If `force' refresh even if package list already exists."
 	 (c++-mode-hook . lsp-deferred)))
 
 (leaf icomplete-vertical
-  :disabled t
   :bind ((icomplete-minibuffer-map
 	  ("<down>" . icomplete-forward-completions)
 	  ("C-n" . icomplete-forward-completions)
@@ -1435,6 +1461,12 @@ If `force' refresh even if package list already exists."
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
 
+(leaf consult
+  :bind (("C-x b" . consult-buffer)
+	 ("<help> a" . consult-apropos))
+  :init
+  (consult-annotate-mode +1)
+  (consult-preview-mode +1))
 
 
 (leaf external-process-improvements
@@ -1612,6 +1644,10 @@ Saves to a temp file."
 	(insert data))
       (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
 						    (expand-file-name "~/Pictures")) 1))))
+
+(leaf languagetool
+  :disabled t
+  :setq ((languagetool-default-language . "en-US")))
 
 (provide 'init)
 ;;; init.el ends here

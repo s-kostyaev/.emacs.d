@@ -39,7 +39,7 @@
  '(fringe-mode 0 nil (fringe))
  '(global-aggressive-indent-mode t)
  '(go-packages-function 'go-packages-go-list)
- '(go-tag-args '("-transform" "snakecase") t)
+ '(go-tag-args '("-transform" "snakecase"))
  '(go-test-verbose t)
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
@@ -48,65 +48,6 @@
  '(hippie-expand-try-functions-list
    '(try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill))
  '(imenu-max-item-length 230)
- '(ivy-height 20)
- '(ivy-mode t)
- '(ivy-rich-display-transformers-list
-   '(ivy-switch-buffer
-     (:columns
-      ((ivy-switch-buffer-transformer
-	(:width 30))
-       (ivy-rich-switch-buffer-size
-	(:width 7))
-       (ivy-rich-switch-buffer-indicators
-	(:width 4 :face error :align right))
-       (ivy-rich-switch-buffer-major-mode
-	(:width 12 :face warning)))
-      :predicate
-      (lambda
-	(cand)
-	(get-buffer cand)))
-     counsel-find-file
-     (:columns
-      ((ivy-read-file-transformer)
-       (ivy-rich-counsel-find-file-truename
-	(:face font-lock-doc-face))))
-     counsel-M-x
-     (:columns
-      ((counsel-M-x-transformer
-	(:width 40))
-       (ivy-rich-counsel-function-docstring
-	(:face font-lock-doc-face))))
-     counsel-describe-function
-     (:columns
-      ((counsel-describe-function-transformer
-	(:width 40))
-       (ivy-rich-counsel-function-docstring
-	(:face font-lock-doc-face))))
-     counsel-describe-variable
-     (:columns
-      ((counsel-describe-variable-transformer
-	(:width 40))
-       (ivy-rich-counsel-variable-docstring
-	(:face font-lock-doc-face))))
-     counsel-recentf
-     (:columns
-      ((ivy-rich-candidate
-	(:width 0.8))
-       (ivy-rich-file-last-modified-time
-	(:face font-lock-comment-face))))
-     package-install
-     (:columns
-      ((ivy-rich-candidate
-	(:width 30))
-       (ivy-rich-package-version
-	(:width 16 :face font-lock-comment-face))
-       (ivy-rich-package-archive-summary
-	(:width 7 :face font-lock-builtin-face))
-       (ivy-rich-package-install-summary
-	(:face font-lock-doc-face))))))
- '(ivy-rich-mode t)
- '(ivy-rich-path-style 'relative)
- '(ivy-truncate-lines nil)
  '(keycast-insert-after "        ")
  '(lsp-auto-guess-root t)
  '(lsp-eldoc-hook '(lsp-hover lsp-signature))
@@ -128,7 +69,7 @@
      ("melpa-stable" . "https://stable.melpa.org/packages/")
      ("ublt" . "https://elpa.ubolonton.org/packages/")))
  '(package-selected-packages
-   '(visual-regexp company-axiom axiom-environment cl-libify auctex maxima ivy-rich ivy-avy flx ace-isearch counsel ivy leaf-convert leaf expand-region flymake-proselint flymake-quickdef package-lint-flymake rainbow-mode icomplete-vertical orderless go-translate modus-operandi-theme modus-vivendi-theme lsp-mode lsp-pyright vterm comby elisp-benchmarks protobuf-mode dumb-jump vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism poly-markdown gif-screencast keycast fzf hercules white-sand-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme zenburn-theme magit-libgit solarized-theme flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link symbol-overlay composable multiple-cursors go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im bash-completion pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server go-tag go-gen-test comment-tags org-mind-map json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl edit-indirect company-quickhelp cask-mode))
+   '(consult languagetool visual-regexp company-axiom axiom-environment cl-libify auctex maxima ivy-rich ivy-avy flx ace-isearch counsel ivy leaf-convert leaf expand-region flymake-proselint flymake-quickdef package-lint-flymake rainbow-mode icomplete-vertical orderless go-translate modus-operandi-theme modus-vivendi-theme lsp-mode lsp-pyright vterm comby elisp-benchmarks protobuf-mode dumb-jump vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism poly-markdown gif-screencast keycast fzf hercules white-sand-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme zenburn-theme magit-libgit solarized-theme flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link symbol-overlay composable multiple-cursors go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im bash-completion pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server go-tag go-gen-test comment-tags org-mind-map json-snatcher docker-compose-mode go-direx feature-mode zygospore hungry-delete ibuffer-vc xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl edit-indirect company-quickhelp cask-mode))
  '(racer-rust-src-path "/usr/src/rust/src")
  '(read-buffer-completion-ignore-case t)
  '(read-file-name-completion-ignore-case t)
@@ -168,11 +109,7 @@
      (eval c-set-offset 'innamespace 0)))
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
- '(warning-suppress-types
-   '((leaf)
-     (comp)
-     (frameset)
-     (bytecomp))))
+ '(warning-suppress-types '((leaf) (comp) (frameset) (bytecomp)))
 
 (provide 'emacs-customizations)
 ;;; emacs-customizations.el ends here
