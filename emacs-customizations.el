@@ -56,6 +56,8 @@
  '(lsp-rust-server 'rust-analyzer)
  '(mac-frame-tabbing nil)
  '(mac-pass-command-to-system nil)
+ '(magit-branch-prefer-remote-upstream '(3))
+ '(magit-clone-default-directory "~/projects")
  '(magit-diff-use-overlays nil)
  '(mail-envelope-from 'header)
  '(mail-specify-envelope-from t)
