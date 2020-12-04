@@ -1465,8 +1465,11 @@ The optional argument IGNORED is not used."
   :bind (("C-x b" . consult-buffer)
 	 ("<help> a" . consult-apropos))
   :init
-  (consult-annotate-mode +1)
   (consult-preview-mode +1))
+
+(leaf marginalia-mode
+  :init
+  (marginalia-mode +1))
 
 
 (leaf external-process-improvements
