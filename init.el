@@ -1121,17 +1121,6 @@ The optional argument IGNORED is not used."
     (add-hook 'prog-mode-hook #'symbol-overlay-mode)
     (add-hook 'emacs-lisp-mode-hook #'symbol-overlay-mode)))
 
-(leaf smie
-  :preface
-  (defun smie-auto-guess ()
-    "Autoindentation with SMIE."
-    (when (featurep 'smie)
-      (unless (eq smie-grammar 'unset)
-	(smie-config-guess))))
-
-  :hook ((prog-mode-hook . smie-auto-guess))
-  :require t)
-
 (leaf zygospore
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows)))
 
@@ -1397,11 +1386,7 @@ The optional argument IGNORED is not used."
   :bind (("C-;" . hippie-expand)))
 
 (leaf dtrt-indent
-  :after t
-  :hook (prog-mode-hook protobuf-mode-hook)
-  :config
-  (add-to-list 'dtrt-indent-hook-mapping-list
-	       '(protobuf-mode c/c++/java c-basic-offset)))
+  :hook (prog-mode-hook protobuf-mode-hook))
 
 ;;; Screencasts
 
