@@ -1438,7 +1438,7 @@ The optional argument IGNORED is not used."
 					((file
 					  (styles basic substring))
 					 (line
-					  (styles basic substring))))
+					  (styles partial-completion substring))))
 	 (read-file-name-completion-ignore-case . t)
 	 (read-buffer-completion-ignore-case . t)
 	 (completion-ignore-case . t))
