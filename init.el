@@ -1092,7 +1092,8 @@ The optional argument IGNORED is not used."
 
 (leaf which-key
   :hook (after-init-hook)
-  :require t)
+  :require t
+  :setq ((which-key-show-transient-maps . 't)))
 
 (leaf composable
   :config
@@ -1274,8 +1275,15 @@ The optional argument IGNORED is not used."
 		  "")))
       (next-history-element arg)))
 
+  (defun my-consult-line-from-isearch ()
+    (interactive)
+    (minibuffer-with-setup-hook
+	(lambda ()
+	  (setq orderless-transient-matching-styles '(orderless-prefixes)))
+      (consult-line-from-isearch)))
+
   :bind ((isearch-mode-map
-	  ("M-i" . consult-line-from-isearch)
+	  ("M-i" . my-consult-line-from-isearch)
 	  ("M-n" . my-isearch-next)))
   :config
   (setq search-whitespace-regexp ".*")
@@ -1436,9 +1444,7 @@ The optional argument IGNORED is not used."
 			    (orderless))
 	 (completion-category-overrides quote
 					((file
-					  (styles basic substring))
-					 (line
-					  (styles partial-completion substring))))
+					  (styles basic substring))))
 	 (read-file-name-completion-ignore-case . t)
 	 (read-buffer-completion-ignore-case . t)
 	 (completion-ignore-case . t))
@@ -1447,6 +1453,9 @@ The optional argument IGNORED is not used."
   (icomplete-mode)
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
+
+(leaf orderless
+  :hook ((minibuffer-exit-hook . orderless-remove-transient-configuration)))
 
 (leaf consult
   :bind (("C-x b" . consult-buffer)
@@ -1457,6 +1466,11 @@ The optional argument IGNORED is not used."
 (leaf marginalia-mode
   :init
   (marginalia-mode +1))
+
+(leaf embark
+  :bind ((minibuffer-local-completion-map
+	  ("M-o" . embark-act-noexit)
+	  ("C-o" . embark-act))))
 
 
 (leaf external-process-improvements
