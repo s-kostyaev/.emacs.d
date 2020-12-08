@@ -1432,14 +1432,16 @@ The optional argument IGNORED is not used."
 	  ("C-j" . icomplete-force-complete)
 	  ("C-M-j" . exit-minibuffer)
 	  ("<RET>" . icomplete-force-complete-and-exit)))
-  :custom ((completion-styles quote
-			      (orderless))
-	   (completion-category-overrides quote
-					  ((file
-					    (styles basic substring))))
-	   (read-file-name-completion-ignore-case . t)
-	   (read-buffer-completion-ignore-case . t)
-	   (completion-ignore-case . t))
+  :setq ((completion-styles quote
+			    (orderless))
+	 (completion-category-overrides quote
+					((file
+					  (styles basic substring))
+					 (line
+					  (styles basic substring))))
+	 (read-file-name-completion-ignore-case . t)
+	 (read-buffer-completion-ignore-case . t)
+	 (completion-ignore-case . t))
   :require t orderless
   :config
   (icomplete-mode)
