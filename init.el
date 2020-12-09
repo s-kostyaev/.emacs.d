@@ -864,25 +864,6 @@ The optional argument IGNORED is not used."
 	 (mac-command-key-is-meta quote t)
 	 (mac-option-key-is-meta nil)))
 
-(leaf ivy
-  :disabled t
-  :defvar ivy-completion-beg ivy-completion-end
-  :bind* (("C-c s k" . ivy-resume))
-  :bind (:ivy-minibuffer-map
-	 ("C-;" . ivy-avy))
-  :init
-  (ivy-mode)
-  :config
-  (with-eval-after-load 'ivy
-    (progn
-      (setq ivy-initial-inputs-alist nil)
-      (setq ivy-re-builders-alist '((counsel-M-x . ivy--regex-fuzzy)
-				    (swiper . ivy--regex-plus)
-				    (t . ivy--regex-fuzzy)))))
-  (leaf flx)
-  (leaf ivy-avy
-    :require t))
-
 (leaf fzf
   :bind* (("C-c C-f" . my-fzf-project))
   :config
@@ -1162,33 +1143,6 @@ The optional argument IGNORED is not used."
     (advice-add 'my-grep-vc-or-dir :after 'my-next-window)))
 
 
-(leaf counsel
-  :disabled t
-  :bind (("C-c g" . my-counsel-git-grep)
-	 ("C-c C-f" . my-counsel-fzf-project)
-	 (isearch-mode-map
-	  ("M-i" . swiper-from-isearch)))
-  :init
-  (counsel-mode)
-  :config
-  (with-eval-after-load 'counsel
-    (defun my-counsel-git-grep ()
-      "My git grep."
-      (interactive)
-      (counsel-git-grep nil
-			(let ((symb (symbol-at-point)))
-			  (if symb
-			      (prin1-to-string symb)
-			    ""))))
-
-    (defun my-counsel-fzf-project ()
-      "Fzf in project."
-      (interactive)
-      (counsel-fzf nil (if (project-current)
-			   (project-root (project-current)))))
-
-    (setq ivy-height 20)))
-
 (leaf my-yank-kill-ring
   :preface
   (defun my-icomplete-yank-kill-ring ()
@@ -1201,36 +1155,6 @@ The optional argument IGNORED is not used."
        (completing-read "paste from kill ring:" kill-ring nil t))))
 
   :bind (("M-y" . my-icomplete-yank-kill-ring)))
-
-(leaf ace-isearch
-  :disabled t
-  :preface
-  (defun swiper-from-isearch ()
-    "Invoke `swiper' from isearch."
-    (interactive)
-    (let ((query (if isearch-regexp
-		     isearch-string
-		   (regexp-quote isearch-string))))
-      (isearch-exit)
-      (swiper query)))
-
-  (defun my-isearch-next ()
-    "Isearch symbol at point or next isearch history item."
-    (interactive)
-    (isearch-yank-string
-     (format "%s"
-	     (or
-	      (symbol-at-point)
-	      ""))))
-
-  :bind ((isearch-mode-map
-	  ("M-n" . my-isearch-next)
-	  ("M-i" . swiper-from-isearch)))
-  :config
-  (with-eval-after-load 'ace-isearch
-    (setq ace-isearch-function 'avy-goto-word-1)
-    (setq ace-isearch-function-from-isearch 'swiper-from-isearch)
-    (setq ace-isearch-use-jump nil)))
 
 (leaf isearch
   :preface
