@@ -526,33 +526,6 @@
 		      (s-trim
 		       (shell-command-to-string "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec"))))
 	  (require 'go-impl)
-	  (leaf go-direx
-	    :disabled t
-            :preface
-            (defun my-kill-prev-buf (_)
-              "Kill current buffer."
-              (interactive)
-              (kill-buffer
-               (caar
-                (window-prev-buffers))))
-
-            (defun my-direx-hook ()
-	      "My hook for direx."
-              (interactive)
-              (local-set-key
-               (kbd "s")
-               #'isearch-forward)
-              (local-set-key
-               (kbd "q")
-               (lambda ()
-                 (interactive)
-                 (kill-buffer
-	          (buffer-name))))
-              (advice-add 'direx:find-item :after 'my-kill-prev-buf))
-
-            :hook ((direx:direx-mode-hook . my-direx-hook))
-            :require t)
-
 	  (require 'gotest)
 	  (require 'go-playground)
 	  (defun my-go-test (arg)
@@ -589,9 +562,6 @@
 	  (local-set-key
 	   (kbd "C-c C-i")
 	   #'go-fill-struct)
-	  ;; (local-set-key
-	  ;;  (kbd "M-i")
-	  ;;  #'go-direx-switch-to-buffer)
 	  (local-set-key
 	   (kbd "M-?")
 	   #'lsp-find-references)
