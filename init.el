@@ -1353,7 +1353,8 @@ The optional argument IGNORED is not used."
 
 (leaf consult
   :bind (("C-x b" . consult-buffer)
-	 ("<help> a" . consult-apropos))
+	 ("<help> a" . consult-apropos)
+	 ("M-i" . consult-imenu))
   :init
   (consult-preview-mode +1))
 
@@ -1364,7 +1365,8 @@ The optional argument IGNORED is not used."
 (leaf embark
   :bind ((minibuffer-local-completion-map
 	  ("M-o" . embark-act-noexit)
-	  ("C-o" . embark-act))))
+	  ("C-o" . embark-act)
+	  ("M-r" . embark-become))))
 
 
 (leaf external-process-improvements
@@ -1454,6 +1456,12 @@ The optional argument IGNORED is not used."
   :config
   (save-place-mode 1))
 
+(leaf recentf
+  :preface
+  (recentf-mode 1)
+  (setq recentf-max-menu-items 100)
+  (setq recentf-max-saved-items 100))
+
 (leaf package-lint-flymake
   :preface
   (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
@@ -1518,6 +1526,8 @@ The optional argument IGNORED is not used."
     "Setup axiom."
     (setq-local company-backends '(company-axiom-backend))
     (aggressive-indent-mode -1))
+
+  (setq axiom-process-enable-pretty-print t)
   :hook ((axiom-process-mode-hook . my-setup-axiom)))
 
 (leaf my-screenshots
