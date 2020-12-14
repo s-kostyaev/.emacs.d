@@ -1356,13 +1356,16 @@ The optional argument IGNORED is not used."
 	 ("<help> a" . consult-apropos)
 	 ("M-i" . consult-imenu))
   :init
-  (consult-preview-mode +1))
+  (consult-preview-mode +1)
+  :setq ((completion-in-region-function . 'consult-completion-in-region)))
 
 (leaf marginalia-mode
   :init
-  (marginalia-mode +1))
+  (marginalia-mode +1)
+  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
 
 (leaf embark
+  :disabled t
   :bind ((minibuffer-local-completion-map
 	  ("M-o" . embark-act-noexit)
 	  ("C-o" . embark-act)
