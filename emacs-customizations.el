@@ -100,6 +100,7 @@
 	    (make-local-variable 'package-build-recipes-dir)
 	    default-directory))
      (eval c-set-offset 'innamespace 0)))
+ '(speechd-out-active-drivers '(ssip))
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
  '(warning-suppress-types '((leaf) (comp) (frameset) (bytecomp))))

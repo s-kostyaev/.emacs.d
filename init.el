@@ -643,11 +643,6 @@ If `force' refresh even if package list already exists."
 	 ("v" . quoted-insert)
 	 ("f" . search-forward)
 	 ("c" . compile)
-	 ("r" . replace-string)
-	 ("a" . repeat-complex-command)
-	 ("m" . manual-entry)
-	 ("w" . what-line)
-	 ("" . shell)
 	 ("0" . overwrite-mode)
 	 ("" . read-only-mode)
 	 ("" . kill-word)
@@ -1580,12 +1575,27 @@ Saves to a temp file."
 (leaf nov
   :mode (("\\.epub\\'" . nov-mode))
   :preface
+  (leaf speechd
+    :preface
+    (defun my-read-buffer ()
+      (interactive)
+      (speechd-stop t)
+      (speechd-set-language "ru")
+      (speechd-set-rate 100 t)
+      (speechd-say-text (buffer-substring-no-properties (point) (point-max))))
+
+    (defun my-stop-reading ()
+      (interactive)
+      (speechd-stop t)))
+
   (defun my-nov-font-setup ()
     (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
                              :height 1.6)
     (local-set-key (kbd "f") (lambda ()
 			       (interactive)
-			       (spray-mode))))
+			       (spray-mode)))
+    (local-set-key (kbd "y") #'my-read-buffer)
+    (local-set-key (kbd "s") #'my-stop-reading))
   (add-hook 'nov-mode-hook 'my-nov-font-setup)
   (setq nov-text-width 140)
   (setq visual-fill-column-center-text t)
