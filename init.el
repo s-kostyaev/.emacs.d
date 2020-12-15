@@ -17,6 +17,19 @@
         (setq network-security-level 'high)
         (setq gnutls-verify-error t))))
 
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 (package-initialize)
 
 (leaf benchmark-init
@@ -1047,6 +1060,10 @@ The optional argument IGNORED is not used."
   :setq ((which-key-show-transient-maps . 't)))
 
 (leaf composable
+  :straight
+  (composable :type git :host github :repo "paldepind/composable.el"
+	      :fork (:host github
+			   :repo "Ergus/composable.el"))
   :config
   (run-with-idle-timer 0.1 nil #'require 'composable nil t)
   (with-eval-after-load 'composable
@@ -1560,12 +1577,15 @@ Saves to a temp file."
   :disabled t
   :setq ((languagetool-default-language . "en-US")))
 
-(leaf nov-mode
-  :mode (("\\.epub\\'"))
+(leaf nov
+  :mode (("\\.epub\\'" . nov-mode))
   :preface
   (defun my-nov-font-setup ()
     (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
-                             :height 1.6))
+                             :height 1.6)
+    (local-set-key (kbd "f") (lambda ()
+			       (interactive)
+			       (spray-mode))))
   (add-hook 'nov-mode-hook 'my-nov-font-setup)
   (setq nov-text-width 140)
   (setq visual-fill-column-center-text t)
@@ -1573,7 +1593,9 @@ Saves to a temp file."
   (add-hook 'nov-mode-hook 'visual-fill-column-mode)
 
   :config
-  (require 'justify-kp)
+  (leaf justify-kp
+    :straight (justify-kp :type git :host github :repo "Fuco1/justify-kp")
+    :require t)
   (setq nov-text-width t)
 
   (defun my-nov-window-configuration-change-hook ()
