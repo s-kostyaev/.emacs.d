@@ -287,7 +287,8 @@
   :init
   (leaf flymake
     :bind (("C-x `" . flymake-goto-next-error)
-	   ("C-c r" . flymake-show-diagnostics-buffer)))
+	   ;; ("C-c r" . flymake-show-diagnostics-buffer)
+	   ("C-c r" . consult-flymake)))
 
   :require flymake)
 
@@ -1481,8 +1482,8 @@ The optional argument IGNORED is not used."
 (leaf recentf
   :preface
   (recentf-mode 1)
-  (setq recentf-max-menu-items 100)
-  (setq recentf-max-saved-items 100))
+  (setq recentf-max-menu-items 300)
+  (setq recentf-max-saved-items 300))
 
 (leaf package-lint-flymake
   :preface
