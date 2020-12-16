@@ -1364,6 +1364,13 @@ The optional argument IGNORED is not used."
   :hook ((minibuffer-exit-hook . orderless-remove-transient-configuration)))
 
 (leaf consult
+  :preface
+  (defun my-consult-project-rg ()
+    (interactive)
+    (let ((xref-search-program 'ripgrep)
+	  (xref-show-xrefs-function 'xref--show-defs-minibuffer))
+      (call-interactively 'project-find-regexp)))
+
   :bind (("C-x b" . consult-buffer)
 	 ("<help> a" . consult-apropos)
 	 ("M-i" . consult-imenu))
