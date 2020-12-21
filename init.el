@@ -37,7 +37,9 @@
   :require benchmark-init)
 
 (global-set-key (kbd "C-M-r") (lambda () (interactive)
-                                (byte-recompile-file "~/.emacs.d/init.el" t 0)))
+                                (byte-recompile-file "~/.emacs.d/init.el" t 0)
+				(package-quickstart-refresh)
+				(byte-recompile-file "~/.emacs.d/package-quickstart.el" t 0)))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
@@ -1456,6 +1458,7 @@ The optional argument IGNORED is not used."
 	 ("C-c T" . go-translate-popup))
   :config
   (with-eval-after-load 'go-translate
+    (setq go-translate-token-current (cons 430675 2721866130))
     (setq go-translate-target-language "ru")
     (setq go-translate-local-language "en")
     (setq go-translate-extra-directions '(("en" . "ru")
