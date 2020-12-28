@@ -1058,6 +1058,7 @@ The optional argument IGNORED is not used."
   :setq ((which-key-show-transient-maps . 't)))
 
 (leaf composable
+  :disabled t
   :straight
   (composable :type git :host github :repo "paldepind/composable.el"
 	      :fork (:host github
