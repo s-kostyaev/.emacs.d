@@ -1646,8 +1646,14 @@ Saves to a temp file."
   (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook))
 
 (leaf golden-ratio-mode
+  :disabled t
   :init
   (golden-ratio-mode +1))
+
+(leaf golden
+  :straight (golden :type git :repo "https://git.sr.ht/~wklew/golden")
+  :init
+  (global-golden-mode +1))
 
 (provide 'init)
 ;;; init.el ends here
