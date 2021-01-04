@@ -102,6 +102,7 @@
   (defun my-reload-theme ()
     "Reload current theme."
     (interactive)
+    (set-frame-font (font-spec :size 13.0 :family "Go Mono") nil t)
     (mapc
      (lambda (theme)
        (disable-theme theme)
