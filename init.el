@@ -102,12 +102,13 @@
   (defun my-reload-theme ()
     "Reload current theme."
     (interactive)
-    (set-frame-font (font-spec :size 13.0 :family "Go Mono") nil t)
-    (mapc
-     (lambda (theme)
-       (disable-theme theme)
-       (load-theme theme t))
-     custom-enabled-themes))
+    (set-frame-font my-font nil t)
+    (if my-need-theme-reload
+	(mapc
+	 (lambda (theme)
+	   (disable-theme theme)
+	   (load-theme theme t))
+	 custom-enabled-themes)))
 
   (defun my-reload-theme--frame (_frame)
     "Reload theme after make frame."
@@ -147,12 +148,17 @@
 
   (add-to-list 'after-make-frame-functions #'my-reload-theme--frame)
   (add-hook 'server-after-make-frame-hook #'my-reload-theme)
+  (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
   :pre-setq ((my-light-theme quote solarized-light)
-	     (my-dark-theme quote spacemacs-dark)
+	     (my-dark-theme quote solarized-dark)
 	     (my-need-fix-bg)
-	     (my-pos quote "55.05N 82.94E"))
+	     (my-pos quote "55.05N 82.94E")
+	     (my-need-theme-reload))
+
+  :preface
+  (setq my-font (font-spec :size 13.0 :family "Go Mono"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
