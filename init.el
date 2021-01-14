@@ -1372,6 +1372,13 @@ The optional argument IGNORED is not used."
   (setq completion-ignore-case t))
 
 (leaf orderless
+  :preface
+  (defun my-orderless-dispatch (pattern _index _total)
+    (cond
+     ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
+     ((string-suffix-p "=" pattern) `(orderless-literal . ,(substring pattern 0 -1)))
+     ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
+  (setq orderless-style-dispatchers '(my-orderless-dispatch))
   :hook ((minibuffer-exit-hook . orderless-remove-transient-configuration)))
 
 (leaf consult
