@@ -1569,6 +1569,7 @@ The optional argument IGNORED is not used."
     (aggressive-indent-mode -1))
 
   (setq axiom-process-enable-pretty-print t)
+  (setq axiom-process-embed-gnu-draw t)
   :hook ((axiom-process-mode-hook . my-setup-axiom)))
 
 (leaf my-screenshots
@@ -1577,6 +1578,7 @@ The optional argument IGNORED is not used."
     "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file."
     (interactive)
+    (require 'dired)
     (let* ((filename (make-temp-file "Emacs" nil ".svg"))
            (data (x-export-frames nil 'svg)))
       (with-temp-file filename
@@ -1587,6 +1589,7 @@ Saves to a temp file."
     "Save a screenshot of the current frame as an PNG image.
 Saves to a temp file."
     (interactive)
+    (require 'dired)
     (let* ((filename (make-temp-file "Emacs" nil ".png"))
            (data (x-export-frames nil 'png)))
       (with-temp-file filename
