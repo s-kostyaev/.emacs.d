@@ -722,7 +722,7 @@ The optional argument IGNORED is not used."
 	    " GDK_BACKEND=x11 /usr/bin/setsid -w chromium " url)))
       (start-process-shell-command "browser" "*chromium-open-url*" cmd)))
 
-  :setq ((browse-url-browser-function function my-browse-url-chromium-wayland)))
+  :setq ((browse-url-browser-function function browse-url-default-browser)))
 
 (leaf my-open-multiple-files
   :hook ((window-setup-hook . delete-other-windows)))
