@@ -158,7 +158,7 @@
 	     (my-need-theme-reload))
 
   :preface
-  (setq my-font (font-spec :size 13.0 :family "Go Mono"))
+  (setq my-font (font-spec :size 14.0 :family "PT Mono"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
@@ -655,7 +655,6 @@ If `force' refresh even if package list already exists."
 	 ("c" . compile)
 	 ("0" . overwrite-mode)
 	 ("" . read-only-mode)
-	 ("" . kill-word)
 	 ("" . previous-line)
 	 ("" . forward-word)
 	 ("" . not-modified)))
@@ -1570,6 +1569,7 @@ The optional argument IGNORED is not used."
 
   (setq axiom-process-enable-pretty-print t)
   (setq axiom-process-embed-gnu-draw t)
+  (setq axiom-process-show-svg t)
   :hook ((axiom-process-mode-hook . my-setup-axiom)))
 
 (leaf my-screenshots
