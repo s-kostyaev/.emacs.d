@@ -528,6 +528,7 @@
   (leaf go-mode
     :defvar company-backends go-tag-args
     :mode ("\\.go\\'"
+	   "\\.go2\\'"
 	   ("go.mod$" . go-dot-mod-mode))
     :config
     (with-eval-after-load 'go-mode
