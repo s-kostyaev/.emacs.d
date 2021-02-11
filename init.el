@@ -47,24 +47,35 @@
 
 (leaf my-themes
   :preface
-  (defun my-is-night ()
-    "Check if gnome night light enabled."
-    (string= "NIGHT"
-	     (string-trim
-	      (shell-command-to-string
-	       (concat "sunwait poll civil " my-pos)))))
+  (setq calendar-location-name "Novosibirsk, Russia")
+  (setq calendar-latitude 55.05)
+  (setq calendar-longitude 82.93)
+
+  (defun my-switch-themes (sun-event &optional first-run)
+    "Switch themes on sunrise and sunset."
+    (if first-run
+	(cond ((memq sun-event '(sunrise midday))
+	       (mapc #'disable-theme custom-enabled-themes)
+	       (load-theme my-light-theme t))
+	      ((memq sun-event '(sunset midnight))
+	       (mapc #'disable-theme custom-enabled-themes)
+	       (load-theme my-dark-theme t)))
+      (cond ((eq sun-event 'sunrise)
+	     (mapc #'disable-theme custom-enabled-themes)
+	     (load-theme my-light-theme t))
+	    ((eq sun-event 'sunset)
+	     (mapc #'disable-theme custom-enabled-themes)
+	     (load-theme my-dark-theme t)))))
+
+  ;; sign this function to be invoked on sun events
+  (add-hook 'rase-functions 'my-switch-themes)
 
   (defun my-enable-light-theme ()
     "Enable light theme."
     (interactive)
     (mapc #'disable-theme custom-enabled-themes)
     (progn
-      (load-theme my-light-theme t)
-      (if my-need-fix-bg
-	  (custom-set-faces
-	   '(default
-	      ((t
-		(:background "#fdf6e3" :height 130 :width normal :foundry "nil" :family "Go Mono"))))))))
+      (load-theme my-light-theme t)))
 
   (defun my-enable-dark-theme ()
     "Enable dark theme."
@@ -75,18 +86,7 @@
   (defun my-set-themes ()
     "Function for setting themes after init."
     (interactive)
-    (if (executable-find "sunwait")
-	(if (my-is-night)
-	    (my-enable-dark-theme)
-	  (my-enable-light-theme))
-      (let ((cur-hour (nth 2
-			   (decode-time))))
-	(mapc #'disable-theme custom-enabled-themes)
-	(if (and
-	     (> cur-hour 7)
-	     (< cur-hour 20))
-	    (my-enable-light-theme)
-	  (my-enable-dark-theme)))))
+    (rase-start t))
 
   (defun my-toggle-themes ()
     "Toggle light and dark themes."
@@ -153,12 +153,10 @@
 
   :pre-setq ((my-light-theme quote solarized-light)
 	     (my-dark-theme quote solarized-dark)
-	     (my-need-fix-bg)
-	     (my-pos quote "55.05N 82.94E")
 	     (my-need-theme-reload))
 
   :preface
-  (setq my-font (font-spec :size 13.0 :family "PT Mono"))
+  (setq my-font (font-spec :size 15.0 :family "Iosevka SS04"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook

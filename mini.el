@@ -67,8 +67,7 @@
       ;; 'adwaita
       ;; 'tsdh-light
       my-dark-theme 'misterioso
-      ;; 'tsdh-dark
-      my-need-fix-bg t)
+      ;; 'tsdh-dark)
 
 (defun my-set-themes ()
   "Function for setting themes after init."
@@ -77,15 +76,8 @@
     (mapc #'disable-theme custom-enabled-themes)
     (if (and (>  cur-hour 7)
              (<  cur-hour 20))
-        (progn
-          (load-theme my-light-theme t)
-          (if my-need-fix-bg
-              (custom-set-faces
-               '(default ((t (:background "#fdf6e3":height 130 :width normal :foundry "nil" :family "Go Mono")))))))
-      (load-theme my-dark-theme t)
-      (if my-need-fix-bg
-          (custom-set-faces
-           '(default ((t (:height 130 :width normal :family "Go Mono")))))))))
+        (load-theme my-light-theme t)
+      (load-theme my-dark-theme t))))
 
 (defun my-toggle-themes ()
   "Toggle light and dark themes."
@@ -96,15 +88,8 @@
                      'dark)))
     (mapc #'disable-theme custom-enabled-themes)
     (if (equal cur-theme 'light)
-        (progn
-          (load-theme my-dark-theme t)
-          (if my-need-fix-bg
-              (custom-set-faces
-               '(default ((t (:height 130 :width normal :family "Go Mono")))))))
-      (load-theme my-light-theme t)
-      (if my-need-fix-bg
-          (custom-set-faces
-           '(default ((t (:background "#fdf6e3" :height 130 :width normal :family "Go Mono")))))))))
+        (load-theme my-dark-theme t)
+      (load-theme my-light-theme t))))
 
 (global-set-key (kbd "<f6>") #'my-toggle-themes)
 
