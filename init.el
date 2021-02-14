@@ -194,6 +194,18 @@
   (defvar my-gnome-night-light-light-change-callback nil "The callback function called on Night Light state change.\nIt takes one parameter, which is t when the Night Light is active\n(e.g.  it's night) and nil when it's day.")
   (my-gnome-night-light))
 
+(leaf my-mac-themes
+  :preface
+  (defun my-mac-apply-theme (appearance)
+    "Load theme, taking current system APPEARANCE into consideration."
+    (mapc #'disable-theme custom-enabled-themes)
+    (pcase appearance
+      ('light (load-theme my-light-theme t))
+      ('dark (load-theme my-dark-theme t))))
+
+  (if (eq (window-system) 'ns)
+      (add-hook 'ns-system-appearance-change-functions #'my-mac-apply-theme)))
+
 (leaf key-chord
   :bind (([f9] . key-chord-mode))
   :config
