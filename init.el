@@ -400,7 +400,8 @@
   (put 'downcase-region 'disabled nil)
   (delete-selection-mode)
   (show-paren-mode 1)
-  (electric-pair-mode 1))
+  (electric-pair-mode 1)
+  (setq sentence-end-double-space nil))
 
 (leaf my-align-region
   :defvar delimit-columns-extra delimit-columns-format delimit-columns-str-separator delimit-columns-separator
