@@ -559,7 +559,7 @@
 	  (if (eq system-type 'darwin)
 	      (setenv "GOROOT"
 		      (s-trim
-		       (shell-command-to-string "echo /usr/local/Cellar/go/`GOROOT='' go version | awk '{print $3}' | sed -e 's/go//g'`/libexec"))))
+		       (shell-command-to-string "find /usr/local/Cellar/go -type 'd' -name 'libexec'"))))
 	  (require 'go-impl)
 	  (require 'gotest)
 	  (require 'go-playground)
@@ -1310,8 +1310,24 @@ The optional argument IGNORED is not used."
   :hook ((after-init-hook . my-go-home)))
 
 (leaf libgit
-  :when (package-installed-p 'libgit)
-  :require libgit)
+  :straight (libgit :fetcher github
+		    :repo "magit/libegit2"
+		    :fork "s-kostyaev/libegit2"
+		    :files ("CMakeLists.txt"
+			    ("libgit2" "libgit2/cmake")
+			    ("libgit2" "libgit2/CMakeLists.txt")
+			    ("libgit2" "libgit2/COPYING")
+			    ("libgit2" "libgit2/deps")
+			    ("libgit2" "libgit2/.HEADER")
+			    ("libgit2" "libgit2/include")
+			    ("libgit2" "libgit2/libgit2_clar.supp")
+			    ("libgit2" "libgit2/libgit2.pc.in")
+			    ("libgit2" "libgit2/script")
+			    ("libgit2" "libgit2/src")
+			    "libgit.el"
+			    "Makefile"
+			    "src"
+			    "uthash")))
 
 (leaf so-long
   :when (>= emacs-major-version 27)
