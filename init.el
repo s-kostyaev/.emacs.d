@@ -1310,7 +1310,6 @@ The optional argument IGNORED is not used."
   :hook ((after-init-hook . my-go-home)))
 
 (leaf libgit
-  :disabled t
   :when (package-installed-p 'libgit)
   :require libgit)
 
@@ -1432,12 +1431,12 @@ The optional argument IGNORED is not used."
   :setq ((rust-format-on-save . t)))
 
 (leaf tree-sitter
-  :disabled t
   :preface
+  (require 'tree-sitter-langs)
+
   (defun my-enable-tree-sitter ()
     "Enable tree-sitter."
-    (require 'tree-sitter-langs)
-    (tree-sitter-hl-mode))
+    (tree-sitter-hl-mode +1))
 
   :hook ((tree-sitter-after-on-hook . my-enable-tree-sitter))
   :config
