@@ -34,6 +34,7 @@
  '(debug-on-error nil)
  '(debug-on-quit nil)
  '(electric-spacing-double-space-docs nil)
+ '(enable-recursive-minibuffers t)
  '(fringe-mode 0 nil (fringe))
  '(global-aggressive-indent-mode t)
  '(go-packages-function 'go-packages-go-list)
