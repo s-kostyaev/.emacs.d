@@ -156,7 +156,7 @@
 	     (my-need-theme-reload))
 
   :preface
-  (setq my-font (font-spec :size 15.0 :family "Iosevka SS04"))
+  (setq my-font (font-spec :size 14.0 :family "PT Mono"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
