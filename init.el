@@ -1178,6 +1178,7 @@ The optional argument IGNORED is not used."
 
 
 (leaf my-yank-kill-ring
+  :disabled t
   :preface
   (defun my-icomplete-yank-kill-ring ()
     "Insert the selected `kill-ring' item directly at point."
@@ -1417,7 +1418,8 @@ The optional argument IGNORED is not used."
 
   :bind (("C-x b" . consult-buffer)
 	 ("<help> a" . consult-apropos)
-	 ("M-i" . consult-imenu))
+	 ("M-i" . consult-imenu)
+	 ("M-y" . consult-yank-pop))
   :init
   (consult-preview-mode +1)
   :setq ((completion-in-region-function . 'consult-completion-in-region)))
