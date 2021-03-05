@@ -13,6 +13,7 @@
 	composable-comment-or-uncomment-region
 	composable-kill-region
 	composable-save-region
+	consult-yank-pop
 	dabbrev-completion
 	electric-newline-and-maybe-indent
 	electric-pair-delete-pair
