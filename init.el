@@ -502,9 +502,10 @@
   :config
   (eval-after-load 'eglot
     (lambda nil
-      (bind-key
-       (kbd "C-c C-h")
-       'eglot-help-at-point eglot-mode-map))))
+      (define-key
+	eglot-mode-map
+	(kbd "C-c C-h")
+	'eglot-help-at-point))))
 
 (leaf exec-path
   :preface
@@ -617,6 +618,7 @@
 	  (company-prescient-mode -1)
 	  (setq-local lsp-completion-filter-on-incomplete nil)
 	  (lsp-deferred)
+	  ;; (eglot-ensure)
 	  (defun my-go-packages-go-list ()
 	    (ht-get my-go-packages-by-project (project-current)))
 
