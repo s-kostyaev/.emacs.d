@@ -1301,7 +1301,8 @@ The optional argument IGNORED is not used."
   :require yasnippet
   :config
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (add-hook 'lsp-mode-hook #'lsp-completion--enable))
+  (add-hook 'lsp-mode-hook #'lsp-completion--enable)
+  (add-hook 'lsp-mode-hook #'flymake-start))
 
 (leaf my-go-home
   :preface
