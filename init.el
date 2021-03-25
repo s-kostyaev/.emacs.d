@@ -1297,12 +1297,20 @@ The optional argument IGNORED is not used."
 (leaf lsp-mode
   :preface
   (setq lsp-keymap-prefix (kbd "C-x l"))
+
+  (defun my-lsp-before-save ()
+    (interactive)
+    (when lsp-mode
+      (lsp-organize-imports)
+      (lsp-format-buffer)))
+
   :after t
   :require yasnippet
   :config
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (add-hook 'lsp-mode-hook #'lsp-completion--enable)
-  (add-hook 'lsp-mode-hook #'flymake-start))
+  (add-hook 'lsp-mode-hook #'flymake-start)
+  (add-hook 'before-save-hook #'my-lsp-before-save))
 
 (leaf my-go-home
   :preface
