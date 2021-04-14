@@ -609,6 +609,8 @@
 	   '(("gopls.completeUnimported" t)))
 	  (lsp-register-custom-settings
 	   '(("gopls.staticcheck" t)))
+	  (lsp-register-custom-settings
+	   '(("gopls.experimentalPostfixCompletions" t)))
 	  (setq-local project-find-functions
 		      (list #'my-try-go-mod #'project-try-vc))
 	  (setq-local flymake-start-on-save-buffer nil)
