@@ -40,8 +40,10 @@
 
 (global-set-key (kbd "C-M-r") (lambda () (interactive)
                                 (byte-recompile-file "~/.emacs.d/init.el" t 0)
+				(native-compile "~/.emacs.d/init.el")
 				(package-quickstart-refresh)
-				(byte-recompile-file "~/.emacs.d/package-quickstart.el" t 0)))
+				(byte-recompile-file "~/.emacs.d/package-quickstart.el" t 0)
+				(native-compile "~/.emacs.d/package-quickstart.el")))
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
