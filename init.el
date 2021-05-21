@@ -35,6 +35,7 @@
 (package-initialize)
 
 (leaf benchmark-init
+  :disabled t
   :hook ((after-init-hook . benchmark-init/deactivate))
   :require benchmark-init)
 
@@ -1315,7 +1316,6 @@ The optional argument IGNORED is not used."
   :config
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (add-hook 'lsp-mode-hook #'lsp-completion--enable)
-  (add-hook 'lsp-mode-hook #'flymake-start)
   (add-hook 'before-save-hook #'my-lsp-before-save))
 
 (leaf my-go-home

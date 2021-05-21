@@ -18,7 +18,7 @@
 (setq-default icomplete-delay-completions-threshold 0)
 (setq-default icomplete-max-delay-chars 0)
 (setq-default icomplete-compute-delay 0)
-(setq-default icomplete-separator "\n ")
+;; (setq-default icomplete-separator "\n ")
 (setq-default icomplete-with-completion-tables t)
 (setq-default icomplete-in-buffer t)
 (setq-default icomplete--in-region-buffer t)
@@ -31,7 +31,7 @@
 (setq-default icomplete-show-matches-on-no-input t)
 (setq-default resize-mini-windows 'grow-only)
 (setq-default icomplete-prospects-height 10)
-
+(icomplete-vertical-mode +1)
 
 (define-key icomplete-minibuffer-map (kbd "<down>")  #'icomplete-forward-completions)
 (define-key icomplete-minibuffer-map (kbd "C-n")  #'icomplete-forward-completions)
@@ -67,7 +67,8 @@
       ;; 'adwaita
       ;; 'tsdh-light
       my-dark-theme 'misterioso
-      ;; 'tsdh-dark)
+      ;; 'tsdh-dark
+      )
 
 (defun my-set-themes ()
   "Function for setting themes after init."

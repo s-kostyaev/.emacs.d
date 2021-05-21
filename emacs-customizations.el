@@ -23,8 +23,8 @@
    '(redefine callargs interactive-only make-local mapcar constants suspicious lexical))
  '(column-number-mode t)
  '(company-backends
-   '(company-capf company-cmake company-bbdb company-files
-		  (company-dabbrev-code company-gtags company-etags company-keywords)
+   '(company-capf company-cmake company-files
+		  (company-dabbrev-code company-keywords)
 		  company-oddmuse company-dabbrev))
  '(compilation-message-face 'default)
  '(consult-ripgrep-command
@@ -72,7 +72,35 @@
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
-   '((flycheck-disabled-checkers emacs-lisp-checkdoc)
+   '((eval when
+	   (and
+	    (buffer-file-name)
+	    (not
+	     (file-directory-p
+	      (buffer-file-name)))
+	    (string-match-p "^[^.]"
+			    (buffer-file-name)))
+	   (unless
+	       (featurep 'package-build)
+	     (let
+		 ((load-path
+		   (cons "../package-build" load-path)))
+	       (require 'package-build)))
+	   (unless
+	       (derived-mode-p 'emacs-lisp-mode)
+	     (emacs-lisp-mode))
+	   (package-build-minor-mode)
+	   (setq-local flycheck-checkers nil)
+	   (set
+	    (make-local-variable 'package-build-working-dir)
+	    (expand-file-name "../working/"))
+	   (set
+	    (make-local-variable 'package-build-archive-dir)
+	    (expand-file-name "../packages/"))
+	   (set
+	    (make-local-variable 'package-build-recipes-dir)
+	    default-directory))
+     (flycheck-disabled-checkers emacs-lisp-checkdoc)
      (eval progn
 	   (make-local-variable 'process-environment)
 	   (setq process-environment
