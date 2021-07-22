@@ -39,7 +39,7 @@
  '(global-aggressive-indent-mode t)
  '(go-packages-function 'go-packages-go-list)
  '(go-tag-args '("-transform" "snakecase") t)
- '(go-test-verbose t)
+ '(go-test-verbose nil)
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
  '(godoc-use-completing-read t)

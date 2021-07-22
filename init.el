@@ -614,8 +614,6 @@
 	   '(("gopls.completeUnimported" t)))
 	  (lsp-register-custom-settings
 	   '(("gopls.staticcheck" t)))
-	  (lsp-register-custom-settings
-	   '(("gopls.experimentalPostfixCompletions" t)))
 	  (setq-local project-find-functions
 		      (list #'my-try-go-mod #'project-try-vc))
 	  (setq-local flymake-start-on-save-buffer nil)
@@ -1437,8 +1435,8 @@ The optional argument IGNORED is not used."
 	 ("<help> a" . consult-apropos)
 	 ("M-i" . consult-imenu)
 	 ("M-y" . consult-yank-pop))
-  :init
-  (consult-preview-mode +1)
+  ;; :init
+  ;; (consult-preview-mode +1)
   :setq ((completion-in-region-function . 'consult-completion-in-region)))
 
 (leaf marginalia-mode
