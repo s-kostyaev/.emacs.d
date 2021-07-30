@@ -740,7 +740,7 @@ The optional argument IGNORED is not used."
 	    " GDK_BACKEND=x11 /usr/bin/setsid -w chromium " url)))
       (start-process-shell-command "browser" "*chromium-open-url*" cmd)))
 
-  :setq ((browse-url-browser-function function browse-url-default-browser)))
+  :setq ((browse-url-browser-function function my-browse-url-chromium-wayland)))
 
 (leaf my-open-multiple-files
   :hook ((window-setup-hook . delete-other-windows)))
@@ -1388,7 +1388,7 @@ The optional argument IGNORED is not used."
   :hook ((c-mode-hook . lsp-deferred)
 	 (c++-mode-hook . lsp-deferred)))
 
-(leaf icomplete-vertical
+(leaf icomplete
   :bind ((icomplete-minibuffer-map
 	  ("<down>" . icomplete-forward-completions)
 	  ("C-n" . icomplete-forward-completions)
@@ -1406,9 +1406,11 @@ The optional argument IGNORED is not used."
 					  (styles basic substring))))
 	 (read-file-name-completion-ignore-case . t)
 	 (read-buffer-completion-ignore-case . t)
-	 (completion-ignore-case . t))
-  :require t orderless
-  :config
+	 (completion-ignore-case . t)
+	 (icomplete-show-matches-on-no-input . t)
+	 (icomplete-prospects-height . 10))
+  :require orderless
+  :init
   (icomplete-mode)
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
