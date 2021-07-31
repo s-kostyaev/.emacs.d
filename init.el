@@ -35,7 +35,6 @@
 (package-initialize)
 
 (leaf benchmark-init
-  :disabled t
   :hook ((after-init-hook . benchmark-init/deactivate))
   :require benchmark-init)
 
@@ -1717,6 +1716,9 @@ Saves to a temp file."
   :straight (golden :type git :repo "https://git.sr.ht/~wklew/golden")
   :init
   (global-golden-mode +1))
+
+(leaf fsharp-mode
+  :hook ((fsharp-mode-hook . lsp)))
 
 (provide 'init)
 ;;; init.el ends here
