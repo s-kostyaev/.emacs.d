@@ -35,6 +35,7 @@
 (package-initialize)
 
 (leaf benchmark-init
+  :disabled t
   :hook ((after-init-hook . benchmark-init/deactivate))
   :require benchmark-init)
 
@@ -1718,7 +1719,16 @@ Saves to a temp file."
   (global-golden-mode +1))
 
 (leaf fsharp-mode
-  :hook ((fsharp-mode-hook . lsp)))
+  :hook ((fsharp-mode-hook . lsp)
+	 ;; (fsharp-mode-hook . eglot-ensure)
+	 )
+  :init
+  (defun my-fix-fsac ()
+    (interactive)
+    (dolist  (file (directory-files-recursively (expand-file-name "~/.emacs.d/.cache/lsp/fsautocomplete") "." t))
+      (if (file-directory-p file)
+	  (chmod file #o755)
+	(chmod file #o644)))))
 
 (provide 'init)
 ;;; init.el ends here
