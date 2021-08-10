@@ -538,6 +538,18 @@
 	    (cons 'transient dir)))
       (when dir
 	(cons 'transient dir))))
+  (defun my-extract-go-module-name ()
+    (let* ((go-mod-file (f-join (project-root (project-current)) "go.mod"))
+	   (name
+	    (with-temp-buffer
+	      (find-file-noselect-1 (current-buffer) go-mod-file t t go-mod-file 2)
+	      (string-remove-prefix "module "
+				    (buffer-substring-no-properties (point-min)
+								    (progn
+								      (goto-char (point-min))
+								      (end-of-line)
+								      (point)))))))
+      name))
   :require s
   :config
   (require 'ht)
@@ -618,6 +630,7 @@
 		      (list #'my-try-go-mod #'project-try-vc))
 	  (setq-local flymake-start-on-save-buffer nil)
 	  (setq-local flymake-no-changes-timeout nil)
+	  (setq-local lsp-go-goimports-local (my-extract-go-module-name))
 	  (require 'lsp-go)
 	  (symbol-overlay-mode -1)
 	  (company-prescient-mode -1)
