@@ -686,7 +686,6 @@ If `force' refresh even if package list already exists."
 	 ("f" . search-forward)
 	 ("c" . compile)
 	 ("0" . overwrite-mode)
-	 ("" . read-only-mode)
 	 ("" . previous-line)
 	 ("" . forward-word)
 	 ("" . not-modified)))
