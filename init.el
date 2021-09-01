@@ -507,10 +507,12 @@
   :config
   (eval-after-load 'eglot
     (lambda nil
-      (define-key
-	eglot-mode-map
-	(kbd "C-c C-h")
-	'eglot-help-at-point))))
+      (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
+      (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
+      (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
+      (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
+      (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
+      (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions))))
 
 (leaf exec-path
   :preface
@@ -1731,10 +1733,10 @@ Saves to a temp file."
   (global-golden-mode +1))
 
 (leaf fsharp-mode
-  :hook ((fsharp-mode-hook . lsp)
-	 ;; (fsharp-mode-hook . eglot-ensure)
-	 )
+  :hook (;; (fsharp-mode-hook . lsp)
+	 (fsharp-mode-hook . eglot-ensure))
   :init
+  (require 'eglot-fsharp)
   (defun my-fix-fsac ()
     (interactive)
     (dolist  (file (directory-files-recursively (expand-file-name "~/.emacs.d/.cache/lsp/fsautocomplete") "." t))
