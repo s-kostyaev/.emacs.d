@@ -1737,10 +1737,14 @@ Saves to a temp file."
 
 (leaf fsharp-mode
   :hook (;; (fsharp-mode-hook . lsp)
-	 (fsharp-mode-hook . eglot-ensure))
+	 (fsharp-mode-hook . eglot-ensure)
+	 (fsharp-mode-hook . my-set-fsharp-compile-command))
   :init
   (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi")
+  (defun my-set-fsharp-compile-command ()
+    (interactive)
+    (setq-local compile-command "dotnet build"))
   (defun my-fix-fsac ()
     (interactive)
     (dolist  (file (directory-files-recursively (expand-file-name "~/.emacs.d/.cache/lsp/fsautocomplete") "." t))
