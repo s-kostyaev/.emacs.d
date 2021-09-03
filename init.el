@@ -507,6 +507,8 @@
   :config
   (eval-after-load 'eglot
     (lambda nil
+      (defun my-eglot-organize-imports () (call-interactively 'eglot-code-action-organize-imports))
+      (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
       (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
       (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
       (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
@@ -1143,7 +1145,8 @@ The optional argument IGNORED is not used."
     (interactive)
     (aggressive-indent-mode -1))
 
-  :hook ((lsp-mode-hook . my-disable-aggressive-indent))
+  :hook ((lsp-mode-hook . my-disable-aggressive-indent)
+	 (fsharp-mode-hook . my-disable-aggressive-indent))
   :require t
   :config
   (aggressive-indent-global-mode))
