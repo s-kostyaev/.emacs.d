@@ -1736,11 +1736,11 @@ Saves to a temp file."
   (global-golden-mode +1))
 
 (leaf fsharp-mode
-  :hook (;; (fsharp-mode-hook . lsp)
-	 (fsharp-mode-hook . eglot-ensure)
+  :hook ((fsharp-mode-hook . lsp)
+	 ;; (fsharp-mode-hook . eglot-ensure)
 	 (fsharp-mode-hook . my-set-fsharp-compile-command))
   :init
-  (require 'eglot-fsharp)
+  ;; (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi")
   (defun my-set-fsharp-compile-command ()
     (interactive)
