@@ -585,6 +585,7 @@
 	  (require 'go-impl)
 	  (require 'gotest)
 	  (require 'go-playground)
+	  (require 'dap-go)
 	  (defun my-go-test (arg)
 	    (interactive "P")
 	    (if arg
@@ -917,6 +918,7 @@ The optional argument IGNORED is not used."
 	 (mac-option-key-is-meta nil)))
 
 (leaf fzf
+  :disabled t
   :bind* (("C-c C-f" . my-fzf-project))
   :config
   (with-eval-after-load 'fzf
@@ -1734,6 +1736,9 @@ Saves to a temp file."
   :straight (golden :type git :repo "https://git.sr.ht/~wklew/golden")
   :init
   (global-golden-mode +1))
+
+(leaf affe
+  :bind* (("C-c C-f" . affe-find)))
 
 (leaf fsharp-mode
   :hook ((fsharp-mode-hook . lsp)
