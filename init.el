@@ -1740,10 +1740,18 @@ Saves to a temp file."
 (leaf affe
   :bind* (("C-c C-f" . affe-find)))
 
+(leaf dap-mode
+  :init
+  (setq dap-lldb-debug-program '("/usr/bin/lldb-vscode")))
+
 (leaf fsharp-mode
   :hook ((fsharp-mode-hook . lsp)
 	 ;; (fsharp-mode-hook . eglot-ensure)
 	 (fsharp-mode-hook . my-set-fsharp-compile-command))
+  :config
+  (require 'dap-netcore)
+  (setq dap-netcore-download-url "https://github.com/Samsung/netcoredbg/releases/download/1.2.0-825/netcoredbg-linux-amd64_fixed.tar.gz")
+
   :init
   ;; (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi")
