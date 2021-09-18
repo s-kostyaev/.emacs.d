@@ -1750,20 +1750,17 @@ Saves to a temp file."
 	 (fsharp-mode-hook . my-set-fsharp-compile-command))
   :config
   (require 'dap-netcore)
-  (setq dap-netcore-download-url "https://github.com/Samsung/netcoredbg/releases/download/1.2.0-825/netcoredbg-linux-amd64_fixed.tar.gz")
+  (setq dap-netcore-download-url
+	"https://github.com/Samsung/netcoredbg/releases/download/1.2.0-825/netcoredbg-linux-amd64_fixed.tar.gz")
+  (setq dap-netcore-install-dir
+	(f-slash (f-join user-emacs-directory ".cache" "lsp" "netcoredbg")))
 
   :init
   ;; (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi")
   (defun my-set-fsharp-compile-command ()
     (interactive)
-    (setq-local compile-command "dotnet build"))
-  (defun my-fix-fsac ()
-    (interactive)
-    (dolist  (file (directory-files-recursively (expand-file-name "~/.emacs.d/.cache/lsp/fsautocomplete") "." t))
-      (if (file-directory-p file)
-	  (chmod file #o755)
-	(chmod file #o644)))))
+    (setq-local compile-command "dotnet build")))
 
 (provide 'init)
 ;;; init.el ends here
