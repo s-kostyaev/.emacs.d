@@ -1741,7 +1741,7 @@ Saves to a temp file."
   :bind* (("C-c C-f" . affe-find)))
 
 (leaf dap-mode
-  :init
+  :config
   (setq dap-lldb-debug-program '("/usr/bin/lldb-vscode")))
 
 (leaf fsharp-mode
@@ -1750,7 +1750,7 @@ Saves to a temp file."
 	 (fsharp-mode-hook . my-set-fsharp-compile-command))
   :config
   (require 'dap-netcore)
-  (url-retrieve "https://github.com/Samsung/netcoredbg/releases/latest"
+  (url-retrieve "https://github.com/Samsung/netcoredbg/releases"
 		(lambda (_)
 		  (setq dap-netcore-download-url
 			(concat
