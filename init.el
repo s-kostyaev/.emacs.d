@@ -1759,7 +1759,10 @@ Saves to a temp file."
 			  (dom-search
 			   (libxml-parse-html-region (point-min) (point-max))
 			   (lambda (node)
-			     (string-match-p ".*linux.*\\.tar\\.gz"
+			     (string-match-p (pcase system-type
+					       (`gnu/linux ".*linux.*\\.tar\\.gz")
+					       (`darwin ".*osx.*\\.tar\\.gz")
+					       (`windows-nt ".*win64.*\\.zip"))
 					     (or (dom-attr node 'href) ""))))
 			  'href)))))
   (setq dap-netcore-install-dir
