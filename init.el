@@ -219,93 +219,6 @@
     (key-chord-mode 1)))
 
 (leaf flymake
-  :preface
-  (defun my-flymake--mode-line-format ()
-    "Produce a pretty minor mode indicator."
-    (if flymake--backend-state
-	(let* ((known (hash-table-keys flymake--backend-state))
-	       (running (flymake-running-backends))
-	       (disabled (flymake-disabled-backends))
-	       (diags-by-type (make-hash-table))
-	       (all-disabled (and disabled
-				  (null running))))
-	  (maphash
-	   (lambda (_b state)
-	     (mapc
-	      (lambda (diag)
-		(push diag
-		      (gethash
-		       (flymake--diag-type diag)
-		       diags-by-type)))
-	      (flymake--backend-state-diags state)))
-	   flymake--backend-state)
-	  `(,@(unless (or all-disabled
-			  (null known))
-		(cl-loop with types =
-			 (hash-table-keys diags-by-type)
-			 with _augmented =
-			 (cl-loop for extra in
-				  '(:error :warning)
-				  do
-				  (cl-pushnew extra types :key #'flymake--severity))
-			 for type in
-			 (cl-sort types #'> :key #'flymake--severity)
-			 for diags =
-			 (gethash type diags-by-type)
-			 for face =
-			 (flymake--lookup-type-property type 'mode-line-face 'compilation-error)
-			 when (or diags
-				  (cond
-				   ((eq flymake-suppress-zero-counters t)
-				    nil)
-				   (flymake-suppress-zero-counters
-				    (>=
-				     (flymake--severity type)
-				     (warning-numeric-level flymake-suppress-zero-counters)))
-				   (t t)))
-			 collect
-			 `(:propertize ,(format "%d"
-						(length diags))
-				       face ,face mouse-face mode-line-highlight keymap ,(let ((map (make-sparse-keymap))
-											       (type type))
-											   (define-key map
-											     (vector 'mode-line mouse-wheel-down-event)
-											     (lambda (event)
-											       (interactive "e")
-											       (with-selected-window (posn-window
-														      (event-start event))
-												 (flymake-goto-prev-error 1
-															  (list type)
-															  t))))
-											   (define-key map
-											     (vector 'mode-line mouse-wheel-up-event)
-											     (lambda (event)
-											       (interactive "e")
-											       (with-selected-window (posn-window
-														      (event-start event))
-												 (flymake-goto-next-error 1
-															  (list type)
-															  t))))
-											   map)
-				       help-echo ,(concat
-						   (format "%s diagnostics of type %s\n"
-							   (propertize
-							    (format "%d"
-								    (length diags))
-							    'face face)
-							   (propertize
-							    (format "%s" type)
-							    'face face))
-						   (format "%s/%s: previous/next of this type" mouse-wheel-down-event mouse-wheel-up-event)))
-			 into forms finally return
-			 `((:propertize "[")
-			   ,@(cl-loop for
-				      (a . rest)
-				      on forms by #'cdr collect a when rest collect
-				      '(:propertize " "))
-			   (:propertize "]"))))))
-      nil))
-
   :hook ((prog-mode-hook . flymake-mode)
 	 (emacs-lisp-mode-hook . flymake-mode))
   :init
@@ -316,6 +229,7 @@
 
   :require flymake)
 
+(setq flymake-mode-line-format '(" " flymake-mode-line-counters))
 (setq-default mode-line-format
               (list
                "["
@@ -358,7 +272,7 @@
                ;; '(:eval (flycheck-mode-line-status-text))
 
                ;; flymake errors
-               '(:eval (my-flymake--mode-line-format))
+               flymake-mode-line-format
 
                ;; relative position, size of file
                "    ["

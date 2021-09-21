@@ -36,6 +36,7 @@
  '(debug-on-quit nil)
  '(electric-spacing-double-space-docs nil)
  '(enable-recursive-minibuffers t)
+ '(flymake-mode-line-format '(" " flymake-mode-line-counters))
  '(fringe-mode 0 nil (fringe))
  '(global-aggressive-indent-mode t)
  '(go-gen-test-use-testify t)
