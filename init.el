@@ -470,8 +470,6 @@
       name))
   :require s
   :config
-  (require 'ht)
-  (defvar my-go-packages-by-project (ht-create))
   (leaf go-mode
     :defvar company-backends go-tag-args
     :mode ("\\.go\\'"
@@ -556,46 +554,7 @@
 	  (setq-local lsp-completion-filter-on-incomplete nil)
 	  (lsp-deferred)
 	  ;; (eglot-ensure)
-	  (defun my-go-packages-go-list ()
-	    (ht-get my-go-packages-by-project (project-current)))
-
-	  (setq go-packages-function 'my-go-packages-go-list)
-	  (require 'cl-lib)
-	  (defun my-refresh-go-packages-list (&optional force)
-	    "Refresh go packages list.
-If `force' refresh even if package list already exists."
-	    (if (string-equal "go-mode" major-mode)
-		(let ((cur-buf (buffer-name))
-		      (cur-project (project-current)))
-		  (if (not
-		       (f-descendant-of-p (project-root cur-project)
-					  (or
-					   (getenv "GOPATH")
-					   (concat
-					    (getenv "HOME")
-					    "/go/pkg/mod"))))
-		      (if (or (not (cl-find cur-project (ht-keys my-go-packages-by-project)))
-			      force)
-			  (progn
-			    (if (not (cl-find cur-project (ht-keys my-go-packages-by-project)))
-				(ht-set my-go-packages-by-project cur-project '("in progress")))
-			    (async-start
-			     (lambda nil
-			       (process-lines "go" "list" "-e" "all"))
-			     (lambda (res)
-			       (with-current-buffer cur-buf
-				 (ht-set my-go-packages-by-project cur-project (cl-mapcar
-										(lambda (s)
-										  (replace-regexp-in-string "@[^/]*" ""
-													    (string-remove-prefix "mod/"
-																  (string-remove-prefix "vendor/" s))))
-										(cl-remove-if
-										 (lambda (s)
-										   (string-prefix-p "warning:" s))
-										 res))))))))))))
-
-	  (my-refresh-go-packages-list)
-	  (add-hook 'after-save-hook #'my-refresh-go-packages-list t))
+	  )
 
 	(add-hook 'go-mode-hook #'my-go-mode-hook)))))
 
@@ -1258,25 +1217,7 @@ The optional argument IGNORED is not used."
 
   :hook ((after-init-hook . my-go-home)))
 
-(leaf libgit
-  :straight (libgit :fetcher github
-		    :repo "magit/libegit2"
-		    :fork "s-kostyaev/libegit2"
-		    :files ("CMakeLists.txt"
-			    ("libgit2" "libgit2/cmake")
-			    ("libgit2" "libgit2/CMakeLists.txt")
-			    ("libgit2" "libgit2/COPYING")
-			    ("libgit2" "libgit2/deps")
-			    ("libgit2" "libgit2/.HEADER")
-			    ("libgit2" "libgit2/include")
-			    ("libgit2" "libgit2/libgit2_clar.supp")
-			    ("libgit2" "libgit2/libgit2.pc.in")
-			    ("libgit2" "libgit2/script")
-			    ("libgit2" "libgit2/src")
-			    "libgit.el"
-			    "Makefile"
-			    "src"
-			    "uthash")))
+(leaf libgit)
 
 (leaf so-long
   :when (>= emacs-major-version 27)
