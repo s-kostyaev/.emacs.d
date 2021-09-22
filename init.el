@@ -1664,23 +1664,6 @@ Saves to a temp file."
 	 (fsharp-mode-hook . my-set-fsharp-compile-command))
   :config
   (require 'dap-netcore)
-  (url-retrieve "https://github.com/Samsung/netcoredbg/releases"
-		(lambda (_)
-		  (setq dap-netcore-download-url
-			(concat
-			 "https://github.com"
-			 (dom-attr
-			  (dom-search
-			   (libxml-parse-html-region (point-min) (point-max))
-			   (lambda (node)
-			     (string-match-p (pcase system-type
-					       (`gnu/linux ".*linux.*\\.tar\\.gz")
-					       (`darwin ".*osx.*\\.tar\\.gz")
-					       (`windows-nt ".*win64.*\\.zip"))
-					     (or (dom-attr node 'href) ""))))
-			  'href)))))
-  (setq dap-netcore-install-dir
-	(f-slash (f-join user-emacs-directory ".cache" "lsp" "netcoredbg")))
 
   :init
   ;; (require 'eglot-fsharp)
