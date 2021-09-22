@@ -1603,10 +1603,24 @@ Saves to a temp file."
   :hook ((fsharp-mode-hook . lsp)
 	 ;; (fsharp-mode-hook . eglot-ensure)
 	 (fsharp-mode-hook . my-set-fsharp-compile-command))
+
   :config
   (require 'dap-netcore)
 
   :init
+  (setq my-lsp-skip-errors
+	'("Index was outside the bounds of the array."
+	  "No symbol information found"
+	  "No ident at this location"))
+  (setq lsp-default-create-error-handler-fn
+	(lambda (method)
+	  (lambda (error)
+	    (when (not (seq-find (lambda (s)
+				   (string= s (lsp-get error :message)))
+				 my-lsp-skip-errors))
+	      (lsp--warn "%s" (or (lsp--error-string error)
+				  (format "%s Request has failed" method)))))))
+
   ;; (require 'eglot-fsharp)
   (setq inferior-fsharp-program "dotnet fsi")
   (defun my-set-fsharp-compile-command ()
