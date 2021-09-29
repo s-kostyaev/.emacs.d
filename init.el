@@ -390,7 +390,8 @@
                 (other-window 1))))))
 
   :bind (("C-x t" . toggle-window-split)
-         ("C-x o" . hydra-cycle-windows/body))
+         ;; ("C-x o" . hydra-cycle-windows/body)
+	 )
   :config
   (defhydra hydra-cycle-windows
     (:body-pre
@@ -1108,7 +1109,7 @@ The optional argument IGNORED is not used."
     (minibuffer-with-setup-hook
         (lambda ()
           (setq orderless-transient-matching-styles '(orderless-prefixes)))
-      (consult-line-from-isearch)))
+      (consult-line (or isearch-string (thing-at-point 'symbol) ""))))
 
   :bind ((isearch-mode-map
           ("M-i" . my-consult-line-from-isearch)
