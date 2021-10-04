@@ -1594,7 +1594,13 @@ Saves to a temp file."
   (global-golden-mode +1))
 
 (leaf affe
-  :bind* (("C-c C-f" . affe-find)))
+  :init
+  (defun my-affe-find-project ()
+    (interactive)
+    (if (project-current)
+	(affe-find (project-root (project-current)))
+      (affe-find)))
+  :bind* (("C-c C-f" . my-affe-find-project)))
 
 (leaf dap-mode
   :config
