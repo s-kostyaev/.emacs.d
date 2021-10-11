@@ -1391,7 +1391,9 @@ The optional argument IGNORED is not used."
 (leaf go-translate
   :bind (("C-c t" . gts-do-translate))
   :init
-  (setq gts-translate-list '(("en" "ru" "de")))
+  (setq gts-translate-list '(("en" "ru")
+			     ("de" "ru")
+			     ("en" "de")))
 
   (setq gts-default-translator
 	(gts-translator
