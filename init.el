@@ -1389,17 +1389,15 @@ The optional argument IGNORED is not used."
                 (lsp-deferred))))
 
 (leaf go-translate
-  :bind (("C-c t" . go-translate)
-         ("C-c T" . go-translate-popup))
-  :config
-  (with-eval-after-load 'go-translate
-    (setq go-translate-token-current (cons 430675 2721866130))
-    (setq go-translate-target-language "ru")
-    (setq go-translate-local-language "en")
-    (setq go-translate-extra-directions '(("en" . "ru")
-                                          ("de" . "ru")
-                                          ("ru" . "en")
-                                          ("ru" . "de")))))
+  :bind (("C-c t" . gts-do-translate))
+  :init
+  (setq gts-translate-list '(("en" "ru" "de")))
+
+  (setq gts-default-translator
+	(gts-translator
+	 :picker (gts-prompt-picker)
+	 :engines (list (gts-google-rpc-engine) (gts-google-engine))
+	 :render (gts-buffer-render))))
 
 (leaf savehist
   :hook (after-init-hook-hook)
