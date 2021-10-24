@@ -1628,7 +1628,11 @@ Saves to a temp file."
 (leaf haskell-mode
   :hook ((haskell-mode-hook . lsp))
   :init
-  (require 'lsp-haskell))
+  (require 'lsp-haskell)
+  :bind ((haskell-mode-map
+          ("C-c C-i" . haskell-interactive-switch))
+	 (haskell-interactive-mode-map
+	  ("C-c C-i" . haskell-interactive-switch-back))))
 
 (provide 'init)
 ;;; init.el ends here
