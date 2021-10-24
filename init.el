@@ -1625,5 +1625,10 @@ Saves to a temp file."
     (interactive)
     (setq-local compile-command "dotnet build")))
 
+(leaf haskell-mode
+  :hook ((haskell-mode-hook . lsp))
+  :init
+  (require 'lsp-haskell))
+
 (provide 'init)
 ;;; init.el ends here
