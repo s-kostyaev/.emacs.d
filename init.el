@@ -1626,9 +1626,26 @@ Saves to a temp file."
     (setq-local compile-command "dotnet build")))
 
 (leaf haskell-mode
-  :hook ((haskell-mode-hook . lsp))
+  :hook ((haskell-mode-hook . my-haskell-setup))
+  :preface
+  (require 'haskell-interactive-mode)
   :init
-  (require 'lsp-haskell)
+  (defun my-haskell-setup ()
+    "Setup haskell mode by hook."
+    (require 'lsp-haskell)
+    (defun my-try-haskell-project (dir)
+      "Find haskell project root for DIR."
+      (when dir
+        (let ((result (or
+		       (locate-dominating-file dir "Setup.hs")
+		       (locate-dominating-file dir "stack.yaml"))))
+          (if result
+	      (cons 'transient
+                    (expand-file-name result))
+            (cons 'transient dir)))))
+    (setq-local project-find-functions
+                (list #'my-try-haskell-project #'project-try-vc))
+    (lsp))
   :bind ((haskell-mode-map
           ("C-c C-i" . haskell-interactive-switch))
 	 (haskell-interactive-mode-map
