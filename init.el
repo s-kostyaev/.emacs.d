@@ -1643,11 +1643,25 @@ Saves to a temp file."
 	      (cons 'transient
                     (expand-file-name result))
             (cons 'transient dir)))))
+    (defun my-send-region-to-haskell-interactive ()
+      "Send region to haskell interactive."
+      (interactive)
+      (when (region-active-p)
+	(save-mark-and-excursion
+	  (let ((content
+		 (buffer-substring-no-properties
+		  (region-beginning) (region-end))))
+	    (haskell-interactive-switch)
+	    (end-of-buffer)
+	    (insert content)
+	    (haskell-interactive-mode-return)
+	    (haskell-interactive-switch-back)))))
     (setq-local project-find-functions
                 (list #'my-try-haskell-project #'project-try-vc))
     (lsp))
   :bind ((haskell-mode-map
-          ("C-c C-i" . haskell-interactive-switch))
+          ("C-c C-i" . haskell-interactive-switch)
+	  ("C-c C-e" . my-send-region-to-haskell-interactive))
 	 (haskell-interactive-mode-map
 	  ("C-c C-i" . haskell-interactive-switch-back))))
 
