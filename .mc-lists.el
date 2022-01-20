@@ -27,6 +27,7 @@
 	paredit-forward-delete
 	paredit-open-round
 	sp-remove-active-pair-overlay
+	wdired--self-insert
 	wgrep-finish-edit
 	yaml-electric-dash-and-dot
 	yas-expand
@@ -47,6 +48,7 @@
 	counsel-M-x
 	counsel-find-file
 	counsel-grep-or-swiper
+	dired-find-alternate-file
 	electrify-return-if-match
 	end-of-defun
 	eval-last-sexp
@@ -96,4 +98,5 @@
 	save-buffers-kill-terminal
 	scroll-up-line
 	tab-indent-or-complete
+	undefined
 	))

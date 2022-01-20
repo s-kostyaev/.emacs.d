@@ -1315,7 +1315,7 @@ The optional argument IGNORED is not used."
   :setq ((completion-in-region-function . 'consult-completion-in-region))
   :config
   (consult-customize
-   consult-ripgrep consult-git-grep consult-grep
+   consult-grep
    consult-bookmark consult-recent-file consult-xref
    consult--source-file consult--source-project-file consult--source-bookmark
    :preview-key (kbd "M-.")))
