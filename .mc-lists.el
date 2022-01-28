@@ -15,6 +15,7 @@
 	composable-save-region
 	consult-yank-pop
 	dabbrev-completion
+	downcase-region
 	electric-newline-and-maybe-indent
 	electric-pair-delete-pair
 	erlang-electric-comma

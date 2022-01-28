@@ -434,7 +434,7 @@
 (leaf exec-path
   :preface
   (setq exec-path (append exec-path
-                          '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin" "~/.local/bin")))
+                          '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin" "~/.local/bin" "/home/feofan/.dotnet/tools")))
   (require 's)
   (setenv "PATH"
           (s-join ":" exec-path)))
