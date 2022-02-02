@@ -144,7 +144,8 @@
  '(straight-use-package-mode t)
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
- '(warning-suppress-types '((leaf) (comp) (frameset) (bytecomp))))
+ '(warning-suppress-log-types '((comp) (leaf) (comp) (frameset) (bytecomp)))
+ '(warning-suppress-types '((comp) (comp) (leaf) (comp) (frameset) (bytecomp))))
 
 (provide 'emacs-customizations)
 ;;; emacs-customizations.el ends here

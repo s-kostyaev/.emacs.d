@@ -15,6 +15,7 @@
 	composable-save-region
 	consult-yank-pop
 	dabbrev-completion
+	default-indent-new-line
 	downcase-region
 	electric-newline-and-maybe-indent
 	electric-pair-delete-pair
@@ -28,6 +29,7 @@
 	paredit-forward-delete
 	paredit-open-round
 	sp-remove-active-pair-overlay
+	upcase-region
 	wdired--self-insert
 	wgrep-finish-edit
 	yaml-electric-dash-and-dot
@@ -100,4 +102,5 @@
 	scroll-up-line
 	tab-indent-or-complete
 	undefined
+	yank-rectangle
 	))
