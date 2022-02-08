@@ -1675,5 +1675,29 @@ Saves to a temp file."
 	 (haskell-interactive-mode-map
 	  ("C-c C-i" . haskell-interactive-switch-back))))
 
+(leaf org-roam
+  :preface
+  (setq org-roam-v2-ack t)
+  (setq org-roam-directory (concat (getenv "HOME") "/org-roam/"))
+  (setq org-roam-dailies-directory "journal/")
+  (setq org-roam-completion-everywhere t)
+  :bind
+  (("C-c n l" . org-roam-buffer-toggle)
+   ("C-c n f" . org-roam-node-find)
+   ("C-c n j n" . org-roam-dailies-capture-today)
+   ("C-c n j y" . org-roam-dailies-capture-yesterday)
+   ("C-c n j t" . org-roam-dailies-capture-tomorrow)
+   ("C-c n j d" . org-roam-dailies-goto-date)
+   ("C-c n j j" . org-roam-dailies-goto-today)
+   ("C-c n j Y" . org-roam-dailies-goto-yesterday)
+   ("C-c n j T" . org-roam-dailies-goto-tomorrow)
+   ("C-c n j f" . org-roam-dailies-goto-next-note)
+   ("C-c n j b" . org-roam-dailies-goto-previous-note)
+   ("C-c n g" . org-roam-graph)
+   (org-mode-map
+    ("C-c n i" . org-roam-node-insert)))
+  :config
+  (org-roam-db-autosync-mode))
+
 (provide 'init)
 ;;; init.el ends here
