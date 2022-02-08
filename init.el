@@ -1308,6 +1308,14 @@ The optional argument IGNORED is not used."
           (xref-show-xrefs-function 'xref--show-defs-minibuffer))
       (call-interactively 'project-find-regexp)))
 
+  (defun my-advices-inhibit-if-non-essential (oldfun &rest args)
+    "An around advice that inhibit OLDFUN if `non-essential' is non-nil."
+    (unless non-essential
+      (apply oldfun args)))
+  
+  (advice-add 'lsp-deferred :around #'my-advices-inhibit-if-non-essential)
+  (advice-add 'lsp :around #'my-advices-inhibit-if-non-essential)
+
   :bind (("C-x b" . consult-buffer)
          ("<help> a" . consult-apropos)
          ("M-i" . consult-imenu)
@@ -1317,7 +1325,6 @@ The optional argument IGNORED is not used."
   (consult-customize
    consult-grep
    consult-bookmark consult-recent-file consult-xref
-   consult--source-file consult--source-project-file consult--source-bookmark
    :preview-key (kbd "M-.")))
 
 (leaf marginalia-mode
