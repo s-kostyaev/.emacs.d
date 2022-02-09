@@ -514,7 +514,6 @@
               (go-test-current-project)))
 
           (setq go-tag-args (list "-transform" "snakecase"))
-          (add-hook 'before-save-hook #'gofmt-before-save)
           (local-set-key
            (kbd "C-c i")
            #'go-goto-imports)
@@ -1207,7 +1206,8 @@ The optional argument IGNORED is not used."
   :config
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (add-hook 'lsp-mode-hook #'lsp-completion--enable)
-  (add-hook 'before-save-hook #'my-lsp-before-save))
+  (add-hook 'before-save-hook #'my-lsp-before-save)
+  (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable))
 
 (leaf my-go-home
   :preface
@@ -1698,6 +1698,28 @@ Saves to a temp file."
     ("C-c n i" . org-roam-node-insert)))
   :config
   (org-roam-db-autosync-mode))
+
+(leaf origami
+  :if (locate-library "origami")
+  :commands origami-mode
+  :config
+  (progn
+    (add-hook 'prog-mode-hook 'origami-mode)
+    (with-eval-after-load 'hydra
+      (define-key origami-mode-map (kbd "C-c o")
+	(defhydra hydra-folding (:color red :hint nil)
+	  "
+_o_pen node    _n_ext fold       toggle _f_orward    _F_ill column: %`fill-column
+_c_lose node   _p_revious fold   toggle _a_ll        e_x_it
+"
+	  ("o" origami-open-node)
+	  ("c" origami-close-node)
+	  ("n" origami-next-fold)
+	  ("p" origami-previous-fold)
+	  ("f" origami-forward-toggle-node)
+	  ("a" origami-toggle-all-nodes)
+	  ("F" fill-column)
+	  ("x" nil :color blue))))))
 
 (provide 'init)
 ;;; init.el ends here
