@@ -1320,12 +1320,7 @@ The optional argument IGNORED is not used."
          ("<help> a" . consult-apropos)
          ("M-i" . consult-imenu)
          ("M-y" . consult-yank-pop))
-  :setq ((completion-in-region-function . 'consult-completion-in-region))
-  :config
-  (consult-customize
-   consult-grep
-   consult-bookmark consult-recent-file consult-xref
-   :preview-key (kbd "M-.")))
+  :setq ((completion-in-region-function . 'consult-completion-in-region)))
 
 (leaf marginalia-mode
   :init
