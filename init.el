@@ -1701,20 +1701,21 @@ Saves to a temp file."
   (progn
     (add-hook 'prog-mode-hook 'origami-mode)
     (with-eval-after-load 'hydra
-      (define-key origami-mode-map (kbd "C-c o")
-	(defhydra hydra-folding (:color red :hint nil)
-	  "
+      (define-key
+       origami-mode-map (kbd "C-c o")
+       (defhydra hydra-folding (:color red :hint nil)
+	 "
 _o_pen node    _n_ext fold       toggle _f_orward    _F_ill column: %`fill-column
 _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 "
-	  ("o" origami-open-node)
-	  ("c" origami-close-node)
-	  ("n" origami-next-fold)
-	  ("p" origami-previous-fold)
-	  ("f" origami-forward-toggle-node)
-	  ("a" origami-toggle-all-nodes)
-	  ("F" fill-column)
-	  ("x" nil :color blue))))))
+	 ("o" origami-open-node)
+	 ("c" origami-close-node)
+	 ("n" origami-next-fold)
+	 ("p" origami-previous-fold)
+	 ("f" origami-forward-toggle-node)
+	 ("a" origami-toggle-all-nodes)
+	 ("F" fill-column)
+	 ("x" nil :color blue))))))
 
 (provide 'init)
 ;;; init.el ends here
