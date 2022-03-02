@@ -1717,5 +1717,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 	 ("F" fill-column)
 	 ("x" nil :color blue))))))
 
+(if (boundp pixel-scroll-precision-mode)
+    (pixel-scroll-precision-mode +1))
+
 (provide 'init)
 ;;; init.el ends here
