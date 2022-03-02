@@ -156,8 +156,8 @@
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  :pre-setq ((my-light-theme quote solarized-light)
-             (my-dark-theme quote solarized-dark)
+  :pre-setq ((my-light-theme quote spacemacs-light)
+             (my-dark-theme quote spacemacs-dark)
              (my-need-theme-reload))
 
   :preface
