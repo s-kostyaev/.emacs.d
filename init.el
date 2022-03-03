@@ -158,7 +158,7 @@
 
   :pre-setq ((my-light-theme quote spacemacs-light)
              (my-dark-theme quote spacemacs-dark)
-             (my-need-theme-reload))
+             (my-need-theme-reload . t))
 
   :preface
   (setq my-font (font-spec :size 14.0 :family "PT Mono"))
