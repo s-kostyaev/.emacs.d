@@ -45,7 +45,8 @@
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
  '(godoc-use-completing-read t)
- '(gofmt-command "goimports")
+ '(gofmt-args '("--shorten-comments"))
+ '(gofmt-command "golines")
  '(hippie-expand-try-functions-list
    '(try-complete-file-name-partially try-complete-file-name try-expand-all-abbrevs try-expand-list try-expand-line try-expand-dabbrev try-expand-dabbrev-all-buffers try-expand-dabbrev-from-kill))
  '(imenu-max-item-length 230)
@@ -54,7 +55,7 @@
  '(lsp-eldoc-hook '(lsp-hover lsp-signature))
  '(lsp-eldoc-render-all t)
  '(lsp-file-watch-threshold 5000)
- '(lsp-go-use-gofumpt t)
+ '(lsp-go-use-gofumpt nil)
  '(lsp-rust-server 'rust-analyzer)
  '(mac-frame-tabbing nil)
  '(mac-pass-command-to-system nil)
@@ -71,7 +72,7 @@
      ("melpa" . "https://melpa.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
  '(package-selected-packages
-   '(csharp-mode origami lsp-origami org-roam-ui org-roam-timestamps org-roam ein lsp-haskell haskell-mode haskell-snippets dap-mode affe eglot-fsharp fsharp-mode tree-sitter tree-sitter-langs rase company-maxima posframe speechd-el apparmor-mode golden-ratio visual-fill-column justify-kp nov spray embark marginalia consult consult-lsp languagetool visual-regexp company-axiom axiom-environment cl-libify auctex maxima flx leaf-convert leaf expand-region flymake-proselint flymake-quickdef package-lint-flymake rainbow-mode orderless go-translate modus-operandi-theme modus-vivendi-theme lsp-mode lsp-pyright vterm comby elisp-benchmarks protobuf-mode dumb-jump vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism poly-markdown gif-screencast keycast fzf hercules white-sand-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme zenburn-theme magit-libgit solarized-theme flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link symbol-overlay composable multiple-cursors go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im bash-completion pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server go-tag go-gen-test comment-tags org-mind-map json-snatcher docker-compose-mode feature-mode zygospore hungry-delete ibuffer-vc xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl edit-indirect company-quickhelp cask-mode))
+   '(vterm vterm-toggle fb2-reader csharp-mode origami lsp-origami org-roam-ui org-roam-timestamps org-roam ein lsp-haskell haskell-mode haskell-snippets dap-mode affe eglot-fsharp fsharp-mode tree-sitter tree-sitter-langs rase company-maxima posframe speechd-el apparmor-mode golden-ratio visual-fill-column justify-kp nov spray embark marginalia consult consult-lsp languagetool visual-regexp company-axiom axiom-environment cl-libify auctex maxima flx leaf-convert leaf expand-region flymake-proselint flymake-quickdef package-lint-flymake rainbow-mode orderless go-translate modus-operandi-theme modus-vivendi-theme lsp-mode lsp-pyright vterm comby elisp-benchmarks protobuf-mode dumb-jump vmd-mode dockerfile-mode pkgbuild-mode rg cargo rust-playground rust-mode string-inflection prism poly-markdown gif-screencast keycast fzf hercules white-sand-theme yasnippet benchmark-init magit kaolin-themes company-prescient chocolate-theme git-timemachine dart-mode nova-theme zenburn-theme magit-libgit solarized-theme flymake libgit ample-theme flymake-go-staticcheck package-lint auto-yasnippet pass password-store ace-window ace-link symbol-overlay composable multiple-cursors go-playground gotest dtrt-indent magit-todos aggressive-indent reverse-im bash-completion pcre2el eglot docker-tramp pyenv-mode go-snippets smart-shift highlight-indentation go-fill-struct edit-server go-tag go-gen-test comment-tags org-mind-map json-snatcher docker-compose-mode feature-mode zygospore hungry-delete ibuffer-vc xah-lookup which-key wgrep web-beautify timp tagedit speed-type spacemacs-theme pandoc-mode noflet monokai-theme key-chord json-rpc jquery-doc go-impl edit-indirect company-quickhelp cask-mode))
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
@@ -145,6 +146,7 @@
  '(straight-use-package-mode t)
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
+ '(vterm-max-scrollback 10000)
  '(warning-suppress-log-types '((comp) (leaf) (comp) (frameset) (bytecomp)))
  '(warning-suppress-types '((comp) (comp) (leaf) (comp) (frameset) (bytecomp))))
 
