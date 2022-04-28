@@ -496,7 +496,7 @@
           (require 'go-impl)
           (require 'gotest)
           (require 'go-playground)
-          (require 'dap-go)
+          (require 'dap-dlv-go)
           (defun my-go-test (arg)
             (interactive "P")
             (if arg
