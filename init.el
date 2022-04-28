@@ -156,9 +156,9 @@
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  :pre-setq ((my-light-theme quote spacemacs-light)
-             (my-dark-theme quote spacemacs-dark)
-             (my-need-theme-reload . t))
+  :pre-setq ((my-light-theme quote solarized-light)
+             (my-dark-theme quote solarized-dark)
+             (my-need-theme-reload . nil))
 
   :preface
   (setq my-font (font-spec :size 14.0 :family "PT Mono"))
