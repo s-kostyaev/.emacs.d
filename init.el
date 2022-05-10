@@ -437,24 +437,12 @@
   (setenv "PATH"
           (s-join ":" exec-path)))
 
+(leaf project-rootfile
+  :init
+  (add-to-list 'project-find-functions #'project-rootfile-try-detect t))
+
 (leaf go
   :preface
-  (defun my-try-go-mod (dir)
-    "Find go project root for DIR."
-    (if (and dir
-             (not (f-descendant-of-p dir
-                                     (or
-                                      (getenv "GOPATH")
-                                      (concat
-                                       (getenv "HOME")
-                                       "/go")))))
-        (let ((result (locate-dominating-file dir "go.mod")))
-          (if result
-              (cons 'transient
-                    (expand-file-name result))
-            (cons 'transient dir)))
-      (when dir
-        (cons 'transient dir))))
   (defun my-extract-go-module-name ()
     (let* ((go-mod-file (f-join (project-root (project-current)) "go.mod"))
            (name
@@ -472,7 +460,6 @@
   (leaf go-mode
     :defvar company-backends go-tag-args
     :mode ("\\.go\\'"
-           "\\.go2\\'"
            ("go.mod$" . go-dot-mod-mode))
     :config
     (with-eval-after-load 'go-mode
@@ -495,7 +482,6 @@
                        (shell-command-to-string "find /usr/local/Cellar/go -type 'd' -name 'libexec'"))))
           (require 'go-impl)
           (require 'gotest)
-          (require 'go-playground)
           (require 'dap-dlv-go)
           (defun my-go-test (arg)
             (interactive "P")
@@ -528,9 +514,6 @@
            (kbd "C-c g")
            #'go-gen-test-dwim)
           (local-set-key
-           (kbd "C-c C-i")
-           #'go-fill-struct)
-          (local-set-key
            (kbd "M-?")
            #'lsp-find-references)
           (local-set-key
@@ -541,8 +524,6 @@
            '(("gopls.completeUnimported" t)))
           (lsp-register-custom-settings
            '(("gopls.staticcheck" t)))
-          (setq-local project-find-functions
-                      (list #'my-try-go-mod #'project-try-vc))
           (setq-local flymake-start-on-save-buffer nil)
           (setq-local flymake-no-changes-timeout nil)
           (setq-local lsp-go-goimports-local (my-extract-go-module-name))
