@@ -224,7 +224,6 @@
   :init
   (leaf flymake
     :bind (("C-x `" . flymake-goto-next-error)
-           ;; ("C-c r" . flymake-show-diagnostics-buffer)
            ("C-c r" . consult-flymake)))
 
   :require flymake)
@@ -952,19 +951,6 @@ The optional argument IGNORED is not used."
   :require t
   :setq ((which-key-show-transient-maps . 't)))
 
-(leaf composable
-  :disabled t
-  :straight
-  (composable :type git :host github :repo "paldepind/composable.el"
-              :fork (:host github
-                           :repo "Ergus/composable.el"))
-  :config
-  (run-with-idle-timer 0.1 nil #'require 'composable nil t)
-  (with-eval-after-load 'composable
-    (progn
-      (composable-mode)
-      (composable-mark-mode))))
-
 (leaf ibuffer-vc
   :bind* (("C-x C-b" . ibuffer))
   :config
@@ -1053,21 +1039,6 @@ The optional argument IGNORED is not used."
       (other-window 1))
 
     (advice-add 'my-grep-vc-or-dir :after 'my-next-window)))
-
-
-(leaf my-yank-kill-ring
-  :disabled t
-  :preface
-  (defun my-icomplete-yank-kill-ring ()
-    "Insert the selected `kill-ring' item directly at point."
-    (interactive)
-    (let ((icomplete-separator (concat "\n"
-                                       (propertize "..................." 'face 'shadow)
-                                       "\n ")))
-      (insert
-       (completing-read "paste from kill ring:" kill-ring nil t))))
-
-  :bind (("M-y" . my-icomplete-yank-kill-ring)))
 
 (leaf isearch
   :preface
@@ -1163,12 +1134,6 @@ The optional argument IGNORED is not used."
         (find-file tramp-path))))
 
   :bind (("C-c C-r" . open-this-file-as-root)))
-
-(leaf helm-make
-  :disabled t
-  :after t
-  :setq ((helm-make-directory-functions-list
-          '(helm-make-project-directory helm-make-current-directory))))
 
 (leaf lsp-mode
   :preface
@@ -1449,22 +1414,9 @@ The optional argument IGNORED is not used."
                 :transient t))
 
 (leaf imaxima
+  :disabled t
   :init (require 'cl)
   :commands (imaxima))
-
-(leaf fricas
-  :preface
-  (add-to-list 'load-path "~/projects/fricas/contrib/emacs")
-  ;; (add-to-list 'load-path "/usr/lib/fricas/emacs")
-  (defun my-fricas-setup()
-    "Configure fricas."
-    (process-send-string fricas-process
-                         (concat
-                          ")set output tex on\n"
-                          ")set output algebra off\n")))
-  :commands fricas
-  :config
-  (add-hook 'fricas-mode-hook #'my-fricas-setup))
 
 (leaf axiom
   :preface
@@ -1567,11 +1519,6 @@ Saves to a temp file."
                 nil t)))
 
   (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook))
-
-(leaf golden-ratio-mode
-  :disabled t
-  :init
-  (golden-ratio-mode +1))
 
 (leaf golden
   :straight (golden :type git :repo "https://git.sr.ht/~wklew/golden")
