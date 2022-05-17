@@ -443,7 +443,10 @@
 (leaf go
   :preface
   (defun my-extract-go-module-name ()
-    (let* ((go-mod-file (f-join (project-root (project-current)) "go.mod"))
+    (let* ((go-mod-file (f-join (if (project-current)
+				    (project-root (project-current))
+				  default-directory)
+				"go.mod"))
            (name
             (with-temp-buffer
               (find-file-noselect-1 (current-buffer) go-mod-file t t go-mod-file 2)
