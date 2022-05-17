@@ -1521,6 +1521,7 @@ Saves to a temp file."
   (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook))
 
 (leaf golden
+  :disabled t
   :straight (golden :type git :repo "https://git.sr.ht/~wklew/golden")
   :init
   (global-golden-mode +1))
