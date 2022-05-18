@@ -229,6 +229,7 @@
   :require flymake)
 
 (setq flymake-mode-line-format '(" " flymake-mode-line-counters))
+(require 'f)
 (setq-default mode-line-format
 	      (list
 	       "["
@@ -255,12 +256,15 @@
 	       (propertize "%02c" 'face 'font-lock-constant-face)
 	       ;; ") "
 
-	       "        "
+	       "    "
 	       '(:eval (when (stringp vc-mode)
 			 vc-mode))
+	       "    "
+	       '(:eval (when (project-current)
+			 (concat "[" (car (-take-last 1 (f-split (project-root (project-current))))) "]")))
 
 	       ;; the current major mode for the buffer.
-	       "        ["
+	       "    ["
 
 	       '(:eval (propertize "%m" 'face 'font-lock-string-face
 				   'help-echo buffer-file-coding-system))
@@ -956,7 +960,7 @@ The optional argument IGNORED is not used."
 
 (leaf ibuffer-vc
   :bind* (("C-x C-b" . ibuffer))
-  :config
+  :init
   (run-with-idle-timer 3 nil #'require 'ibuffer-vc nil t)
   (with-eval-after-load 'ibuffer-vc
     (add-hook 'ibuffer-hook
