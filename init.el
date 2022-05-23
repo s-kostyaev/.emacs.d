@@ -259,10 +259,6 @@
 	       "    "
 	       '(:eval (when (stringp vc-mode)
 			 vc-mode))
-	       "    "
-	       '(:eval (when (project-current)
-			 (concat "[" (car (-take-last 1 (f-split (project-root (project-current))))) "]")))
-
 	       ;; the current major mode for the buffer.
 	       "    ["
 
