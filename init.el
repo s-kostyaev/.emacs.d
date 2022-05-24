@@ -157,8 +157,8 @@
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
   :pre-setq ((my-light-theme quote solarized-light)
-             (my-dark-theme quote solarized-dark)
-             (my-need-theme-reload . nil))
+             (my-dark-theme quote spacemacs-dark)
+             (my-need-theme-reload . t))
 
   :preface
   (setq my-font (font-spec :size 14.0 :family "PT Mono"))
@@ -181,8 +181,19 @@
 
   (defun my-gnome-night-light ()
     "Load and enable my-gnome-night-light."
-    (dbus-register-signal :session "org.gnome.SettingsDaemon.Color" "/org/gnome/SettingsDaemon/Color" "org.freedesktop.DBus.Properties" "PropertiesChanged" #'my-gnome-night-light-internal-prop-change-listener)
-    (let ((value (dbus-get-property :session "org.gnome.SettingsDaemon.Color" "/org/gnome/SettingsDaemon/Color" "org.gnome.SettingsDaemon.Color" "NightLightActive")))
+    (dbus-register-signal
+     :session
+     "org.gnome.SettingsDaemon.Color"
+     "/org/gnome/SettingsDaemon/Color"
+     "org.freedesktop.DBus.Properties"
+     "PropertiesChanged"
+     #'my-gnome-night-light-internal-prop-change-listener)
+    (let ((value (dbus-get-property
+		  :session
+		  "org.gnome.SettingsDaemon.Color"
+		  "/org/gnome/SettingsDaemon/Color"
+		  "org.gnome.SettingsDaemon.Color"
+		  "NightLightActive")))
       (when (functionp my-gnome-night-light-light-change-callback)
         (funcall my-gnome-night-light-light-change-callback value))))
 
@@ -196,7 +207,10 @@
   :require dbus
   :setq ((my-gnome-night-light-light-change-callback function my-theme-changer))
   :config
-  (defvar my-gnome-night-light-light-change-callback nil "The callback function called on Night Light state change.\nIt takes one parameter, which is t when the Night Light is active\n(e.g.  it's night) and nil when it's day.")
+  (defvar my-gnome-night-light-light-change-callback nil
+    "The callback function called on Night Light state change.
+It takes one parameter, which is t when the Night Light is active
+(e.g.  it's night) and nil when it's day.")
   (my-gnome-night-light))
 
 (leaf my-mac-themes
@@ -435,8 +449,9 @@
 (leaf eglot
   :defvar eglot-workspace-configuration eglot-strict-mode
   :setq ((eglot-strict-mode))
-  :setq-default ((eglot-workspace-configuration quote
-                                                ((:gopls :usePlaceholders t :staticcheck t :completeUnimported t))))
+  :setq-default
+  ((eglot-workspace-configuration quote
+                                  ((:gopls :usePlaceholders t :staticcheck t :completeUnimported t))))
   :config
   (eval-after-load 'eglot
     (lambda nil
@@ -452,7 +467,13 @@
 (leaf exec-path
   :preface
   (setq exec-path (append exec-path
-                          '("~/go/bin" "/opt/local/bin" "/usr/local/bin" "~/.cargo/bin" "/usr/local/opt/llvm/bin" "~/.local/bin" "/home/feofan/.dotnet/tools")))
+                          '("~/go/bin"
+			    "/opt/local/bin"
+			    "/usr/local/bin"
+			    "~/.cargo/bin"
+			    "/usr/local/opt/llvm/bin"
+			    "~/.local/bin"
+			    "/home/feofan/.dotnet/tools")))
   (require 's)
   (setenv "PATH"
           (s-join ":" exec-path)))
@@ -1475,8 +1496,10 @@ Saves to a temp file."
            (data (x-export-frames nil 'png)))
       (with-temp-file filename
         (insert data))
-      (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
-                                                    (expand-file-name "~/Pictures")) 1))))
+      (dired-rename-file filename
+			 (expand-file-name (file-name-nondirectory filename)
+                                           (expand-file-name "~/Pictures"))
+			 1))))
 
 (leaf languagetool
   :disabled t
