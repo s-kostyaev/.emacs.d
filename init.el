@@ -411,6 +411,27 @@
     ("c" delete-window "Close window")
     ("q" nil "quit")))
 
+(leaf lsp-mode
+  :preface
+  (setq lsp-use-plists t)
+  (setenv "LSP_USE_PLISTS" "true")
+
+  (setq lsp-keymap-prefix (kbd "C-x l"))
+
+  (defun my-lsp-before-save ()
+    (interactive)
+    (when lsp-mode
+      (lsp-organize-imports)
+      (lsp-format-buffer)))
+
+  :after t
+  :require yasnippet
+  :config
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+  (add-hook 'lsp-mode-hook #'lsp-completion--enable)
+  (add-hook 'before-save-hook #'my-lsp-before-save)
+  (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable))
+
 (leaf eglot
   :defvar eglot-workspace-configuration eglot-strict-mode
   :setq ((eglot-strict-mode))
@@ -1137,24 +1158,6 @@ The optional argument IGNORED is not used."
         (find-file tramp-path))))
 
   :bind (("C-c C-r" . open-this-file-as-root)))
-
-(leaf lsp-mode
-  :preface
-  (setq lsp-keymap-prefix (kbd "C-x l"))
-
-  (defun my-lsp-before-save ()
-    (interactive)
-    (when lsp-mode
-      (lsp-organize-imports)
-      (lsp-format-buffer)))
-
-  :after t
-  :require yasnippet
-  :config
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (add-hook 'lsp-mode-hook #'lsp-completion--enable)
-  (add-hook 'before-save-hook #'my-lsp-before-save)
-  (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable))
 
 (leaf my-go-home
   :preface
