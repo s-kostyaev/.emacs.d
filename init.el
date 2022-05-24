@@ -586,7 +586,9 @@
 
 
 (leaf company
-  :defvar company-dabbrev-ignore-case company-dabbrev-code-ignore-case company-tooltip-limit company-idle-delay company-echo-delay company-minimum-prefix-length
+  :defvar
+  company-dabbrev-ignore-case company-dabbrev-code-ignore-case company-tooltip-limit
+  company-idle-delay company-echo-delay company-minimum-prefix-length
   :commands global-company-mode
   :hook ((after-init-hook . global-company-mode))
   :config
@@ -845,7 +847,11 @@ The optional argument IGNORED is not used."
       (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
       (setq auto-revert-check-vc-info t)
       (defun my-magit-find-file-other-frame (file)
-        "View FILE from worktree, in another frame.\nSwitch to a buffer visiting blob FILE, creating one if none\nalready exists.  If prior to calling this command the current\nbuffer and/or cursor position is about the same file, then go to\nthe line and column corresponding to that location."
+        "View FILE from worktree, in another frame.
+Switch to a buffer visiting blob FILE, creating one if none
+already exists. If prior to calling this command the current
+buffer and/or cursor position is about the same file, then go to
+the line and column corresponding to that location."
         (interactive
          (my-magit-find-file-read-args "Find file in other frame"))
         (find-file-other-frame
@@ -854,7 +860,11 @@ The optional argument IGNORED is not used."
           file)))
 
       (defun my-magit-find-file (file)
-        "View FILE from worktree.\nSwitch to a buffer visiting blob FILE, creating one if none\nalready exists.  If prior to calling this command the current\nbuffer and/or cursor position is about the same file, then go\nto the line and column corresponding to that location."
+        "View FILE from worktree.
+Switch to a buffer visiting blob FILE, creating one if none
+already exists.  If prior to calling this command the current
+buffer and/or cursor position is about the same file, then go
+to the line and column corresponding to that location."
         (interactive
          (my-magit-find-file-read-args "Find file"))
         (find-file
@@ -1053,7 +1063,8 @@ The optional argument IGNORED is not used."
       :confirm prefix :flags
       ("--hidden -g !.git"))
     (defun my-rg-save-search-as-name ()
-      "Save `rg' buffer, naming it after the current search query.\n\nThis function is meant to be mapped to a key in `rg-mode-map'."
+      "Save `rg' buffer, naming it after the current search query.
+This function is meant to be mapped to a key in `rg-mode-map'."
       (interactive)
       (let ((pattern (car rg-pattern-history)))
         (rg-save-search-as-name
@@ -1148,7 +1159,8 @@ The optional argument IGNORED is not used."
 (leaf open-file-as-root
   :preface
   (defun open-this-file-as-root ()
-    "Edit current file as root, using `tramp' and `sudo'.\nIf the current buffer is not visiting a file, prompt for a file name."
+    "Edit current file as root, using `tramp' and `sudo'.
+If the current buffer is not visiting a file, prompt for a file name."
     (interactive)
     (let* ((filename (or buffer-file-name
                          (read-file-name "Find file (as root): ")))
@@ -1401,7 +1413,9 @@ The optional argument IGNORED is not used."
       (nreverse targets)))
 
   (defun my-make (arg)
-    "Make current project with targets selection.\nUse project root as default directory if universal ARG is not set.\nSelect it interactively otherwise."
+    "Make current project with targets selection.
+Use project root as default directory if universal ARG is not set.
+Select it interactively otherwise."
     (interactive "p")
     (let* ((project (project-current))
            (default-directory (if (= arg 4)
