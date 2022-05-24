@@ -1172,7 +1172,10 @@ The optional argument IGNORED is not used."
 
 (leaf so-long
   :when (>= emacs-major-version 27)
-  :hook ((after-init-hook . global-so-long-mode)))
+  :hook ((after-init-hook . global-so-long-mode))
+  :preface
+  (setq bidi-paragraph-direction 'left-to-right)
+  (setq bidi-inhibit-bpa t))
 
 (leaf hippie-expand
   :bind (("C-;" . hippie-expand)))
