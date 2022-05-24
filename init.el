@@ -271,7 +271,7 @@
 	       ;; '(:eval (flycheck-mode-line-status-text))
 
 	       ;; flymake errors
-	       flymake-mode-line-format
+	       '(:eval (when flymake--state flymake-mode-line-format))
 
 	       ;; relative position, size of file
 	       "    ["
