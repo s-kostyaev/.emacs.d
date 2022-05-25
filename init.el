@@ -581,6 +581,9 @@ It takes one parameter, which is t when the Night Light is active
 
         (add-hook 'go-mode-hook #'my-go-mode-hook)))))
 
+(leaf go-playground
+  :straight (go-playground :type git :host github :repo "s-kostyaev/go-playground" :branch "add-minor-mode-autoloads"))
+
 (leaf default-keybindings
   :bind (("s" . save-buffer)
          ("v" . quoted-insert)
