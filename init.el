@@ -1465,17 +1465,16 @@ Select it interactively otherwise."
   :init (require 'cl)
   :commands (imaxima))
 
-(leaf axiom
+(leaf frimacs
   :preface
-  (defun my-setup-axiom ()
-    "Setup axiom."
-    (setq-local company-backends '(company-axiom-backend))
+  (defun my-setup-frimacs ()
+    "Setup frimacs."
     (aggressive-indent-mode -1))
 
-  (setq axiom-process-enable-pretty-print t)
-  (setq axiom-process-embed-gnu-draw t)
-  (setq axiom-process-show-svg t)
-  :hook ((axiom-process-mode-hook . my-setup-axiom)))
+  (setq frimacs-process-enable-pretty-print t)
+  (setq frimacs-process-embed-gnu-draw t)
+  (setq frimacs-process-show-svg t)
+  :hook ((frimacs-process-mode-hook . my-setup-frimacs)))
 
 (leaf my-screenshots
   :preface
