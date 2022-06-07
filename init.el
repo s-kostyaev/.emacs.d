@@ -1114,10 +1114,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 
   (defun my-consult-line-from-isearch ()
     (interactive)
-    (minibuffer-with-setup-hook
-        (lambda ()
-          (setq orderless-transient-matching-styles '(orderless-prefixes)))
-      (consult-line (or isearch-string (thing-at-point 'symbol) ""))))
+    (consult-line (or isearch-string (thing-at-point 'symbol) "")))
 
   :bind ((isearch-mode-map
           ("M-i" . my-consult-line-from-isearch)
@@ -1263,23 +1260,20 @@ If the current buffer is not visiting a file, prompt for a file name."
           ("C-j" . icomplete-force-complete)
           ("C-M-j" . exit-minibuffer)
           ("<RET>" . icomplete-force-complete-and-exit)))
-  :setq ((completion-styles quote
-                            (orderless))
-         (completion-category-overrides quote
-                                        ((file
-                                          (styles basic substring))))
-         (read-file-name-completion-ignore-case . t)
+  :setq ((read-file-name-completion-ignore-case . t)
          (read-buffer-completion-ignore-case . t)
          (completion-ignore-case . t)
          (icomplete-show-matches-on-no-input . t)
          (icomplete-prospects-height . 10))
-  :require orderless
   :init
+  (setq-default completion-styles '(basic partial-completion emacs22 initials flex))
+  (setq-default completion-category-overrides '((file (styles basic substring))))
   (icomplete-mode)
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
 
 (leaf orderless
+  :disabled t
   :preface
   (defun my-orderless-dispatch (pattern _index _total)
     (cond
