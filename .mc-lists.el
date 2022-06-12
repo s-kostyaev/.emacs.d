@@ -98,6 +98,8 @@
 	multiple-cursors-hydra/nil
 	my-counsel-company
 	my-go-test
+	pixel-scroll-precision
+	pixel-scroll-start-momentum
 	rg-recompile
 	save-buffers-kill-terminal
 	scroll-up-line
