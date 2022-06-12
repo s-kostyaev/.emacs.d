@@ -1579,7 +1579,9 @@ Saves to a temp file."
 
 (leaf dap-mode
   :config
-  (setq dap-lldb-debug-program '("/usr/bin/lldb-vscode")))
+  (setq dap-lldb-debug-program '("/usr/bin/lldb-vscode"))
+  (add-hook 'dap-stopped-hook
+            (lambda (arg) (call-interactively #'dap-hydra))))
 
 (leaf fsharp-mode
   :hook ((fsharp-mode-hook . lsp)
