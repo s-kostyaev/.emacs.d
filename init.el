@@ -1688,6 +1688,15 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 	 ("F" fill-column)
 	 ("x" nil :color blue))))))
 
+(leaf consult-dash
+  :bind
+  (("M-s d" . consult-dash))
+  :straight
+  (consult-dash :type git :repo "https://codeberg.org/ravi/consult-dash.git")
+  :config
+  (dash-docs-activate-docset "Go")
+  (dash-docs-activate-docset "NET Framework"))
+
 (when (boundp pixel-scroll-precision-mode)
   (pixel-scroll-precision-mode +1))
 
