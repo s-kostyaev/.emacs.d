@@ -1593,10 +1593,36 @@ Saves to a temp file."
 
   :init
   ;; (require 'eglot-fsharp)
+  (setq auto-mode-alist (cons '("\\.fsproj\\'" . nxml-mode) auto-mode-alist))
+  (setq auto-mode-alist (cons '("\\.csproj\\'" . nxml-mode) auto-mode-alist))
   (setq inferior-fsharp-program "dotnet fsi")
   (defun my-set-fsharp-compile-command ()
     (interactive)
     (setq-local compile-command "dotnet build")))
+
+(leaf dotnet
+  :preface
+  (add-hook 'csharp-mode-hook 'dotnet-mode)
+  (add-hook 'fsharp-mode-hook 'dotnet-mode)
+
+  (require 'dap-netcore)
+  (defun my-try-dotnet (dir)
+    "Find dotnet project root for DIR."
+    (let* ((directory (or dir default-directory))
+	   (result (or
+		    (dap-netcore--locate-dominating-file-wildcard
+		     directory "*.sln")
+		    (dap-netcore--locate-dominating-file-wildcard
+		     directory "*.*proj"))))
+      (when result (cons 'transient (f-full result)))))
+
+  (defun my-dotnet-project ()
+    "Enable alternative project root find function."
+    (setq-local project-find-functions
+		(list #'my-try-dotnet #'project-try-vc)))
+
+  (add-hook 'csharp-mode-hook 'my-dotnet-project)
+  (add-hook 'fsharp-mode-hook 'my-dotnet-project))
 
 (leaf haskell-mode
   :hook ((haskell-mode-hook . my-haskell-setup))
