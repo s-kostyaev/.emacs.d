@@ -1279,7 +1279,8 @@ If the current buffer is not visiting a file, prompt for a file name."
   (add-hook 'rfn-eshadow-update-overlay-hook #'my-directory-tidy)
 
   (setq-default completion-styles '(basic partial-completion emacs22 initials flex))
-  (setq-default completion-category-overrides '((file (styles basic substring))))
+  (setq-default completion-category-overrides '((file (styles basic substring))
+						(consult-location (styles basic substring))))
   (icomplete-mode)
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
