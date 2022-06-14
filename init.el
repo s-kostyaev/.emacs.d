@@ -1266,6 +1266,18 @@ If the current buffer is not visiting a file, prompt for a file name."
          (icomplete-show-matches-on-no-input . t)
          (icomplete-prospects-height . 10))
   :init
+  (defun my-directory-tidy () ;; thanks minad - this part from vertico
+    "Tidy shadowed file name, see `rfn-eshadow-overlay'."
+    (when (and (eq this-command #'self-insert-command)
+               (bound-and-true-p rfn-eshadow-overlay)
+               (overlay-buffer rfn-eshadow-overlay)
+               (= (point) (point-max))
+               (or (>= (- (point) (overlay-end rfn-eshadow-overlay)) 2)
+                   (eq ?/ (char-before (- (point) 2)))))
+      (delete-region (overlay-start rfn-eshadow-overlay) (overlay-end rfn-eshadow-overlay))))
+
+  (add-hook 'rfn-eshadow-update-overlay-hook #'my-directory-tidy)
+
   (setq-default completion-styles '(basic partial-completion emacs22 initials flex))
   (setq-default completion-category-overrides '((file (styles basic substring))))
   (icomplete-mode)
