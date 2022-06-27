@@ -32,6 +32,7 @@
 	upcase-region
 	wdired--self-insert
 	wgrep-finish-edit
+	yaml-electric-backspace
 	yaml-electric-dash-and-dot
 	yas-expand
 	))
