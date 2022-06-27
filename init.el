@@ -1602,6 +1602,7 @@ Saves to a temp file."
          (fsharp-mode-hook . my-set-fsharp-compile-command))
 
   :config
+  (lsp-ensure-server 'fsac)
   (require 'dap-netcore)
 
   :init
@@ -1612,6 +1613,13 @@ Saves to a temp file."
   (defun my-set-fsharp-compile-command ()
     (interactive)
     (setq-local compile-command "dotnet build")))
+
+(leaf csharp-mode
+  :hook ((csharp-mode-hook . lsp)
+	 (csharp-mode-hook . my-set-fsharp-compile-command))
+  :config
+  (lsp-ensure-server 'omnisharp)
+  (require 'dap-netcore))
 
 (leaf dotnet
   :preface
