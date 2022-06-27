@@ -1638,6 +1638,7 @@ Saves to a temp file."
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
 
 (leaf haskell-mode
+  :disabled t
   :hook ((haskell-mode-hook . my-haskell-setup))
   :preface
   (require 'haskell-interactive-mode)
