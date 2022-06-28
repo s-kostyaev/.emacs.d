@@ -147,6 +147,7 @@
  '(straight-use-package-mode t)
  '(symbol-overlay-global-mode t)
  '(tls-checktrust t)
+ '(tuareg-opam-insinuate t)
  '(vterm-max-scrollback 10000)
  '(warning-suppress-log-types '((comp) (leaf) (comp) (frameset) (bytecomp)))
  '(warning-suppress-types '((comp) (comp) (leaf) (comp) (frameset) (bytecomp))))

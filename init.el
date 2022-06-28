@@ -466,15 +466,16 @@ It takes one parameter, which is t when the Night Light is active
 
 (leaf exec-path
   :preface
-  (setq exec-path (append exec-path
-                          '("~/go/bin"
-			    "/opt/local/bin"
-			    "/usr/local/bin"
-			    "~/.cargo/bin"
-			    "/usr/local/opt/llvm/bin"
-			    "~/.local/bin"
-			    "/home/feofan/.dotnet/tools"
-			    "/home/feofan/.opam/default/bin")))
+  (setq exec-path (append
+                   '("/home/feofan/.opam/default/bin"
+		     "~/go/bin"
+		     "/opt/local/bin"
+		     "/usr/local/bin"
+		     "~/.cargo/bin"
+		     "/usr/local/opt/llvm/bin"
+		     "~/.local/bin"
+		     "/home/feofan/.dotnet/tools")
+		   exec-path))
   (require 's)
   (setenv "PATH"
           (s-join ":" exec-path)))
@@ -1662,6 +1663,7 @@ Saves to a temp file."
 		    auto-mode-alist))))
 
   (add-to-list 'lsp-language-id-configuration '(gopcaml-mode . "ocaml"))
+  (require 'lsp-ocaml)
   (lsp-register-client
    (make-lsp-client
     :new-connection
@@ -1676,7 +1678,14 @@ Saves to a temp file."
 		(set (make-local-variable 'compile-command)
 		     (concat "dune build"))
 		(set (make-local-variable 'compilation-read-command)
-		     nil))))
+		     nil)))
+
+  (defun my-opam-env ()
+    (interactive nil)
+    (dolist (var (car (read-from-string
+		       (shell-command-to-string "opam config env --sexp"))))
+      (setenv (car var) (cadr var))))
+  (add-hook 'gopcaml-mode-hook 'my-opam-env))
 
 (leaf haskell-mode
   :disabled t
