@@ -473,7 +473,8 @@ It takes one parameter, which is t when the Night Light is active
 			    "~/.cargo/bin"
 			    "/usr/local/opt/llvm/bin"
 			    "~/.local/bin"
-			    "/home/feofan/.dotnet/tools")))
+			    "/home/feofan/.dotnet/tools"
+			    "/home/feofan/.opam/default/bin")))
   (require 's)
   (setenv "PATH"
           (s-join ":" exec-path)))
@@ -1644,6 +1645,38 @@ Saves to a temp file."
 
   (add-hook 'csharp-mode-hook 'my-dotnet-project)
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
+
+(leaf gopcaml-mode
+  :preface
+  (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+    (when (and opam-share (file-directory-p opam-share))
+      ;; Register Gopcaml mode
+      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+      (autoload 'gopcaml-mode "gopcaml-mode" nil t nil)
+      (autoload 'tuareg-mode "tuareg" nil t nil)
+      (autoload 'merlin-mode "merlin" "Merlin mode" t)
+      ;; Automatically start it in OCaml buffers
+      (setq auto-mode-alist
+	    (append '(("\\.ml[ily]?$" . gopcaml-mode)
+		      ("\\.topml$" . gopcaml-mode))
+		    auto-mode-alist))))
+
+  (add-to-list 'lsp-language-id-configuration '(gopcaml-mode . "ocaml"))
+  (lsp-register-client
+   (make-lsp-client
+    :new-connection
+    (lsp-stdio-connection (lambda () lsp-ocaml-lsp-server-command))
+    :major-modes '(reason-mode caml-mode tuareg-mode gopcaml-mode)
+    :priority 0
+    :server-id 'ocaml-lsp-server))
+  (add-hook 'gopcaml-mode-hook 'lsp)
+
+  (add-hook 'tuareg-mode-hook
+	    #'(lambda ()
+		(set (make-local-variable 'compile-command)
+		     (concat "dune build"))
+		(set (make-local-variable 'compilation-read-command)
+		     nil))))
 
 (leaf haskell-mode
   :disabled t
