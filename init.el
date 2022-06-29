@@ -1787,6 +1787,10 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (dash-docs-activate-docset "Go")
   (dash-docs-activate-docset "NET Framework"))
 
+(leaf pulsar
+  :init
+  (pulsar-global-mode))
+
 (when (boundp pixel-scroll-precision-mode)
   (pixel-scroll-precision-mode +1))
 
