@@ -1731,7 +1731,26 @@ Saves to a temp file."
 	 (haskell-interactive-mode-map
 	  ("C-c C-i" . haskell-interactive-switch-back))))
 
+(leaf denote
+  :straight
+  (denote :type git :repo "https://git.sr.ht/~protesilaos/denote")
+  :bind
+  (("C-c n n" . denote)
+   ("C-c n d" . my-denote-dired)
+   ("C-c n l" . denote-link)
+   ("C-c n f" . denote-link-find-file))
+  :config
+  (require 'org)
+  (add-hook 'find-file-hook #'denote-link-buttonize-buffer)
+  (setq denote-file-type 'markdown-yaml)
+  (defun my-denote-dired ()
+    "Open dired buffer with denote notes."
+    (interactive)
+    (dired denote-directory)
+    (denote-dired-mode)))
+
 (leaf org-roam
+  :disabled t
   :preface
   (setq org-roam-v2-ack t)
   (setq org-roam-directory (concat (getenv "HOME") "/org-roam/"))
