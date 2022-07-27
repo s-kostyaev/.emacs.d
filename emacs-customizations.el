@@ -150,7 +150,14 @@
  '(tuareg-opam-insinuate t)
  '(vterm-max-scrollback 10000)
  '(warning-suppress-log-types '((comp) (leaf) (comp) (frameset) (bytecomp)))
- '(warning-suppress-types '((comp) (comp) (leaf) (comp) (frameset) (bytecomp))))
+ '(warning-suppress-types
+   '(((tar link))
+     (comp)
+     (comp)
+     (leaf)
+     (comp)
+     (frameset)
+     (bytecomp))))
 
 (provide 'emacs-customizations)
 ;;; emacs-customizations.el ends here
