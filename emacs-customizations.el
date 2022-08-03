@@ -70,6 +70,7 @@
  '(orderless-matching-styles '(orderless-regexp orderless-initialism orderless-flex))
  '(package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
+     ("nongnu" . "https://elpa.nongnu.org/nongnu/")
      ("melpa" . "https://melpa.org/packages/")
      ("org" . "https://orgmode.org/elpa/")))
  '(package-selected-packages
