@@ -389,8 +389,8 @@
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  :pre-setq ((my-light-theme quote modus-operandi)
-             (my-dark-theme quote modus-vivendi)
+  :pre-setq ((my-light-theme quote ef-summer)
+             (my-dark-theme quote ef-winter)
              (my-need-theme-reload . nil))
 
   :preface
