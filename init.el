@@ -1438,6 +1438,9 @@ If the current buffer is not visiting a file, prompt for a file name."
 
 (leaf libgit)
 
+(leaf magit-libgit
+  :require t)
+
 (leaf so-long
   :when (>= emacs-major-version 27)
   :hook ((after-init-hook . global-so-long-mode))
