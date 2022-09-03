@@ -161,7 +161,7 @@
              (my-need-theme-reload . nil))
 
   :preface
-  (setq my-font (font-spec :size 14.0 :family "PT Mono"))
+  (setq my-font (font-spec :size 14.0 :family "Iosevka Comfy"))
   :bind
   (("<f6>" . my-toggle-themes))
   :hook
