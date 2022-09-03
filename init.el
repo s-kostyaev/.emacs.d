@@ -1777,6 +1777,16 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (dash-docs-activate-docset "Go")
   (dash-docs-activate-docset "NET Framework"))
 
+(leaf my-reopen-file
+  :bind (("<f5>" . my-reopen-file))
+  :init
+  (defun my-reopen-file ()
+    "Reopen current file."
+    (interactive)
+    (let ((filename (buffer-file-name)))
+      (kill-buffer)
+      (find-file filename))))
+
 (leaf pulsar
   :init
   (pulsar-global-mode))
