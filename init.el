@@ -1730,8 +1730,6 @@ Saves to a temp file."
 	  ("C-c C-i" . haskell-interactive-switch-back))))
 
 (leaf denote
-  :straight
-  (denote :type git :repo "https://git.sr.ht/~protesilaos/denote")
   :bind
   (("C-c n n" . denote)
    ("C-c n d" . my-denote-dired)
