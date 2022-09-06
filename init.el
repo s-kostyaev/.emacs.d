@@ -32,7 +32,7 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
-(package-initialize)
+(setq package-quickstart t)
 
 (leaf benchmark-init
   :disabled t
