@@ -1794,5 +1794,21 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 (when (boundp pixel-scroll-precision-mode)
   (pixel-scroll-precision-mode +1))
 
+(leaf narrow
+  :bind (("C-x n n" . my-narrow-dwim))
+  :init
+  (defun my-narrow-dwim ()
+    "Toggle narrowing."
+    (interactive)
+    (cond ((region-active-p)
+           ;; If region is highlighted, narrow to that
+           (call-interactively #'narrow-to-region)
+           (deactivate-mark t))
+          ((buffer-narrowed-p)
+           ;; Otherwise widen if narrowed
+           (widen))
+          (t
+           (call-interactively #'narrow-to-defun)))))
+
 (provide 'init)
 ;;; init.el ends here
