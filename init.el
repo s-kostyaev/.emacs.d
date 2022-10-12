@@ -1686,7 +1686,6 @@ Saves to a temp file."
   (add-hook 'gopcaml-mode-hook 'my-opam-env))
 
 (leaf haskell-mode
-  :disabled t
   :hook ((haskell-mode-hook . my-haskell-setup))
   :preface
   (require 'haskell-interactive-mode)
