@@ -55,7 +55,6 @@
  '(leetcode-prefer-language "golang")
  '(leetcode-save-solutions t)
  '(lsp-auto-guess-root t)
- '(lsp-eldoc-hook '(lsp-hover lsp-signature))
  '(lsp-eldoc-render-all t)
  '(lsp-file-watch-threshold 5000)
  '(lsp-go-use-gofumpt nil)

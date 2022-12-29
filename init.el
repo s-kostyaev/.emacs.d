@@ -491,29 +491,32 @@ It takes one parameter, which is t when the Night Light is active
 
 (leaf go
   :preface
-  (defun my-extract-go-module-name ()
-    (let* ((go-mod-file (f-join (if (project-current)
-				    (project-root (project-current))
-				  default-directory)
-				"go.mod"))
-           (name
-            (with-temp-buffer
-              (find-file-noselect-1 (current-buffer) go-mod-file t t go-mod-file 2)
-              (string-remove-prefix "module "
-                                    (buffer-substring-no-properties (point-min)
-                                                                    (progn
-                                                                      (goto-char (point-min))
-                                                                      (end-of-line)
-                                                                      (point)))))))
-      name))
+  (progn
+    (defun my-extract-go-module-name ()
+      (let* ((go-mod-file (f-join (if (project-current)
+				      (project-root (project-current))
+				    default-directory)
+				  "go.mod"))
+             (name
+              (with-temp-buffer
+		(find-file-noselect-1 (current-buffer) go-mod-file t t go-mod-file 2)
+		(string-remove-prefix "module "
+                                      (buffer-substring-no-properties (point-min)
+                                                                      (progn
+									(goto-char (point-min))
+									(end-of-line)
+									(point)))))))
+	name))
+    (setq auto-mode-alist
+	  (cons '("\\.go\\'" . go-ts-mode) auto-mode-alist)))
   :require s
   :config
-  (leaf go-mode
+  (leaf go-ts-mode
     :defvar company-backends go-tag-args
     :mode ("\\.go\\'"
-           ("go.mod$" . go-dot-mod-mode))
+           ("go.mod$" . go-mod-ts-mode))
     :config
-    (with-eval-after-load 'go-mode
+    (with-eval-after-load 'go-ts-mode
       (progn
         (setenv "GOPATH"
                 (concat
@@ -586,7 +589,7 @@ It takes one parameter, which is t when the Night Light is active
           ;; (eglot-ensure)
           )
 
-        (add-hook 'go-mode-hook #'my-go-mode-hook)))))
+        (add-hook 'go-ts-mode-hook #'my-go-mode-hook)))))
 
 (leaf go-playground
   :straight (go-playground :type git :host github :repo "s-kostyaev/go-playground" :branch "add-minor-mode-autoloads"))
@@ -1347,18 +1350,6 @@ If the current buffer is not visiting a file, prompt for a file name."
   :hook ((rust-mode-hook . lsp-deferred))
   :setq ((rust-format-on-save . t)))
 
-(leaf tree-sitter
-  :preface
-  (require 'tree-sitter-langs)
-
-  (defun my-enable-tree-sitter ()
-    "Enable tree-sitter."
-    (tree-sitter-hl-mode +1))
-
-  :hook ((tree-sitter-after-on-hook . my-enable-tree-sitter))
-  :config
-  (global-tree-sitter-mode))
-
 (leaf comby
   :bind (("C-c C-e" . comby)))
 
@@ -1651,6 +1642,7 @@ Saves to a temp file."
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
 
 (leaf gopcaml-mode
+  :disabled t
   :preface
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
     (when (and opam-share (file-directory-p opam-share))
