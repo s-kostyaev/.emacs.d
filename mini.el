@@ -160,4 +160,75 @@ Select it interactively otherwise."
 (when (boundp pixel-scroll-precision-mode)
   (pixel-scroll-precision-mode +1))
 
+(setq-default mode-line-format
+	      (list
+	       "["
+	       ;; was this buffer modified since the last save?
+	       '(:eval (when (buffer-modified-p)
+			 (propertize "*"
+				     'face 'font-lock-warning-face
+				     'help-echo "Buffer has been modified")))
+
+	       ;; is this buffer read-only?
+	       '(:eval (when buffer-read-only
+			 (propertize "RO"
+				     'face 'font-lock-type-face
+				     'help-echo "Buffer is read-only")))
+	       "] "
+
+	       ;; the buffer name; the file name as a tool tip
+	       '(:eval (propertize "%b " 'face 'font-lock-keyword-face
+				   'help-echo (buffer-file-name)))
+
+	       ;; line and column
+	       ;; "(" ;; '%02' to set to 2 chars at least; prevents flickering
+	       (propertize "%02l" 'face 'font-lock-constant-face) ":"
+	       (propertize "%02c" 'face 'font-lock-constant-face)
+	       ;; ") "
+
+	       "    "
+	       '(:eval (when (stringp vc-mode)
+			 vc-mode))
+	       ;; the current major mode for the buffer.
+	       "    ["
+
+	       '(:eval (propertize "%m" 'face 'font-lock-string-face
+				   'help-echo buffer-file-coding-system))
+	       "] "
+
+	       ;; Flycheck errors
+
+	       ;; '(:eval (flycheck-mode-line-status-text))
+
+	       ;; flymake errors
+	       '(:eval (when flymake--state flymake-mode-line-format))
+
+	       ;; relative position, size of file
+	       "    ["
+	       (propertize "%p" 'face 'font-lock-constant-face) ;; % above top
+	       "/"
+	       (propertize "%I" 'face 'font-lock-constant-face) ;; size
+	       "] "))
+
+(defun my-update-vc-mode ()
+  "Update variable `vc-mode' for modeline."
+  (when (stringp vc-mode)
+    (let ((noback (replace-regexp-in-string
+                   (format "^ %s"
+                           (vc-backend buffer-file-name))
+                   " " vc-mode)))
+      (setq vc-mode (propertize vc-mode 'face
+                                (cond
+                                 ((string-match "^ -" noback)
+                                  'font-lock-keyword-face)
+                                 ((string-match "^ [:@]" noback)
+                                  'font-lock-warning-face)
+                                 ((string-match "^ [!\\?]" noback)
+                                  'font-lock-warning-face)))))))
+
+(add-hook 'after-revert-hook 'my-update-vc-mode)
+(add-hook 'after-find-file 'my-update-vc-mode)
+
+(add-hook 'before-save-hook 'eglot-format-buffer)
+
 (my-set-themes)
