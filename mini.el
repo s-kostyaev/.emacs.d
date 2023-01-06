@@ -18,7 +18,6 @@
 (setq-default icomplete-delay-completions-threshold 0)
 (setq-default icomplete-max-delay-chars 0)
 (setq-default icomplete-compute-delay 0)
-;; (setq-default icomplete-separator "\n ")
 (setq-default icomplete-with-completion-tables t)
 (setq-default icomplete-in-buffer t)
 (setq-default icomplete--in-region-buffer t)
@@ -195,10 +194,6 @@ Select it interactively otherwise."
 	       '(:eval (propertize "%m" 'face 'font-lock-string-face
 				   'help-echo buffer-file-coding-system))
 	       "] "
-
-	       ;; Flycheck errors
-
-	       ;; '(:eval (flycheck-mode-line-status-text))
 
 	       ;; flymake errors
 	       '(:eval (when flymake--state flymake-mode-line-format))
