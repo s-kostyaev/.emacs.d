@@ -155,7 +155,7 @@ Select it interactively otherwise."
 
 (define-key completion-in-region-mode-map (kbd "M-RET") 'my-minibuffer-choose-completion)
 
-(global-set-key (kbd "C-c C-s") 'grep-find)
+(global-set-key (kbd "C-c C-s") 'rgrep)
 
 (when (boundp pixel-scroll-precision-mode)
   (pixel-scroll-precision-mode +1))
