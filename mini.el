@@ -135,7 +135,8 @@ Select it interactively otherwise."
 
 (setq go-ts-mode-indent-offset 8)
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
-(define-key go-ts-mode-map (kbd "C-c C-c") 'my-make)
+(with-eval-after-load 'go-ts-mode (define-key go-ts-mode-map (kbd "C-c C-c") 'my-make))
+
 
 (setq completions-format 'one-column)
 (setq completions-header-format nil)
