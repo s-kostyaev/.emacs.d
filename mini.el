@@ -3,7 +3,7 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
-(load-theme 'dichromacy)
+(load-theme 'misterioso)
 (global-font-lock-mode 1)
 (show-paren-mode 1)
 
@@ -156,5 +156,8 @@ Select it interactively otherwise."
 (define-key completion-in-region-mode-map (kbd "M-RET") 'my-minibuffer-choose-completion)
 
 (global-set-key (kbd "C-c C-s") 'grep-find)
+
+(when (boundp pixel-scroll-precision-mode)
+  (pixel-scroll-precision-mode +1))
 
 (my-set-themes)
