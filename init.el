@@ -17,20 +17,25 @@
         (setq network-security-level 'high)
         (setq gnutls-verify-error t))))
 
-(defvar bootstrap-version)
-(defvar straight-check-for-modifications)
-(setq straight-check-for-modifications '(check-on-save find-when-checking))
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-        (url-retrieve-synchronously
-         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-         'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-  (load bootstrap-file nil 'nomessage))
+(require 'cl-lib)
+(cl-defun my-vc-install (&key url host repo name rev backend)
+  "Install a package from a remote if it's not already installed.
+This is a thin wrapper around `package-vc-install' in order to
+make non-interactive usage more ergonomic.  Takes the following
+named arguments:
+
+- HOST the remote where to get the package (e.g., \"gitlab\").
+
+- REPO should be the name of the repository (e.g.,
+  \"slotThe/arXiv-citation\".
+
+- URL, NAME, REV, and BACKEND are as in `package-vc-install' (which
+  see)."
+  (let* ((uri (or url (format "https://www.%s.com/%s" host repo)))
+         (iname (when name (intern name)))
+         (pac-name (or iname (intern (file-name-base repo)))))
+    (unless (package-installed-p pac-name)
+      (package-vc-install uri iname rev backend))))
 
 (setq package-quickstart t)
 
@@ -1539,7 +1544,8 @@ Saves to a temp file."
 
   :config
   (leaf justify-kp
-    :straight (justify-kp :type git :host github :repo "Fuco1/justify-kp")
+    :init
+    (my-vc-install :name "justify-kp" :host "github" :repo "Fuco1/justify-kp")
     :require t)
   (setq nov-text-width t)
 
@@ -1570,8 +1576,8 @@ Saves to a temp file."
 
 (leaf golden
   :disabled t
-  :straight (golden :type git :repo "https://git.sr.ht/~wklew/golden")
   :init
+  (my-vc-install :name "golden" :url "https://git.sr.ht/~wklew/golden")
   (global-golden-mode +1))
 
 (leaf affe
@@ -1764,8 +1770,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 (leaf consult-dash
   :bind
   (("M-s d" . consult-dash))
-  :straight
-  (consult-dash :type git :repo "https://codeberg.org/ravi/consult-dash.git")
+  :init
+  (my-vc-install :name "consult-dash" :url "https://codeberg.org/ravi/consult-dash.git")
   :config
   (dash-docs-activate-docset "Go")
   (dash-docs-activate-docset "NET Framework"))
