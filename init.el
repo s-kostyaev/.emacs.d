@@ -39,15 +39,8 @@ named arguments:
 
 (setq package-quickstart t)
 
-(leaf benchmark-init
-  :disabled t
-  :hook ((after-init-hook . benchmark-init/deactivate))
-  :require benchmark-init)
-
-(leaf native-comp
-  :preface
-  (setq native-comp-deferred-compilation t)
-  (setq native-compile-prune-cache t))
+(setq native-comp-deferred-compilation t)
+(setq native-compile-prune-cache t)
 
 ;; (global-set-key (kbd "C-M-r") (lambda () (interactive)
 ;;                                 (byte-recompile-file "~/.emacs.d/init.el" t 0)
@@ -58,10 +51,7 @@ named arguments:
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
-(leaf-keywords-init)
-
-(leaf my-themes
-  :preface
+(progn ; my-themes
   (setq calendar-location-name "Novosibirsk, Russia")
   (setq calendar-latitude 55.05)
   (setq calendar-longitude 82.93)
@@ -69,18 +59,18 @@ named arguments:
   (defun my-switch-themes (sun-event &optional first-run)
     "Switch themes on sunrise and sunset."
     (if first-run
-        (cond ((memq sun-event '(sunrise midday))
-               (mapc #'disable-theme custom-enabled-themes)
-               (load-theme my-light-theme t))
-              ((memq sun-event '(sunset midnight))
-               (mapc #'disable-theme custom-enabled-themes)
-               (load-theme my-dark-theme t)))
+	(cond ((memq sun-event '(sunrise midday))
+	       (mapc #'disable-theme custom-enabled-themes)
+	       (load-theme my-light-theme t))
+	      ((memq sun-event '(sunset midnight))
+	       (mapc #'disable-theme custom-enabled-themes)
+	       (load-theme my-dark-theme t)))
       (cond ((eq sun-event 'sunrise)
-             (mapc #'disable-theme custom-enabled-themes)
-             (load-theme my-light-theme t))
-            ((eq sun-event 'sunset)
-             (mapc #'disable-theme custom-enabled-themes)
-             (load-theme my-dark-theme t)))))
+	     (mapc #'disable-theme custom-enabled-themes)
+	     (load-theme my-light-theme t))
+	    ((eq sun-event 'sunset)
+	     (mapc #'disable-theme custom-enabled-themes)
+	     (load-theme my-dark-theme t)))))
 
   ;; sign this function to be invoked on sun events
   (add-hook 'rase-functions 'my-switch-themes)
@@ -107,23 +97,23 @@ named arguments:
     "Toggle light and dark themes."
     (interactive)
     (let ((cur-theme (if (equal
-                          (car custom-enabled-themes)
-                          my-light-theme)
-                         'light 'dark)))
+			  (car custom-enabled-themes)
+			  my-light-theme)
+			 'light 'dark)))
       (if (equal cur-theme 'light)
-          (my-enable-dark-theme)
-        (my-enable-light-theme))))
+	  (my-enable-dark-theme)
+	(my-enable-light-theme))))
 
   (defun my-reload-theme ()
     "Reload current theme."
     (interactive)
     (set-frame-font my-font nil t)
     (if my-need-theme-reload
-        (mapc
-         (lambda (theme)
-           (disable-theme theme)
-           (load-theme theme t))
-         custom-enabled-themes)))
+	(mapc
+	 (lambda (theme)
+	   (disable-theme theme)
+	   (load-theme theme t))
+	 custom-enabled-themes)))
 
   (defun my-reload-theme--frame (_frame)
     "Reload theme after make frame."
@@ -133,9 +123,9 @@ named arguments:
     "Load theme."
     (interactive)
     (let ((theme (intern
-                  (completing-read "Load custom theme: "
-                                   (mapcar #'symbol-name
-                                           (custom-available-themes))))))
+		  (completing-read "Load custom theme: "
+				   (mapcar #'symbol-name
+					   (custom-available-themes))))))
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme theme t nil)))
 
@@ -143,17 +133,17 @@ named arguments:
     "Load theme."
     (interactive)
     (let ((theme (intern
-                  (completing-read "Load custom theme: "
-                                   (cl-delete-if
-                                    (lambda (theme)
-                                      (f-ancestor-of\?
-                                       (getenv "HOME")
-                                       (locate-file
-                                        (concat theme "-theme.el")
-                                        (custom-theme--load-path)
-                                        '("" "c"))))
-                                    (mapcar #'symbol-name
-                                            (custom-available-themes)))))))
+		  (completing-read "Load custom theme: "
+				   (cl-delete-if
+				    (lambda (theme)
+				      (f-ancestor-of\?
+				       (getenv "HOME")
+				       (locate-file
+					(concat theme "-theme.el")
+					(custom-theme--load-path)
+					'("" "c"))))
+				    (mapcar #'symbol-name
+					    (custom-available-themes)))))))
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme theme t nil)))
 
@@ -166,28 +156,25 @@ named arguments:
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  :pre-setq ((my-light-theme quote ef-summer)
-             (my-dark-theme quote ef-winter)
-             (my-need-theme-reload . nil))
+  (setq my-font (font-spec :size 14.0 :family "Iosevka Comfy")
+	my-light-theme 'ef-summer
+	my-dark-theme 'ef-winter
+	my-need-theme-reload nil)
 
-  :preface
-  (setq my-font (font-spec :size 14.0 :family "Iosevka Comfy"))
-  :bind
-  (("<f6>" . my-toggle-themes))
-  :hook
-  ((after-init-hook . my-set-themes)
-   (desktop-after-read-hook . my-set-themes)
-   (after-init-hook . my-load-custom-file)))
+  (global-set-key (kbd "<f6>") 'my-toggle-themes)
+  (add-hook 'after-init-hook 'my-set-themes)
+  (add-hook 'desktop-after-read-hook 'my-set-themes)
+  (add-hook 'after-init-hook 'my-load-custom-file))
 
-(leaf my-gnome-night-light-light
-  :preface
+(progn ; my-gnome-night-light-light
+  (require 'dbus)
   (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
     (let* ((prop (car changed-props))
-           (name (car prop))
-           (value (car (cadr prop))))
+	   (name (car prop))
+	   (value (car (cadr prop))))
       (when (string-equal name "NightLightActive")
-        (when (functionp my-gnome-night-light-light-change-callback)
-          (funcall my-gnome-night-light-light-change-callback value)))))
+	(when (functionp my-gnome-night-light-light-change-callback)
+	  (funcall my-gnome-night-light-light-change-callback value)))))
 
   (defun my-gnome-night-light ()
     "Load and enable my-gnome-night-light."
@@ -205,26 +192,23 @@ named arguments:
 		  "org.gnome.SettingsDaemon.Color"
 		  "NightLightActive")))
       (when (functionp my-gnome-night-light-light-change-callback)
-        (funcall my-gnome-night-light-light-change-callback value))))
+	(funcall my-gnome-night-light-light-change-callback value))))
 
   (defun my-theme-changer (state)
     "My callback for gnome-night-light.\nChanges theme according to STATE."
     (mapc #'disable-theme custom-enabled-themes)
     (if state
-        (load-theme my-dark-theme t nil)
+	(load-theme my-dark-theme t nil)
       (load-theme my-light-theme t nil)))
 
-  :require dbus
-  :setq ((my-gnome-night-light-light-change-callback function my-theme-changer))
-  :config
+  (setq my-gnome-night-light-light-change-callback 'my-theme-changer)
   (defvar my-gnome-night-light-light-change-callback nil
     "The callback function called on Night Light state change.
 It takes one parameter, which is t when the Night Light is active
 (e.g.  it's night) and nil when it's day.")
   (my-gnome-night-light))
 
-(leaf my-mac-themes
-  :preface
+(progn ; my-mac-themes
   (defun my-mac-apply-theme (appearance)
     "Load theme, taking current system APPEARANCE into consideration."
     (mapc #'disable-theme custom-enabled-themes)
@@ -235,22 +219,18 @@ It takes one parameter, which is t when the Night Light is active
   (if (eq (window-system) 'ns)
       (add-hook 'ns-system-appearance-change-functions #'my-mac-apply-theme)))
 
-(leaf key-chord
+(use-package key-chord
   :bind (([f9] . key-chord-mode))
   :config
   (run-with-idle-timer 2 nil #'require 'key-chord nil t)
   (with-eval-after-load 'key-chord
     (key-chord-mode 1)))
 
-(leaf flymake
+(use-package flymake
   :hook ((prog-mode-hook . flymake-mode)
          (emacs-lisp-mode-hook . flymake-mode))
-  :init
-  (leaf flymake
-    :bind (("C-x `" . flymake-goto-next-error)
-           ("C-c r" . consult-flymake)))
-
-  :require flymake)
+  :bind (("C-x `" . flymake-goto-next-error)
+         ("C-c r" . consult-flymake)))
 
 (setq flymake-mode-line-format '(" " flymake-mode-line-counters))
 (require 'f)
@@ -304,7 +284,7 @@ It takes one parameter, which is t when the Night Light is active
 	       (propertize "%I" 'face 'font-lock-constant-face) ;; size
 	       "] "))
 
-(leaf vc-mode
+(use-package vc-mode
   :preface
   (defun my-update-vc-mode ()
     "Update variable `vc-mode' for modeline."
@@ -325,16 +305,16 @@ It takes one parameter, which is t when the Night Light is active
   :hook ((after-revert-hook . my-update-vc-mode)
          (after-find-file . my-update-vc-mode)))
 
-(leaf text-defaults
+(use-package text-defaults
   :bind (("M-J" . scroll-up-line)
          ("M-K" . scroll-down-line))
   :hook ((after-init-hook . global-font-lock-mode))
-  :pre-setq ((inhibit-startup-message . t)
-             (frame-title-format . "emacs - %b")
-             (auto-window-vscroll)
-             (require-final-newline . t)
-             (next-line-add-newlines))
   :preface
+  (setq inhibit-startup-message t
+	frame-title-format "emacs - %b"
+	auto-window-vscroll nil
+	require-final-newline t
+	next-line-add-newlines nil)
   (mouse-wheel-mode t)
   (fset 'yes-or-no-p 'y-or-n-p)
   (put 'downcase-region 'disabled nil)
@@ -343,8 +323,7 @@ It takes one parameter, which is t when the Night Light is active
   (electric-pair-mode 1)
   (setq sentence-end-double-space nil))
 
-(leaf my-align-region
-  :defvar delimit-columns-extra delimit-columns-format delimit-columns-str-separator delimit-columns-separator
+(use-package my-align-region
   :preface
   (defun my-align-region-by (&optional delimiter)
     "Align current region by DELIMITER."
@@ -368,7 +347,7 @@ It takes one parameter, which is t when the Night Light is active
 
   :bind (("C-c a" . my-align-region-by)))
 
-(leaf hydra
+(use-package hydra
   :preface
   (defun toggle-window-split ()
     "Toggle window split vertically or horizontally."
@@ -435,7 +414,7 @@ It takes one parameter, which is t when the Night Light is active
     ("c" delete-window "Close window")
     ("q" nil "quit")))
 
-(leaf lsp-mode
+(use-package lsp-mode
   :preface
   (setq lsp-use-plists t)
   (setenv "LSP_USE_PLISTS" "true")
@@ -449,19 +428,18 @@ It takes one parameter, which is t when the Night Light is active
       (lsp-format-buffer)))
 
   :after t
-  :require yasnippet
+  :init
+  (require 'yasnippet)
   :config
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (add-hook 'lsp-mode-hook #'lsp-completion--enable)
   (add-hook 'before-save-hook #'my-lsp-before-save)
   (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable))
 
-(leaf eglot
-  :defvar eglot-workspace-configuration eglot-strict-mode
-  :setq ((eglot-strict-mode))
-  :setq-default
-  ((eglot-workspace-configuration quote
-                                  ((:gopls :usePlaceholders t :staticcheck t :completeUnimported t))))
+(use-package eglot
+  :preface
+  (setq eglot-strict-mode nil)
+  (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   :config
   (eval-after-load 'eglot
     (lambda nil
@@ -474,10 +452,9 @@ It takes one parameter, which is t when the Night Light is active
       (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
       (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions))))
 
-(leaf exec-path
-  :preface
+(progn ; exec-path
   (setq exec-path (append
-                   '("/home/feofan/.opam/default/bin"
+		   '("/home/feofan/.opam/default/bin"
 		     "~/go/bin"
 		     "/opt/local/bin"
 		     "/usr/local/bin"
@@ -488,38 +465,35 @@ It takes one parameter, which is t when the Night Light is active
 		   exec-path))
   (require 's)
   (setenv "PATH"
-          (s-join ":" exec-path)))
+	  (s-join ":" exec-path)))
 
-(leaf project-rootfile
+(use-package project-rootfile
   :init
   (add-to-list 'project-find-functions #'project-rootfile-try-detect t))
 
-(leaf go
-  :preface
+(progn ; go
+  (require 's)
   (progn
     (defun my-extract-go-module-name ()
       (let* ((go-mod-file (f-join (if (project-current)
 				      (project-root (project-current))
 				    default-directory)
 				  "go.mod"))
-             (name
-              (with-temp-buffer
+	     (name
+	      (with-temp-buffer
 		(find-file-noselect-1 (current-buffer) go-mod-file t t go-mod-file 2)
 		(string-remove-prefix "module "
-                                      (buffer-substring-no-properties (point-min)
-                                                                      (progn
+				      (buffer-substring-no-properties (point-min)
+								      (progn
 									(goto-char (point-min))
 									(end-of-line)
 									(point)))))))
 	name))
     (setq auto-mode-alist
 	  (cons '("\\.go\\'" . go-ts-mode) auto-mode-alist)))
-  :require s
-  :config
-  (leaf go-ts-mode
-    :defvar company-backends go-tag-args
+  (use-package go-ts-mode
     :mode ("\\.go\\'"
-           ("go.mod$" . go-mod-ts-mode))
+	   ("go.mod$" . go-mod-ts-mode))
     :config
     (with-eval-after-load 'go-ts-mode
       (progn
@@ -534,97 +508,72 @@ It takes one parameter, which is t when the Night Light is active
                  (getenv "GOPATH")
                  "/bin"))
         (defun my-go-mode-hook ()
-          "Setup for go."
-          (if (eq system-type 'darwin)
-              (setenv "GOROOT"
-                      (s-trim
-                       (shell-command-to-string "find /usr/local/Cellar/go -type 'd' -name 'libexec'"))))
-          (require 'go-impl)
-          (require 'gotest)
-          (require 'dap-dlv-go)
-          (defun my-go-test (arg)
-            (interactive "P")
-            (if arg
+	  "Setup for go."
+	  (if (eq system-type 'darwin)
+	      (setenv "GOROOT"
+		      (s-trim
+		       (shell-command-to-string "find /usr/local/Cellar/go -type 'd' -name 'libexec'"))))
+	  (require 'go-impl)
+	  (require 'gotest)
+	  (require 'dap-dlv-go)
+	  (defun my-go-test (arg)
+	    (interactive "P")
+	    (if arg
                 (pcase (completing-read "go test "
                                         '("current project" "current directory"))
-                  ("current project"
-                   (let ((default-directory (project-root
-                                             (project-current)))
+		  ("current project"
+		   (let ((default-directory (project-root
+					     (project-current)))
                          (current-prefix-arg nil))
-                     (go-test-current-project)))
-                  (_
-                   (go-test-current-project)))
-              (go-test-current-project)))
+		     (go-test-current-project)))
+		  (_
+		   (go-test-current-project)))
+	      (go-test-current-project)))
 
-          (setq go-tag-args (list "-transform" "snakecase"))
-          (local-set-key
-           (kbd "C-c i")
-           #'go-goto-imports)
-          (local-set-key
-           (kbd "C-c C-t")
-           #'my-go-test)
-          (local-set-key
-           (kbd "C-c t")
-           #'go-tag-add)
-          (local-set-key
-           (kbd "C-c T")
-           #'go-tag-remove)
-          (local-set-key
-           (kbd "C-c g")
-           #'go-gen-test-dwim)
-          (local-set-key
-           (kbd "M-?")
-           #'lsp-find-references)
-          (local-set-key
-           (kbd "C-c C-c")
-           #'my-make)
-          (require 'lsp-mode)
-          (lsp-register-custom-settings
-           '(("gopls.completeUnimported" t)))
-          (lsp-register-custom-settings
-           '(("gopls.staticcheck" t)))
-          (setq-local flymake-start-on-save-buffer nil)
-          (setq-local flymake-no-changes-timeout nil)
-          (setq-local lsp-go-goimports-local (my-extract-go-module-name))
-          (require 'lsp-go)
-          (symbol-overlay-mode -1)
-          (company-prescient-mode -1)
-          (setq-local lsp-completion-filter-on-incomplete nil)
-          (lsp-deferred)
-          ;; (eglot-ensure)
-          )
+	  (setq go-tag-args (list "-transform" "snakecase"))
+	  (local-set-key
+	   (kbd "C-c i")
+	   #'go-goto-imports)
+	  (local-set-key
+	   (kbd "C-c C-t")
+	   #'my-go-test)
+	  (local-set-key
+	   (kbd "C-c t")
+	   #'go-tag-add)
+	  (local-set-key
+	   (kbd "C-c T")
+	   #'go-tag-remove)
+	  (local-set-key
+	   (kbd "C-c g")
+	   #'go-gen-test-dwim)
+	  (local-set-key
+	   (kbd "M-?")
+	   #'lsp-find-references)
+	  (local-set-key
+	   (kbd "C-c C-c")
+	   #'my-make)
+	  (require 'lsp-mode)
+	  (lsp-register-custom-settings
+	   '(("gopls.completeUnimported" t)))
+	  (lsp-register-custom-settings
+	   '(("gopls.staticcheck" t)))
+	  (setq-local flymake-start-on-save-buffer nil)
+	  (setq-local flymake-no-changes-timeout nil)
+	  (setq-local lsp-go-goimports-local (my-extract-go-module-name))
+	  (require 'lsp-go)
+	  (symbol-overlay-mode -1)
+	  (company-prescient-mode -1)
+	  (setq-local lsp-completion-filter-on-incomplete nil)
+	  (lsp-deferred)
+	  ;; (eglot-ensure)
+	  )
 
         (add-hook 'go-ts-mode-hook #'my-go-mode-hook)))))
 
-(leaf default-keybindings
-  :bind (("s" . save-buffer)
-         ("v" . quoted-insert)
-         ("f" . search-forward)
-         ("c" . compile)
-         ("0" . overwrite-mode)
-         ("" . previous-line)
-         ("" . forward-word)
-         ("" . not-modified)))
+(setq make-backup-files nil
+      text-mode-hook 'turn-on-auto-fill)
 
-(leaf default-modes
-  :setq ((make-backup-files quote nil)
-         (text-mode-hook quote turn-on-auto-fill))
-  :config
-  (setq auto-mode-alist (cons
-                         '("\\.cxx$" . c++-mode)
-                         auto-mode-alist))
-  (setq auto-mode-alist (cons
-                         '("\\.hpp$" . c++-mode)
-                         auto-mode-alist))
-  (setq auto-mode-alist (cons
-                         '("\\.tex$" . latex-mode)
-                         auto-mode-alist)))
-
-
-(leaf company
-  :defvar
-  company-dabbrev-ignore-case company-dabbrev-code-ignore-case company-tooltip-limit
-  company-idle-delay company-echo-delay company-minimum-prefix-length
+(use-package company
   :commands global-company-mode
   :hook ((after-init-hook . global-company-mode))
   :config
@@ -641,20 +590,19 @@ It takes one parameter, which is t when the Night Light is active
     (setq setq nil)
     (setq company-tooltip-align-annotations nil)))
 
-(leaf bash-dynamic-completion
+(use-package bash-dynamic-completion
   :commands bash-completion-dynamic-complete
   :hook ((shell-dynamic-complete-functions . bash-completion-dynamic-complete)))
 
-(leaf eldoc
+(use-package eldoc
   :hook ((emacs-lisp-mode-hook . eldoc-mode)
          (lisp-interaction-mode-hook . eldoc-mode)
          (ielm-mode-hook . eldoc-mode)))
 
-(leaf dumb-jump
+(use-package dumb-jump
   :hook ((xref-backend-functions . dumb-jump-xref-activate)))
 
-(leaf browse-url
-  :require t
+(use-package browse-url
   :preface
   (defun my-browse-url-chromium-wayland (url &optional ignored)
     "Pass the specified URL to the \"chromium\" command.
@@ -670,27 +618,27 @@ The optional argument IGNORED is not used."
             " GDK_BACKEND=x11 /usr/bin/setsid -w chromium " url)))
       (start-process-shell-command "browser" "*chromium-open-url*" cmd)))
 
-  :setq ((browse-url-browser-function function my-browse-url-chromium-wayland)))
+  (setq browse-url-browser-function 'my-browse-url-chromium-wayland))
 
-(leaf my-open-multiple-files
+(use-package my-open-multiple-files
   :hook ((window-setup-hook . delete-other-windows)))
 
-(leaf pkgbuild-mode
+(use-package pkgbuild-mode
   :when (file-exists-p "/etc/pacman.conf")
   :mode ("/PKGBUILD$"))
 
-(leaf poly-markdown
+(use-package poly-markdown
   :mode ("\\.text\\'"
          ("\\.md$" . poly-gfm-mode)
          "\\.markdown$")
-  :bind ((markdown-mode-map
-          ("M-p" . ace-window))))
+  :bind ((:map markdown-mode-map
+               ("M-p" . ace-window))))
 
-(leaf flymake-proselint
+(use-package flymake-proselint
   :hook ((markdown-mode-hook . flymake-proselint-setup)
          (gfm-mode-hook . flymake-proselint-setup)))
 
-(leaf vmd-mode
+(use-package vmd-mode
   :preface
   (defun my-github-emojis-complete-at-point ()
     "My function for complete github emoji at point."
@@ -714,12 +662,12 @@ The optional argument IGNORED is not used."
   (defun my-bind-md-preview-key ()
     "Rebind markdown preview."
     (define-key markdown-mode-command-map
-      (kbd "p")
-      'vmd-mode))
+		(kbd "p")
+		'vmd-mode))
 
   :after markdown-mode
-  :bind ((markdown-mode-command-map
-          ("p" . vmd-mode)))
+  :bind ((:map markdown-mode-command-map
+               ("p" . vmd-mode)))
   :hook ((markdown-mode-hook . my-enable-emojis-completion)
          (markdown-mode-hook . my-bind-md-preview-key))
   :config
@@ -734,26 +682,28 @@ The optional argument IGNORED is not used."
                                         (buffer-string)
                                         "\n" t)))))
 
-(leaf emmet-mode
+(use-package emmet-mode
   :disabled t
   :hook (sgml-mode-hook web-mode-hook rjsx-mode css-mode-hook)
-  :require t
-  :setq ((emmet-move-cursor-between-quotes . t)))
+  (setq emmet-move-cursor-between-quotes t))
 
-(leaf avy
-  :chord (("fj" . avy-goto-word-1)
-          ("f'" . avy-pop-mark))
+(use-package avy
+  :preface
+  (key-chord-define-global "fj" 'avy-goto-word-1)
+  (key-chord-define-global "f'" 'avy-pop-mark)
   :config
   (define-key isearch-mode-map (kbd "C-'") #'avy-isearch))
 
 
-(leaf expand-region
-  :chord (("zj" . er/expand-region)
-          ("zk" . er/contract-region)))
+(use-package expand-region
+  :preface
+  (key-chord-define-global "zj" 'er/expand-region)
+  (key-chord-define-global "zk" 'er/contract-region))
 
-(leaf multiple-cursors
+(use-package multiple-cursors
   :commands (multiple-cursors-hydra/body)
-  :chord (("mf" . multiple-cursors-hydra/body))
+  :preface
+  (key-chord-define-global "mf" 'multiple-cursors-hydra/body)
   :config
   (progn
     (require 'hydra)
@@ -787,7 +737,7 @@ The optional argument IGNORED is not used."
       ("k" ace-mc-add-single-cursor :exit t)
       ("q" nil))))
 
-(leaf yasnippet
+(use-package yasnippet
   :bind (([tab]
           . tab-indent-or-complete)
          ("TAB" . tab-indent-or-complete))
@@ -822,15 +772,13 @@ The optional argument IGNORED is not used."
                   (company-complete-common)
                 (indent-for-tab-command))))))))
 
-(leaf x-hyper-keysym
-  :defvar x-hyper-keysym
-  :setq ((x-hyper-keysym quote meta)
-         (mac-option-modifier quote none)
-         (mac-command-modifier quote meta)
-         (mac-command-key-is-meta quote t)
-         (mac-option-key-is-meta nil)))
+(setq x-hyper-keysym 'meta
+      mac-option-modifier 'none
+      mac-command-modifier 'meta
+      mac-command-key-is-meta 't
+      mac-option-key-is-meta nil)
 
-(leaf fzf
+(use-package fzf
   :disabled t
   :bind* (("C-c C-f" . my-fzf-project))
   :config
@@ -844,34 +792,31 @@ The optional argument IGNORED is not used."
             (project-root (project-current)))
         default-directory)))))
 
-(leaf wgrep
+(use-package wgrep
   :bind (("C-c C-p" . wgrep-change-to-wgrep-mode))
   :config
   (with-eval-after-load 'wgrep
     (setq wgrep-auto-save-buffer t)))
 
-(leaf keyboard-selection
-  :setq ((select-enable-primary . t)
-         (select-enable-clipboard . t)))
+(setq select-enable-primary t
+      select-enable-clipboard  t)
 
-(leaf mouse
+(use-package mouse
   :bind (([drag-mouse-0]
           . mouse-set-region))
-  :require mouse
-  :setq ((mouse-drag-copy-region . t))
+  :preface
+  (setq mouse-drag-copy-region t)
   :config
   (xterm-mouse-mode t))
 
-(leaf imenu
+(use-package imenu
   :bind (("M-i" . imenu)))
 
-(leaf magit
-  :defvar auto-revert-check-vc-info
+(use-package magit
   :bind (("C-x C-j" . my-magit-find-file-other-frame))
   :bind* (("C-x g" . magit-status))
   :config
-  (leaf diff-mode
-    :require t)
+  (use-package diff-mode)
   (with-eval-after-load 'magit
     (progn
       (defun my-magit-diff-hook ()
@@ -914,28 +859,27 @@ to the line and column corresponding to that location."
 
 
 
-(leaf edit-indirect
-  :chord ((";r" . edit-indirect-region)))
+(use-package edit-indirect
+  :preface
+  (key-chord-define-global ";r" 'edit-indirect-region))
 
-(leaf pandoc
-  :defun (pandoc-load-default-settings . ext:pandoc)
+(use-package pandoc
   :hook ((markdown-mode-hook . pandoc-mode)
          (pandoc-mode-hook . pandoc-load-default-settings)))
 
-(leaf erlang
+(use-package erlang
   :disabled t
-  :defvar erlang-extended-mode-map
   :mode ("\\.erl$" "\\.hrl$" "rebar\\.config$" "relx\\.config$" "system\\.config$" "\\.app\\.src$")
   :hook ((erlang-mode-hook . my-erlang-hook)
          (erlang-mode-hook . company-erlang-init))
   :config
   (with-eval-after-load 'erlang
     (progn
-      (leaf company-erlang
+      (use-package company-erlang
         :config
         (load "company-erlang-autoloads"))
 
-      (leaf ivy-erlang-complete)
+      (use-package ivy-erlang-complete)
 
       (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
       (defun my-format-erlang-record ()
@@ -967,20 +911,20 @@ to the line and column corresponding to that location."
           (require 'wrangler))
         (ivy-erlang-complete-init)
         (define-key erlang-extended-mode-map
-          (kbd "M-.")
-          nil)
+		    (kbd "M-.")
+		    nil)
         (define-key erlang-extended-mode-map
-          (kbd "M-,")
-          nil)
+		    (kbd "M-,")
+		    nil)
         (define-key erlang-extended-mode-map
-          (kbd "M-?")
-          nil)
+		    (kbd "M-?")
+		    nil)
         (define-key erlang-extended-mode-map
-          (kbd "(")
-          nil)
+		    (kbd "(")
+		    nil)
         (define-key erlang-extended-mode-map
-          (kbd "C-M-i")
-          nil)
+		    (kbd "C-M-i")
+		    nil)
         (local-set-key
          (kbd "C-c C-p")
          #'my-format-erlang-record)
@@ -990,38 +934,38 @@ to the line and column corresponding to that location."
 
       (add-hook 'after-save-hook #'ivy-erlang-complete-reparse))))
 
-(leaf open-urls
+(use-package open-urls
   :bind (("C-x u" . link-hint-open-multiple-links)))
 
-(leaf xml-mode
+(use-package xml-mode
   :mode (("\\.xsd\\'" . xml-mode)
          ("\\.xslt\\'" . xml-mode)))
 
-(leaf hungry-delete
+(use-package hungry-delete
   :config
   (run-with-idle-timer 0.5 nil #'require 'hungry-delete nil t)
   (with-eval-after-load 'hungry-delete
     (global-hungry-delete-mode)))
 
-(leaf ace-link
+(use-package ace-link
   :config
   (run-with-idle-timer 0.1 nil #'require 'ace-link nil t)
   (with-eval-after-load 'ace-link
     (ace-link-setup-default)))
 
-(leaf ace-window
+(use-package ace-window
   :bind (("M-p" . ace-window))
   :config
   (with-eval-after-load 'ace-window
     (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
 
 
-(leaf which-key
+(use-package which-key
   :hook (after-init-hook)
-  :require t
-  :setq ((which-key-show-transient-maps . 't)))
+  :preface
+  (setq which-key-show-transient-maps 't))
 
-(leaf ibuffer-vc
+(use-package ibuffer-vc
   :bind* (("C-x C-b" . ibuffer))
   :init
   (run-with-idle-timer 3 nil #'require 'ibuffer-vc nil t)
@@ -1032,7 +976,7 @@ to the line and column corresponding to that location."
                 (unless (eq ibuffer-sorting-mode 'alphabetic)
                   (ibuffer-do-sort-by-alphabetic))))))
 
-(leaf symbol-overlay
+(use-package symbol-overlay
   :config
   (run-with-idle-timer 2 nil #'require 'symbol-overlay nil t)
   (with-eval-after-load 'symbol-overlay
@@ -1040,15 +984,14 @@ to the line and column corresponding to that location."
     (add-hook 'prog-mode-hook #'symbol-overlay-mode)
     (add-hook 'emacs-lisp-mode-hook #'symbol-overlay-mode)))
 
-(leaf zygospore
+(use-package zygospore
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows)))
 
-(leaf reverse-im
-  :require t
+(use-package reverse-im
   :config
   (reverse-im-activate "russian-computer"))
 
-(leaf aggressive-indent
+(use-package aggressive-indent
   :preface
   (defun my-disable-aggressive-indent ()
     "Disable aggressive indent mode in current buffer."
@@ -1057,32 +1000,31 @@ to the line and column corresponding to that location."
 
   :hook ((lsp-mode-hook . my-disable-aggressive-indent)
          (fsharp-mode-hook . my-disable-aggressive-indent))
-  :require t
   :config
   (aggressive-indent-global-mode))
 
-(leaf password-store
+(use-package password-store
   :commands password-store-get)
 
-(leaf pass
+(use-package pass
   :commands pass)
 
-(leaf dash
+(use-package dash
   :after t
   :config
   (dash-enable-font-lock))
 
-(leaf rg
+(use-package rg
   :bind* (("C-c C-s" . my-grep-vc-or-dir))
-  :bind (:rg-mode-map
-         ("f" . next-error-follow-minor-mode)
-         ("s" . my-rg-save-search-as-name)
-         ("n" . next-line)
-         ("p" . previous-line)
-         ("C-n" . next-line)
-         ("C-p" . previous-line)
-         ("M-n" . rg-next-file)
-         ("M-p" . rg-prev-file))
+  :bind (:map rg-mode-map
+              ("f" . next-error-follow-minor-mode)
+              ("s" . my-rg-save-search-as-name)
+              ("n" . next-line)
+              ("p" . previous-line)
+              ("C-n" . next-line)
+              ("C-p" . previous-line)
+              ("M-n" . rg-next-file)
+              ("M-p" . rg-prev-file))
   :config
   (with-eval-after-load 'rg
     (require 'wgrep)
@@ -1111,7 +1053,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 
     (advice-add 'my-grep-vc-or-dir :after 'my-next-window)))
 
-(leaf isearch
+(use-package isearch
   :preface
   (defun my-isearch-next (arg)
     "Isearch symbol at point or next isearch history item."
@@ -1128,23 +1070,20 @@ This function is meant to be mapped to a key in `rg-mode-map'."
     (interactive)
     (consult-line (or isearch-string (thing-at-point 'symbol) "")))
 
-  :bind ((isearch-mode-map
-          ("M-i" . my-consult-line-from-isearch)
-          ("M-n" . my-isearch-next)))
+  :bind ((:map isearch-mode-map
+               ("M-i" . my-consult-line-from-isearch)
+               ("M-n" . my-isearch-next)))
   :config
   (setq search-whitespace-regexp ".*")
   (setq isearch-lax-whitespace t)
   (setq isearch-regexp-lax-whitespace nil))
 
-(leaf upcase-region
-  :config
-  (put 'upcase-region 'disabled nil))
+(put 'upcase-region 'disabled nil)
 
-(leaf comment-tags
-  :hook (prog-mode-hook)
-  :require t)
+(use-package comment-tags
+  :hook (prog-mode-hook))
 
-(leaf eww-more-readable
+(use-package eww-more-readable
   :preface
   (defun eww-more-readable ()
     "Better eww.  Run it after eww buffer is loaded."
@@ -1156,7 +1095,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 
   :hook ((eww-after-render-hook . eww-more-readable)))
 
-(leaf yaml
+(use-package yaml
   :preface
   (defun my-disable-auto-fill ()
     "Disable `auto-fill-mode'."
@@ -1166,30 +1105,33 @@ This function is meant to be mapped to a key in `rg-mode-map'."
     "Enable `prism-mode'."
     (prism-mode 1))
 
+  (key-chord-define-global "<<" 'smart-shift-left)
+  (key-chord-define-global ">>" 'smart-shift-right)
+
+  :init
+  (require 'company-dabbrev-code)
+
   :hook ((yaml-mode-hook . highlight-indentation-mode)
-         (yaml-mode-hook . highlight-indentation-current-column-mode)
-         (yaml-mode-hook . my-disable-auto-fill)
-         (yaml-mode-hook . my-enable-prism))
-  :require company-dabbrev-code
-  :chord (("<<" . smart-shift-left)
-          (">>" . smart-shift-right))
+	 (yaml-mode-hook . highlight-indentation-current-column-mode)
+	 (yaml-mode-hook . my-disable-auto-fill)
+	 (yaml-mode-hook . my-enable-prism))
   :config
   (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
   (add-to-list 'company-dabbrev-code-modes 'protobuf-mode)
   (global-smart-shift-mode 1))
 
-(leaf auto-yasnippet
+(use-package auto-yasnippet
   :bind (("C-c y" . aya-create)
          ("C-." . aya-expand))
   :config
   (with-eval-after-load 'auto-yasnippet
     (setq aya-field-regex "\\sw\\|\\s_\\|\\*\\|\\&")))
 
-(leaf toggle-fullscreen
+(use-package toggle-fullscreen
   :bind (("ff" . toggle-frame-fullscreen)))
 
 
-(leaf open-file-as-root
+(use-package open-file-as-root
   :preface
   (defun open-this-file-as-root ()
     "Edit current file as root, using `tramp' and `sudo'.
@@ -1204,7 +1146,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 
   :bind (("C-c C-r" . open-this-file-as-root)))
 
-(leaf my-go-home
+(use-package my-go-home
   :preface
   (defun my-go-home ()
     "Go to home dir."
@@ -1213,22 +1155,22 @@ If the current buffer is not visiting a file, prompt for a file name."
 
   :hook ((after-init-hook . my-go-home)))
 
-(leaf so-long
+(use-package so-long
   :when (>= emacs-major-version 27)
   :hook ((after-init-hook . global-so-long-mode))
   :preface
   (setq bidi-paragraph-direction 'left-to-right)
   (setq bidi-inhibit-bpa t))
 
-(leaf hippie-expand
+(use-package hippie-expand
   :bind (("C-;" . hippie-expand)))
 
-(leaf dtrt-indent
+(use-package dtrt-indent
   :hook (prog-mode-hook protobuf-mode-hook))
 
 ;;; Screencasts
 
-(leaf gif-screencast
+(use-package gif-screencast
   :bind (("<f7>" . gif-screencast-toggle-pause)
          ("<f8>" . gif-screencast-start-or-stop))
   :config
@@ -1255,26 +1197,27 @@ If the current buffer is not visiting a file, prompt for a file name."
             gif-screencast-capture-format "png"))
     (setq gif-screencast-capture-prefer-internal t)))
 
-(leaf c-cpp-mode
+(use-package c-cpp-mode
   :hook ((c-mode-hook . lsp-deferred)
          (c++-mode-hook . lsp-deferred)))
 
-(leaf icomplete
-  :bind ((icomplete-minibuffer-map
-          ("<down>" . icomplete-forward-completions)
-          ("C-n" . icomplete-forward-completions)
-          ("<up>" . icomplete-backward-completions)
-          ("C-p" . icomplete-backward-completions)
-          ("C-v" . icomplete-vertical-toggle)
-          ("<backspace>" . icomplete-fido-backward-updir)
-          ("C-j" . icomplete-force-complete)
-          ("C-M-j" . exit-minibuffer)
-          ("<RET>" . icomplete-force-complete-and-exit)))
-  :setq ((read-file-name-completion-ignore-case . t)
-         (read-buffer-completion-ignore-case . t)
-         (completion-ignore-case . t)
-         (icomplete-show-matches-on-no-input . t)
-         (icomplete-prospects-height . 10))
+(use-package icomplete
+  :bind ((:map icomplete-minibuffer-map
+               ("<down>" . icomplete-forward-completions)
+               ("C-n" . icomplete-forward-completions)
+               ("<up>" . icomplete-backward-completions)
+               ("C-p" . icomplete-backward-completions)
+               ("C-v" . icomplete-vertical-toggle)
+               ("<backspace>" . icomplete-fido-backward-updir)
+               ("C-j" . icomplete-force-complete)
+               ("C-M-j" . exit-minibuffer)
+               ("<RET>" . icomplete-force-complete-and-exit)))
+  :preface
+  (setq read-file-name-completion-ignore-case t
+        read-buffer-completion-ignore-case t
+        completion-ignore-case t
+        icomplete-show-matches-on-no-input t
+        icomplete-prospects-height 10)
   :init
   (defun my-directory-tidy () ;; thanks minad - this part from vertico
     "Tidy shadowed file name, see `rfn-eshadow-overlay'."
@@ -1295,7 +1238,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
 
-(leaf orderless
+(use-package orderless
   :disabled t
   :preface
   (defun my-orderless-dispatch (pattern _index _total)
@@ -1306,8 +1249,10 @@ If the current buffer is not visiting a file, prompt for a file name."
   (setq orderless-style-dispatchers '(my-orderless-dispatch))
   :hook ((minibuffer-exit-hook . orderless-remove-transient-configuration)))
 
-(leaf consult
+(use-package consult
   :preface
+  (setq completion-in-region-function 'consult-completion-in-region)
+
   (defun my-consult-project-rg ()
     (interactive)
     (let ((xref-search-program 'ripgrep)
@@ -1325,15 +1270,14 @@ If the current buffer is not visiting a file, prompt for a file name."
   :bind (("C-x b" . consult-buffer)
          ("<help> a" . consult-apropos)
          ("M-i" . consult-imenu)
-         ("M-y" . consult-yank-pop))
-  :setq ((completion-in-region-function . 'consult-completion-in-region)))
+         ("M-y" . consult-yank-pop)))
 
-(leaf marginalia-mode
+(use-package marginalia
   :init
   (marginalia-mode +1)
   (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
 
-(leaf embark
+(use-package embark
   :disabled t
   :bind ((minibuffer-local-completion-map
           ("M-o" . embark-act-noexit)
@@ -1341,26 +1285,24 @@ If the current buffer is not visiting a file, prompt for a file name."
           ("M-r" . embark-become))))
 
 
-(leaf external-process-improvements
-  :preface
-  (setq read-process-output-max (* 1024 1024)))
+(setq read-process-output-max (* 1024 1024))
 
-(leaf string-inflection
+(use-package string-inflection
   :bind (("C-c C-u" . string-inflection-all-cycle)))
 
-(leaf rust
+(use-package rust
   :hook ((rust-mode-hook . lsp-deferred))
-  :setq ((rust-format-on-save . t)))
+  :preface
+  (setq rust-format-on-save t))
 
-(leaf comby
+(use-package comby
   :bind (("C-c C-e" . comby)))
 
-(leaf indent-region-workaround
-  :preface
+(progn ; indent-region-workaround
   (defun my-suppress-messages (old-fun &rest args)
     (cl-flet ((silence
-               (&rest _args1)
-               (ignore)))
+		(&rest _args1)
+		(ignore)))
       (advice-add 'message :around #'silence)
       (advice-add 'make-progress-reporter :around #'silence)
       (advice-add 'progress-reporter-done :around #'silence)
@@ -1368,7 +1310,7 @@ If the current buffer is not visiting a file, prompt for a file name."
       (advice-add 'progress-reporter-do-update :around #'silence)
       (advice-add 'progress-reporter-force-update :around #'silence)
       (unwind-protect
-          (apply old-fun args)
+	  (apply old-fun args)
         (advice-remove 'message #'silence)
         (advice-remove 'make-progress-reporter #'silence)
         (advice-remove 'progress-reporter-done #'silence)
@@ -1376,32 +1318,25 @@ If the current buffer is not visiting a file, prompt for a file name."
         (advice-remove 'progress-reporter-do-update #'silence)
         (advice-remove 'progress-reporter-force-update #'silence))))
 
-  :config
   (advice-add 'indent-region :around #'my-suppress-messages))
 
-(leaf lsp-pyright
-  :setq ((lsp-pyright-auto-search-paths . t)
-         (lsp-pyright-venv-path . "/home/feofan/.local/share/virtualenvs/"))
+(use-package lsp-pyright
+  :preface (setq lsp-pyright-auto-search-paths t
+		 lsp-pyright-venv-path "/home/feofan/.local/share/virtualenvs/")
   :config
   (add-hook 'python-mode-hook
             #'(lambda nil
                 (require 'lsp-pyright)
                 (lsp-deferred))))
 
-(leaf go-translate
+(use-package go-translate
   :bind (("C-c t" . gts-do-translate))
   :init
   (setq gts-translate-list '(("en" "ru")
 			     ("de" "ru")
-			     ("en" "de")))
+			     ("en" "de"))))
 
-  (setq gts-default-translator
-	(gts-translator
-	 :picker (gts-prompt-picker)
-	 :engines (list (gts-google-rpc-engine) (gts-google-engine))
-	 :render (gts-buffer-render))))
-
-(leaf savehist
+(use-package savehist
   :hook (after-init-hook-hook)
   :config
   (with-eval-after-load 'savehist
@@ -1410,35 +1345,34 @@ If the current buffer is not visiting a file, prompt for a file name."
     (setq history-delete-duplicates t)
     (setq savehist-save-minibuffer-history t)))
 
-(leaf saveplace
-  :require t
-  :setq ((save-place-file . "~/.emacs.d/saveplace")
-         (save-place-forget-unreadable-files . t))
+(use-package saveplace
+  :preface
+  (setq save-place-file "~/.emacs.d/saveplace"
+	save-place-forget-unreadable-files t)
   :config
   (save-place-mode 1))
 
-(leaf recentf
+(use-package recentf
   :preface
   (recentf-mode 1)
   (setq recentf-max-menu-items 300)
   (setq recentf-max-saved-items 300))
 
-(leaf package-lint-flymake
+(use-package package-lint-flymake
   :preface
   (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
 
-(leaf my-make
-  :preface
+(progn ; my-make
   (defun my--make-target-list (makefile)
     "Return the target list for MAKEFILE by parsing it."
     (let (targets)
       (with-temp-buffer
-        (insert-file-contents makefile)
-        (goto-char (point-min))
-        (while (re-search-forward "^\\([^: \n]+\\) *:\\(?: \\|$\\)" nil t)
-          (let ((str (match-string 1)))
-            (unless (string-match "^\\." str)
-              (push str targets)))))
+	(insert-file-contents makefile)
+	(goto-char (point-min))
+	(while (re-search-forward "^\\([^: \n]+\\) *:\\(?: \\|$\\)" nil t)
+	  (let ((str (match-string 1)))
+	    (unless (string-match "^\\." str)
+	      (push str targets)))))
       (nreverse targets)))
 
   (defun my-make (arg)
@@ -1447,30 +1381,30 @@ Use project root as default directory if universal ARG is not set.
 Select it interactively otherwise."
     (interactive "p")
     (let* ((project (project-current))
-           (default-directory (if (= arg 4)
-                                  (read-directory-name "select directory ")
-                                (if project
-                                    (project-root project)
-                                  default-directory)))
-           (makefile (expand-file-name "Makefile" default-directory))
-           (targets (my--make-target-list makefile))
-           (target (completing-read "make " targets)))
+	   (default-directory (if (= arg 4)
+				  (read-directory-name "select directory ")
+				(if project
+				    (project-root project)
+				  default-directory)))
+	   (makefile (expand-file-name "Makefile" default-directory))
+	   (targets (my--make-target-list makefile))
+	   (target (completing-read "make " targets)))
       (compile
        (format "make %s" target)))))
 
-(leaf smerge-mode
+(use-package smerge-mode
   :preface
   (hercules-def :toggle-funs #'smerge-mode
                 :keymap 'smerge-basic-map
                 :show-funs '(smerge-next smerge-prev)
                 :transient t))
 
-(leaf imaxima
+(use-package imaxima
   :disabled t
   :init (require 'cl)
   :commands (imaxima))
 
-(leaf frimacs
+(use-package frimacs
   :preface
   (defun my-setup-frimacs ()
     "Setup frimacs."
@@ -1481,41 +1415,41 @@ Select it interactively otherwise."
   (setq frimacs-process-show-svg t)
   :hook ((frimacs-process-mode-hook . my-setup-frimacs)))
 
-(leaf my-screenshots
-  :preface
+(progn ; my-screenshots
   (defun my-screenshot-svg ()
     "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file."
     (interactive)
     (require 'dired)
     (let* ((filename (make-temp-file "Emacs" nil ".svg"))
-           (data (x-export-frames nil 'svg)))
+	   (data (x-export-frames nil 'svg)))
       (with-temp-file filename
         (insert data))
       (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
-                                                    (expand-file-name "~/Pictures")) 1)))
+						    (expand-file-name "~/Pictures")) 1)))
   (defun my-screenshot-png ()
     "Save a screenshot of the current frame as an PNG image.
 Saves to a temp file."
     (interactive)
     (require 'dired)
     (let* ((filename (make-temp-file "Emacs" nil ".png"))
-           (data (x-export-frames nil 'png)))
+	   (data (x-export-frames nil 'png)))
       (with-temp-file filename
         (insert data))
       (dired-rename-file filename
 			 (expand-file-name (file-name-nondirectory filename)
-                                           (expand-file-name "~/Pictures"))
+					   (expand-file-name "~/Pictures"))
 			 1))))
 
-(leaf languagetool
+(use-package languagetool
   :disabled t
-  :setq ((languagetool-default-language . "en-US")))
+  :preface
+  (setq languagetool-default-language "en-US"))
 
-(leaf nov
+(use-package nov
   :mode (("\\.epub\\'" . nov-mode))
   :preface
-  (leaf speechd
+  (use-package speechd
     :preface
     (defun my-read-buffer ()
       (interactive)
@@ -1543,10 +1477,9 @@ Saves to a temp file."
   (add-hook 'nov-mode-hook 'visual-fill-column-mode)
 
   :config
-  (leaf justify-kp
+  (use-package justify-kp
     :init
-    (my-vc-install :name "justify-kp" :host "github" :repo "Fuco1/justify-kp")
-    :require t)
+    (my-vc-install :name "justify-kp" :host "github" :repo "Fuco1/justify-kp"))
   (setq nov-text-width t)
 
   (defun my-nov-window-configuration-change-hook ()
@@ -1574,13 +1507,13 @@ Saves to a temp file."
 
   (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook))
 
-(leaf golden
+(use-package golden
   :disabled t
   :init
   (my-vc-install :name "golden" :url "https://git.sr.ht/~wklew/golden")
   (global-golden-mode +1))
 
-(leaf affe
+(use-package affe
   :init
   (defun my-affe-find-project ()
     (interactive)
@@ -1589,13 +1522,13 @@ Saves to a temp file."
       (affe-find)))
   :bind* (("C-c C-f" . my-affe-find-project)))
 
-(leaf dap-mode
+(use-package dap-mode
   :config
   (setq dap-lldb-debug-program '("/usr/bin/lldb-vscode"))
   (add-hook 'dap-stopped-hook
             (lambda (arg) (call-interactively #'dap-hydra))))
 
-(leaf fsharp-mode
+(use-package fsharp-mode
   :hook ((fsharp-mode-hook . lsp)
          ;; (fsharp-mode-hook . eglot-ensure)
          (fsharp-mode-hook . my-set-fsharp-compile-command))
@@ -1613,14 +1546,14 @@ Saves to a temp file."
     (interactive)
     (setq-local compile-command "dotnet build")))
 
-(leaf csharp-mode
+(use-package csharp-mode
   :hook ((csharp-mode-hook . lsp)
 	 (csharp-mode-hook . my-set-fsharp-compile-command))
   :config
   (lsp-ensure-server 'omnisharp)
   (require 'dap-netcore))
 
-(leaf dotnet
+(use-package dotnet
   :preface
   (add-hook 'csharp-mode-hook 'dotnet-mode)
   (add-hook 'fsharp-mode-hook 'dotnet-mode)
@@ -1644,7 +1577,7 @@ Saves to a temp file."
   (add-hook 'csharp-mode-hook 'my-dotnet-project)
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
 
-(leaf gopcaml-mode
+(use-package gopcaml-mode
   :disabled t
   :preface
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
@@ -1685,7 +1618,7 @@ Saves to a temp file."
       (setenv (car var) (cadr var))))
   (add-hook 'gopcaml-mode-hook 'my-opam-env))
 
-(leaf haskell-mode
+(use-package haskell-mode
   :hook ((haskell-mode-hook . my-haskell-setup))
   :preface
   (require 'haskell-interactive-mode)
@@ -1722,13 +1655,13 @@ Saves to a temp file."
     (setq-local project-find-functions
 		(list #'my-try-haskell-project #'project-try-vc))
     (lsp))
-  :bind ((haskell-mode-map
-          ("C-c C-i" . haskell-interactive-switch)
-	  ("C-c C-e" . my-send-region-to-haskell-interactive))
-	 (haskell-interactive-mode-map
-	  ("C-c C-i" . haskell-interactive-switch-back))))
+  :bind ((:map haskell-mode-map
+               ("C-c C-i" . haskell-interactive-switch)
+	       ("C-c C-e" . my-send-region-to-haskell-interactive))
+	 (:map haskell-interactive-mode-map
+	       ("C-c C-i" . haskell-interactive-switch-back))))
 
-(leaf denote
+(use-package denote
   :bind
   (("C-c n n" . denote)
    ("C-c n d" . my-denote-dired)
@@ -1744,7 +1677,7 @@ Saves to a temp file."
     (dired denote-directory)
     (denote-dired-mode)))
 
-(leaf origami
+(use-package origami
   :if (locate-library "origami")
   :commands origami-mode
   :config
@@ -1767,7 +1700,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 	 ("F" fill-column)
 	 ("x" nil :color blue))))))
 
-(leaf consult-dash
+(use-package consult-dash
   :bind
   (("M-s d" . consult-dash))
   :init
@@ -1776,7 +1709,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (dash-docs-activate-docset "Go")
   (dash-docs-activate-docset "NET Framework"))
 
-(leaf my-reopen-file
+(use-package my-reopen-file
   :bind (("<f5>" . my-reopen-file))
   :init
   (defun my-reopen-file ()
@@ -1786,14 +1719,14 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
       (kill-buffer)
       (find-file filename))))
 
-(leaf pulsar
+(use-package pulsar
   :init
   (pulsar-global-mode))
 
 (when (boundp pixel-scroll-precision-mode)
   (pixel-scroll-precision-mode +1))
 
-(leaf narrow
+(use-package narrow
   :bind (("C-x n n" . my-narrow-dwim))
   :init
   (defun my-narrow-dwim ()
@@ -1809,7 +1742,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
           (t
            (call-interactively #'narrow-to-defun)))))
 
-(leaf restclient
+(use-package restclient
   :mode ((".rest$" . restclient-mode)
 	 (".http$" . restclient-mode)))
 
