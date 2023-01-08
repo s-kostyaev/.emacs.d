@@ -1599,6 +1599,7 @@ Saves to a temp file."
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
 
 (use-package tuareg
+  :disabled t
   :bind (:map tuareg-mode-map
 	      ("C-c C-i" . tuareg-switch-to-repl)
 	      :map tuareg-interactive-mode-map
@@ -1609,6 +1610,7 @@ Saves to a temp file."
 	 (ignore-errors (car (process-lines "opam" "var" "share")))))
     (when (and opam-share (file-directory-p opam-share))
       (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+      (require 'ocp-indent)
       (require 'ocamlformat)
       (add-hook 'before-save-hook #'ocamlformat-before-save))))
 
@@ -1616,7 +1618,6 @@ Saves to a temp file."
   :ensure t)
 
 (use-package gopcaml-mode
-  :disabled t
   :preface
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
     (when (and opam-share (file-directory-p opam-share))
