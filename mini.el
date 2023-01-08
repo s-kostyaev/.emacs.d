@@ -226,4 +226,38 @@ Select it interactively otherwise."
 
 (add-hook 'before-save-hook 'eglot-format-buffer)
 
+(setq-default project-vc-extra-root-markers
+	      '("TAGS" "GTAGS"                                          ; tags
+		"configure.ac" "configure.in"                           ; autoconf
+		"cscope.out"                                            ; cscope
+		"SConstruct"                                            ; scons
+		"meson.build"                                           ; meson
+		"default.nix" "flake.nix"                               ; nix
+		"WORKSPACE"                                             ; bazel
+		"debian/control"                                        ; debian
+		"Makefile" "GNUMakefile" "CMakeLists.txt"               ; Make & CMake
+		"composer.json"                                         ; PHP
+		"rebar.config" "mix.exs"                                ; Erlang & Elixir
+		"Gruntfile.js" "gulpfile.js" "package.json" "angular.json"
+					; JavaScript
+		"manage.py" "requirements.txt" "setup.py" "tox.ini" "Pipfile" "poetry.lock"
+					; Python
+		"pom.xml" "build.gradle" "gradlew" "application.yml"    ; Java & friends
+		"build.sbt" "build.sc"                                  ; Scala
+		"project.clj" "build.boot" "deps.edn" ".bloop"          ; Clojure
+		"Gemfile"                                               ; Ruby
+		"shard.yml"                                             ; Crystal
+		"Cask" "Eldev" "Keg" "Eask"                             ; Emacs
+		"DESCRIPTION"                                           ; R
+		"bower.json" "psc-package.json" "spago.dhall"           ; PureScript
+		"stack.yaml"                                            ; Haskell
+		"Cargo.toml"                                            ; Rust
+		"info.rkt"                                              ; Racket
+		"pubspec.yaml"                                          ; Dart
+		"dune-project"                                          ; OCaml
+		"go.mod"                                                ; Go
+		"*.cproj"                                               ; c#
+		"*.fsproj"                                              ; f#
+		))
+
 (my-set-themes)
