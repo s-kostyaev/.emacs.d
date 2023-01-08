@@ -265,10 +265,6 @@ It takes one parameter, which is t when the Night Light is active
 				   'help-echo buffer-file-coding-system))
 	       "] "
 
-	       ;; Flycheck errors
-
-	       ;; '(:eval (flycheck-mode-line-status-text))
-
 	       ;; flymake errors
 	       '(:eval (when flymake--state flymake-mode-line-format))
 
@@ -1601,6 +1597,16 @@ Saves to a temp file."
 
   (add-hook 'csharp-mode-hook 'my-dotnet-project)
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
+
+(use-package tuareg
+  :bind (:map tuareg-mode-map
+	      ("C-c C-i" . tuareg-switch-to-repl)
+	      :map tuareg-interactive-mode-map
+	      ("C-c C-i" . tuareg-switch-to-recent-buffer))
+  :hook ((tuareg-mode) . lsp))
+
+(use-package dune
+  :ensure t)
 
 (use-package gopcaml-mode
   :disabled t
