@@ -1603,7 +1603,14 @@ Saves to a temp file."
 	      ("C-c C-i" . tuareg-switch-to-repl)
 	      :map tuareg-interactive-mode-map
 	      ("C-c C-i" . tuareg-switch-to-recent-buffer))
-  :hook ((tuareg-mode) . lsp))
+  :hook ((tuareg-mode) . lsp)
+  :config
+  (let ((opam-share
+	 (ignore-errors (car (process-lines "opam" "var" "share")))))
+    (when (and opam-share (file-directory-p opam-share))
+      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+      (require 'ocamlformat)
+      (add-hook 'before-save-hook #'ocamlformat-before-save))))
 
 (use-package dune
   :ensure t)
