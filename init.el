@@ -418,14 +418,13 @@ It takes one parameter, which is t when the Night Light is active
       (lsp-organize-imports)
       (lsp-format-buffer)))
 
-  :after t
-  :init
-  (require 'yasnippet)
-  :config
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (add-hook 'lsp-mode-hook #'lsp-completion--enable)
   (add-hook 'before-save-hook #'my-lsp-before-save)
-  (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable))
+  (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable)
+  :after t
+  :init
+  (require 'yasnippet))
 
 (use-package eglot
   :preface
@@ -596,7 +595,8 @@ It takes one parameter, which is t when the Night Light is active
 
 (use-package company
   :commands global-company-mode
-  :hook ((after-init-hook . global-company-mode))
+  :preface
+  (add-hook 'after-init-hook 'global-company-mode)
   :config
   (add-hook 'company-mode-hook #'company-prescient-mode)
   (with-eval-after-load 'company

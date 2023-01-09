@@ -52,6 +52,7 @@
 	counsel-M-x
 	counsel-find-file
 	counsel-grep-or-swiper
+	dap-tooltip-mouse-motion
 	dired-find-alternate-file
 	electrify-return-if-match
 	end-of-defun
