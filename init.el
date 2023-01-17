@@ -1641,21 +1641,21 @@ Saves to a temp file."
     :major-modes '(reason-mode caml-mode tuareg-mode gopcaml-mode)
     :priority 0
     :server-id 'ocaml-lsp-server))
-  (add-hook 'gopcaml-mode-hook 'lsp)
-
-  (add-hook 'tuareg-mode-hook
-	    #'(lambda ()
-		(set (make-local-variable 'compile-command)
-		     (concat "dune build"))
-		(set (make-local-variable 'compilation-read-command)
-		     nil)))
 
   (defun my-opam-env ()
     (interactive nil)
     (dolist (var (car (read-from-string
 		       (shell-command-to-string "opam config env --sexp"))))
       (setenv (car var) (cadr var))))
-  (add-hook 'gopcaml-mode-hook 'my-opam-env))
+
+  (add-hook 'tuareg-mode-hook
+	    #'(lambda ()
+		(set (make-local-variable 'compile-command)
+		     (concat "dune build"))
+		(set (make-local-variable 'compilation-read-command)
+		     nil)
+		(my-opam-env)
+		(lsp))))
 
 (use-package haskell-mode
   :disabled t
