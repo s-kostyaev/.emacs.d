@@ -1702,6 +1702,7 @@ Saves to a temp file."
 	       ("C-c C-i" . haskell-interactive-switch-back))))
 
 (use-package denote
+  :demand t
   :bind
   (("C-c n n" . denote)
    ("C-c n d" . my-denote-dired)
@@ -1716,6 +1717,15 @@ Saves to a temp file."
     (interactive)
     (dired denote-directory)
     (denote-dired-mode)))
+
+(use-package xeft
+  :ensure t
+  :preface
+  (setq xeft-directory denote-directory)
+  :bind
+  (("C-c n x" . xeft))
+  :config
+  (bind-key (kbd "RET") 'denote xeft-mode-map))
 
 (use-package origami
   :if (locate-library "origami")
