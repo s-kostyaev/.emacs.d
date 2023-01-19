@@ -963,6 +963,7 @@ to the line and column corresponding to that location."
          ("\\.xslt\\'" . xml-mode)))
 
 (use-package hungry-delete
+  :demand t
   :config
   (run-with-idle-timer 0.5 nil #'require 'hungry-delete nil t)
   (with-eval-after-load 'hungry-delete
