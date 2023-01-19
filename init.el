@@ -1006,6 +1006,7 @@ to the line and column corresponding to that location."
     (add-hook 'emacs-lisp-mode-hook #'symbol-overlay-mode)))
 
 (use-package zygospore
+  :disabled t
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows)))
 
 (use-package reverse-im
