@@ -158,6 +158,7 @@ Select it interactively otherwise."
       (choose-completion nil no-exit no-quit))))
 
 (define-key completion-in-region-mode-map (kbd "M-RET") 'my-minibuffer-choose-completion)
+(define-key completion-in-region-mode-map (kbd "C-<return>") 'my-minibuffer-choose-completion)
 
 (global-set-key (kbd "C-c C-s") 'rgrep)
 
