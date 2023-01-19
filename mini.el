@@ -224,6 +224,16 @@ Select it interactively otherwise."
 (add-hook 'after-revert-hook 'my-update-vc-mode)
 (add-hook 'after-find-file 'my-update-vc-mode)
 
+(eval-after-load 'eglot
+  (lambda nil
+    (defun my-eglot-organize-imports () (call-interactively 'eglot-code-action-organize-imports))
+    (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
+    (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
+    (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
+    (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
+    (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
+    (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions)))
 (add-hook 'before-save-hook 'eglot-format-buffer)
 
 (setq-default project-vc-extra-root-markers
