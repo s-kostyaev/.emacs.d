@@ -983,9 +983,11 @@ to the line and column corresponding to that location."
 
 
 (use-package which-key
-  :hook (after-init-hook)
+  :demand t
   :preface
-  (setq which-key-show-transient-maps 't))
+  (setq which-key-show-transient-maps 't)
+  :config
+  (which-key-mode t))
 
 (use-package ibuffer-vc
   :bind* (("C-x C-b" . ibuffer))
