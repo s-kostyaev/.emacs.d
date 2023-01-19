@@ -134,7 +134,12 @@ Select it interactively otherwise."
 
 (setq go-ts-mode-indent-offset 8)
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
-(with-eval-after-load 'go-ts-mode (define-key go-ts-mode-map (kbd "C-c C-c") 'my-make))
+(with-eval-after-load 'go-ts-mode
+  (progn
+    (define-key go-ts-mode-map (kbd "C-c C-c") 'my-make)
+    (define-key go-ts-mode-map (kbd "C-c C-t") (lambda ()
+						 (interactive)
+						 (compile "go test .")))))
 
 
 (setq completions-format 'one-column)
@@ -224,6 +229,7 @@ Select it interactively otherwise."
 (add-hook 'after-revert-hook 'my-update-vc-mode)
 (add-hook 'after-find-file 'my-update-vc-mode)
 
+(setq-default eglot-confirm-server-initiated-edits nil)
 (eval-after-load 'eglot
   (lambda nil
     (defun my-eglot-organize-imports () (call-interactively 'eglot-code-action-organize-imports))
