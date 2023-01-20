@@ -141,6 +141,39 @@ Select it interactively otherwise."
 						 (interactive)
 						 (compile "go test .")))))
 
+(use-package gopcaml-mode
+  :preface
+  (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
+    (when (and opam-share (file-directory-p opam-share))
+      ;; Register Gopcaml mode
+      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
+      (autoload 'gopcaml-mode "gopcaml-mode" nil t nil)
+      (autoload 'tuareg-mode "tuareg" nil t nil)
+      (autoload 'merlin-mode "merlin" "Merlin mode" t)
+      ;; Automatically start it in OCaml buffers
+      (setq auto-mode-alist
+	    (append '(("\\.ml[ily]?$" . gopcaml-mode)
+		      ("\\.topml$" . gopcaml-mode))
+		    auto-mode-alist))))
+
+  (defun my-opam-env ()
+    (interactive nil)
+    (dolist (var (car (read-from-string
+		       (shell-command-to-string "opam config env --sexp"))))
+      (setenv (car var) (cadr var))))
+
+  (add-hook 'tuareg-mode-hook
+	    #'(lambda ()
+		(set (make-local-variable 'compile-command)
+		     (concat "dune build"))
+		(set (make-local-variable 'compilation-read-command)
+		     nil)
+		(my-opam-env)
+		(eglot-ensure)))
+  :config
+  (define-key gopcaml-mode-map (kbd "TAB") 'indent-for-tab-command)
+  (define-key gopcaml-mode-map (kbd "C-c C-j") 'gopcaml-move-to-hole))
+
 (setq tab-always-indent 'complete)
 (setq completion-auto-help 'visible)
 (setq completion-auto-select 'second-tab)
