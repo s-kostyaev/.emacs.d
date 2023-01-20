@@ -150,6 +150,9 @@ Select it interactively otherwise."
       (autoload 'gopcaml-mode "gopcaml-mode" nil t nil)
       (autoload 'tuareg-mode "tuareg" nil t nil)
       (autoload 'merlin-mode "merlin" "Merlin mode" t)
+      (autoload 'dune-mode "dune" nil t)
+      (add-to-list 'auto-mode-alist
+             '("\\(?:\\`\\|/\\)dune\\(?:\\.inc\\|\\-project\\)?\\'" . dune-mode))
       ;; Automatically start it in OCaml buffers
       (setq auto-mode-alist
 	    (append '(("\\.ml[ily]?$" . gopcaml-mode)
