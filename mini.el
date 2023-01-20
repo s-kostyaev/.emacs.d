@@ -141,7 +141,9 @@ Select it interactively otherwise."
 						 (interactive)
 						 (compile "go test .")))))
 
-
+(setq tab-always-indent 'complete)
+(setq completion-auto-help 'visible)
+(setq completion-auto-select 'second-tab)
 (setq completions-format 'one-column)
 (setq completions-header-format nil)
 (setq completions-max-height 20)
@@ -159,6 +161,7 @@ Select it interactively otherwise."
 
 (define-key completion-in-region-mode-map (kbd "M-RET") 'my-minibuffer-choose-completion)
 (define-key completion-in-region-mode-map (kbd "C-<return>") 'my-minibuffer-choose-completion)
+(define-key completion-in-region-mode-map (kbd "RET") 'my-minibuffer-choose-completion)
 
 (global-set-key (kbd "C-c C-s") 'rgrep)
 
