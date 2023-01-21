@@ -1625,6 +1625,7 @@ Saves to a temp file."
 
 (use-package gopcaml-mode
   :preface
+  (setq gopcaml-messaging-level 'none)
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
     (when (and opam-share (file-directory-p opam-share))
       ;; Register Gopcaml mode
