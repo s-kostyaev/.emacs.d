@@ -212,7 +212,7 @@ Select it interactively otherwise."
 		(my-opam-env)
 		(eglot-ensure)))
   :config
-  (define-key gopcaml-mode-map (kbd "TAB") 'indent-for-tab-command)
+  (unbind-key "TAB" gopcaml-mode-map)
   (define-key gopcaml-mode-map (kbd "C-c C-j") 'gopcaml-move-to-hole))
 
 (setq tab-always-indent 'complete)
