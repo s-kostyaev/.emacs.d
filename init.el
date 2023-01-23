@@ -432,7 +432,8 @@ It takes one parameter, which is t when the Night Light is active
   (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   (setq-default eglot-confirm-server-initiated-edits nil)
   :config
-  (defun my-eglot-organize-imports () (call-interactively 'eglot-code-action-organize-imports))
+  (defun my-eglot-organize-imports () (interactive)
+	 (eglot-code-actions nil nil "source.organizeImports" t))
   (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
   (add-hook 'before-save-hook 'eglot-format-buffer)
   (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
