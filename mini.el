@@ -355,4 +355,6 @@ Select it interactively otherwise."
 		"*.fsproj"                                              ; f#
 		))
 
+(global-set-key (kbd "C-o") 'other-window)
+
 (my-set-themes)

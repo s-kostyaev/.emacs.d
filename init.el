@@ -1820,5 +1820,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   :mode ((".rest$" . restclient-mode)
 	 (".http$" . restclient-mode)))
 
+(global-set-key (kbd "C-o") 'other-window)
+
 (provide 'init)
 ;;; init.el ends here
