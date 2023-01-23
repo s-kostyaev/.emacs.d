@@ -35,7 +35,7 @@ named arguments:
          (iname (when name (intern name)))
          (pac-name (or iname (intern (file-name-base repo)))))
     (unless (package-installed-p pac-name)
-      (package-vc-install uri iname rev backend))))
+      (package-vc-install uri rev backend))))
 
 (setq-default use-package-always-defer t)
 
@@ -491,6 +491,24 @@ It takes one parameter, which is t when the Night Light is active
 		"*.cproj"                                               ; c#
 		"*.fsproj"                                              ; f#
 		))
+
+(use-package treesit-auto
+  :init
+  (my-vc-install :name "treesit-auto" :host "github" :repo "renzmann/treesit-auto")
+  :demand t
+  :config
+  (defun my-install-language-grammar (lang)
+    (when (not (file-exists-p
+		(expand-file-name
+		 (format "tree-sitter/libtree-sitter-%s.so" lang)
+		 user-emacs-directory)))
+      (treesit-install-language-grammar lang)))
+
+  (mapc 'my-install-language-grammar
+	'(go go-mod elisp c cpp js python rust markdown typescript tsx yaml make
+	     json csharp css cmake html bash haskell))
+
+  (treesit-auto-apply-remap))
 
 (progn ; go
   (require 's)
