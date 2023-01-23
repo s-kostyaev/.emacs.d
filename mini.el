@@ -8,6 +8,7 @@
 (show-paren-mode 1)
 
 (electric-pair-mode 1)
+(electric-indent-mode t)
 
 (setq mouse-wheel-progressive-speed nil)
 
@@ -353,6 +354,28 @@ Select it interactively otherwise."
 		"*.cproj"                                               ; c#
 		"*.fsproj"                                              ; f#
 		))
+
+(use-package savehist
+  :hook (after-init-hook-hook)
+  :config
+  (with-eval-after-load 'savehist
+    (setq savehist-file "~/.emacs.d/savehist")
+    (setq history-length 1000)
+    (setq history-delete-duplicates t)
+    (setq savehist-save-minibuffer-history t)))
+
+(use-package saveplace
+  :preface
+  (setq save-place-file "~/.emacs.d/saveplace"
+	save-place-forget-unreadable-files t)
+  :config
+  (save-place-mode 1))
+
+(use-package recentf
+  :preface
+  (recentf-mode 1)
+  (setq recentf-max-menu-items 300)
+  (setq recentf-max-saved-items 300))
 
 (global-set-key (kbd "C-o") 'other-window)
 
