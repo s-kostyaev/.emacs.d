@@ -432,17 +432,16 @@ It takes one parameter, which is t when the Night Light is active
   (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   (setq-default eglot-confirm-server-initiated-edits nil)
   :config
-  (eval-after-load 'eglot
-    (lambda nil
-      (defun my-eglot-organize-imports () (call-interactively 'eglot-code-action-organize-imports))
-      (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
-      (add-hook 'before-save-hook 'eglot-format-buffer)
-      (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
-      (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
-      (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
-      (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
-      (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
-      (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions))))
+  (defun my-eglot-organize-imports () (call-interactively 'eglot-code-action-organize-imports))
+  (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
+  (add-hook 'before-save-hook 'eglot-format-buffer)
+  (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
+  (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
+  (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
+  (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
+  (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
+  (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions)
+  (define-key eglot-mode-map (kbd "C-x l g i") 'eglot-find-implementation))
 
 (progn ; exec-path
   (setq exec-path (append

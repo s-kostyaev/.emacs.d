@@ -281,7 +281,8 @@ Select it interactively otherwise."
     (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
     (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
     (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
-    (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions)))
+    (define-key eglot-mode-map (kbd "C-x l a a") 'eglot-code-actions)
+    (define-key eglot-mode-map (kbd "C-x l g i") 'eglot-find-implementation)))
 
 (setq-default project-vc-extra-root-markers
 	      '("TAGS" "GTAGS"                                          ; tags
