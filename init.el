@@ -1033,6 +1033,7 @@ to the line and column corresponding to that location."
   :bind (("C-x 1" . zygospore-toggle-delete-other-windows)))
 
 (use-package reverse-im
+  :demand t
   :config
   (reverse-im-activate "russian-computer"))
 
