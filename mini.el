@@ -378,6 +378,6 @@ Select it interactively otherwise."
   (setq recentf-max-menu-items 300)
   (setq recentf-max-saved-items 300))
 
-(global-set-key (kbd "C-o") 'other-window)
+(bind-key* (kbd "C-o") 'other-window)
 
 (my-set-themes)
