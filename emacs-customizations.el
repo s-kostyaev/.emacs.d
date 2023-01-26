@@ -50,7 +50,6 @@
  '(go-packages-function 'go-packages-go-list)
  '(go-tag-args '("-transform" "snakecase") t)
  '(go-test-verbose nil)
- '(go-ts-mode-indent-offset 8)
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
  '(godoc-use-completing-read t)

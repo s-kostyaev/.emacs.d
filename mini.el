@@ -170,7 +170,6 @@ Select it interactively otherwise."
       '(go go-mod elisp c cpp js python rust markdown typescript tsx yaml make
 	   json csharp css cmake html bash haskell))
 
-(setq go-ts-mode-indent-offset 8)
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
 (with-eval-after-load 'go-ts-mode
   (progn
