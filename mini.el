@@ -378,8 +378,24 @@ Select it interactively otherwise."
   (setq recentf-max-saved-items 300))
 
 (bind-key* (kbd "C-o") 'other-window)
+(bind-key* (kbd "C-x C-p") 'recentf)
 
 (setq make-backup-files nil
       text-mode-hook 'turn-on-auto-fill)
+
+(use-package open-file-as-root
+  :preface
+  (defun open-this-file-as-root ()
+    "Edit current file as root, using `tramp' and `sudo'.
+If the current buffer is not visiting a file, prompt for a file name."
+    (interactive)
+    (let* ((filename (or buffer-file-name
+                         (read-file-name "Find file (as root): ")))
+           (tramp-path (concat "/sudo:root@localhost:" filename)))
+      (if buffer-file-name
+          (find-alternate-file tramp-path)
+        (find-file tramp-path))))
+
+  :bind (("C-c C-r" . open-this-file-as-root)))
 
 (my-set-themes)
