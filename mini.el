@@ -172,11 +172,40 @@ Select it interactively otherwise."
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
 (with-eval-after-load 'go-ts-mode
+  (add-to-list 'load-path (expand-file-name "~/elisp/go-gen-test"))
+  (require 'go-gen-test)
   (progn
     (define-key go-ts-mode-map (kbd "C-c C-c") 'my-make)
     (define-key go-ts-mode-map (kbd "C-c C-t") (lambda ()
 						 (interactive)
-						 (compile "go test .")))))
+						 (compile "go test .")))
+    (define-key go-ts-mode-map (kbd "C-c g") 'go-gen-test-dwim)))
+
+(defun my-go-playground ()
+  "Create go snippet for play around."
+  (interactive)
+  (let* ((dir (expand-file-name
+	       (concat "at-" (format-time-string "%Y-%m-%d-%H%M%S")) "~/go/src/playground/"))
+	 (file (expand-file-name "snippet.go" dir)))
+    (dired-create-directory dir)
+    (dired-copy-file (expand-file-name "~/.emacs.d/snippet.go") file t)
+    (find-file file)
+    (local-set-key (kbd "C-<return>") (lambda () (interactive)
+					(compile "go run snippet.go")))))
+
+(defun my-go-playground-rm ()
+  "Remove current go snippet."
+  (interactive)
+  (let ((filename (concat
+		   (file-name-base (or (buffer-file-name) "")) "."
+		   (file-name-extension (or (buffer-file-name) "")))))
+    (when (and
+	   (not (string= default-directory
+			 (expand-file-name user-emacs-directory)))
+	   (string= filename
+		    "snippet.go"))
+      (delete-directory default-directory t nil)
+      (kill-buffer))))
 
 (use-package gopcaml-mode
   :preface
