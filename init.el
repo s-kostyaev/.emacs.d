@@ -151,7 +151,7 @@ named arguments:
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  (setq my-font (font-spec :size 14.0 :family "Iosevka Comfy")
+  (setq my-font (font-spec :size 13.0 :family "PT Mono")
 	my-light-theme 'ef-summer
 	my-dark-theme 'ef-winter
 	my-need-theme-reload nil)
