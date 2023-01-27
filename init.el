@@ -819,20 +819,6 @@ The optional argument IGNORED is not used."
       mac-command-key-is-meta 't
       mac-option-key-is-meta nil)
 
-(use-package fzf
-  :disabled t
-  :bind* (("C-c C-f" . my-fzf-project))
-  :config
-  (with-eval-after-load 'fzf
-    (defun my-fzf-project ()
-      "Fzf in project directory."
-      (interactive)
-      (fzf/start
-       (or
-        (if (project-current)
-            (project-root (project-current)))
-        default-directory)))))
-
 (use-package wgrep
   :bind (("C-c C-p" . wgrep-change-to-wgrep-mode))
   :config
@@ -908,73 +894,6 @@ to the line and column corresponding to that location."
   :hook ((markdown-mode-hook . pandoc-mode)
          (pandoc-mode-hook . pandoc-load-default-settings)))
 
-(use-package erlang
-  :disabled t
-  :mode ("\\.erl$" "\\.hrl$" "rebar\\.config$" "relx\\.config$" "system\\.config$" "\\.app\\.src$")
-  :hook ((erlang-mode-hook . my-erlang-hook)
-         (erlang-mode-hook . company-erlang-init))
-  :config
-  (with-eval-after-load 'erlang
-    (progn
-      (use-package company-erlang
-        :config
-        (load "company-erlang-autoloads"))
-
-      (use-package ivy-erlang-complete)
-
-      (add-to-list 'load-path "/usr/lib/erlang/lib/wrangler-1.2.0/elisp")
-      (defun my-format-erlang-record ()
-        "Format erlang record."
-        (interactive)
-        (let ((from (line-beginning-position)))
-          (goto-char from)
-          (search-forward "-record")
-          (search-forward "{")
-          (goto-char (-
-                      (point)
-                      1))
-          (ignore-errors
-            (er/expand-region 1))
-          (my-align-region-by "=")
-          (goto-char from)
-          (search-forward "-record")
-          (search-forward "{")
-          (goto-char (-
-                      (point)
-                      1))
-          (ignore-errors
-            (er/expand-region 1))
-          (my-align-region-by "::")))
-
-      (defun my-erlang-hook ()
-        "Setup for erlang."
-        (ignore-errors
-          (require 'wrangler))
-        (ivy-erlang-complete-init)
-        (define-key erlang-extended-mode-map
-		    (kbd "M-.")
-		    nil)
-        (define-key erlang-extended-mode-map
-		    (kbd "M-,")
-		    nil)
-        (define-key erlang-extended-mode-map
-		    (kbd "M-?")
-		    nil)
-        (define-key erlang-extended-mode-map
-		    (kbd "(")
-		    nil)
-        (define-key erlang-extended-mode-map
-		    (kbd "C-M-i")
-		    nil)
-        (local-set-key
-         (kbd "C-c C-p")
-         #'my-format-erlang-record)
-        (local-set-key
-         (kbd "C-M-i")
-         #'ivy-erlang-complete))
-
-      (add-hook 'after-save-hook #'ivy-erlang-complete-reparse))))
-
 (use-package open-urls
   :bind (("C-x u" . link-hint-open-multiple-links)))
 
@@ -994,13 +913,6 @@ to the line and column corresponding to that location."
   (run-with-idle-timer 0.1 nil #'require 'ace-link nil t)
   (with-eval-after-load 'ace-link
     (ace-link-setup-default)))
-
-(use-package ace-window
-  :bind (("M-p" . ace-window))
-  :config
-  (with-eval-after-load 'ace-window
-    (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))))
-
 
 (use-package which-key
   :demand t
@@ -1027,10 +939,6 @@ to the line and column corresponding to that location."
     (setq-default symbol-overlay-temp-in-scope t)
     (add-hook 'prog-mode-hook #'symbol-overlay-mode)
     (add-hook 'emacs-lisp-mode-hook #'symbol-overlay-mode)))
-
-(use-package zygospore
-  :disabled t
-  :bind (("C-x 1" . zygospore-toggle-delete-other-windows)))
 
 (use-package reverse-im
   :demand t
@@ -1284,17 +1192,6 @@ If the current buffer is not visiting a file, prompt for a file name."
   (icomplete-vertical-mode)
   (setq completion-ignore-case t))
 
-(use-package orderless
-  :disabled t
-  :preface
-  (defun my-orderless-dispatch (pattern _index _total)
-    (cond
-     ((string-prefix-p "!" pattern) `(orderless-without-literal . ,(substring pattern 1)))
-     ((string-suffix-p "=" pattern) `(orderless-literal . ,(substring pattern 0 -1)))
-     ((string-suffix-p "~" pattern) `(orderless-flex . ,(substring pattern 0 -1)))))
-  (setq orderless-style-dispatchers '(my-orderless-dispatch))
-  :hook ((minibuffer-exit-hook . orderless-remove-transient-configuration)))
-
 (use-package consult
   :preface
   (setq completion-in-region-function 'consult-completion-in-region)
@@ -1340,9 +1237,6 @@ If the current buffer is not visiting a file, prompt for a file name."
   :hook ((rust-mode-hook . lsp-deferred))
   :preface
   (setq rust-format-on-save t))
-
-(use-package comby
-  :bind (("C-c C-e" . comby)))
 
 (progn ; indent-region-workaround
   (defun my-suppress-messages (old-fun &rest args)
@@ -1487,11 +1381,6 @@ Saves to a temp file."
 					   (expand-file-name "~/Pictures"))
 			 1))))
 
-(use-package languagetool
-  :disabled t
-  :preface
-  (setq languagetool-default-language "en-US"))
-
 (use-package nov
   :mode (("\\.epub\\'" . nov-mode))
   :preface
@@ -1552,12 +1441,6 @@ Saves to a temp file."
                 nil t)))
 
   (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook))
-
-(use-package golden
-  :disabled t
-  :init
-  (my-vc-install :name "golden" :url "https://git.sr.ht/~wklew/golden")
-  (global-golden-mode +1))
 
 (use-package affe
   :init
@@ -1622,22 +1505,6 @@ Saves to a temp file."
 
   (add-hook 'csharp-mode-hook 'my-dotnet-project)
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
-
-(use-package tuareg
-  :disabled t
-  :bind (:map tuareg-mode-map
-	      ("C-c C-i" . tuareg-switch-to-repl)
-	      :map tuareg-interactive-mode-map
-	      ("C-c C-i" . tuareg-switch-to-recent-buffer))
-  :hook ((tuareg-mode) . lsp)
-  :config
-  (let ((opam-share
-	 (ignore-errors (car (process-lines "opam" "var" "share")))))
-    (when (and opam-share (file-directory-p opam-share))
-      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
-      (require 'ocp-indent)
-      (require 'ocamlformat)
-      (add-hook 'before-save-hook #'ocamlformat-before-save))))
 
 (use-package dune
   :ensure t)
