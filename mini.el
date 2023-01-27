@@ -427,4 +427,30 @@ If the current buffer is not visiting a file, prompt for a file name."
 
   :bind (("C-c C-r" . open-this-file-as-root)))
 
+(progn ; my-screenshots
+  (defun my-screenshot-svg ()
+    "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file."
+    (interactive)
+    (require 'dired)
+    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+	   (data (x-export-frames nil 'svg)))
+      (with-temp-file filename
+        (insert data))
+      (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
+						    (expand-file-name "~/Pictures")) 1)))
+  (defun my-screenshot-png ()
+    "Save a screenshot of the current frame as an PNG image.
+Saves to a temp file."
+    (interactive)
+    (require 'dired)
+    (let* ((filename (make-temp-file "Emacs" nil ".png"))
+	   (data (x-export-frames nil 'png)))
+      (with-temp-file filename
+        (insert data))
+      (dired-rename-file filename
+			 (expand-file-name (file-name-nondirectory filename)
+					   (expand-file-name "~/Pictures"))
+			 1))))
+
 (my-set-themes)
