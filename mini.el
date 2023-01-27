@@ -379,4 +379,7 @@ Select it interactively otherwise."
 
 (bind-key* (kbd "C-o") 'other-window)
 
+(setq make-backup-files nil
+      text-mode-hook 'turn-on-auto-fill)
+
 (my-set-themes)
