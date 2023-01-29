@@ -63,8 +63,8 @@
 
 (global-set-key (kbd "M-p") #'other-window)
 
-(setq my-light-theme 'dichromacy
-      ;; 'adwaita
+(setq my-light-theme 'adwaita
+      ;; 'dichromacy
       ;; 'tsdh-light
       my-dark-theme 'misterioso
       ;; 'tsdh-dark
@@ -453,5 +453,23 @@ Saves to a temp file."
 			 (expand-file-name (file-name-nondirectory filename)
 					   (expand-file-name "~/Pictures"))
 			 1))))
+
+(defun my-load-builtin-theme ()
+    "Load theme."
+    (interactive)
+    (let ((theme (intern
+		  (completing-read "Load custom theme: "
+				   (cl-delete-if
+				    (lambda (theme)
+				      (file-in-directory-p
+				       (locate-file
+					(concat theme "-theme.el")
+					(custom-theme--load-path)
+					'("" "c"))
+				       (getenv "HOME")))
+				    (mapcar #'symbol-name
+					    (custom-available-themes)))))))
+      (mapc #'disable-theme custom-enabled-themes)
+      (load-theme theme t nil)))
 
 (my-set-themes)

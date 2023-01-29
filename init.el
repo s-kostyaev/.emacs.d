@@ -131,12 +131,12 @@ named arguments:
 		  (completing-read "Load custom theme: "
 				   (cl-delete-if
 				    (lambda (theme)
-				      (f-ancestor-of\?
-				       (getenv "HOME")
+				      (file-in-directory-p
 				       (locate-file
 					(concat theme "-theme.el")
 					(custom-theme--load-path)
-					'("" "c"))))
+					'("" "c"))
+				       (getenv "HOME")))
 				    (mapcar #'symbol-name
 					    (custom-available-themes)))))))
       (mapc #'disable-theme custom-enabled-themes)
