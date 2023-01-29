@@ -228,7 +228,6 @@ It takes one parameter, which is t when the Night Light is active
          ("C-c r" . consult-flymake)))
 
 (setq flymake-mode-line-format '(" " flymake-mode-line-counters))
-(require 'f)
 (setq-default mode-line-format
 	      (list
 	       "["
@@ -455,9 +454,8 @@ It takes one parameter, which is t when the Night Light is active
 		     "~/.local/bin"
 		     "/home/feofan/.dotnet/tools")
 		   exec-path))
-  (require 's)
   (setenv "PATH"
-	  (s-join ":" exec-path)))
+	  (string-join exec-path ":")))
 
 (setq-default project-vc-extra-root-markers
 	      '("TAGS" "GTAGS"                                          ; tags
@@ -512,13 +510,13 @@ It takes one parameter, which is t when the Night Light is active
   (treesit-auto-apply-remap))
 
 (progn ; go
-  (require 's)
   (progn
     (defun my-extract-go-module-name ()
-      (let* ((go-mod-file (f-join (if (project-current)
-				      (project-root (project-current))
-				    default-directory)
-				  "go.mod"))
+      (let* ((go-mod-file (expand-file-name
+			   "go.mod"
+			   (if (project-current)
+			       (project-root (project-current))
+			     default-directory)))
 	     (name
 	      (with-temp-buffer
 		(find-file-noselect-1 (current-buffer) go-mod-file t t go-mod-file 2)
@@ -551,7 +549,7 @@ It takes one parameter, which is t when the Night Light is active
 	  "Setup for go."
 	  (if (eq system-type 'darwin)
 	      (setenv "GOROOT"
-		      (s-trim
+		      (string-trim
 		       (shell-command-to-string "find /usr/local/Cellar/go -type 'd' -name 'libexec'"))))
 	  (require 'go-impl)
 	  (require 'gotest)
@@ -863,9 +861,7 @@ the line and column corresponding to that location."
         (interactive
          (my-magit-find-file-read-args "Find file in other frame"))
         (find-file-other-frame
-         (f-join
-          (vc-root-dir)
-          file)))
+         (expand-file-name file (vc-root-dir))))
 
       (defun my-magit-find-file (file)
         "View FILE from worktree.
@@ -876,9 +872,7 @@ to the line and column corresponding to that location."
         (interactive
          (my-magit-find-file-read-args "Find file"))
         (find-file
-         (f-join
-          (vc-root-dir)
-          file)))
+         (expand-file-name file (vc-root-dir))))
 
       (defun my-magit-find-file-read-args (prompt)
         (list
@@ -1496,7 +1490,8 @@ Saves to a temp file."
 		     directory "*.sln")
 		    (dap-netcore--locate-dominating-file-wildcard
 		     directory "*.*proj"))))
-      (when result (cons 'transient (f-full result)))))
+      (when result (cons 'transient (file-name-as-directory
+				     (expand-file-name result))))))
 
   (defun my-dotnet-project ()
     "Enable alternative project root find function."
