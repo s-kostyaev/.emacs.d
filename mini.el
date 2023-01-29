@@ -143,7 +143,7 @@ Select it interactively otherwise."
 	(csharp "https://github.com/tree-sitter/tree-sitter-c-sharp")
 	(elisp "https://github.com/Wilfred/tree-sitter-elisp")
 	(go "https://github.com/tree-sitter/tree-sitter-go")
-	(go-mod "https://github.com/camdencheek/tree-sitter-go-mod")
+	(gomod "https://github.com/syntacti/tree-sitter-go-mod")
 	(html "https://github.com/tree-sitter/tree-sitter-html")
 	(js . ("https://github.com/tree-sitter/tree-sitter-javascript" "master" "src"))
 	(json "https://github.com/tree-sitter/tree-sitter-json")
@@ -167,7 +167,7 @@ Select it interactively otherwise."
     (treesit-install-language-grammar lang)))
 
 (mapc 'my-install-language-grammar
-      '(go go-mod elisp c cpp js python rust markdown typescript tsx yaml make
+      '(go gomod elisp c cpp js python rust markdown typescript tsx yaml make
 	   json csharp css cmake html bash haskell))
 
 (add-hook 'go-ts-mode-hook 'eglot-ensure)
@@ -180,6 +180,7 @@ Select it interactively otherwise."
 						 (interactive)
 						 (compile "go test .")))
     (define-key go-ts-mode-map (kbd "C-c g") 'go-gen-test-dwim)))
+(require 'go-ts-mode)
 
 (defun my-go-playground ()
   "Create go snippet for play around."

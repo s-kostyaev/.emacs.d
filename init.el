@@ -506,7 +506,7 @@ It takes one parameter, which is t when the Night Light is active
       (treesit-install-language-grammar lang)))
 
   (mapc 'my-install-language-grammar
-	'(go go-mod elisp c cpp js python rust markdown typescript tsx yaml make
+	'(go gomod elisp c cpp js python rust markdown typescript tsx yaml make
 	     json csharp css cmake html bash haskell))
 
   (treesit-auto-apply-remap))
