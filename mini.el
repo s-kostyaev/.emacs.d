@@ -3,7 +3,6 @@
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 (blink-cursor-mode -1)
-(load-theme 'misterioso)
 (global-font-lock-mode 1)
 (show-paren-mode 1)
 
@@ -76,12 +75,16 @@
 (defun my-set-themes ()
   "Function for setting themes after init."
   (interactive)
-  (let ((cur-hour (nth 2 (decode-time))))
-    (mapc #'disable-theme custom-enabled-themes)
-    (if (and (>  cur-hour 7)
-             (<  cur-hour 20))
-        (load-theme my-light-theme t)
-      (load-theme my-dark-theme t))))
+  (mapc #'disable-theme custom-enabled-themes)
+  (if (ignore-errors
+	(string= "false"
+		 (car
+		  (process-lines
+		   "gsettings" "get"
+		   "org.gnome.settings-daemon.plugins.color"
+		   "night-light-enabled"))))
+      (load-theme my-light-theme t)
+    (load-theme my-dark-theme t)))
 
 (defun my-toggle-themes ()
   "Toggle light and dark themes."

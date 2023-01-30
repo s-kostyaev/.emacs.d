@@ -47,29 +47,6 @@ named arguments:
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
 (progn ; my-themes
-  (setq calendar-location-name "Novosibirsk, Russia")
-  (setq calendar-latitude 55.05)
-  (setq calendar-longitude 82.93)
-
-  (defun my-switch-themes (sun-event &optional first-run)
-    "Switch themes on sunrise and sunset."
-    (if first-run
-	(cond ((memq sun-event '(sunrise midday))
-	       (mapc #'disable-theme custom-enabled-themes)
-	       (load-theme my-light-theme t))
-	      ((memq sun-event '(sunset midnight))
-	       (mapc #'disable-theme custom-enabled-themes)
-	       (load-theme my-dark-theme t)))
-      (cond ((eq sun-event 'sunrise)
-	     (mapc #'disable-theme custom-enabled-themes)
-	     (load-theme my-light-theme t))
-	    ((eq sun-event 'sunset)
-	     (mapc #'disable-theme custom-enabled-themes)
-	     (load-theme my-dark-theme t)))))
-
-  ;; sign this function to be invoked on sun events
-  (add-hook 'rase-functions 'my-switch-themes)
-
   (defun my-enable-light-theme ()
     "Enable light theme."
     (interactive)
@@ -84,9 +61,18 @@ named arguments:
     (load-theme my-dark-theme t))
 
   (defun my-set-themes ()
-    "Function for setting themes after init."
-    (interactive)
-    (rase-start t))
+  "Function for setting themes after init."
+  (interactive)
+  (mapc #'disable-theme custom-enabled-themes)
+  (if (ignore-errors
+	(string= "false"
+		 (car
+		  (process-lines
+		   "gsettings" "get"
+		   "org.gnome.settings-daemon.plugins.color"
+		   "night-light-enabled"))))
+      (load-theme my-light-theme t)
+    (load-theme my-dark-theme t)))
 
   (defun my-toggle-themes ()
     "Toggle light and dark themes."
