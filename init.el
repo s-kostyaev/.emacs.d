@@ -471,7 +471,7 @@ It takes one parameter, which is t when the Night Light is active
 		"Cask" "Eldev" "Keg" "Eask"                             ; Emacs
 		"DESCRIPTION"                                           ; R
 		"bower.json" "psc-package.json" "spago.dhall"           ; PureScript
-		"stack.yaml"                                            ; Haskell
+		"stack.yaml" "*.cabal"                                  ; Haskell
 		"Cargo.toml"                                            ; Rust
 		"info.rkt"                                              ; Racket
 		"pubspec.yaml"                                          ; Dart
