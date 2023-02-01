@@ -1536,24 +1536,11 @@ Saves to a temp file."
 		(lsp))))
 
 (use-package haskell-mode
-  :disabled t
-  :hook ((haskell-mode-hook . my-haskell-setup))
   :preface
   (require 'haskell-interactive-mode)
-  :init
   (defun my-haskell-setup ()
     "Setup haskell mode by hook."
     (require 'lsp-haskell)
-    (defun my-try-haskell-project (dir)
-      "Find haskell project root for DIR."
-      (when dir
-        (let ((result (or
-		       (locate-dominating-file dir "Setup.hs")
-		       (locate-dominating-file dir "stack.yaml"))))
-          (if result
-	      (cons 'transient
-                    (expand-file-name result))
-            (cons 'transient dir)))))
     (defun my-send-region-to-haskell-interactive ()
       "Send region to haskell interactive."
       (interactive)
@@ -1570,14 +1557,12 @@ Saves to a temp file."
 	  (insert content)
 	  (haskell-interactive-mode-return)
 	  (haskell-interactive-switch-back))))
-    (setq-local project-find-functions
-		(list #'my-try-haskell-project #'project-try-vc))
-    (lsp))
+    (lsp)
+    ;; (eglot-ensure)
+    )
+  (add-hook 'haskell-mode-hook 'my-haskell-setup)
   :bind ((:map haskell-mode-map
-               ("C-c C-i" . haskell-interactive-switch)
-	       ("C-c C-e" . my-send-region-to-haskell-interactive))
-	 (:map haskell-interactive-mode-map
-	       ("C-c C-i" . haskell-interactive-switch-back))))
+	       ("C-c C-e" . my-send-region-to-haskell-interactive))))
 
 (use-package denote
   :demand t
