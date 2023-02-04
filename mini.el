@@ -395,7 +395,7 @@ Select it interactively otherwise."
       (add-hook 'before-save-hook 'eglot-format-buffer nil t))
     (add-hook 'eglot-managed-mode-hook 'my-eglot-setup)
     (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
-    (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
+    (define-key eglot-mode-map (kbd "C-x l w q") 'eglot-shutdown)
     (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
     (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
     (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)

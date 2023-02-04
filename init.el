@@ -425,7 +425,7 @@ It takes one parameter, which is t when the Night Light is active
     (add-hook 'before-save-hook 'eglot-format-buffer nil t))
 
   (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
-  (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
+  (define-key eglot-mode-map (kbd "C-x l w q") 'eglot-shutdown)
   (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
   (define-key eglot-mode-map (kbd "C-x l r r") 'eglot-rename)
   (define-key eglot-mode-map (kbd "C-x l r o") 'eglot-code-action-organize-imports)
