@@ -389,8 +389,11 @@ Select it interactively otherwise."
   (lambda nil
     (defun my-eglot-organize-imports () (interactive)
 	   (eglot-code-actions nil nil "source.organizeImports" t))
-    (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
-    (add-hook 'before-save-hook 'eglot-format-buffer)
+    (defun my-eglot-setup ()
+      (interactive)
+      (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
+      (add-hook 'before-save-hook 'eglot-format-buffer nil t))
+    (add-hook 'eglot-managed-mode-hook 'my-eglot-setup)
     (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
     (define-key eglot-mode-map (kbd "C-x l w s") 'eglot-shutdown)
     (define-key eglot-mode-map (kbd "C-x l w r") 'eglot-reconnect)
