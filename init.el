@@ -479,6 +479,7 @@ It takes one parameter, which is t when the Night Light is active
 		"go.mod"                                                ; Go
 		"*.cproj"                                               ; c#
 		"*.fsproj"                                              ; f#
+		".project"
 		))
 
 (use-package treesit-auto

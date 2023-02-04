@@ -431,6 +431,7 @@ Select it interactively otherwise."
 		"go.mod"                                                ; Go
 		"*.cproj"                                               ; c#
 		"*.fsproj"                                              ; f#
+		".project"
 		))
 
 (use-package savehist
