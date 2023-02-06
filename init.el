@@ -61,18 +61,18 @@ named arguments:
     (load-theme my-dark-theme t))
 
   (defun my-set-themes ()
-  "Function for setting themes after init."
-  (interactive)
-  (mapc #'disable-theme custom-enabled-themes)
-  (if (ignore-errors
-	(string= "false"
-		 (car
-		  (process-lines
-		   "gsettings" "get"
-		   "org.gnome.settings-daemon.plugins.color"
-		   "night-light-enabled"))))
-      (load-theme my-light-theme t)
-    (load-theme my-dark-theme t)))
+    "Function for setting themes after init."
+    (interactive)
+    (mapc #'disable-theme custom-enabled-themes)
+    (if (ignore-errors
+	  (string-suffix-p "-dark"
+			   (string-replace "'" "" (car
+						   (process-lines
+						    "gsettings" "get"
+						    "org.gnome.desktop.interface"
+						    "gtk-theme")))))
+	(load-theme my-dark-theme t)
+      (load-theme my-light-theme t)))
 
   (defun my-toggle-themes ()
     "Toggle light and dark themes."
