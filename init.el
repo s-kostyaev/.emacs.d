@@ -412,11 +412,12 @@ It takes one parameter, which is t when the Night Light is active
   (require 'yasnippet))
 
 (use-package eglot
+  :demand t
   :preface
   (setq eglot-strict-mode nil)
   (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   (setq-default eglot-confirm-server-initiated-edits nil)
-  :init
+  :config
   (defun my-eglot-organize-imports () (interactive)
 	 (eglot-code-actions nil nil "source.organizeImports" t))
   (defun my-eglot-setup ()
