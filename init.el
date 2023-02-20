@@ -137,8 +137,10 @@ named arguments:
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  (setq my-font (font-spec :size 13.0 :family "PT Mono")
-	my-light-theme 'ef-summer
+  (if (eq system-type 'darwin)
+      (setq my-font (font-spec :size 16.0 :family "PT Mono"))
+    (setq my-font (font-spec :size 13.0 :family "PT Mono")))
+  (setq my-light-theme 'ef-summer
 	my-dark-theme 'ef-winter
 	my-need-theme-reload nil)
 
@@ -147,7 +149,7 @@ named arguments:
   (add-hook 'desktop-after-read-hook 'my-set-themes)
   (add-hook 'after-init-hook 'my-load-custom-file))
 
-(progn ; my-gnome-night-light-light
+(while (not (eq system-type 'darwin)) ; my-gnome-night-light-light
   (require 'dbus)
   (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
     (let* ((prop (car changed-props))
@@ -197,7 +199,7 @@ It takes one parameter, which is t when the Night Light is active
       ('light (load-theme my-light-theme t))
       ('dark (load-theme my-dark-theme t))))
 
-  (if (eq (window-system) 'ns)
+  (if (eq system-type 'darwin)
       (add-hook 'ns-system-appearance-change-functions #'my-mac-apply-theme)))
 
 (use-package key-chord
@@ -444,7 +446,8 @@ It takes one parameter, which is t when the Night Light is active
 		     "~/.cargo/bin"
 		     "/usr/local/opt/llvm/bin"
 		     "~/.local/bin"
-		     "/home/feofan/.dotnet/tools")
+		     "/home/feofan/.dotnet/tools"
+		     "/opt/homebrew/bin")
 		   exec-path))
   (setenv "PATH"
 	  (string-join exec-path ":")))
@@ -487,6 +490,7 @@ It takes one parameter, which is t when the Night Light is active
 (use-package treesit-auto
   :init
   (my-vc-install :name "treesit-auto" :host "github" :repo "renzmann/treesit-auto")
+  :disabled t
   :demand t
   :config
   (defun my-install-language-grammar (lang)
@@ -500,7 +504,7 @@ It takes one parameter, which is t when the Night Light is active
 	'(go gomod elisp c cpp js python rust markdown typescript tsx yaml make
 	     json csharp css cmake html bash haskell))
 
-  (treesit-auto-apply-remap))
+  (treesit-auto-install-all))
 
 (progn ; go
   (progn
@@ -543,7 +547,7 @@ It takes one parameter, which is t when the Night Light is active
 	  (if (eq system-type 'darwin)
 	      (setenv "GOROOT"
 		      (string-trim
-		       (shell-command-to-string "find /usr/local/Cellar/go -type 'd' -name 'libexec'"))))
+		       (shell-command-to-string "find /opt/homebrew/Cellar/go -type 'd' -name 'libexec'"))))
 	  (require 'go-impl)
 	  (require 'gotest)
 	  (require 'dap-dlv-go)
@@ -1639,7 +1643,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   :init
   (pulsar-global-mode))
 
-(when (boundp pixel-scroll-precision-mode)
+(when (and (boundp pixel-scroll-precision-mode)
+	   (not (eq system-type 'darwin)))
   (pixel-scroll-precision-mode +1))
 
 (use-package narrow
