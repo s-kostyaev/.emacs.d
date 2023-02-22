@@ -447,7 +447,8 @@ It takes one parameter, which is t when the Night Light is active
 		     "/usr/local/opt/llvm/bin"
 		     "~/.local/bin"
 		     "/home/feofan/.dotnet/tools"
-		     "/opt/homebrew/bin")
+		     "/opt/homebrew/bin"
+		     "/opt/homebrew/Cellar/libpq/15.2/bin")
 		   exec-path))
   (setenv "PATH"
 	  (string-join exec-path ":")))
