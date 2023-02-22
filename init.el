@@ -439,16 +439,17 @@ It takes one parameter, which is t when the Night Light is active
 
 (progn ; exec-path
   (setq exec-path (append
-		   '("/home/feofan/.opam/default/bin"
-		     "~/go/bin"
-		     "/opt/local/bin"
-		     "/usr/local/bin"
-		     "~/.cargo/bin"
-		     "/usr/local/opt/llvm/bin"
-		     "~/.local/bin"
-		     "/home/feofan/.dotnet/tools"
-		     "/opt/homebrew/bin"
-		     "/opt/homebrew/Cellar/libpq/15.2/bin")
+		   (mapcar 'expand-file-name
+			   '("~/.opam/default/bin"
+			     "~/go/bin"
+			     "/opt/local/bin"
+			     "/usr/local/bin"
+			     "~/.cargo/bin"
+			     "/usr/local/opt/llvm/bin"
+			     "~/.local/bin"
+			     "~/.dotnet/tools"
+			     "/opt/homebrew/bin"
+			     "/opt/homebrew/Cellar/libpq/15.2/bin"))
 		   exec-path))
   (setenv "PATH"
 	  (string-join exec-path ":")))
