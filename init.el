@@ -138,7 +138,7 @@ named arguments:
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
   (if (eq system-type 'darwin)
-      (setq my-font (font-spec :size 16.0 :family "PT Mono"))
+      (setq my-font (font-spec :size 16.0 :family "Go Mono"))
     (setq my-font (font-spec :size 13.0 :family "PT Mono")))
   (setq my-light-theme 'ef-summer
 	my-dark-theme 'ef-winter
