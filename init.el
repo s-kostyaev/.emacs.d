@@ -1282,7 +1282,6 @@ If the current buffer is not visiting a file, prompt for a file name."
   :preface
   (setq save-place-file "~/.emacs.d/saveplace"
 	save-place-forget-unreadable-files t)
-  :config
   (save-place-mode 1))
 
 (use-package recentf
