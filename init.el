@@ -449,7 +449,8 @@ It takes one parameter, which is t when the Night Light is active
 			     "~/.local/bin"
 			     "~/.dotnet/tools"
 			     "/opt/homebrew/bin"
-			     "/opt/homebrew/Cellar/libpq/15.2/bin"))
+			     "/opt/homebrew/Cellar/libpq/15.2/bin"
+			     "/opt/homebrew/anaconda3/bin"))
 		   exec-path))
   (setenv "PATH"
 	  (string-join exec-path ":")))
@@ -1253,7 +1254,15 @@ If the current buffer is not visiting a file, prompt for a file name."
 
   (advice-add 'indent-region :around #'my-suppress-messages))
 
+(use-package lsp-jedi
+  :preface
+  (add-hook 'python-mode-hook
+            #'(lambda nil
+                (require 'lsp-jedi)
+                (lsp-deferred))))
+
 (use-package lsp-pyright
+  :disabled t
   :preface (setq lsp-pyright-auto-search-paths t
 		 lsp-pyright-venv-path "/home/feofan/.local/share/virtualenvs/")
   :config
