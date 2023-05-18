@@ -86,7 +86,8 @@
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
-   '((eval conda-env-activate "textgen")
+   '((eval conda-env-activate "langchain")
+     (eval conda-env-activate "textgen")
      (eval progn
 	   (make-local-variable 'process-environment)
 	   (setq process-environment
