@@ -1686,7 +1686,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
     (make-process
      :name "replit" :buffer (current-buffer)
      :sentinel #'ignore
-     :connection-type 'pipe
+     :filter (lambda (_ out) (insert out))
+     :connection-type nil
      :command
      (list "/Users/sergeykostyaev/nn/ggml/build/bin/replit"
 	   "-t" "8" "-n" "300" "--temp" "0.3"
@@ -1698,7 +1699,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
       (save-excursion
 	(beginning-of-line)
 	(ignore-errors
-	  (previous-line 200))
+	  (previous-line 80)) ;; to not go outside max_seq_len
 	(buffer-substring-no-properties (point) end))))
 
   (defun replit-complete ()
