@@ -401,7 +401,7 @@ It takes one parameter, which is t when the Night Light is active
 
   (defun my-lsp-before-save ()
     (interactive)
-    (when lsp-mode
+    (when (and lsp-mode (not (equal major-mode 'c++-mode)))
       (lsp-organize-imports)
       (lsp-format-buffer)))
 
