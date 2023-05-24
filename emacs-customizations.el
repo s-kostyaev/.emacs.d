@@ -21,6 +21,12 @@
  '(byte-compile-verbose nil)
  '(byte-compile-warnings
    '(redefine callargs interactive-only make-local mapcar constants suspicious lexical))
+ '(c-basic-offset 'set-from-style)
+ '(c-default-style
+   '((c++-mode . "stroustrup")
+     (java-mode . "java")
+     (awk-mode . "awk")
+     (other . "gnu")))
  '(column-number-mode t)
  '(company-backends
    '(company-capf company-cmake company-files
@@ -86,7 +92,8 @@
  '(racer-rust-src-path "/usr/src/rust/src")
  '(ring-bell-function 'ignore)
  '(safe-local-variable-values
-   '((eval conda-env-activate "langchain")
+   '((eval conda-env-activate "playground")
+     (eval conda-env-activate "langchain")
      (eval conda-env-activate "textgen")
      (eval progn
 	   (make-local-variable 'process-environment)

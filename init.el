@@ -602,7 +602,7 @@ It takes one parameter, which is t when the Night Light is active
 	  (symbol-overlay-mode -1)
 	  (company-prescient-mode -1)
 	  (setq-local lsp-completion-filter-on-incomplete nil)
-	  (lsp-deferred)
+	  (lsp)
 	  ;; (eglot-ensure)
 	  )
 
@@ -1146,8 +1146,8 @@ If the current buffer is not visiting a file, prompt for a file name."
     (setq gif-screencast-capture-prefer-internal t)))
 
 (use-package c-cpp-mode
-  :hook ((c-mode-hook . lsp-deferred)
-         (c++-mode-hook . lsp-deferred)))
+  :hook ((c-mode-hook . lsp)
+         (c++-mode-hook . lsp)))
 
 (use-package icomplete
   :bind ((:map icomplete-minibuffer-map
@@ -1228,7 +1228,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   :bind (("C-c C-u" . string-inflection-all-cycle)))
 
 (use-package rust
-  :hook ((rust-mode-hook . lsp-deferred))
+  :hook ((rust-mode-hook . lsp))
   :preface
   (setq rust-format-on-save t))
 
@@ -1259,7 +1259,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   (add-hook 'python-mode-hook
             #'(lambda nil
                 (require 'lsp-jedi)
-                (lsp-deferred))))
+                (lsp))))
 
 (use-package lsp-pyright
   :disabled t
@@ -1269,7 +1269,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   (add-hook 'python-mode-hook
             #'(lambda nil
                 (require 'lsp-pyright)
-                (lsp-deferred))))
+                (lsp))))
 
 (use-package go-translate
   :bind (("C-c t" . gts-do-translate))
