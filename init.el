@@ -1707,5 +1707,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
     (interactive)
     (replit-call (replit-get-prompt))))
 
+(load-file (file-name-concat user-emacs-directory "starcoder.el"))
+
 (provide 'init)
 ;;; init.el ends here
