@@ -1709,5 +1709,11 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 
 (load-file (file-name-concat user-emacs-directory "starcoder.el"))
 
+(use-package ellama
+  :init
+  (my-vc-install :name "ellama" :host "github" :repo "s-kostyaev/ellama")
+  (setopt ellama-language "Russian")
+  (setopt ellama-model "dolphin"))
+
 (provide 'init)
 ;;; init.el ends here
