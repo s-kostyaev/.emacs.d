@@ -1680,35 +1680,6 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 
 (bind-key* (kbd "C-o") 'other-window)
 
-(use-package replit
-  :bind* (("C-'" . replit-complete))
-  :preface
-  (defun replit-call (prompt)
-    (make-process
-     :name "replit" :buffer (current-buffer)
-     :sentinel #'ignore
-     :filter (lambda (_ out) (insert out))
-     :connection-type nil
-     :command
-     (list "/Users/sergeykostyaev/nn/ggml/build/bin/replit"
-	   "-t" "8" "-n" "300" "--temp" "0.3"
-	   "-m" "/Users/sergeykostyaev/nn/replit-code-v1-3b/ggml-model-q8_0.bin"
-	   "-p" prompt)))
-
-  (defun replit-get-prompt ()
-    (let ((end (point)))
-      (save-excursion
-	(beginning-of-line)
-	(ignore-errors
-	  (previous-line 80)) ;; to not go outside max_seq_len
-	(buffer-substring-no-properties (point) end))))
-
-  (defun replit-complete ()
-    (interactive)
-    (replit-call (replit-get-prompt))))
-
-(load-file (file-name-concat user-emacs-directory "starcoder.el"))
-
 (use-package ellama
   :init
   (my-vc-install :name "ellama" :host "github" :repo "s-kostyaev/ellama")
