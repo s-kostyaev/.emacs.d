@@ -1684,7 +1684,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   :init
   (my-vc-install :name "ellama" :host "github" :repo "s-kostyaev/ellama")
   (setopt ellama-language "Russian")
-  (setopt ellama-model "zephyr"))
+  (setopt ellama-model "zephyr:7b-alpha-q5_K_M"))
 
 (provide 'init)
 ;;; init.el ends here
