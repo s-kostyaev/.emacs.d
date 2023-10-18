@@ -1688,5 +1688,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (setopt ellama-language "Russian")
   (setopt ellama-model "zephyr:7b-alpha-q5_K_M"))
 
+(setopt elisp-flymake-byte-compile-load-path load-path)
+
 (provide 'init)
 ;;; init.el ends here
