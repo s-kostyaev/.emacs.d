@@ -252,6 +252,8 @@ It takes one parameter, which is t when the Night Light is active
 				   'help-echo buffer-file-coding-system))
 	       "] "
 
+	       '("" mode-line-process)
+
 	       ;; flymake errors
 	       '(:eval (when flymake--state flymake-mode-line-format))
 
