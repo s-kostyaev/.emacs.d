@@ -1708,49 +1708,54 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   ;; Use n for next etc. in REPL
   (setq dape-repl-use-shorthand t)
 
-  (setq treesit-go-tests-query (treesit-query-compile 'go
-                                                      '((function_declaration
-                                                         name: (identifier) @testname
-                                                         parameters: (parameter_list :anchor (parameter_declaration type: (pointer_type) @type :anchor))
-                                                         (:match "*testing.\\(T\\|M\\)" @type) (:match "^Test.+$" @testname)) @parent)))
-  (defun my-query-go-test-nodes ()
-    (when (treesit-ready-p 'go)
-      (treesit-query-capture (treesit-buffer-root-node) treesit-go-tests-query)))
+  ;; (setq treesit-go-tests-query
+  ;; 	(treesit-query-compile
+  ;; 	 'go
+  ;;        '((function_declaration
+  ;;           name: (identifier) @testname
+  ;;           parameters: (parameter_list
+  ;; 			 :anchor (parameter_declaration type: (pointer_type) @type :anchor))
+  ;;           (:match "*testing.\\(T\\|M\\)" @type) (:match "^Test.+$" @testname)) @parent)))
+  ;; (defun my-query-go-test-nodes ()
+  ;;   (when (treesit-ready-p 'go)
+  ;;     (treesit-query-capture (treesit-buffer-root-node) treesit-go-tests-query)))
 
-  (defun my-completing-read-go-tests ()
-    (let* ((test-matches (my-query-go-test-nodes))
-           (test-name-matches (cl-remove-if-not (lambda (match) (eq (car match) 'testname)) test-matches))
-           (test-names (mapcar (lambda (match) (treesit-node-text (cdr match))) test-name-matches)))
-      (completing-read "Test:" test-names nil t)))
+  ;; (defun my-completing-read-go-tests ()
+  ;;   (let* ((test-matches (my-query-go-test-nodes))
+  ;;          (test-name-matches
+  ;; 	    (cl-remove-if-not (lambda (match) (eq (car match) 'testname)) test-matches))
+  ;;          (test-names
+  ;; 	    (mapcar (lambda (match) (treesit-node-text (cdr match))) test-name-matches)))
+  ;;     (completing-read "Test:" test-names nil t)))
 
 
-  (defun my-dape--select-go-test-args ()
-    (when-let* ((test-name (my-completing-read-go-tests))
-                (test-regexp (concat "^" test-name "$")))
-      (if test-name
-          `["-test.run" ,test-regexp]
-        (error "No test selected"))))
+  ;; (defun my-dape--select-go-test-args ()
+  ;;   (when-let* ((test-name (my-completing-read-go-tests))
+  ;;               (test-regexp (concat "^" test-name "$")))
+  ;;     (if test-name
+  ;;         `["-test.run" ,test-regexp]
+  ;;       (error "No test selected"))))
 
-  (defun my-file-relative-dir ()
-    "Return the file directory relative to dape's cwd. This is used by Delve debugger."
-    (concat "./" (file-relative-name default-directory (funcall dape-cwd-fn))))
+  ;; (defun my-file-relative-dir ()
+  ;;   "Return the file directory relative to dape's cwd. This is used by Delve debugger."
+  ;;   (concat "./" (file-relative-name default-directory (funcall dape-cwd-fn))))
 
-  ;; inside your dape-config
-  (add-to-list 'dape-configs
-               `(delve-test
-                 modes (go-mode go-ts-mode)
-                 command "dlv"
-                 command-cwd dape-cwd-fn
-                 command-args ("dap" "--listen" "127.0.0.1:55878")
-                 host "127.0.0.1"
-                 port 55878
-                 :type "go"
-                 :name "debug test"
-                 :request "launch"
-                 :mode "test"
-                 :cwd dape-cwd-fn
-                 :program my-file-relative-dir
-                 :args my-dape--select-go-test-args))
+  ;; ;; inside your dape-config
+  ;; (add-to-list 'dape-configs
+  ;;              `(delve-test
+  ;;                modes (go-mode go-ts-mode)
+  ;;                command "dlv"
+  ;;                command-cwd dape-cwd-fn
+  ;;                command-args ("dap" "--listen" "127.0.0.1:55878")
+  ;;                host "127.0.0.1"
+  ;;                port 55878
+  ;;                :type "go"
+  ;;                :name "debug test"
+  ;;                :request "launch"
+  ;;                :mode "test"
+  ;;                :cwd dape-cwd-fn
+  ;;                :program my-file-relative-dir
+  ;;                :args my-dape--select-go-test-args))
 
   (defun go-func-name-at-point ()
     (interactive)
