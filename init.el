@@ -1786,6 +1786,9 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
                       default-directory (funcall dape-cwd-fn)))
       (funcall dape-cwd-fn)))
 
+  (defun my-dlv-attach-args ()
+    (list "dap" "--listen" "127.0.0.1:55878" "attach" (format "%d" (dape-read-pid))))
+
   ;; inside your dape-config
   (add-to-list 'dape-configs
                `(delve
@@ -1801,7 +1804,21 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
                  :mode my-dape-test-p
                  :cwd dape-cwd-fn
                  :program my-dape-relative-dir
-                 :args my-dape--select-go-args)))
+                 :args my-dape--select-go-args))
+
+  (add-to-list 'dape-configs
+               `(delve-attach
+                 modes (go-mode go-ts-mode)
+                 command "dlv"
+                 command-cwd dape-cwd-fn
+                 command-args my-dlv-attach-args
+		 host "127.0.0.1"
+		 port 55878
+		 :type "go"
+		 :name "go-debug"
+		 :request "local"
+		 :mode "debug"
+		 :cwd dape-cwd-fn)))
 
 (provide 'init)
 ;;; init.el ends here
