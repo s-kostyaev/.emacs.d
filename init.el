@@ -512,6 +512,10 @@ It takes one parameter, which is t when the Night Light is active
 
   (treesit-auto-install-all))
 
+(use-package go-mode
+  :init
+  (add-hook 'go-mode-hook 'go-ts-mode))
+
 (progn ; go
   (progn
     (defun my-extract-go-module-name ()
@@ -529,9 +533,7 @@ It takes one parameter, which is t when the Night Light is active
 									(goto-char (point-min))
 									(end-of-line)
 									(point)))))))
-	name))
-    (setq auto-mode-alist
-	  (cons '("\\.go\\'" . go-ts-mode) auto-mode-alist)))
+	name)))
   (use-package go-ts-mode
     :mode ("\\.go\\'"
 	   ("go.mod$" . go-mod-ts-mode))
@@ -556,7 +558,7 @@ It takes one parameter, which is t when the Night Light is active
 		       (shell-command-to-string "find /opt/homebrew/Cellar/go -type 'd' -name 'libexec'"))))
 	  (require 'go-impl)
 	  (require 'gotest)
-	  (require 'dap-dlv-go)
+	  ;; (require 'dap-dlv-go)
 	  (defun my-go-test (arg)
 	    (interactive "P")
 	    (if arg
@@ -593,21 +595,21 @@ It takes one parameter, which is t when the Night Light is active
 	  (local-set-key
 	   (kbd "C-c C-c")
 	   #'my-make)
-	  (require 'lsp-mode)
-	  (lsp-register-custom-settings
-	   '(("gopls.completeUnimported" t)))
-	  (lsp-register-custom-settings
-	   '(("gopls.staticcheck" t)))
-	  (setq-local flymake-start-on-save-buffer nil)
-	  (setq-local flymake-no-changes-timeout nil)
+	  ;; (require 'lsp-mode)
+	  ;; (lsp-register-custom-settings
+	  ;;  '(("gopls.completeUnimported" t)))
+	  ;; (lsp-register-custom-settings
+	  ;;  '(("gopls.staticcheck" t)))
+	  ;; (setq-local flymake-start-on-save-buffer nil)
+	  ;; (setq-local flymake-no-changes-timeout nil)
 	  (setq-local lsp-go-goimports-local (my-extract-go-module-name))
-	  (require 'lsp-go)
+	  ;; (require 'lsp-go)
 	  (symbol-overlay-mode -1)
 	  (company-prescient-mode -1)
 	  (setq-local lsp-completion-filter-on-incomplete nil)
-	  (lsp)
-	  ;; (eglot-ensure)
-	  )
+	  ;; (lsp)
+	  (eglot-ensure)
+	  (flymake-start t))
 
         (add-hook 'go-ts-mode-hook #'my-go-mode-hook)))))
 
@@ -1693,6 +1695,113 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 	   :chat-model "zephyr:7b-alpha-q5_K_M" :embedding-model "zephyr:7b-alpha-q5_K_M")))
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
+
+(use-package dape
+  :preface
+  (hercules-def
+   :keymap 'dape-global-map
+   :show-funs '(dape)
+   :hide-funs '(dape-disconnect-quit dape-quit))
+  :init
+  (my-vc-install :name "dape" :host "github" :repo "svaante/dape")
+  :config
+  ;; Use n for next etc. in REPL
+  (setq dape-repl-use-shorthand t)
+
+  (setq treesit-go-tests-query (treesit-query-compile 'go
+                                                      '((function_declaration
+                                                         name: (identifier) @testname
+                                                         parameters: (parameter_list :anchor (parameter_declaration type: (pointer_type) @type :anchor))
+                                                         (:match "*testing.\\(T\\|M\\)" @type) (:match "^Test.+$" @testname)) @parent)))
+  (defun my-query-go-test-nodes ()
+    (when (treesit-ready-p 'go)
+      (treesit-query-capture (treesit-buffer-root-node) treesit-go-tests-query)))
+
+  (defun my-completing-read-go-tests ()
+    (let* ((test-matches (my-query-go-test-nodes))
+           (test-name-matches (cl-remove-if-not (lambda (match) (eq (car match) 'testname)) test-matches))
+           (test-names (mapcar (lambda (match) (treesit-node-text (cdr match))) test-name-matches)))
+      (completing-read "Test:" test-names nil t)))
+
+
+  (defun my-dape--select-go-test-args ()
+    (when-let* ((test-name (my-completing-read-go-tests))
+                (test-regexp (concat "^" test-name "$")))
+      (if test-name
+          `["-test.run" ,test-regexp]
+        (error "No test selected"))))
+
+  (defun my-file-relative-dir ()
+    "Return the file directory relative to dape's cwd. This is used by Delve debugger."
+    (concat "./" (file-relative-name default-directory (funcall dape-cwd-fn))))
+
+  ;; inside your dape-config
+  (add-to-list 'dape-configs
+               `(delve-test
+                 modes (go-mode go-ts-mode)
+                 command "dlv"
+                 command-cwd dape-cwd-fn
+                 command-args ("dap" "--listen" "127.0.0.1:55878")
+                 host "127.0.0.1"
+                 port 55878
+                 :type "go"
+                 :name "debug test"
+                 :request "launch"
+                 :mode "test"
+                 :cwd dape-cwd-fn
+                 :program my-file-relative-dir
+                 :args my-dape--select-go-test-args))
+
+  (defun go-func-name-at-point ()
+    (interactive)
+    (save-excursion
+      (end-of-line)
+      (beginning-of-defun)
+      (when (re-search-forward "^func[[:space:]]+\\([[:alnum:]_]+\\)" nil t)
+        (match-string 1))))
+
+  (defun my-dape--select-go-args ()
+    (if (string-suffix-p "_test.go"   (buffer-name))
+        (when-let* ((test-name (go-func-name-at-point))
+                    (test-regexp (concat "^" test-name "$")))
+          (if test-name
+              `["-test.run" ,test-regexp]
+            (error "No test selected")))
+      (if  current-prefix-arg
+          (vconcat (split-string (read-shell-command "args: " nil
+                                                     (if (equal (car compile-history) "")
+                                                         '(compile-history . 1)
+                                                       'compile-history))))
+        [])))
+
+  ;; https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+  (defun my-dape-test-p ()
+    (if (string-suffix-p "_test.go"   (buffer-name))
+        "test" "debug"))
+
+  (defun my-dape-relative-dir ()
+    "Return the file directory relative to dape's cwd. This is used by Delve debugger."
+    (if (string-suffix-p "_test.go"   (buffer-name))
+        (concat "./" (file-relative-name
+                      default-directory (funcall dape-cwd-fn)))
+      (funcall dape-cwd-fn)))
+
+  ;; inside your dape-config
+  (add-to-list 'dape-configs
+               `(delve
+                 modes (go-mode go-ts-mode)
+                 command "dlv"
+                 command-cwd dape-cwd-fn
+                 command-args ("dap" "--listen" "127.0.0.1:55878")
+                 host "127.0.0.1"
+                 port 55878
+                 :type "go"
+                 :name "go-debug"
+                 :request "launch"
+                 :mode my-dape-test-p
+                 :cwd dape-cwd-fn
+                 :program my-dape-relative-dir
+                 :args my-dape--select-go-args)))
 
 (provide 'init)
 ;;; init.el ends here
