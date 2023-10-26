@@ -45,6 +45,7 @@
  '(dap-ui-many-windows-mode t)
  '(dap-ui-mode t nil (dap-ui))
  '(dape-info-buffer-variable-format nil)
+ '(dape-on-start-hooks '(dape-info))
  '(dape-repl-use-shorthand t)
  '(dash-docs-enable-debugging nil)
  '(debug-on-error nil)
