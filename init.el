@@ -1789,6 +1789,12 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (defun my-dlv-attach-args ()
     (list "dap" "--listen" "127.0.0.1:55878" "attach" (format "%d" (dape-read-pid))))
 
+  (defun my-dlv-remote-args ()
+    (list "dap" "--listen" "127.0.0.1:55878" "connect"
+	  (format "%s:%s"
+		  (read-string "host: ")
+		  (read-string "port: "))))
+
   ;; inside your dape-config
   (add-to-list 'dape-configs
                `(delve
@@ -1817,6 +1823,20 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 		 :type "go"
 		 :name "go-debug"
 		 :request "local"
+		 :mode "debug"
+		 :cwd dape-cwd-fn))
+
+  (add-to-list 'dape-configs
+               `(delve-remote
+                 modes (go-mode go-ts-mode)
+                 command "dlv"
+                 command-cwd dape-cwd-fn
+                 command-args my-dlv-remote-args
+		 host "127.0.0.1"
+		 port 55878
+		 :type "go"
+		 :name "go-debug"
+		 :request "remove"
 		 :mode "debug"
 		 :cwd dape-cwd-fn)))
 
