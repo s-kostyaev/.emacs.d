@@ -1701,7 +1701,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (hercules-def
    :keymap 'dape-global-map
    :show-funs '(dape dape-step-in dape-step-out dape-next)
-   :hide-funs '(dape-disconnect-quit dape-quit))
+   :hide-funs '(dape-disconnect-quit dape-quit dape-info)
+   :transient t)
   :init
   (my-vc-install :name "dape" :host "github" :repo "svaante/dape")
   :config
