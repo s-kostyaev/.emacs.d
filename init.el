@@ -423,6 +423,7 @@ It takes one parameter, which is t when the Night Light is active
   (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   (setq-default eglot-confirm-server-initiated-edits nil)
   :config
+  (fset #'jsonrpc--log-event #'ignore)
   (defun my-eglot-organize-imports () (interactive)
 	 (eglot-code-actions nil nil "source.organizeImports" t))
   (defun my-eglot-setup ()
