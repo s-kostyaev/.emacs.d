@@ -1689,11 +1689,10 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   :init
   (my-vc-install :name "ellama" :host "github" :repo "s-kostyaev/ellama")
   (setopt ellama-language "Russian")
-  (setopt ellama-model "zephyr:7b-alpha-q5_K_M")
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "zephyr:7b-alpha-q5_K_M" :embedding-model "zephyr:7b-alpha-q5_K_M")))
+	   :chat-model "zephyr:7b-beta-q5_K_M" :embedding-model "zephyr:7b-beta-q5_K_M")))
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
