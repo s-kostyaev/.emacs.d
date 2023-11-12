@@ -590,9 +590,9 @@ It takes one parameter, which is t when the Night Light is active
 	  (local-set-key
 	   (kbd "C-c g")
 	   #'go-gen-test-dwim)
-	  (local-set-key
-	   (kbd "M-?")
-	   #'lsp-find-references)
+	  ;; (local-set-key
+	  ;;  (kbd "M-?")
+	  ;;  #'lsp-find-references)
 	  (local-set-key
 	   (kbd "C-c C-c")
 	   #'my-make)
@@ -1333,11 +1333,13 @@ Select it interactively otherwise."
 				(if project
 				    (project-root project)
 				  default-directory)))
-	   (makefile (expand-file-name "Makefile" default-directory))
-	   (targets (my--make-target-list makefile))
-	   (target (completing-read "make " targets)))
-      (compile
-       (format "make %s" target)))))
+	   (makefile (expand-file-name "Makefile" default-directory)))
+      (if (file-exists-p makefile)
+	  (let* ((targets (my--make-target-list makefile))
+		 (target (completing-read "make " targets)))
+	    (compile
+	     (format "make %s" target)))
+	(compile "go build ./...")))))
 
 (use-package smerge-mode
   :preface
