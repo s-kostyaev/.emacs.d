@@ -606,7 +606,7 @@ It takes one parameter, which is t when the Night Light is active
 	  (setq-local lsp-go-goimports-local (my-extract-go-module-name))
 	  ;; (require 'lsp-go)
 	  (symbol-overlay-mode -1)
-	  (company-prescient-mode -1)
+	  ;; (company-prescient-mode -1)
 	  (setq-local lsp-completion-filter-on-incomplete nil)
 	  ;; (lsp)
 	  (eglot-ensure)
@@ -617,7 +617,20 @@ It takes one parameter, which is t when the Night Light is active
 (setq make-backup-files nil
       text-mode-hook 'turn-on-auto-fill)
 
+(use-package corfu
+  :preface
+  (setopt corfu-auto t)
+  (setopt corfu-auto-delay 0.1)
+  (setopt corfu-auto-prefix 1)
+  ;; (global-set-key (kbd "<tab>") 'indent-for-tab-command)
+  (setopt tab-always-indent 'complete)
+  (setopt tab-first-completion nil)
+  :init
+  (global-corfu-mode t)
+  (corfu-echo-mode t))
+
 (use-package company
+  :disabled t
   :commands global-company-mode
   :preface
   (add-hook 'after-init-hook 'global-company-mode)
@@ -783,39 +796,40 @@ The optional argument IGNORED is not used."
       ("q" nil))))
 
 (use-package yasnippet
-  :bind (([tab]
-          . tab-indent-or-complete)
-         ("TAB" . tab-indent-or-complete))
+  ;; :bind (([tab]
+  ;;         . tab-indent-or-complete)
+  ;;        ("TAB" . tab-indent-or-complete))
   :config
   (setq yas-inhibit-overlay-modification-protection t)
   (run-with-idle-timer 3 nil #'require 'yasnippet nil t)
   (with-eval-after-load 'yasnippet
     (progn
       (yas-global-mode 1)
-      (defun check-expansion ()
-        "Check yasnippet expansion."
-        (save-excursion
-          (if (looking-at "\\_>")
-              t
-            (backward-char 1)
-            (if (looking-at "\\.")
-                t
-              (backward-char 1)
-              (if (looking-at "->")
-                  t nil)))))
+      ;; (defun check-expansion ()
+      ;;   "Check yasnippet expansion."
+      ;;   (save-excursion
+      ;;     (if (looking-at "\\_>")
+      ;;         t
+      ;;       (backward-char 1)
+      ;;       (if (looking-at "\\.")
+      ;;           t
+      ;;         (backward-char 1)
+      ;;         (if (looking-at "->")
+      ;;             t nil)))))
 
-      (defvar yas-minor-mode)
-      (defun tab-indent-or-complete ()
-        "Smart tab function."
-        (interactive)
-        (if (minibufferp)
-            (minibuffer-complete)
-          (if (or
-               (not yas-minor-mode)
-               (null (yas-expand)))
-              (if (check-expansion)
-                  (company-complete-common)
-                (indent-for-tab-command))))))))
+      ;; (defvar yas-minor-mode)
+      ;; (defun tab-indent-or-complete ()
+      ;;   "Smart tab function."
+      ;;   (interactive)
+      ;;   (if (minibufferp)
+      ;;       (minibuffer-complete)
+      ;;     (if (or
+      ;;          (not yas-minor-mode)
+      ;;          (null (yas-expand)))
+      ;;         (if (check-expansion)
+      ;;             (company-complete-common)
+      ;;           (indent-for-tab-command)))))
+      )))
 
 (setq x-hyper-keysym 'meta
       mac-option-modifier 'none
@@ -1063,15 +1077,15 @@ This function is meant to be mapped to a key in `rg-mode-map'."
   (key-chord-define-global ">>" 'smart-shift-right)
 
   :init
-  (require 'company-dabbrev-code)
+  ;; (require 'company-dabbrev-code)
 
   :hook ((yaml-mode-hook . highlight-indentation-mode)
 	 (yaml-mode-hook . highlight-indentation-current-column-mode)
 	 (yaml-mode-hook . my-disable-auto-fill)
 	 (yaml-mode-hook . my-enable-prism))
   :config
-  (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
-  (add-to-list 'company-dabbrev-code-modes 'protobuf-mode)
+  ;; (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
+  ;; (add-to-list 'company-dabbrev-code-modes 'protobuf-mode)
   (global-smart-shift-mode 1))
 
 (use-package auto-yasnippet
