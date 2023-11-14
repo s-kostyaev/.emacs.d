@@ -1333,7 +1333,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 	(while (re-search-forward "^\\([^: \n]+\\) *:\\(?: \\|$\\)" nil t)
 	  (let ((str (match-string 1)))
 	    (unless (string-match "^\\." str)
-	      (push str targets)))))
+	      (push str targets))))
+	(push "go build" targets))
       (nreverse targets)))
 
   (defun my-make (arg)
@@ -1352,7 +1353,9 @@ Select it interactively otherwise."
 	  (let* ((targets (my--make-target-list makefile))
 		 (target (completing-read "make " targets)))
 	    (compile
-	     (format "make %s" target)))
+	     (if (string= target "go build")
+		 "go build ./..."
+	       (format "make %s" target))))
 	(compile "go build ./...")))))
 
 (use-package smerge-mode
