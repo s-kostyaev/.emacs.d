@@ -37,16 +37,27 @@ named arguments:
     (unless (package-installed-p pac-name)
       (package-vc-install uri rev backend))))
 
-(setq-default use-package-always-defer t)
+(setopt use-package-always-defer t)
 
-(setq package-quickstart t)
+(setopt package-quickstart t)
 
-(setq native-comp-deferred-compilation t)
-(setq native-compile-prune-cache t)
+(setopt native-comp-deferred-compilation t)
+(setopt native-compile-prune-cache t)
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
 (progn ; my-themes
+  (defvar my-font)
+  (defvar my-light-theme)
+  (defvar my-dark-theme)
+  (defvar my-need-theme-reload)
+  (if (eq system-type 'darwin)
+      (setq my-font (font-spec :size 15.0 :family "Go Mono"))
+    (setq my-font (font-spec :size 13.0 :family "PT Mono")))
+  (setq my-light-theme 'ef-summer
+	my-dark-theme 'ef-winter
+	my-need-theme-reload nil)
+
   (defun my-enable-light-theme ()
     "Enable light theme."
     (interactive)
@@ -137,59 +148,53 @@ named arguments:
   (add-hook 'after-init-hook #'my-reload-theme)
   (with-eval-after-load 'emacs-customizations #'my-set-themes)
 
-  (if (eq system-type 'darwin)
-      (setq my-font (font-spec :size 15.0 :family "Go Mono"))
-    (setq my-font (font-spec :size 13.0 :family "PT Mono")))
-  (setq my-light-theme 'ef-summer
-	my-dark-theme 'ef-winter
-	my-need-theme-reload nil)
-
   (global-set-key (kbd "<f6>") 'my-toggle-themes)
   (add-hook 'after-init-hook 'my-set-themes)
   (add-hook 'desktop-after-read-hook 'my-set-themes)
   (add-hook 'after-init-hook 'my-load-custom-file))
 
-(while (not (eq system-type 'darwin)) ; my-gnome-night-light-light
-  (require 'dbus)
-  (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
-    (let* ((prop (car changed-props))
-	   (name (car prop))
-	   (value (car (cadr prop))))
-      (when (string-equal name "NightLightActive")
-	(when (functionp my-gnome-night-light-light-change-callback)
-	  (funcall my-gnome-night-light-light-change-callback value)))))
+;; (while (not (eq system-type 'darwin)) ; my-gnome-night-light-light
+;;   (defvar my-gnome-night-light-light-change-callback)
+;;   (require 'dbus)
+;;   (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
+;;     (let* ((prop (car changed-props))
+;; 	   (name (car prop))
+;; 	   (value (car (cadr prop))))
+;;       (when (string-equal name "NightLightActive")
+;; 	(when (functionp my-gnome-night-light-light-change-callback)
+;; 	  (funcall my-gnome-night-light-light-change-callback value)))))
 
-  (defun my-gnome-night-light ()
-    "Load and enable my-gnome-night-light."
-    (dbus-register-signal
-     :session
-     "org.gnome.SettingsDaemon.Color"
-     "/org/gnome/SettingsDaemon/Color"
-     "org.freedesktop.DBus.Properties"
-     "PropertiesChanged"
-     #'my-gnome-night-light-internal-prop-change-listener)
-    (let ((value (dbus-get-property
-		  :session
-		  "org.gnome.SettingsDaemon.Color"
-		  "/org/gnome/SettingsDaemon/Color"
-		  "org.gnome.SettingsDaemon.Color"
-		  "NightLightActive")))
-      (when (functionp my-gnome-night-light-light-change-callback)
-	(funcall my-gnome-night-light-light-change-callback value))))
+;;   (defun my-gnome-night-light ()
+;;     "Load and enable my-gnome-night-light."
+;;     (dbus-register-signal
+;;      :session
+;;      "org.gnome.SettingsDaemon.Color"
+;;      "/org/gnome/SettingsDaemon/Color"
+;;      "org.freedesktop.DBus.Properties"
+;;      "PropertiesChanged"
+;;      #'my-gnome-night-light-internal-prop-change-listener)
+;;     (let ((value (dbus-get-property
+;; 		  :session
+;; 		  "org.gnome.SettingsDaemon.Color"
+;; 		  "/org/gnome/SettingsDaemon/Color"
+;; 		  "org.gnome.SettingsDaemon.Color"
+;; 		  "NightLightActive")))
+;;       (when (functionp my-gnome-night-light-light-change-callback)
+;; 	(funcall my-gnome-night-light-light-change-callback value))))
 
-  (defun my-theme-changer (state)
-    "My callback for gnome-night-light.\nChanges theme according to STATE."
-    (mapc #'disable-theme custom-enabled-themes)
-    (if state
-	(load-theme my-dark-theme t nil)
-      (load-theme my-light-theme t nil)))
+;;   (defun my-theme-changer (state)
+;;     "My callback for gnome-night-light.\nChanges theme according to STATE."
+;;     (mapc #'disable-theme custom-enabled-themes)
+;;     (if state
+;; 	(load-theme my-dark-theme t nil)
+;;       (load-theme my-light-theme t nil)))
 
-  (setq my-gnome-night-light-light-change-callback 'my-theme-changer)
-  (defvar my-gnome-night-light-light-change-callback nil
-    "The callback function called on Night Light state change.
-It takes one parameter, which is t when the Night Light is active
-(e.g.  it's night) and nil when it's day.")
-  (my-gnome-night-light))
+;;   (setq my-gnome-night-light-light-change-callback 'my-theme-changer)
+;;   (defvar my-gnome-night-light-light-change-callback nil
+;;     "The callback function called on Night Light state change.
+;; It takes one parameter, which is t when the Night Light is active
+;; (e.g.  it's night) and nil when it's day.")
+;;   (my-gnome-night-light))
 
 (progn ; my-mac-themes
   (defun my-mac-apply-theme (appearance)
@@ -304,6 +309,7 @@ It takes one parameter, which is t when the Night Light is active
   (setq sentence-end-double-space nil))
 
 (use-package my-align-region
+  :disabled t
   :preface
   (defun my-align-region-by (&optional delimiter)
     "Align current region by DELIMITER."
@@ -423,6 +429,7 @@ It takes one parameter, which is t when the Night Light is active
   (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   (setq-default eglot-confirm-server-initiated-edits nil)
   :config
+  (require 'jsonrpc)
   (fset #'jsonrpc--log-event #'ignore)
   (defun my-eglot-organize-imports () (interactive)
 	 (eglot-code-actions nil nil "source.organizeImports" t))
@@ -574,7 +581,7 @@ It takes one parameter, which is t when the Night Light is active
 		   (go-test-current-project)))
 	      (go-test-current-project)))
 
-	  (setq go-tag-args (list "-transform" "snakecase"))
+	  (setopt go-tag-args (list "-transform" "snakecase"))
 	  (local-set-key
 	   (kbd "C-c i")
 	   #'go-goto-imports)
@@ -662,7 +669,7 @@ It takes one parameter, which is t when the Night Light is active
 
 (use-package browse-url
   :preface
-  (defun my-browse-url-chromium-wayland (url &optional ignored)
+  (defun my-browse-url-chromium-wayland (url &optional _ignored)
     "Pass the specified URL to the \"chromium\" command.
 The optional argument IGNORED is not used."
     (interactive (browse-url-interactive-arg "URL: "))
@@ -831,11 +838,11 @@ The optional argument IGNORED is not used."
       ;;           (indent-for-tab-command)))))
       )))
 
-(setq x-hyper-keysym 'meta
-      mac-option-modifier 'none
-      mac-command-modifier 'meta
-      mac-command-key-is-meta 't
-      mac-option-key-is-meta nil)
+(setopt x-hyper-keysym 'meta
+	mac-option-modifier 'none
+	mac-command-modifier 'meta
+	mac-command-key-is-meta 't
+	mac-option-key-is-meta nil)
 
 (use-package wgrep
   :bind (("C-c C-p" . wgrep-change-to-wgrep-mode))
@@ -980,7 +987,7 @@ to the line and column corresponding to that location."
 (use-package dash
   :after t
   :config
-  (dash-enable-font-lock))
+  (global-dash-fontify-mode t))
 
 (use-package rg
   :bind* (("C-c C-s" . my-grep-vc-or-dir))
@@ -1232,7 +1239,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (use-package marginalia
   :init
   (marginalia-mode +1)
-  (setq marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
+  (setopt marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
 
 (use-package embark
   :disabled t
@@ -1360,6 +1367,7 @@ Select it interactively otherwise."
 
 (use-package smerge-mode
   :preface
+  (require 'hercules)
   (hercules-def :toggle-funs #'smerge-mode
                 :keymap 'smerge-basic-map
                 :show-funs '(smerge-next smerge-prev)
@@ -1371,6 +1379,7 @@ Select it interactively otherwise."
   :commands (imaxima))
 
 (use-package frimacs
+  :disabled t
   :preface
   (defun my-setup-frimacs ()
     "Setup frimacs."

@@ -58,7 +58,7 @@
  '(global-aggressive-indent-mode t)
  '(go-gen-test-use-testify t)
  '(go-packages-function 'go-packages-go-list)
- '(go-tag-args '("-transform" "camelcase"))
+ '(go-tag-args '("-transform" "camelcase") t)
  '(go-test-verbose nil)
  '(godoc-at-point-function 'godoc-gogetdoc)
  '(godoc-command "godoc")
