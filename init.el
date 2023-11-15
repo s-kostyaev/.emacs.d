@@ -1866,5 +1866,9 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 		 :mode "debug"
 		 :cwd dape-cwd-fn)))
 
+(use-package spacious-padding
+  :init
+  (spacious-padding-mode t))
+
 (provide 'init)
 ;;; init.el ends here
