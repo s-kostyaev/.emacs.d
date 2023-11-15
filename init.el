@@ -1679,7 +1679,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
   (pulsar-global-mode))
 
 (when (and (boundp pixel-scroll-precision-mode)
-	   (not (eq system-type 'darwin)))
+	   ;; (not (eq system-type 'darwin))
+	   )
   (pixel-scroll-precision-mode +1))
 
 (use-package narrow
