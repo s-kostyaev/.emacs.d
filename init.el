@@ -208,6 +208,7 @@ named arguments:
       (add-hook 'ns-system-appearance-change-functions #'my-mac-apply-theme)))
 
 (use-package key-chord
+  :commands key-chord-define-global
   :bind (([f9] . key-chord-mode))
   :config
   (run-with-idle-timer 2 nil #'require 'key-chord nil t)
@@ -379,28 +380,31 @@ named arguments:
          ;; ("C-x o" . hydra-cycle-windows/body)
 	 )
   :config
-  (defhydra hydra-cycle-windows
-    (:body-pre
-     (other-window 1))
-    "Windows"
-    ("o"
-     (other-window 1)
-     "Next")
-    ("O"
-     (other-window -1)
-     "Previous")
-    ("t" toggle-window-split "Toggle split")
-    ("]" enlarge-window-horizontally "Enlarge horizontal")
-    ("[" shrink-window-horizontally "Shrink horizontal")
-    ("=" enlarge-window "Enlarge vertival")
-    ("-" shrink-window "Shrink vertical")
-    ("b" balance-windows "Balance windows")
-    ("m" delete-other-windows "Maximize window")
-    ("n" split-window-below "New window")
-    ("c" delete-window "Close window")
-    ("q" nil "quit")))
+  ;; (defhydra hydra-cycle-windows
+  ;;   (:body-pre
+  ;;    (other-window 1))
+  ;;   "Windows"
+  ;;   ("o"
+  ;;    (other-window 1)
+  ;;    "Next")
+  ;;   ("O"
+  ;;    (other-window -1)
+  ;;    "Previous")
+  ;;   ("t" toggle-window-split "Toggle split")
+  ;;   ("]" enlarge-window-horizontally "Enlarge horizontal")
+  ;;   ("[" shrink-window-horizontally "Shrink horizontal")
+  ;;   ("=" enlarge-window "Enlarge vertival")
+  ;;   ("-" shrink-window "Shrink vertical")
+  ;;   ("b" balance-windows "Balance windows")
+  ;;   ("m" delete-other-windows "Maximize window")
+  ;;   ("n" split-window-below "New window")
+  ;;   ("c" delete-window "Close window")
+  ;;   ("q" nil "quit"))
+  )
 
 (use-package lsp-mode
+  :disabled t
+  :functions lsp-ensure-server
   :preface
   (setq lsp-use-plists t)
   (setenv "LSP_USE_PLISTS" "true")
@@ -409,7 +413,7 @@ named arguments:
 
   (defun my-lsp-before-save ()
     (interactive)
-    (when (and lsp-mode (not (equal major-mode 'c++-mode))
+    (when (and (not (equal major-mode 'c++-mode))
 	       (not (equal major-mode 'python-mode)))
       (lsp-organize-imports)
       (lsp-format-buffer)))
@@ -423,16 +427,17 @@ named arguments:
   (require 'yasnippet))
 
 (use-package eglot
+  :commands eglot-code-actions
   :demand t
   :preface
   (setq eglot-strict-mode nil)
   (setq-default eglot-workspace-configuration '((:gopls :usePlaceholders t :staticcheck t :completeUnimported t)))
   (setq-default eglot-confirm-server-initiated-edits nil)
   :config
-  (require 'jsonrpc)
-  (fset #'jsonrpc--log-event #'ignore)
-  (defun my-eglot-organize-imports () (interactive)
-	 (eglot-code-actions nil nil "source.organizeImports" t))
+  (fset 'jsonrpc--log-event #'ignore)
+  (defun my-eglot-organize-imports ()
+    (interactive)
+    (eglot-code-actions nil nil "source.organizeImports" t))
   (defun my-eglot-setup ()
     (interactive)
     (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
@@ -543,6 +548,15 @@ named arguments:
 									(point)))))))
 	name)))
   (use-package go-ts-mode
+    :functions (go-test-current-project
+		go-goto-imports
+		my-go-test
+		go-tag-add
+		go-tag-remove
+		go-gen-test-dwim
+		symbol-overlay-mode
+		flymake-start
+		my-go-mode-hook)
     :mode ("\\.go\\'"
 	   ("go.mod$" . go-mod-ts-mode))
     :config
@@ -625,6 +639,9 @@ named arguments:
       text-mode-hook 'turn-on-auto-fill)
 
 (use-package corfu
+  :functions corfu-echo-mode
+  :commands (global-corfu-mode
+	     corfu-history-mode)
   :preface
   (setopt corfu-auto t)
   (setopt corfu-auto-delay 0.1)
@@ -634,7 +651,8 @@ named arguments:
   (setopt tab-first-completion nil)
   :init
   (global-corfu-mode t)
-  (corfu-echo-mode t))
+  (corfu-echo-mode t)
+  (corfu-history-mode t))
 
 (use-package company
   :disabled t
@@ -672,7 +690,8 @@ named arguments:
   (defun my-browse-url-chromium-wayland (url &optional _ignored)
     "Pass the specified URL to the \"chromium\" command.
 The optional argument IGNORED is not used."
-    (interactive (browse-url-interactive-arg "URL: "))
+    (interactive (if (fboundp 'browse-url-interactive-arg)
+		     (browse-url-interactive-arg "URL: ")))
     (let ((cmd
            (concat
             "DISPLAY=:0 HOME=" (getenv "HOME")
@@ -704,6 +723,8 @@ The optional argument IGNORED is not used."
          (gfm-mode-hook . flymake-proselint-setup)))
 
 (use-package vmd-mode
+  :disabled t
+  :functions vmd-mode--update-emojis-file
   :preface
   (defun my-github-emojis-complete-at-point ()
     "My function for complete github emoji at point."
@@ -753,6 +774,7 @@ The optional argument IGNORED is not used."
   (setq emmet-move-cursor-between-quotes t))
 
 (use-package avy
+  :commands avy-isearch
   :preface
   (key-chord-define-global "fj" 'avy-goto-word-1)
   (key-chord-define-global "f'" 'avy-pop-mark)
@@ -766,43 +788,62 @@ The optional argument IGNORED is not used."
   (key-chord-define-global "zk" 'er/contract-region))
 
 (use-package multiple-cursors
-  :commands (multiple-cursors-hydra/body)
-  :preface
-  (key-chord-define-global "mf" 'multiple-cursors-hydra/body)
-  :config
-  (progn
-    (require 'hydra)
-    (defhydra multiple-cursors-hydra (:hint nil)
-      "
-     ^Up^            ^Down^            ^Other^
---------------------------------------------------
-[_p_]   Next      [_n_]   Next      [_l_] Edit lines
-[_P_]   Skip      [_N_]   Skip      [_a_] Mark all
-[_M-p_] Unmark    [_M-n_] Unmark    [_A_] Mark all words
-[_W_]   Up word   [_w_]   Down word [_r_] Mark
-^ ^               ^ ^              [_q_] Quit
-^ ^               ^ ^              [_h_] Toggle hide unmatched
-^ ^               ^ ^              [_j_] Jump for add or remove cursors
-^ ^               ^ ^              [_k_] Jump for single cursor
-"
-      ("l" mc/edit-lines :exit t)
-      ("a" mc/mark-all-like-this)
-      ("A" mc/mark-all-words-like-this)
-      ("n" mc/mark-next-like-this)
-      ("N" mc/skip-to-next-like-this)
-      ("M-n" mc/unmark-next-like-this)
-      ("p" mc/mark-previous-like-this)
-      ("P" mc/skip-to-previous-like-this)
-      ("M-p" mc/unmark-previous-like-this)
-      ("r" mc/mark-all-in-region-regexp :exit t)
-      ("W" mc/mark-previous-word-like-this)
-      ("w" mc/mark-next-word-like-this)
-      ("h" mc-hide-unmatched-lines-mode)
-      ("j" ace-mc-add-multiple-cursors :exit t)
-      ("k" ace-mc-add-single-cursor :exit t)
-      ("q" nil))))
+  :commands (multiple-cursors-hydra/body
+	     mc/edit-lines
+	     mc/mark-all-like-this
+	     mc/mark-all-words-like-this
+	     mc/mark-next-like-this
+	     mc/skip-to-next-like-this
+	     mc/unmark-next-like-this
+	     mc/mark-previous-like-this
+	     mc/skip-to-previous-like-this
+	     mc/unmark-previous-like-this
+	     mc/mark-all-in-region-regexp
+	     mc/mark-previous-word-like-this
+	     mc/mark-next-word-like-this
+	     mc-hide-unmatched-lines-mode
+	     ace-mc-add-multiple-cursors
+	     ace-mc-add-single-cursor)
+  :init
+  (defvar my-mc-map
+    (define-keymap
+      "l" #'mc/edit-lines
+      "a" #'mc/mark-all-like-this
+      "A" #'mc/mark-all-words-like-this
+      "n" #'mc/mark-next-like-this
+      "N" #'mc/skip-to-next-like-this
+      "M-n" #'mc/unmark-next-like-this
+      "p" #'mc/mark-previous-like-this
+      "P" #'mc/skip-to-previous-like-this
+      "M-p" #'mc/unmark-previous-like-this
+      "r" #'mc/mark-all-in-region-regexp
+      "W" #'mc/mark-previous-word-like-this
+      "w" #'mc/mark-next-word-like-this
+      "h" #'mc-hide-unmatched-lines-mode
+      "j" #'ace-mc-add-multiple-cursors
+      "k" #'ace-mc-add-single-cursor))
+  (define-key global-map (kbd "C-c m") my-mc-map)
+  (hercules-def
+   :transient t
+   :keymap 'my-mc-map
+   :show-funs '(mc/edit-lines
+	     mc/mark-all-like-this
+	     mc/mark-all-words-like-this
+	     mc/mark-next-like-this
+	     mc/skip-to-next-like-this
+	     mc/unmark-next-like-this
+	     mc/mark-previous-like-this
+	     mc/skip-to-previous-like-this
+	     mc/unmark-previous-like-this
+	     mc/mark-previous-word-like-this
+	     mc/mark-next-word-like-this
+	     mc-hide-unmatched-lines-mode)
+   :hide-funs '(mc/mark-all-in-region-regexp
+		ace-mc-add-multiple-cursors
+		ace-mc-add-single-cursor)))
 
 (use-package yasnippet
+  :commands yas-global-mode
   ;; :bind (([tab]
   ;;         . tab-indent-or-complete)
   ;;        ("TAB" . tab-indent-or-complete))
@@ -865,7 +906,8 @@ The optional argument IGNORED is not used."
   :bind (("M-i" . imenu)))
 
 (use-package magit
-  :bind (("C-x C-j" . my-magit-find-file-other-frame))
+  :commands diff-refine-hunk
+  :functions my-magit-diff-hook
   :bind* (("C-x g" . magit-status))
   :config
   (use-package diff-mode)
@@ -878,32 +920,7 @@ The optional argument IGNORED is not used."
          #'diff-refine-hunk))
 
       (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
-      (setq auto-revert-check-vc-info t)
-      (defun my-magit-find-file-other-frame (file)
-        "View FILE from worktree, in another frame.
-Switch to a buffer visiting blob FILE, creating one if none
-already exists. If prior to calling this command the current
-buffer and/or cursor position is about the same file, then go to
-the line and column corresponding to that location."
-        (interactive
-         (my-magit-find-file-read-args "Find file in other frame"))
-        (find-file-other-frame
-         (expand-file-name file (vc-root-dir))))
-
-      (defun my-magit-find-file (file)
-        "View FILE from worktree.
-Switch to a buffer visiting blob FILE, creating one if none
-already exists.  If prior to calling this command the current
-buffer and/or cursor position is about the same file, then go
-to the line and column corresponding to that location."
-        (interactive
-         (my-magit-find-file-read-args "Find file"))
-        (find-file
-         (expand-file-name file (vc-root-dir))))
-
-      (defun my-magit-find-file-read-args (prompt)
-        (list
-         (magit-read-file-from-rev "HEAD" prompt))))))
+      (setq auto-revert-check-vc-info t))))
 
 
 
@@ -923,6 +940,7 @@ to the line and column corresponding to that location."
          ("\\.xslt\\'" . xml-mode)))
 
 (use-package hungry-delete
+  :commands global-hungry-delete-mode
   :demand t
   :config
   (run-with-idle-timer 0.5 nil #'require 'hungry-delete nil t)
@@ -930,12 +948,15 @@ to the line and column corresponding to that location."
     (global-hungry-delete-mode)))
 
 (use-package ace-link
-  :config
+  :disabled t
+  :functions ace-link-setup-default
+  :preface
   (run-with-idle-timer 0.1 nil #'require 'ace-link nil t)
   (with-eval-after-load 'ace-link
     (ace-link-setup-default)))
 
 (use-package which-key
+  :commands which-key-mode
   :demand t
   :preface
   (setq which-key-show-transient-maps 't)
@@ -943,6 +964,7 @@ to the line and column corresponding to that location."
   (which-key-mode t))
 
 (use-package ibuffer-vc
+  :commands ibuffer-vc-set-filter-groups-by-vc-root
   :bind* (("C-x C-b" . ibuffer))
   :init
   (run-with-idle-timer 3 nil #'require 'ibuffer-vc nil t)
@@ -954,6 +976,7 @@ to the line and column corresponding to that location."
                   (ibuffer-do-sort-by-alphabetic))))))
 
 (use-package symbol-overlay
+  :commands symbol-overlay-mode
   :config
   (run-with-idle-timer 2 nil #'require 'symbol-overlay nil t)
   (with-eval-after-load 'symbol-overlay
@@ -962,11 +985,14 @@ to the line and column corresponding to that location."
     (add-hook 'emacs-lisp-mode-hook #'symbol-overlay-mode)))
 
 (use-package reverse-im
+  :commands (reverse-im-add-input-method reverse-im-mode)
   :demand t
   :config
-  (reverse-im-activate "russian-computer"))
+  (reverse-im-add-input-method "russian-computer")
+  (reverse-im-mode t))
 
 (use-package aggressive-indent
+  :commands (aggressive-indent-global-mode aggressive-indent-mode)
   :preface
   (defun my-disable-aggressive-indent ()
     "Disable aggressive indent mode in current buffer."
@@ -985,11 +1011,20 @@ to the line and column corresponding to that location."
   :commands pass)
 
 (use-package dash
+  :commands global-dash-fontify-mode
   :after t
   :config
   (global-dash-fontify-mode t))
 
+(use-package grep
+  :bind* (("C-c C-s" . lgrep))
+  :functions grep-apply-setting
+  :config
+  (grep-apply-setting 'grep-template "rg --no-heading -H -S -g '<F>' -e <R> <D>"))
+
 (use-package rg
+  :disabled t
+  :commands rg-save-search-as-name
   :bind* (("C-c C-s" . my-grep-vc-or-dir))
   :bind (:map rg-mode-map
               ("f" . next-error-follow-minor-mode)
@@ -1029,6 +1064,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
     (advice-add 'my-grep-vc-or-dir :after 'my-next-window)))
 
 (use-package isearch
+  :commands consult-line
   :preface
   (defun my-isearch-next (arg)
     "Isearch symbol at point or next isearch history item."
@@ -1066,11 +1102,13 @@ This function is meant to be mapped to a key in `rg-mode-map'."
     (set-window-margins
      (get-buffer-window)
      20 20)
-    (eww-reload 'local))
+    (if (fboundp 'eww-reload)
+	(eww-reload 'local)))
 
   :hook ((eww-after-render-hook . eww-more-readable)))
 
 (use-package yaml
+  :commands (global-smart-shift-mode prism-mode)
   :preface
   (defun my-disable-auto-fill ()
     "Disable `auto-fill-mode'."
@@ -1146,6 +1184,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 ;;; Screencasts
 
 (use-package gif-screencast
+  :functions (my-fix-screencast-hidpi
+	      gif-screencast--cropping-region)
   :bind (("<f7>" . gif-screencast-toggle-pause)
          ("<f8>" . gif-screencast-start-or-stop))
   :config
@@ -1165,7 +1205,8 @@ If the current buffer is not visiting a file, prompt for a file name."
                      (apply oldfun r)
                      "[+x]"))))
 
-          (advice-add #'gif-screencast--cropping-region :around #'my-fix-screencast-hidpi))
+          (if (fboundp 'gif-screencast--cropping-region)
+	      (advice-add #'gif-screencast--cropping-region :around #'my-fix-screencast-hidpi)))
 
       (setq gif-screencast-program "gnome-screenshot"
             gif-screencast-args '("-w" "-f")
@@ -1173,10 +1214,12 @@ If the current buffer is not visiting a file, prompt for a file name."
     (setq gif-screencast-capture-prefer-internal t)))
 
 (use-package c-cpp-mode
+  :disabled t
   :hook ((c-mode-hook . lsp)
          (c++-mode-hook . lsp)))
 
 (use-package icomplete
+  :functions my-directory-tidy
   :bind ((:map icomplete-minibuffer-map
                ("<down>" . icomplete-forward-completions)
                ("C-n" . icomplete-forward-completions)
@@ -1237,6 +1280,7 @@ If the current buffer is not visiting a file, prompt for a file name."
          ("M-y" . consult-yank-pop)))
 
 (use-package marginalia
+  :commands marginalia-mode
   :init
   (marginalia-mode +1)
   (setopt marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
@@ -1282,6 +1326,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   (advice-add 'indent-region :around #'my-suppress-messages))
 
 (use-package lsp-jedi
+  :disabled t
   :preface
   (add-hook 'python-mode-hook
             #'(lambda nil
@@ -1327,6 +1372,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   (setq recentf-max-saved-items 300))
 
 (use-package package-lint-flymake
+  :commands package-lint-flymake-setup
   :preface
   (add-hook 'emacs-lisp-mode-hook #'package-lint-flymake-setup))
 
@@ -1390,47 +1436,55 @@ Select it interactively otherwise."
   (setq frimacs-process-show-svg t)
   :hook ((frimacs-process-mode-hook . my-setup-frimacs)))
 
-(progn ; my-screenshots
-  (defun my-screenshot-svg ()
-    "Save a screenshot of the current frame as an SVG image.
-Saves to a temp file."
-    (interactive)
-    (require 'dired)
-    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
-	   (data (x-export-frames nil 'svg)))
-      (with-temp-file filename
-        (insert data))
-      (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
-						    (expand-file-name "~/Pictures")) 1)))
-  (defun my-screenshot-png ()
-    "Save a screenshot of the current frame as an PNG image.
-Saves to a temp file."
-    (interactive)
-    (require 'dired)
-    (let* ((filename (make-temp-file "Emacs" nil ".png"))
-	   (data (x-export-frames nil 'png)))
-      (with-temp-file filename
-        (insert data))
-      (dired-rename-file filename
-			 (expand-file-name (file-name-nondirectory filename)
-					   (expand-file-name "~/Pictures"))
-			 1))))
+;;; doesn't work on mac, see https://github.com/tecosaur/screenshot/issues/13
+;; (progn ; my-screenshots
+;;   (defun my-screenshot-svg ()
+;;     "Save a screenshot of the current frame as an SVG image.
+;; Saves to a temp file."
+;;     (interactive)
+;;     (require 'dired)
+;;     (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+;; 	   (data (x-export-frames nil 'svg)))
+;;       (with-temp-file filename
+;;         (insert data))
+;;       (dired-rename-file filename (expand-file-name (file-name-nondirectory filename)
+;; 						    (expand-file-name "~/Pictures")) 1)))
+;;   (defun my-screenshot-png ()
+;;     "Save a screenshot of the current frame as an PNG image.
+;; Saves to a temp file."
+;;     (interactive)
+;;     (require 'dired)
+;;     (let* ((filename (make-temp-file "Emacs" nil ".png"))
+;; 	   (data (x-export-frames nil 'png)))
+;;       (with-temp-file filename
+;;         (insert data))
+;;       (dired-rename-file filename
+;; 			 (expand-file-name (file-name-nondirectory filename)
+;; 					   (expand-file-name "~/Pictures"))
+;; 			 1))))
 
 (use-package nov
+  :commands spray-mode
   :mode (("\\.epub\\'" . nov-mode))
   :preface
   (use-package speechd
-    :preface
+    :init
     (defun my-read-buffer ()
       (interactive)
-      (speechd-stop t)
-      (speechd-set-language "ru")
-      (speechd-set-rate 100 t)
-      (speechd-say-text (buffer-substring-no-properties (point) (point-max))))
+      (if (fboundp 'speechd-stop)
+	  (speechd-stop t))
+      (if (fboundp 'speechd-set-language)
+	  (speechd-set-language "ru"))
+      (if (fboundp 'speechd-set-rate)
+	  (speechd-set-rate 100 t))
+      (if (fboundp 'speechd-say-text)
+	  (speechd-say-text
+	   (buffer-substring-no-properties (point) (point-max)))))
 
     (defun my-stop-reading ()
       (interactive)
-      (speechd-stop t)))
+      (if (fboundp 'speechd-stop)
+	  (speechd-stop t))))
 
   (defun my-nov-font-setup ()
     (face-remap-add-relative 'variable-pitch :family "Liberation Serif"
@@ -1453,31 +1507,33 @@ Saves to a temp file."
   (setq nov-text-width t)
 
   (defun my-nov-window-configuration-change-hook ()
-    (my-nov-post-html-render-hook)
+    ;; (my-nov-post-html-render-hook)
     (remove-hook 'window-configuration-change-hook
                  'my-nov-window-configuration-change-hook
                  t))
 
-  (defun my-nov-post-html-render-hook ()
-    (if (get-buffer-window)
-        (let ((max-width (pj-line-width))
-              buffer-read-only)
-          (save-excursion
-            (goto-char (point-min))
-            (while (not (eobp))
-              (when (not (looking-at "^[[:space:]]*$"))
-                (goto-char (line-end-position))
-                (when (> (shr-pixel-column) max-width)
-                  (goto-char (line-beginning-position))
-                  (pj-justify)))
-              (forward-line 1))))
-      (add-hook 'window-configuration-change-hook
-                'my-nov-window-configuration-change-hook
-                nil t)))
+  ;; (defun my-nov-post-html-render-hook ()
+  ;;   (if (get-buffer-window)
+  ;;       (let ((max-width (pj-line-width))
+  ;;             buffer-read-only)
+  ;;         (save-excursion
+  ;;           (goto-char (point-min))
+  ;;           (while (not (eobp))
+  ;;             (when (not (looking-at "^[[:space:]]*$"))
+  ;;               (goto-char (line-end-position))
+  ;;               (when (> (shr-pixel-column) max-width)
+  ;;                 (goto-char (line-beginning-position))
+  ;;                 (pj-justify)))
+  ;;             (forward-line 1))))
+  ;;     (add-hook 'window-configuration-change-hook
+  ;;               'my-nov-window-configuration-change-hook
+  ;;               nil t)))
 
-  (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook))
+  ;; (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook)
+  )
 
 (use-package affe
+  :commands affe-find
   :init
   (defun my-affe-find-project ()
     (interactive)
@@ -1487,19 +1543,20 @@ Saves to a temp file."
   :bind* (("C-c C-f" . my-affe-find-project)))
 
 (use-package dap-mode
+  :commands dap-hydra
   :config
-  (setq dap-lldb-debug-program '("/usr/bin/lldb-vscode"))
+  (setopt dap-lldb-debug-program '("/usr/bin/lldb-vscode"))
   (add-hook 'dap-stopped-hook
-            (lambda (arg) (call-interactively #'dap-hydra))))
+            (lambda (_arg) (call-interactively #'dap-hydra))))
 
 (use-package fsharp-mode
-  :hook ((fsharp-mode-hook . lsp)
-         ;; (fsharp-mode-hook . eglot-ensure)
+  :hook (;; (fsharp-mode-hook . lsp)
+         (fsharp-mode-hook . eglot-ensure)
          (fsharp-mode-hook . my-set-fsharp-compile-command))
 
   :config
-  (lsp-ensure-server 'fsac)
-  (require 'dap-netcore)
+  ;; (lsp-ensure-server 'fsac)
+  ;; (require 'dap-netcore)
 
   :init
   ;; (require 'eglot-fsharp)
@@ -1511,17 +1568,21 @@ Saves to a temp file."
     (setq-local compile-command "dotnet build")))
 
 (use-package csharp-mode
-  :hook ((csharp-mode-hook . lsp)
+  :hook (;; (csharp-mode-hook . lsp)
+	 (csharp-mode-hook . eglot-ensure)
 	 (csharp-mode-hook . my-set-fsharp-compile-command))
-  :config
-  (lsp-ensure-server 'omnisharp)
-  (require 'dap-netcore))
+  ;; :config
+  ;; (lsp-ensure-server 'omnisharp)
+  ;; (require 'dap-netcore)
+  )
 
 (use-package dotnet
+  :disabled t
   :preface
   (add-hook 'csharp-mode-hook 'dotnet-mode)
   (add-hook 'fsharp-mode-hook 'dotnet-mode)
 
+  (require 'project)
   (require 'dap-netcore)
   (defun my-try-dotnet (dir)
     "Find dotnet project root for DIR."
@@ -1546,6 +1607,7 @@ Saves to a temp file."
   :ensure t)
 
 (use-package gopcaml-mode
+  :disabled t
   :preface
   (setq gopcaml-messaging-level 'none)
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
@@ -1563,13 +1625,14 @@ Saves to a temp file."
 
   (add-to-list 'lsp-language-id-configuration '(gopcaml-mode . "ocaml"))
   (require 'lsp-ocaml)
-  (lsp-register-client
-   (make-lsp-client
-    :new-connection
-    (lsp-stdio-connection (lambda () lsp-ocaml-lsp-server-command))
-    :major-modes '(reason-mode caml-mode tuareg-mode gopcaml-mode)
-    :priority 0
-    :server-id 'ocaml-lsp-server))
+  ;; (lsp-register-client
+  ;;  (make-lsp-client
+  ;;   :new-connection
+  ;;   (if (fboundp 'lsp-stdio-connection)
+  ;; 	(lsp-stdio-connection (lambda () lsp-ocaml-lsp-server-command)))
+  ;;   :major-modes '(reason-mode caml-mode tuareg-mode gopcaml-mode)
+  ;;   :priority 0
+  ;;   :server-id 'ocaml-lsp-server))
 
   (defun my-opam-env ()
     (interactive nil)
@@ -1587,11 +1650,12 @@ Saves to a temp file."
 		(lsp))))
 
 (use-package haskell-mode
+  :disabled t
   :preface
   (require 'haskell-interactive-mode)
   (defun my-haskell-setup ()
     "Setup haskell mode by hook."
-    (require 'lsp-haskell)
+    ;; (require 'lsp-haskell)
     (defun my-send-region-to-haskell-interactive ()
       "Send region to haskell interactive."
       (interactive)
@@ -1603,11 +1667,14 @@ Saves to a temp file."
 	(let ((content
 	       (buffer-substring-no-properties
 		(region-beginning) (region-end))))
-	  (haskell-interactive-switch)
-	  (end-of-buffer)
+	  (if (fboundp 'haskell-interactive-switch)
+	      (haskell-interactive-switch))
+	  (goto-char (point-max))
 	  (insert content)
-	  (haskell-interactive-mode-return)
-	  (haskell-interactive-switch-back))))
+	  (if (fboundp 'haskell-interactive-mode-return)
+	      (haskell-interactive-mode-return))
+	  (if (fboundp 'haskell-interactive-switch-back)
+	      (haskell-interactive-switch-back)))))
     (lsp)
     ;; (eglot-ensure)
     )
@@ -1616,12 +1683,14 @@ Saves to a temp file."
 	       ("C-c C-e" . my-send-region-to-haskell-interactive))))
 
 (use-package denote
+  :commands denote-link-buttonize-buffer
+  :commands denote-dired-mode
   :demand t
   :bind
   (("C-c n n" . denote)
    ("C-c n d" . my-denote-dired)
    ("C-c n l" . denote-link)
-   ("C-c n f" . denote-link-find-file))
+   ("C-c n f" . denote-find-link))
   :config
   (require 'org)
   (add-hook 'find-file-hook #'denote-link-buttonize-buffer)
@@ -1635,15 +1704,23 @@ Saves to a temp file."
 (use-package xeft
   :ensure t
   :preface
-  (setq xeft-directory denote-directory)
+  (require 'denote)
+  (setq xeft-directory (denote-directory))
   :bind
   (("C-c n x" . xeft))
   :config
   (bind-key (kbd "RET") 'denote xeft-mode-map))
 
 (use-package origami
+  :disabled t
   :if (locate-library "origami")
-  :commands origami-mode
+  :commands (origami-open-node
+	     origami-close-node
+	     origami-next-fold
+	     origami-previous-fold
+	     origami-forward-toggle-node
+	     origami-toggle-all-nodes
+	     fill-column)
   :config
   (progn
     (add-hook 'prog-mode-hook 'origami-mode)
@@ -1665,6 +1742,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 	 ("x" nil :color blue))))))
 
 (use-package consult-dash
+  :commands dash-docs-activate-docset
   :bind
   (("M-s d" . consult-dash))
   :init
@@ -1684,6 +1762,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
       (find-file filename))))
 
 (use-package pulsar
+  :commands pulsar-global-mode
   :init
   (pulsar-global-mode))
 
@@ -1726,6 +1805,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
 (use-package dape
+  :commands (go-func-name-at-point dape-read-pid)
   :preface
   (hercules-def
    :keymap 'dape-global-map
@@ -1815,7 +1895,8 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
         "test" "debug"))
 
   (defun my-dape-relative-dir ()
-    "Return the file directory relative to dape's cwd. This is used by Delve debugger."
+    "Return the file directory relative to dape's cwd.
+This is used by Delve debugger."
     (if (string-suffix-p "_test.go"   (buffer-name))
         (concat "./" (file-relative-name
                       default-directory (funcall dape-cwd-fn)))
@@ -1876,6 +1957,7 @@ _c_lose node   _p_revious fold   toggle _a_ll        e_x_it
 		 :cwd dape-cwd-fn)))
 
 (use-package spacious-padding
+  :commands spacious-padding-mode
   :init
   (spacious-padding-mode t))
 
