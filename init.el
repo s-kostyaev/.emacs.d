@@ -39,12 +39,26 @@ named arguments:
 
 (setopt use-package-always-defer t)
 
-(setopt package-quickstart t)
-
 (setopt native-comp-deferred-compilation t)
 (setopt native-compile-prune-cache t)
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
+
+(defun my-load-custom-file ()
+  "Load my custom file."
+  (load-file custom-file))
+
+(my-load-custom-file)
+
+(use-package package
+  :demand t
+  :preface
+  (setopt package-quickstart nil)
+  :config
+  (defvar package-archives)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+  (package-initialize))
+
 
 (progn ; my-themes
   (defvar my-font)
@@ -139,10 +153,6 @@ named arguments:
       (mapc #'disable-theme custom-enabled-themes)
       (load-theme theme t nil)))
 
-  (defun my-load-custom-file ()
-    "Load my custom file."
-    (load-file custom-file))
-
   (add-to-list 'after-make-frame-functions #'my-reload-theme--frame)
   (add-hook 'server-after-make-frame-hook #'my-reload-theme)
   (add-hook 'after-init-hook #'my-reload-theme)
@@ -151,7 +161,8 @@ named arguments:
   (global-set-key (kbd "<f6>") 'my-toggle-themes)
   (add-hook 'after-init-hook 'my-set-themes)
   (add-hook 'desktop-after-read-hook 'my-set-themes)
-  (add-hook 'after-init-hook 'my-load-custom-file))
+  ;; (add-hook 'after-init-hook 'my-load-custom-file)
+  )
 
 ;; (while (not (eq system-type 'darwin)) ; my-gnome-night-light-light
 ;;   (defvar my-gnome-night-light-light-change-callback)
@@ -992,6 +1003,7 @@ The optional argument IGNORED is not used."
   (reverse-im-mode t))
 
 (use-package aggressive-indent
+  :demand t
   :commands (aggressive-indent-global-mode aggressive-indent-mode)
   :preface
   (defun my-disable-aggressive-indent ()

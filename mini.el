@@ -98,47 +98,47 @@
         (load-theme my-dark-theme t)
       (load-theme my-light-theme t))))
 
-(progn ; my-gnome-night-light-light
-  (require 'dbus)
-  (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
-    (let* ((prop (car changed-props))
-	   (name (car prop))
-	   (value (car (cadr prop))))
-      (when (string-equal name "NightLightActive")
-	(when (functionp my-gnome-night-light-light-change-callback)
-	  (funcall my-gnome-night-light-light-change-callback value)))))
+;; (progn ; my-gnome-night-light-light
+;;   (require 'dbus)
+;;   (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
+;;     (let* ((prop (car changed-props))
+;; 	   (name (car prop))
+;; 	   (value (car (cadr prop))))
+;;       (when (string-equal name "NightLightActive")
+;; 	(when (functionp my-gnome-night-light-light-change-callback)
+;; 	  (funcall my-gnome-night-light-light-change-callback value)))))
 
-  (defun my-gnome-night-light ()
-    "Load and enable my-gnome-night-light."
-    (dbus-register-signal
-     :session
-     "org.gnome.SettingsDaemon.Color"
-     "/org/gnome/SettingsDaemon/Color"
-     "org.freedesktop.DBus.Properties"
-     "PropertiesChanged"
-     #'my-gnome-night-light-internal-prop-change-listener)
-    (let ((value (dbus-get-property
-		  :session
-		  "org.gnome.SettingsDaemon.Color"
-		  "/org/gnome/SettingsDaemon/Color"
-		  "org.gnome.SettingsDaemon.Color"
-		  "NightLightActive")))
-      (when (functionp my-gnome-night-light-light-change-callback)
-	(funcall my-gnome-night-light-light-change-callback value))))
+;;   (defun my-gnome-night-light ()
+;;     "Load and enable my-gnome-night-light."
+;;     (dbus-register-signal
+;;      :session
+;;      "org.gnome.SettingsDaemon.Color"
+;;      "/org/gnome/SettingsDaemon/Color"
+;;      "org.freedesktop.DBus.Properties"
+;;      "PropertiesChanged"
+;;      #'my-gnome-night-light-internal-prop-change-listener)
+;;     (let ((value (dbus-get-property
+;; 		  :session
+;; 		  "org.gnome.SettingsDaemon.Color"
+;; 		  "/org/gnome/SettingsDaemon/Color"
+;; 		  "org.gnome.SettingsDaemon.Color"
+;; 		  "NightLightActive")))
+;;       (when (functionp my-gnome-night-light-light-change-callback)
+;; 	(funcall my-gnome-night-light-light-change-callback value))))
 
-  (defun my-theme-changer (state)
-    "My callback for gnome-night-light.\nChanges theme according to STATE."
-    (mapc #'disable-theme custom-enabled-themes)
-    (if state
-	(load-theme my-dark-theme t nil)
-      (load-theme my-light-theme t nil)))
+;;   (defun my-theme-changer (state)
+;;     "My callback for gnome-night-light.\nChanges theme according to STATE."
+;;     (mapc #'disable-theme custom-enabled-themes)
+;;     (if state
+;; 	(load-theme my-dark-theme t nil)
+;;       (load-theme my-light-theme t nil)))
 
-  (setq my-gnome-night-light-light-change-callback 'my-theme-changer)
-  (defvar my-gnome-night-light-light-change-callback nil
-    "The callback function called on Night Light state change.
-It takes one parameter, which is t when the Night Light is active
-(e.g.  it's night) and nil when it's day.")
-  (my-gnome-night-light))
+;;   (setq my-gnome-night-light-light-change-callback 'my-theme-changer)
+;;   (defvar my-gnome-night-light-light-change-callback nil
+;;     "The callback function called on Night Light state change.
+;; It takes one parameter, which is t when the Night Light is active
+;; (e.g.  it's night) and nil when it's day.")
+;;   (my-gnome-night-light))
 
 (global-set-key (kbd "<f6>") #'my-toggle-themes)
 
