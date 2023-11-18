@@ -921,7 +921,7 @@ The optional argument IGNORED is not used."
   :functions my-magit-diff-hook
   :bind* (("C-x g" . magit-status))
   :config
-  (use-package diff-mode)
+  (require 'diff-mode)
   (with-eval-after-load 'magit
     (progn
       (defun my-magit-diff-hook ()
@@ -931,7 +931,7 @@ The optional argument IGNORED is not used."
          #'diff-refine-hunk))
 
       (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
-      (setq auto-revert-check-vc-info t))))
+      (setopt auto-revert-check-vc-info t))))
 
 
 
@@ -1972,6 +1972,12 @@ This is used by Delve debugger."
   :commands spacious-padding-mode
   :init
   (spacious-padding-mode t))
+
+(use-package breadcrumb
+  :commands breadcrumb-mode
+  :demand t
+  :init
+  (breadcrumb-mode))
 
 (provide 'init)
 ;;; init.el ends here
