@@ -320,74 +320,51 @@ named arguments:
   (electric-pair-mode 1)
   (setq sentence-end-double-space nil))
 
-(use-package my-align-region
-  :disabled t
-  :preface
-  (defun my-align-region-by (&optional delimiter)
-    "Align current region by DELIMITER."
-    (interactive)
-    (let* ((delim (or delimiter
-                      (read-string "delimiter: ")))
-           (delimit-columns-separator delim)
-           (delimit-columns-str-separator delim)
-           (delimit-columns-format 'separator)
-           (delimit-columns-extra nil)
-           (beg (region-beginning)))
-      (delimit-columns-region beg
-                              (region-end))
-      (goto-char beg)
-      (ignore-errors
-        (er/expand-region 1))
-      (let ((new-end (region-end)))
-        (goto-char new-end)
-        (whitespace-cleanup-region beg
-                                   (line-end-position)))))
+(defun my-toggle-window-split ()
+  "Toggle window split vertically or horizontally."
+  (interactive)
+  (if (=
+       (count-windows)
+       2)
+      (let* ((this-win-buffer (window-buffer))
+             (next-win-buffer (window-buffer
+                               (next-window)))
+             (this-win-edges (window-edges
+                              (selected-window)))
+             (next-win-edges (window-edges
+                              (next-window)))
+             (this-win-2nd (not (and
+                                 (<=
+                                  (car this-win-edges)
+                                  (car next-win-edges))
+                                 (<=
+                                  (cadr this-win-edges)
+                                  (cadr next-win-edges)))))
+             (splitter (if (=
+                            (car this-win-edges)
+                            (car (window-edges
+                                  (next-window))))
+                           'split-window-horizontally 'split-window-vertically)))
+        (delete-other-windows)
+        (let ((first-win (selected-window)))
+          (funcall splitter)
+          (if this-win-2nd
+              (other-window 1))
+          (set-window-buffer
+           (selected-window)
+           this-win-buffer)
+          (set-window-buffer
+           (next-window)
+           next-win-buffer)
+          (select-window first-win)
+          (if this-win-2nd
+              (other-window 1))))))
 
-  :bind (("C-c a" . my-align-region-by)))
+(bind-key (kbd "C-x t") 'my-toggle-window-split)
 
 (use-package hydra
-  :preface
-  (defun toggle-window-split ()
-    "Toggle window split vertically or horizontally."
-    (interactive)
-    (if (=
-         (count-windows)
-         2)
-        (let* ((this-win-buffer (window-buffer))
-               (next-win-buffer (window-buffer
-                                 (next-window)))
-               (this-win-edges (window-edges
-                                (selected-window)))
-               (next-win-edges (window-edges
-                                (next-window)))
-               (this-win-2nd (not (and
-                                   (<=
-                                    (car this-win-edges)
-                                    (car next-win-edges))
-                                   (<=
-                                    (cadr this-win-edges)
-                                    (cadr next-win-edges)))))
-               (splitter (if (=
-                              (car this-win-edges)
-                              (car (window-edges
-                                    (next-window))))
-                             'split-window-horizontally 'split-window-vertically)))
-          (delete-other-windows)
-          (let ((first-win (selected-window)))
-            (funcall splitter)
-            (if this-win-2nd
-                (other-window 1))
-            (set-window-buffer
-             (selected-window)
-             this-win-buffer)
-            (set-window-buffer
-             (next-window)
-             next-win-buffer)
-            (select-window first-win)
-            (if this-win-2nd
-                (other-window 1))))))
-
-  :bind (("C-x t" . toggle-window-split)
+  :disabled t
+  :bind (("C-x t" . my-toggle-window-split)
          ;; ("C-x o" . hydra-cycle-windows/body)
 	 )
   :config
@@ -401,7 +378,7 @@ named arguments:
   ;;   ("O"
   ;;    (other-window -1)
   ;;    "Previous")
-  ;;   ("t" toggle-window-split "Toggle split")
+  ;;   ("t" my-toggle-window-split "Toggle split")
   ;;   ("]" enlarge-window-horizontally "Enlarge horizontal")
   ;;   ("[" shrink-window-horizontally "Shrink horizontal")
   ;;   ("=" enlarge-window "Enlarge vertival")
@@ -412,30 +389,6 @@ named arguments:
   ;;   ("c" delete-window "Close window")
   ;;   ("q" nil "quit"))
   )
-
-(use-package lsp-mode
-  :disabled t
-  :functions lsp-ensure-server
-  :preface
-  (setq lsp-use-plists t)
-  (setenv "LSP_USE_PLISTS" "true")
-
-  (setq lsp-keymap-prefix (kbd "C-x l"))
-
-  (defun my-lsp-before-save ()
-    (interactive)
-    (when (and (not (equal major-mode 'c++-mode))
-	       (not (equal major-mode 'python-mode)))
-      (lsp-organize-imports)
-      (lsp-format-buffer)))
-
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-  (add-hook 'lsp-mode-hook #'lsp-completion--enable)
-  (add-hook 'before-save-hook #'my-lsp-before-save)
-  (add-hook 'lsp-after-open-hook #'lsp-origami-try-enable)
-  :after t
-  :init
-  (require 'yasnippet))
 
 (use-package eglot
   :commands eglot-code-actions
@@ -591,7 +544,6 @@ named arguments:
 		       (shell-command-to-string "find /opt/homebrew/Cellar/go -type 'd' -name 'libexec'"))))
 	  (require 'go-impl)
 	  (require 'gotest)
-	  ;; (require 'dap-dlv-go)
 	  (defun my-go-test (arg)
 	    (interactive "P")
 	    (if arg
@@ -622,25 +574,10 @@ named arguments:
 	  (local-set-key
 	   (kbd "C-c g")
 	   #'go-gen-test-dwim)
-	  ;; (local-set-key
-	  ;;  (kbd "M-?")
-	  ;;  #'lsp-find-references)
 	  (local-set-key
 	   (kbd "C-c C-c")
 	   #'my-make)
-	  ;; (require 'lsp-mode)
-	  ;; (lsp-register-custom-settings
-	  ;;  '(("gopls.completeUnimported" t)))
-	  ;; (lsp-register-custom-settings
-	  ;;  '(("gopls.staticcheck" t)))
-	  ;; (setq-local flymake-start-on-save-buffer nil)
-	  ;; (setq-local flymake-no-changes-timeout nil)
-	  (setq-local lsp-go-goimports-local (my-extract-go-module-name))
-	  ;; (require 'lsp-go)
 	  (symbol-overlay-mode -1)
-	  ;; (company-prescient-mode -1)
-	  (setq-local lsp-completion-filter-on-incomplete nil)
-	  ;; (lsp)
 	  (eglot-ensure)
 	  (flymake-start t))
 
@@ -664,25 +601,6 @@ named arguments:
   (global-corfu-mode t)
   (corfu-echo-mode t)
   (corfu-history-mode t))
-
-(use-package company
-  :disabled t
-  :commands global-company-mode
-  :preface
-  (add-hook 'after-init-hook 'global-company-mode)
-  :config
-  (add-hook 'company-mode-hook #'company-prescient-mode)
-  (with-eval-after-load 'company
-    (setq company-dabbrev-ignore-case nil)
-    (setq company-dabbrev-code-ignore-case nil)
-    (setq company-tooltip-limit 20)
-    (setq company-idle-delay 0.1)
-    (setq company-echo-delay 0)
-    (setq company-minimum-prefix-length 1)
-    (setq defvar nil)
-    (setq company-tooltip-align-annotations nil)
-    (setq setq nil)
-    (setq company-tooltip-align-annotations nil)))
 
 (use-package bash-dynamic-completion
   :commands bash-completion-dynamic-complete
@@ -725,9 +643,7 @@ The optional argument IGNORED is not used."
 (use-package poly-markdown
   :mode ("\\.text\\'"
          ("\\.md$" . poly-gfm-mode)
-         "\\.markdown$")
-  :bind ((:map markdown-mode-map
-               ("M-p" . ace-window))))
+         "\\.markdown$"))
 
 (use-package flymake-proselint
   :hook ((markdown-mode-hook . flymake-proselint-setup)
@@ -863,32 +779,7 @@ The optional argument IGNORED is not used."
   (run-with-idle-timer 3 nil #'require 'yasnippet nil t)
   (with-eval-after-load 'yasnippet
     (progn
-      (yas-global-mode 1)
-      ;; (defun check-expansion ()
-      ;;   "Check yasnippet expansion."
-      ;;   (save-excursion
-      ;;     (if (looking-at "\\_>")
-      ;;         t
-      ;;       (backward-char 1)
-      ;;       (if (looking-at "\\.")
-      ;;           t
-      ;;         (backward-char 1)
-      ;;         (if (looking-at "->")
-      ;;             t nil)))))
-
-      ;; (defvar yas-minor-mode)
-      ;; (defun tab-indent-or-complete ()
-      ;;   "Smart tab function."
-      ;;   (interactive)
-      ;;   (if (minibufferp)
-      ;;       (minibuffer-complete)
-      ;;     (if (or
-      ;;          (not yas-minor-mode)
-      ;;          (null (yas-expand)))
-      ;;         (if (check-expansion)
-      ;;             (company-complete-common)
-      ;;           (indent-for-tab-command)))))
-      )))
+      (yas-global-mode 1))))
 
 (setopt x-hyper-keysym 'meta
 	mac-option-modifier 'none
@@ -1011,8 +902,7 @@ The optional argument IGNORED is not used."
     (interactive)
     (aggressive-indent-mode -1))
 
-  :hook ((lsp-mode-hook . my-disable-aggressive-indent)
-         (fsharp-mode-hook . my-disable-aggressive-indent))
+  :hook ((fsharp-mode-hook . my-disable-aggressive-indent))
   :config
   (aggressive-indent-global-mode))
 
@@ -1029,51 +919,25 @@ The optional argument IGNORED is not used."
   (global-dash-fontify-mode t))
 
 (use-package grep
-  :bind* (("C-c C-s" . lgrep))
-  :functions grep-apply-setting
+  :bind* (("C-c C-s" . my-lgrep))
+  :bind (:map grep-mode-map
+	      ("e" . wgrep-change-to-wgrep-mode))
+  :functions (grep-apply-setting grep-read-regexp grep-read-files)
+  :demand t
   :config
+  (defun my-lgrep ()
+    "Recursive grep in current project"
+    (interactive)
+    (let* ((regexp (grep-read-regexp))
+	   (files (grep-read-files regexp))
+	   (dir (read-directory-name "In directory: "
+				     (if (project-current)
+					 (project-root (project-current))
+				       default-directory)))
+	   (confirm (equal current-prefix-arg '(4))))
+      (lgrep regexp files dir confirm)))
+  
   (grep-apply-setting 'grep-template "rg --no-heading -H -S -g '<F>' -e <R> <D>"))
-
-(use-package rg
-  :disabled t
-  :commands rg-save-search-as-name
-  :bind* (("C-c C-s" . my-grep-vc-or-dir))
-  :bind (:map rg-mode-map
-              ("f" . next-error-follow-minor-mode)
-              ("s" . my-rg-save-search-as-name)
-              ("n" . next-line)
-              ("p" . previous-line)
-              ("C-n" . next-line)
-              ("C-p" . previous-line)
-              ("M-n" . rg-next-file)
-              ("M-p" . rg-prev-file))
-  :config
-  (with-eval-after-load 'rg
-    (require 'wgrep)
-    (setq rg-group-result t)
-    (setq rg-hide-command t)
-    (setq rg-show-columns nil)
-    (setq rg-show-header t)
-    (setq rg-custom-type-aliases nil)
-    (setq rg-default-alias-fallback "all")
-    (rg-define-search my-grep-vc-or-dir :query ask :format regexp :files "everything" :case-fold-search smart :dir
-      (let ((vc (vc-root-dir)))
-        (if vc
-            vc default-directory))
-      :confirm prefix :flags
-      ("--hidden -g !.git"))
-    (defun my-rg-save-search-as-name ()
-      "Save `rg' buffer, naming it after the current search query.
-This function is meant to be mapped to a key in `rg-mode-map'."
-      (interactive)
-      (let ((pattern (car rg-pattern-history)))
-        (rg-save-search-as-name
-         (concat "«" pattern "»"))))
-
-    (defun my-next-window (_)
-      (other-window 1))
-
-    (advice-add 'my-grep-vc-or-dir :after 'my-next-window)))
 
 (use-package isearch
   :commands consult-line
@@ -1119,7 +983,7 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 
   :hook ((eww-after-render-hook . eww-more-readable)))
 
-(use-package yaml
+(use-package yaml-ts-mode
   :commands (global-smart-shift-mode prism-mode)
   :preface
   (defun my-disable-auto-fill ()
@@ -1128,21 +992,16 @@ This function is meant to be mapped to a key in `rg-mode-map'."
 
   (defun my-enable-prism ()
     "Enable `prism-mode'."
-    (prism-mode 1))
+    (prism-mode t))
 
   (key-chord-define-global "<<" 'smart-shift-left)
   (key-chord-define-global ">>" 'smart-shift-right)
 
-  :init
-  ;; (require 'company-dabbrev-code)
-
-  :hook ((yaml-mode-hook . highlight-indentation-mode)
-	 (yaml-mode-hook . highlight-indentation-current-column-mode)
-	 (yaml-mode-hook . my-disable-auto-fill)
-	 (yaml-mode-hook . my-enable-prism))
+  :hook ((yaml-ts-mode-hook . highlight-indentation-mode)
+	 (yaml-ts-mode-hook . highlight-indentation-current-column-mode)
+	 (yaml-ts-mode-hook . my-disable-auto-fill)
+	 (yaml-ts-mode-hook . my-enable-prism))
   :config
-  ;; (add-to-list 'company-dabbrev-code-modes 'yaml-mode)
-  ;; (add-to-list 'company-dabbrev-code-modes 'protobuf-mode)
   (global-smart-shift-mode 1))
 
 (use-package auto-yasnippet
@@ -1226,9 +1085,8 @@ If the current buffer is not visiting a file, prompt for a file name."
     (setq gif-screencast-capture-prefer-internal t)))
 
 (use-package c-cpp-mode
-  :disabled t
-  :hook ((c-mode-hook . lsp)
-         (c++-mode-hook . lsp)))
+  :hook ((c-mode-hook . eglot-ensure)
+         (c++-mode-hook . eglot-ensure)))
 
 (use-package icomplete
   :functions my-directory-tidy
@@ -1283,9 +1141,6 @@ If the current buffer is not visiting a file, prompt for a file name."
     (unless non-essential
       (apply oldfun args)))
   
-  (advice-add 'lsp-deferred :around #'my-advices-inhibit-if-non-essential)
-  (advice-add 'lsp :around #'my-advices-inhibit-if-non-essential)
-
   :bind (("C-x b" . consult-buffer)
          ("<help> a" . consult-apropos)
          ("M-i" . consult-imenu)
@@ -1311,7 +1166,7 @@ If the current buffer is not visiting a file, prompt for a file name."
   :bind (("C-c C-u" . string-inflection-all-cycle)))
 
 (use-package rust
-  :hook ((rust-mode-hook . lsp))
+  :hook ((rust-mode-hook . eglot-ensure))
   :preface
   (setq rust-format-on-save t))
 
@@ -1336,31 +1191,6 @@ If the current buffer is not visiting a file, prompt for a file name."
         (advice-remove 'progress-reporter-force-update #'silence))))
 
   (advice-add 'indent-region :around #'my-suppress-messages))
-
-(use-package lsp-jedi
-  :disabled t
-  :preface
-  (add-hook 'python-mode-hook
-            #'(lambda nil
-                (require 'lsp-jedi)
-                (lsp))))
-
-(use-package lsp-pyright
-  :disabled t
-  :preface (setq lsp-pyright-auto-search-paths t
-		 lsp-pyright-venv-path "/home/feofan/.local/share/virtualenvs/")
-  :config
-  (add-hook 'python-mode-hook
-            #'(lambda nil
-                (require 'lsp-pyright)
-                (lsp))))
-
-(use-package go-translate
-  :bind (("C-c t" . gts-do-translate))
-  :init
-  (setq gts-translate-list '(("en" "ru")
-			     ("de" "ru")
-			     ("en" "de"))))
 
 (use-package savehist
   :hook (after-init-hook-hook)
@@ -1544,34 +1374,12 @@ Select it interactively otherwise."
   ;; (add-hook 'nov-post-html-render-hook 'my-nov-post-html-render-hook)
   )
 
-(use-package affe
-  :commands affe-find
-  :init
-  (defun my-affe-find-project ()
-    (interactive)
-    (if (project-current)
-	(affe-find (project-root (project-current)))
-      (affe-find)))
-  :bind* (("C-c C-f" . my-affe-find-project)))
-
-(use-package dap-mode
-  :commands dap-hydra
-  :config
-  (setopt dap-lldb-debug-program '("/usr/bin/lldb-vscode"))
-  (add-hook 'dap-stopped-hook
-            (lambda (_arg) (call-interactively #'dap-hydra))))
-
 (use-package fsharp-mode
-  :hook (;; (fsharp-mode-hook . lsp)
-         (fsharp-mode-hook . eglot-ensure)
+  :hook ((fsharp-mode-hook . eglot-ensure)
          (fsharp-mode-hook . my-set-fsharp-compile-command))
 
-  :config
-  ;; (lsp-ensure-server 'fsac)
-  ;; (require 'dap-netcore)
-
   :init
-  ;; (require 'eglot-fsharp)
+  (require 'eglot-fsharp)
   (setq auto-mode-alist (cons '("\\.fsproj\\'" . nxml-mode) auto-mode-alist))
   (setq auto-mode-alist (cons '("\\.csproj\\'" . nxml-mode) auto-mode-alist))
   (setq inferior-fsharp-program "dotnet fsi")
@@ -1580,13 +1388,8 @@ Select it interactively otherwise."
     (setq-local compile-command "dotnet build")))
 
 (use-package csharp-mode
-  :hook (;; (csharp-mode-hook . lsp)
-	 (csharp-mode-hook . eglot-ensure)
-	 (csharp-mode-hook . my-set-fsharp-compile-command))
-  ;; :config
-  ;; (lsp-ensure-server 'omnisharp)
-  ;; (require 'dap-netcore)
-  )
+  :hook ((csharp-mode-hook . eglot-ensure)
+	 (csharp-mode-hook . my-set-fsharp-compile-command)))
 
 (use-package dotnet
   :disabled t
@@ -1595,17 +1398,23 @@ Select it interactively otherwise."
   (add-hook 'fsharp-mode-hook 'dotnet-mode)
 
   (require 'project)
-  (require 'dap-netcore)
+  (require 'cl-lib)
+
+  (defun my-locate-dominating-file-regexp (regexp &optional directory)
+    "Locate dominating file with REGEXP in DIRECTORY."
+    (locate-dominating-file
+     (or directory default-directory)
+     (lambda (dir)
+       (cl-first
+	(cl-remove-if-not
+	 (lambda (name) (string-match regexp name))
+	 (directory-files dir))))))
+  
   (defun my-try-dotnet (dir)
     "Find dotnet project root for DIR."
-    (let* ((directory (or dir default-directory))
-	   (result (or
-		    (dap-netcore--locate-dominating-file-wildcard
-		     directory "*.sln")
-		    (dap-netcore--locate-dominating-file-wildcard
-		     directory "*.*proj"))))
-      (when result (cons 'transient (file-name-as-directory
-				     (expand-file-name result))))))
+    (or
+     (my-locate-dominating-file-regexp "\.sln$" dir)
+     (my-locate-dominating-file-regexp "\..proj" dir)))
 
   (defun my-dotnet-project ()
     "Enable alternative project root find function."
@@ -1635,17 +1444,6 @@ Select it interactively otherwise."
 		      ("\\.topml$" . gopcaml-mode))
 		    auto-mode-alist))))
 
-  (add-to-list 'lsp-language-id-configuration '(gopcaml-mode . "ocaml"))
-  (require 'lsp-ocaml)
-  ;; (lsp-register-client
-  ;;  (make-lsp-client
-  ;;   :new-connection
-  ;;   (if (fboundp 'lsp-stdio-connection)
-  ;; 	(lsp-stdio-connection (lambda () lsp-ocaml-lsp-server-command)))
-  ;;   :major-modes '(reason-mode caml-mode tuareg-mode gopcaml-mode)
-  ;;   :priority 0
-  ;;   :server-id 'ocaml-lsp-server))
-
   (defun my-opam-env ()
     (interactive nil)
     (dolist (var (car (read-from-string
@@ -1659,7 +1457,7 @@ Select it interactively otherwise."
 		(set (make-local-variable 'compilation-read-command)
 		     nil)
 		(my-opam-env)
-		(lsp))))
+		(eglot-ensure))))
 
 (use-package haskell-mode
   :disabled t
@@ -1667,7 +1465,6 @@ Select it interactively otherwise."
   (require 'haskell-interactive-mode)
   (defun my-haskell-setup ()
     "Setup haskell mode by hook."
-    ;; (require 'lsp-haskell)
     (defun my-send-region-to-haskell-interactive ()
       "Send region to haskell interactive."
       (interactive)
@@ -1687,9 +1484,7 @@ Select it interactively otherwise."
 	      (haskell-interactive-mode-return))
 	  (if (fboundp 'haskell-interactive-switch-back)
 	      (haskell-interactive-switch-back)))))
-    (lsp)
-    ;; (eglot-ensure)
-    )
+    (eglot-ensure))
   (add-hook 'haskell-mode-hook 'my-haskell-setup)
   :bind ((:map haskell-mode-map
 	       ("C-c C-e" . my-send-region-to-haskell-interactive))))
@@ -1722,36 +1517,6 @@ Select it interactively otherwise."
   (("C-c n x" . xeft))
   :config
   (bind-key (kbd "RET") 'denote xeft-mode-map))
-
-(use-package origami
-  :disabled t
-  :if (locate-library "origami")
-  :commands (origami-open-node
-	     origami-close-node
-	     origami-next-fold
-	     origami-previous-fold
-	     origami-forward-toggle-node
-	     origami-toggle-all-nodes
-	     fill-column)
-  :config
-  (progn
-    (add-hook 'prog-mode-hook 'origami-mode)
-    (with-eval-after-load 'hydra
-      (define-key
-       origami-mode-map (kbd "C-c o")
-       (defhydra hydra-folding (:color red :hint nil)
-	 "
-_o_pen node    _n_ext fold       toggle _f_orward    _F_ill column: %`fill-column
-_c_lose node   _p_revious fold   toggle _a_ll        e_x_it
-"
-	 ("o" origami-open-node)
-	 ("c" origami-close-node)
-	 ("n" origami-next-fold)
-	 ("p" origami-previous-fold)
-	 ("f" origami-forward-toggle-node)
-	 ("a" origami-toggle-all-nodes)
-	 ("F" fill-column)
-	 ("x" nil :color blue))))))
 
 (use-package consult-dash
   :commands dash-docs-activate-docset
