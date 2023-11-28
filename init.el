@@ -1576,7 +1576,7 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "zephyr:7b-beta-q5_K_M" :embedding-model "zephyr:7b-beta-q5_K_M")))
+	   :chat-model "starling-lm:7b-alpha-q6_K" :embedding-model "starling-lm:7b-alpha-q6_K")))
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
