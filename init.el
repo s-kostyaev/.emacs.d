@@ -1142,7 +1142,6 @@ If the current buffer is not visiting a file, prompt for a file name."
       (apply oldfun args)))
   
   :bind (("C-x b" . consult-buffer)
-         ("<help> a" . consult-apropos)
          ("M-i" . consult-imenu)
          ("M-y" . consult-yank-pop)))
 
