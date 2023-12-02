@@ -1228,7 +1228,9 @@ If the current buffer is not visiting a file, prompt for a file name."
 	  (let ((str (match-string 1)))
 	    (unless (string-match "^\\." str)
 	      (push str targets))))
-	(push "go build" targets))
+	(when (or (eq major-mode 'go-mode)
+		  (eq major-mode 'go-ts-mode))
+	  (push "go build" targets)))
       (nreverse targets)))
 
   (defun my-make (arg)
@@ -1756,7 +1758,19 @@ This is used by Delve debugger."
 (use-package python-mode
   :preface
   (add-hook 'python-mode-hook #'eglot-ensure)
-  (add-hook 'python-ts-mode-hook #'eglot-ensure))
+  (add-hook 'python-ts-mode-hook #'eglot-ensure)
+  (bind-key
+   (kbd "C-c C-c")
+   #'my-make python-ts-mode-map)
+  (bind-key
+   (kbd "C-c C-c")
+   #'my-make python-mode-map))
+
+(use-package envrc
+  :commands envrc-global-mode
+  :demand t
+  :init
+  (envrc-global-mode))
 
 (provide 'init)
 ;;; init.el ends here
