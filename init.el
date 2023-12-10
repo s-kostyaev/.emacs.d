@@ -1429,7 +1429,6 @@ Select it interactively otherwise."
   :ensure t)
 
 (use-package gopcaml-mode
-  :disabled t
   :preface
   (setq gopcaml-messaging-level 'none)
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
