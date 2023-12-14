@@ -401,7 +401,8 @@ named arguments:
   (fset 'jsonrpc--log-event #'ignore)
   (defun my-eglot-organize-imports ()
     (interactive)
-    (eglot-code-actions nil nil "source.organizeImports" t))
+    (ignore-errors
+      (eglot-code-actions nil nil "source.organizeImports" t)))
   (defun my-eglot-setup ()
     (interactive)
     (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
@@ -511,6 +512,18 @@ named arguments:
 									(end-of-line)
 									(point)))))))
 	name)))
+  (defun my-convert-go-time-ext ()
+    "Convert go time ext to datetime."
+    (interactive)
+    (let ((num (number-at-point)))
+      (message
+       "%s"
+       (format-time-string
+	"%Y-%m-%d %H:%M:%S"
+	(seconds-to-time
+	 (+ num (time-to-seconds
+		 (encode-time '(0 0 0 1 1 1 nil nil nil)))))))))
+
   (use-package go-ts-mode
     :functions (go-test-current-project
 		go-goto-imports
@@ -1589,8 +1602,6 @@ Select it interactively otherwise."
    :show-funs '(dape dape-step-in dape-step-out dape-next)
    :hide-funs '(dape-disconnect-quit dape-quit dape-info)
    :transient t)
-  :init
-  (my-vc-install :name "dape" :host "github" :repo "svaante/dape")
   :config
   ;; Use n for next etc. in REPL
   (setq dape-repl-use-shorthand t)
@@ -1679,8 +1690,10 @@ This is used by Delve debugger."
                       default-directory (funcall dape-cwd-fn)))
       (funcall dape-cwd-fn)))
 
+  (defvar my-dape-debug-pid nil)
+
   (defun my-dlv-attach-args ()
-    (list "dap" "--listen" "127.0.0.1:55878" "attach" (format "%d" (dape-read-pid))))
+    (list "dap" "--listen" "127.0.0.1:55878" "attach" (format "%d" (setq my-dape-debug-pid (dape-read-pid)))))
 
   (defun my-dlv-remote-args ()
     (list "dap" "--listen" "127.0.0.1:55878" "connect"
@@ -1715,8 +1728,9 @@ This is used by Delve debugger."
 		 port 55878
 		 :type "go"
 		 :name "go-debug"
-		 :request "local"
-		 :mode "debug"
+		 :request "attach"
+		 :mode "local"
+		 :processId my-dape-debug-pid
 		 :cwd dape-cwd-fn))
 
   (add-to-list 'dape-configs
@@ -1729,8 +1743,8 @@ This is used by Delve debugger."
 		 port 55878
 		 :type "go"
 		 :name "go-debug"
-		 :request "remove"
-		 :mode "debug"
+		 :request "attach"
+		 :mode "remote"
 		 :cwd dape-cwd-fn)))
 
 (use-package spacious-padding

@@ -26,6 +26,7 @@
 	hungry-delete-forward
 	keyboard-escape-quit
 	kill-region
+	markdown-outdent-or-delete
 	paredit-forward-delete
 	paredit-open-round
 	sp-remove-active-pair-overlay
