@@ -1590,7 +1590,7 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "starling-lm:7b-alpha-q6_K" :embedding-model "starling-lm:7b-alpha-q6_K")))
+	   :chat-model "mixtral:8x7b-instruct-v0.1-q3_K_M-4k" :embedding-model "mixtral:8x7b-instruct-v0.1-q3_K_M-4k")))
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
