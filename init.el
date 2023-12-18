@@ -1759,6 +1759,7 @@ This is used by Delve debugger."
   (breadcrumb-mode))
 
 (use-package conda
+  :disabled t
   :commands (conda-env-autoactivate-mode conda-env-activate-for-buffer)
   :demand t
   :preface
@@ -1772,12 +1773,13 @@ This is used by Delve debugger."
   :preface
   (add-hook 'python-mode-hook #'eglot-ensure)
   (add-hook 'python-ts-mode-hook #'eglot-ensure)
-  (bind-key
-   (kbd "C-c C-c")
-   #'my-make python-ts-mode-map)
-  (bind-key
-   (kbd "C-c C-c")
-   #'my-make python-mode-map))
+  (with-eval-after-load "python"
+    (bind-key
+     (kbd "C-c C-c")
+     #'my-make python-ts-mode-map)
+    (bind-key
+     (kbd "C-c C-c")
+     #'my-make python-mode-map)))
 
 (use-package envrc
   :commands envrc-global-mode
