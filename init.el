@@ -1584,6 +1584,8 @@ Select it interactively otherwise."
 (bind-key* (kbd "C-o") 'other-window)
 
 (use-package ellama
+  :demand t
+  :functions (make-llm-ollama)
   :init
   (my-vc-install :name "ellama" :host "github" :repo "s-kostyaev/ellama")
   (setopt ellama-language "Russian")
@@ -1770,6 +1772,7 @@ This is used by Delve debugger."
                                          (conda-env-activate-for-buffer)))))
 
 (use-package python-mode
+  :declares (python-mode-map python-ts-mode-map)
   :preface
   (add-hook 'python-mode-hook #'eglot-ensure)
   (add-hook 'python-ts-mode-hook #'eglot-ensure)
