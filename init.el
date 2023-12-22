@@ -42,6 +42,8 @@ named arguments:
 (setopt native-comp-deferred-compilation t)
 (setopt native-compile-prune-cache t)
 
+(setopt visible-bell t)
+
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
 (defun my-load-custom-file ()
