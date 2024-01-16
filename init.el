@@ -785,6 +785,7 @@ The optional argument IGNORED is not used."
 		ace-mc-add-single-cursor)))
 
 (use-package yasnippet
+  :defines (yas-inhibit-overlay-modification-protection)
   :commands yas-global-mode
   ;; :bind (([tab]
   ;;         . tab-indent-or-complete)
@@ -1589,12 +1590,22 @@ Select it interactively otherwise."
   :demand t
   :functions (make-llm-ollama)
   :init
-  (my-vc-install :name "ellama" :host "github" :repo "s-kostyaev/ellama")
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
 	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K")))
+
+(use-package tabby
+  :bind (("C-'" . tabby-complete))
+  :commands (tabby-accept-completion)
+  :defines (taby-mode-map tabby--ongoing-request-id)
+  :init
+  (my-vc-install :name "tabby" :host "github" :repo "alan-w-255/tabby.el")
+  (add-hook 'go-ts-mode-hook 'tabby-mode)
+  (add-hook 'tuareg-mode-hook 'tabby-mode)
+  :config
+  (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
@@ -1774,7 +1785,7 @@ This is used by Delve debugger."
                                          (conda-env-activate-for-buffer)))))
 
 (use-package python-mode
-  :declares (python-mode-map python-ts-mode-map)
+  :defines (python-mode-map python-ts-mode-map)
   :preface
   (add-hook 'python-mode-hook #'eglot-ensure)
   (add-hook 'python-ts-mode-hook #'eglot-ensure)
