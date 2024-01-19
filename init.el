@@ -1592,15 +1592,9 @@ Select it interactively otherwise."
   :init
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
-  (setopt ellama-fill-paragraphs nil)
   (setopt ellama-provider
 	  (make-llm-ollama
 	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K")))
-
-(use-package org-mode
-  :init
-  (setopt org-startup-truncated nil)
-  (add-hook 'org-mode-hook 'toggle-word-wrap))
 
 (use-package tabby
   :bind (("C-'" . tabby-complete))
@@ -1808,8 +1802,6 @@ This is used by Delve debugger."
   :demand t
   :init
   (envrc-global-mode))
-
-(setopt warning-suppress-types '((undo discard-info)))
 
 (provide 'init)
 ;;; init.el ends here
