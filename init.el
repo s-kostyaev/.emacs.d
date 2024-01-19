@@ -556,7 +556,7 @@ named arguments:
 	  (if (eq system-type 'darwin)
 	      (setenv "GOROOT"
 		      (string-trim
-		       (shell-command-to-string "find /opt/homebrew/Cellar/go -type 'd' -name 'libexec'"))))
+		       (shell-command-to-string "/opt/homebrew/bin/go env GOROOT"))))
 	  (require 'go-impl)
 	  (require 'gotest)
 	  (defun my-go-test (arg)
