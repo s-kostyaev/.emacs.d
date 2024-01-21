@@ -1444,20 +1444,17 @@ Select it interactively otherwise."
 (use-package dune
   :ensure t)
 
-(use-package gopcaml-mode
+(use-package tuareg-mode
   :preface
-  (setq gopcaml-messaging-level 'none)
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
     (when (and opam-share (file-directory-p opam-share))
-      ;; Register Gopcaml mode
       (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
-      (autoload 'gopcaml-mode "gopcaml-mode" nil t nil)
       (autoload 'tuareg-mode "tuareg" nil t nil)
       (autoload 'merlin-mode "merlin" "Merlin mode" t)
       ;; Automatically start it in OCaml buffers
       (setq auto-mode-alist
-	    (append '(("\\.ml[ily]?$" . gopcaml-mode)
-		      ("\\.topml$" . gopcaml-mode))
+	    (append '(("\\.ml[ily]?$" . tuareg-mode)
+		      ("\\.topml$" . tuareg-mode))
 		    auto-mode-alist))))
 
   (defun my-opam-env ()
