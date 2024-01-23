@@ -27,6 +27,7 @@
 	keyboard-escape-quit
 	kill-region
 	markdown-outdent-or-delete
+	org-beginning-of-line
 	paredit-forward-delete
 	paredit-open-round
 	sp-remove-active-pair-overlay

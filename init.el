@@ -68,7 +68,8 @@ named arguments:
   (defvar my-dark-theme)
   (defvar my-need-theme-reload)
   (if (eq system-type 'darwin)
-      (setq my-font (font-spec :size 15.0 :family "Go Mono"))
+      ;; (setq my-font (font-spec :size 15.0 :family "Go Mono"))
+      (setq my-font (font-spec :size 15.0 :family "Iosevka Comfy Motion"))
     (setq my-font (font-spec :size 13.0 :family "PT Mono")))
   (setq my-light-theme 'ef-cyprus
 	my-dark-theme 'ef-cherie
@@ -616,6 +617,16 @@ named arguments:
   (global-corfu-mode t)
   (corfu-echo-mode t)
   (corfu-history-mode t))
+
+(use-package cape
+  :functions (my-add-capfs cape-file cape-elisp-block)
+  :init
+  (add-to-list 'completion-at-point-functions #'cape-file)
+  (add-to-list 'completion-at-point-functions #'cape-elisp-block)
+  (defun my-add-capfs ()
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-elisp-block))
+  (add-hook 'org-mode-hook #'my-add-capfs))
 
 (use-package bash-dynamic-completion
   :commands bash-completion-dynamic-complete
@@ -1514,7 +1525,7 @@ Select it interactively otherwise."
   :config
   (require 'org)
   (add-hook 'find-file-hook #'denote-link-buttonize-buffer)
-  (setq denote-file-type 'markdown-yaml)
+  (setq denote-file-type nil)
   (defun my-denote-dired ()
     "Open dired buffer with denote notes."
     (interactive)
@@ -1585,13 +1596,39 @@ Select it interactively otherwise."
 
 (use-package ellama
   :demand t
-  :functions (make-llm-ollama)
+  :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
   :init
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K")))
+	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K"))
+  :config
+  (defun my-translate-md-file-to-org ()
+    "Translate markdown file to org."
+    (interactive)
+    (when-let* ((file (if (and (buffer-file-name)
+			       (string=
+				"md"
+				(file-name-extension (buffer-file-name))))
+			  (buffer-file-name)
+			(car (find-file-read-args
+			      "Select markdown file: " t))))
+		((string= (file-name-extension file) "md"))
+		(dir (file-name-directory file))
+		(basename (file-name-base file))
+		(new-file (file-name-concat dir
+					    (concat basename ".org")))
+		(buffer (find-file-noselect file))
+		(new-buffer (find-file-noselect new-file))
+		(content (with-current-buffer buffer
+			   (buffer-substring-no-properties (point-min) (point-max))))
+		(new-content (ellama--translate-markdown-to-org-filter content)))
+      (with-current-buffer new-buffer
+	(delete-region (point-min) (point-max))
+	(insert new-content)
+	(save-buffer))
+      (display-buffer new-buffer))))
 
 (use-package tabby
   :bind (("C-'" . tabby-complete))
