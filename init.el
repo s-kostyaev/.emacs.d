@@ -434,7 +434,8 @@ named arguments:
 			     "~/.dotnet/tools"
 			     "/opt/homebrew/bin"
 			     "/opt/homebrew/Cellar/libpq/15.2/bin"
-			     "/opt/homebrew/anaconda3/bin"))
+			     "/opt/homebrew/anaconda3/bin"
+			     "~/.ghcup/bin"))
 		   exec-path))
   (setenv "PATH"
 	  (string-join exec-path ":")))
@@ -641,6 +642,7 @@ named arguments:
   :hook ((xref-backend-functions . dumb-jump-xref-activate)))
 
 (use-package browse-url
+  :disabled t
   :preface
   (defun my-browse-url-chromium-wayland (url &optional _ignored)
     "Pass the specified URL to the \"chromium\" command.
@@ -1484,7 +1486,8 @@ Select it interactively otherwise."
 		(eglot-ensure))))
 
 (use-package haskell-mode
-  :disabled t
+  :defines (interactive-haskell-mode-map)
+  :commands (dumb-jump-go dumb-jump-back)
   :preface
   (require 'haskell-interactive-mode)
   (defun my-haskell-setup ()
@@ -1511,7 +1514,10 @@ Select it interactively otherwise."
     (eglot-ensure))
   (add-hook 'haskell-mode-hook 'my-haskell-setup)
   :bind ((:map haskell-mode-map
-	       ("C-c C-e" . my-send-region-to-haskell-interactive))))
+	       ("C-c C-e" . my-send-region-to-haskell-interactive)
+	       :map interactive-haskell-mode-map
+	       ("M-." . dumb-jump-go)
+	       ("M-," . dumb-jump-back))))
 
 (use-package denote
   :commands denote-link-buttonize-buffer
@@ -1638,6 +1644,7 @@ Select it interactively otherwise."
   (my-vc-install :name "tabby" :host "github" :repo "alan-w-255/tabby.el")
   (add-hook 'go-ts-mode-hook 'tabby-mode)
   (add-hook 'tuareg-mode-hook 'tabby-mode)
+  (add-hook 'haskell-mode-hook 'tabby-mode)
   :config
   (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
 
