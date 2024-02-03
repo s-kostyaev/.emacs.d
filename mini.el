@@ -76,15 +76,17 @@
   "Function for setting themes after init."
   (interactive)
   (mapc #'disable-theme custom-enabled-themes)
-  (if (ignore-errors
-	(string-suffix-p "-dark"
-			 (string-replace "'" "" (car
-						 (process-lines
-						  "gsettings" "get"
-						  "org.gnome.desktop.interface"
-						  "gtk-theme")))))
-      (load-theme my-dark-theme t)
-    (load-theme my-light-theme t)))
+  (load-theme my-dark-theme t)
+  ;; (if (ignore-errors
+  ;; 	(string-suffix-p "-dark"
+  ;; 			 (string-replace "'" "" (car
+  ;; 						 (process-lines
+  ;; 						  "gsettings" "get"
+  ;; 						  "org.gnome.desktop.interface"
+  ;; 						  "gtk-theme")))))
+  ;;     (load-theme my-dark-theme t)
+  ;;   (load-theme my-light-theme t))
+  )
 
 (defun my-toggle-themes ()
   "Toggle light and dark themes."
@@ -209,9 +211,9 @@ Select it interactively otherwise."
 
 (defun my-install-language-grammar (lang)
   (when (not (file-exists-p
-	       (expand-file-name
-		(format "tree-sitter/libtree-sitter-%s.so" lang)
-		user-emacs-directory)))
+	      (expand-file-name
+	       (format "tree-sitter/libtree-sitter-%s.dylib" lang)
+	       user-emacs-directory)))
     (treesit-install-language-grammar lang)))
 
 (mapc 'my-install-language-grammar
@@ -255,43 +257,6 @@ Select it interactively otherwise."
 		    "snippet.go"))
       (delete-directory default-directory t nil)
       (kill-buffer))))
-
-(use-package gopcaml-mode
-  :preface
-  (setq gopcaml-messaging-level 'none)
-  (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
-    (when (and opam-share (file-directory-p opam-share))
-      ;; Register Gopcaml mode
-      (add-to-list 'load-path (expand-file-name "emacs/site-lisp" opam-share))
-      (autoload 'gopcaml-mode "gopcaml-mode" nil t nil)
-      (autoload 'tuareg-mode "tuareg" nil t nil)
-      (autoload 'merlin-mode "merlin" "Merlin mode" t)
-      (autoload 'dune-mode "dune" nil t)
-      (add-to-list 'auto-mode-alist
-             '("\\(?:\\`\\|/\\)dune\\(?:\\.inc\\|\\-project\\)?\\'" . dune-mode))
-      ;; Automatically start it in OCaml buffers
-      (setq auto-mode-alist
-	    (append '(("\\.ml[ily]?$" . gopcaml-mode)
-		      ("\\.topml$" . gopcaml-mode))
-		    auto-mode-alist))))
-
-  (defun my-opam-env ()
-    (interactive nil)
-    (dolist (var (car (read-from-string
-		       (shell-command-to-string "opam config env --sexp"))))
-      (setenv (car var) (cadr var))))
-
-  (add-hook 'tuareg-mode-hook
-	    #'(lambda ()
-		(set (make-local-variable 'compile-command)
-		     (concat "dune build"))
-		(set (make-local-variable 'compilation-read-command)
-		     nil)
-		(my-opam-env)
-		(eglot-ensure)))
-  :config
-  (unbind-key "TAB" gopcaml-mode-map)
-  (define-key gopcaml-mode-map (kbd "C-c C-j") 'gopcaml-move-to-hole))
 
 (setq tab-always-indent 'complete)
 (setq completion-auto-help 'visible)
@@ -525,5 +490,11 @@ Saves to a temp file."
       (load-theme theme t nil)))
 
 (setq ring-bell-function 'ignore)
+
+(setopt x-hyper-keysym 'meta
+	mac-option-modifier 'none
+	mac-command-modifier 'meta
+	mac-command-key-is-meta 't
+	mac-option-key-is-meta nil)
 
 (my-set-themes)
