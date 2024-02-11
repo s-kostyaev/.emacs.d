@@ -1609,6 +1609,10 @@ Select it interactively otherwise."
   (setopt ellama-provider
 	  (make-llm-ollama
 	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K"))
+  (setopt ellama-naming-provider
+	  (make-llm-ollama
+	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K"))
+  (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   :config
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
