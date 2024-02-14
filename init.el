@@ -71,7 +71,7 @@ named arguments:
       ;; (setq my-font (font-spec :size 15.0 :family "Go Mono"))
       (setq my-font (font-spec :size 15.0 :family "Iosevka Comfy Motion"))
     (setq my-font (font-spec :size 13.0 :family "PT Mono")))
-  (setq my-light-theme 'ef-cyprus
+  (setq my-light-theme 'ef-duo-light
 	my-dark-theme 'ef-cherie
 	my-need-theme-reload nil)
 
