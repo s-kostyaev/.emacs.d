@@ -1604,14 +1604,15 @@ Select it interactively otherwise."
   :demand t
   :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
   :init
+  (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K"))
+	   :chat-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-32k" :embedding-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-32k"))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "mistral:7b-instruct-v0.2-q6_K" :embedding-model "mistral:7b-instruct-v0.2-q6_K"))
+	   :chat-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-1l" :embedding-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-1l"))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   :config
   (defun my-translate-md-file-to-org ()
@@ -1639,6 +1640,16 @@ Select it interactively otherwise."
 	(insert new-content)
 	(save-buffer))
       (display-buffer new-buffer))))
+
+(use-package elisa
+  :init
+  (setopt elisa-embeddings-provider (progn
+				      (require 'llm-openai)
+				      (setq llm-warn-on-nonfree nil)
+				      (make-llm-openai-compatible
+				       :embedding-model "all-MiniLM-L6-v2"
+				       :url "http://localhost:8000/v1"
+				       :key "YOUR_KEY"))))
 
 (use-package tabby
   :bind (("C-'" . tabby-complete))
