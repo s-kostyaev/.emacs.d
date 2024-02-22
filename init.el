@@ -1644,12 +1644,8 @@ Select it interactively otherwise."
 (use-package elisa
   :init
   (setopt elisa-embeddings-provider (progn
-				      (require 'llm-openai)
-				      (setq llm-warn-on-nonfree nil)
-				      (make-llm-openai-compatible
-				       :embedding-model "all-MiniLM-L6-v2"
-				       :url "http://localhost:8000/v1"
-				       :key "YOUR_KEY"))))
+				      (require 'llm-ollama)
+				      (make-llm-ollama :embedding-model "nomic-embed-text"))))
 
 (use-package tabby
   :bind (("C-'" . tabby-complete))
