@@ -622,6 +622,8 @@ named arguments:
 (use-package cape
   :functions (my-add-capfs cape-file cape-elisp-block)
   :init
+  (declare-function cape-file "cape")
+  (declare-function cape-elisp-block "cape")
   (add-to-list 'completion-at-point-functions #'cape-file)
   (add-to-list 'completion-at-point-functions #'cape-elisp-block)
   (defun my-add-capfs ()
@@ -1609,11 +1611,14 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-32k" :embedding-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-32k"))
+	   :chat-model "sskostyaev/openchat:8k" :embedding-model "nomic-embed-text"))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-1l" :embedding-model "sskostyaev/mistral:7b-instruct-v0.2-q6_K-1l"))
+	   :chat-model "sskostyaev/openchat:1l" :embedding-model "nomic-embed-text"))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
+  (setopt ellama-translation-provider (make-llm-ollama
+				       :chat-model "sskostyaev/openchat:8k"
+				       :embedding-model "nomic-embed-text"))
   :config
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
@@ -1643,9 +1648,11 @@ Select it interactively otherwise."
 
 (use-package elisa
   :init
-  (setopt elisa-embeddings-provider (progn
-				      (require 'llm-ollama)
-				      (make-llm-ollama :embedding-model "nomic-embed-text"))))
+  (require 'llm-ollama)
+  (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "nomic-embed-text"))
+  (setopt elisa-chat-provider (make-llm-ollama
+			       :chat-model "sskostyaev/openchat:8k-rag"
+			       :embedding-model "nomic-embed-text")))
 
 (use-package tabby
   :bind (("C-'" . tabby-complete))
@@ -1663,6 +1670,7 @@ Select it interactively otherwise."
 
 (use-package dape
   :commands (go-func-name-at-point dape-read-pid)
+  :defines (dape-repl-use-shorthand dape-cwd-fn dape-configs)
   :preface
   (hercules-def
    :keymap 'dape-global-map
@@ -1854,6 +1862,9 @@ This is used by Delve debugger."
   :demand t
   :init
   (envrc-global-mode))
+
+(use-package casual
+  :bind (:map calc-mode-map ("M-o" . 'casual-main-menu)))
 
 (provide 'init)
 ;;; init.el ends here
