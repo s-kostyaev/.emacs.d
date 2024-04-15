@@ -408,8 +408,9 @@ named arguments:
       (eglot-code-actions nil nil "source.organizeImports" t)))
   (defun my-eglot-setup ()
     (interactive)
-    (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
-    (add-hook 'before-save-hook 'eglot-format-buffer nil t))
+    (when (not (eq major-mode 'sql-mode))
+      (add-hook 'before-save-hook 'my-eglot-organize-imports nil t)
+      (add-hook 'before-save-hook 'eglot-format-buffer nil t)))
 
   (define-key eglot-mode-map (kbd "C-x l h h") 'eldoc)
   (define-key eglot-mode-map (kbd "C-x l w q") 'eglot-shutdown)
@@ -420,6 +421,60 @@ named arguments:
   (define-key eglot-mode-map (kbd "C-x l g i") 'eglot-find-implementation)
 
   (add-hook 'eglot-managed-mode-hook 'my-eglot-setup))
+
+(defclass eglot-sqls (eglot-lsp-server) ())
+(add-to-list 'eglot-server-programs '(sql-mode . (eglot-sqls "sqls")))
+
+(cl-defmethod eglot-execute
+  :around
+  ((server eglot-sqls) action)
+
+  (pcase (plist-get action :command)
+    ("executeQuery"
+     (if (use-region-p)
+         (let* ((begin (region-beginning))
+                (end (region-end))
+                (begin-lsp (eglot--pos-to-lsp-position begin))
+                (end-lsp (eglot--pos-to-lsp-position end))
+                (action (plist-put action :range `(:start ,begin-lsp :end ,end-lsp)))
+                (result (cl-call-next-method server action)))
+           (my-eglot-sqls-show-result result))
+       (message "No region")))
+
+    ((or
+      "showConnections"
+      "showDatabases"
+      "showSchemas"
+      "showTables")
+     (my-eglot-sqls-show-result (cl-call-next-method)))
+
+    ("switchConnections"
+     (let* ((connections (eglot--request server :workspace/executeCommand
+                                         '(:command "showConnections")))
+            (collection (split-string connections "\n"))
+            (connection (completing-read "Switch to connection: " collection nil t))
+            (index (number-to-string (string-to-number connection)))
+            (action (plist-put action :arguments (vector index))))
+       (cl-call-next-method server action)))
+
+    ("switchDatabase"
+     (let* ((databases (eglot--request server :workspace/executeCommand
+                                       '(:command "showDatabases")))
+            (collection (split-string databases "\n"))
+            (database (completing-read "Switch to database: " collection nil t))
+            (action (plist-put action :arguments (vector database))))
+       (cl-call-next-method server action)))
+
+    (_
+     (cl-call-next-method))))
+
+(defun my-eglot-sqls-show-result (result)
+  (with-current-buffer (get-buffer-create "*sqls result*")
+    (erase-buffer)
+    (insert result)
+    (display-buffer (current-buffer))))
+
+(add-hook 'sql-mode-hook 'eglot-ensure)
 
 (progn ; exec-path
   (setq exec-path (append
@@ -1283,7 +1338,11 @@ Select it interactively otherwise."
 	     (if (string= target "go build")
 		 "go build ./..."
 	       (format "make %s" target))))
-	(compile "go build ./...")))))
+	(compile (if (and (buffer-file-name)
+			  (string= (file-name-nondirectory (buffer-file-name))
+				   "snippet.go"))
+		     "go run snippet.go"
+		   "go build ./..."))))))
 
 (use-package smerge-mode
   :preface
@@ -1611,7 +1670,7 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "sskostyaev/openchat:8k" :embedding-model "nomic-embed-text"))
+	   :chat-model "wizardlm2" :embedding-model "nomic-embed-text"))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
 	   :chat-model "sskostyaev/openchat:1l" :embedding-model "nomic-embed-text"))
