@@ -1670,10 +1670,10 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "wizardlm2" :embedding-model "nomic-embed-text"))
+	   :chat-model "sskostyaev/wizardlm2:32k" :embedding-model "nomic-embed-text"))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "sskostyaev/openchat:1l" :embedding-model "nomic-embed-text"))
+	   :chat-model "sskostyaev/wizardlm2:1l" :embedding-model "nomic-embed-text"))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider (make-llm-ollama
 				       :chat-model "sskostyaev/openchat:8k"
