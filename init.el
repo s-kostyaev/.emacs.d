@@ -555,6 +555,53 @@ named arguments:
 
 (progn ; go
   (progn
+    (defun my-go-playground-snippet-unique-dir ()
+      "Get unique directory under GOPATH/src/playground."
+      (let ((dir-name (concat "~/go/src/playground/"
+			      (time-stamp-string "at-%:y-%02m-%02d-%02H%02M%02S"))))
+	(make-directory dir-name t)
+	dir-name))
+    (defun my-go-playground-snippet-file-name()
+      (let* ((file-name "snippet")
+	     (snippet-dir (my-go-playground-snippet-unique-dir)))
+	(let ((default-directory snippet-dir))
+	  (call-process-shell-command "go mod init"))
+	(concat snippet-dir "/" file-name ".go")))
+    (defun my-go-playground ()
+      "Run playground for Go language in a new buffer."
+      (interactive)
+      (let ((snippet-file-name (my-go-playground-snippet-file-name)))
+	(switch-to-buffer (create-file-buffer snippet-file-name))
+	(insert "package main
+
+import (
+	\"fmt\"
+)
+
+func main() {
+	fmt.Println(\"Results:\")
+}
+")
+	(backward-char 3)
+	(go-ts-mode)
+	(set-visited-file-name snippet-file-name t)))
+    (defun my-go-playground-inside ()
+      "Is the current buffer is valid go-playground buffer."
+      (and buffer-file-name
+	   (string-prefix-p (file-truename "~/go/src/playground")
+			    (file-truename buffer-file-name))))
+    (defun my-go-playground-rm ()
+      "Remove files of the current snippet together with directory of this snippet."
+      (interactive)
+      (if (my-go-playground-inside)
+	  (if (or (y-or-n-p (format "Do you want delete whole snippet dir %s? "
+				    (file-name-directory (buffer-file-name)))))
+	      (progn
+		(save-buffer)
+		(delete-directory (file-name-directory (buffer-file-name)) t t)
+		(kill-buffer)))
+	(message "Won't delete this! Because %s is not under the path %s. Remove the snippet manually!"
+		 (buffer-file-name) "~/go/src/playground")))
     (defun my-extract-go-module-name ()
       (let* ((go-mod-file (expand-file-name
 			   "go.mod"
