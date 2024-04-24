@@ -583,8 +583,9 @@ func main() {
 }
 ")
 	(backward-char 3)
-	(go-ts-mode)
-	(set-visited-file-name snippet-file-name t)))
+	(set-visited-file-name snippet-file-name t)
+	(save-buffer)
+	(go-ts-mode)))
     (defun my-go-playground-inside ()
       "Is the current buffer is valid go-playground buffer."
       (and buffer-file-name
