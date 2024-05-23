@@ -956,7 +956,8 @@ The optional argument IGNORED is not used."
          #'diff-refine-hunk))
 
       (add-hook 'magit-diff-mode-hook #'my-magit-diff-hook)
-      (setopt auto-revert-check-vc-info t))))
+      (setopt auto-revert-check-vc-info t)
+      (setopt dired-vc-rename-file t))))
 
 
 
