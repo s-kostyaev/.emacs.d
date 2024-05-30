@@ -1974,5 +1974,23 @@ This is used by Delve debugger."
 (use-package casual
   :bind (:map calc-mode-map ("M-o" . 'casual-main-menu)))
 
+(defun my-clickhouse-fmt ()
+  "Format clickhouse sql."
+  (interactive)
+  (let ((beg (if (region-active-p)
+		 (region-beginning)
+	       (point-min)))
+	(end (if (region-active-p)
+		 (region-end)
+	       (point-max))))
+    (shell-command-on-region
+     beg
+     end
+     "docker run --rm -i clickhouse/clickhouse-server /usr/bin/clickhouse-format --comment -n"
+     (current-buffer)
+     t
+     "*clickhouse fmt error*"
+     t)))
+
 (provide 'init)
 ;;; init.el ends here
