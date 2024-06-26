@@ -555,6 +555,7 @@ named arguments:
 
 (progn ; go
   (progn
+    (require 'time-stamp)
     (defun my-go-playground-snippet-unique-dir ()
       "Get unique directory under GOPATH/src/playground."
       (let ((dir-name (concat "~/go/src/playground/"
@@ -1596,6 +1597,7 @@ Select it interactively otherwise."
 		(eglot-ensure))))
 
 (use-package haskell-mode
+  :disabled t
   :defines (interactive-haskell-mode-map)
   :commands (dumb-jump-go dumb-jump-back)
   :preface
@@ -1719,14 +1721,15 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "sskostyaev/wizardlm2:32k" :embedding-model "nomic-embed-text"))
+	   :chat-model "llama3:8b-instruct-q8_0" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("num_ctx" . 8192))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "sskostyaev/wizardlm2:1l" :embedding-model "nomic-embed-text"))
+	   :chat-model "llama3:8b-instruct-q8_0" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider (make-llm-ollama
-				       :chat-model "sskostyaev/openchat:8k"
+				       :chat-model "phi3:14b-medium-128k-instruct-q6_K"
 				       :embedding-model "nomic-embed-text"))
+  (setopt ellama-show-quotes t)
   :config
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
@@ -1757,10 +1760,19 @@ Select it interactively otherwise."
 (use-package elisa
   :init
   (require 'llm-ollama)
-  (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "nomic-embed-text"))
   (setopt elisa-chat-provider (make-llm-ollama
-			       :chat-model "sskostyaev/openchat:8k-rag"
-			       :embedding-model "nomic-embed-text")))
+			       :chat-model "llama3-chatqa:8b-v1.5-q8_0"
+			       :embedding-model "nomic-embed-text"
+			       :default-chat-temperature 0.1
+			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
+  ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "phi3:14b-medium-128k-instruct-q6_K"
+  ;; 			       :embedding-model "chatfire/bge-m3:q8_0"
+  ;; 			       :default-chat-temperature 0.1
+  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  :config
+  (setopt elisa-web-search-function 'elisa-search-searxng))
 
 (use-package tabby
   :bind (("C-'" . tabby-complete))

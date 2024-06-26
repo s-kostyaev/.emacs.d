@@ -4,6 +4,7 @@
 (setq mc/cmds-to-run-for-all
       '(
 	backward-sexp
+	backward-up-list
 	c-electric-semi&comma
 	comment-dwim-line
 	company-abort
@@ -28,6 +29,7 @@
 	kill-region
 	markdown-outdent-or-delete
 	org-beginning-of-line
+	org-self-insert-command
 	paredit-forward-delete
 	paredit-open-round
 	sp-remove-active-pair-overlay
@@ -51,6 +53,7 @@
 	aya-expand
 	beginning-of-buffer
 	company-complete-selection
+	consult-buffer
 	counsel-M-x
 	counsel-find-file
 	counsel-grep-or-swiper
