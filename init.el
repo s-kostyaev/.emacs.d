@@ -1632,7 +1632,6 @@ Select it interactively otherwise."
 	       ("M-," . dumb-jump-back))))
 
 (use-package denote
-  :commands denote-link-buttonize-buffer
   :commands denote-dired-mode
   :demand t
   :bind
@@ -1642,7 +1641,6 @@ Select it interactively otherwise."
    ("C-c n f" . denote-find-link))
   :config
   (require 'org)
-  (add-hook 'find-file-hook #'denote-link-buttonize-buffer)
   (setq denote-file-type nil)
   (defun my-denote-dired ()
     "Open dired buffer with denote notes."
@@ -1716,19 +1714,43 @@ Select it interactively otherwise."
   :demand t
   :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
   :init
+  (setopt ellama-auto-scroll t)
   (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "llama3:8b-instruct-q8_0" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("num_ctx" . 8192))))
+	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 8192)("stop" . ("<eot>"
+					  "<end_of_turn>"
+					  "<start_of_turn>")))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "llama3:8b-instruct-q8_0" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("stop" . ("\n")))))
+	   :chat-model "qwen2:1.5b" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("stop" . ("\n")))))
+  (require 'llm-openai)
+  (setq llm-warn-on-nonfree nil)
+  ;; (setopt ellama-naming-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params '(("stop" . (
+  ;; 							  "<eot>"
+  ;; 							  "<end_of_turn>"
+  ;; 							  "<start_of_turn>")))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
-  (setopt ellama-translation-provider (make-llm-ollama
-				       :chat-model "phi3:14b-medium-128k-instruct-q6_K"
-				       :embedding-model "nomic-embed-text"))
+  (setopt ellama-translation-provider
+	  (make-llm-ollama
+	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 8192)("stop" . ("<eot>"
+					  "<end_of_turn>"
+					  "<start_of_turn>")))))
+  ;; (setopt ellama-translation-provider (make-llm-ollama
+  ;; 				       :chat-model "qwen2:7b-instruct-q8_0"
+  ;; 				       :embedding-model "nomic-embed-text"))
   (setopt ellama-show-quotes t)
   :config
   (defun my-translate-md-file-to-org ()
@@ -1760,11 +1782,28 @@ Select it interactively otherwise."
 (use-package elisa
   :init
   (require 'llm-ollama)
-  (setopt elisa-chat-provider (make-llm-ollama
-			       :chat-model "llama3-chatqa:8b-v1.5-q8_0"
-			       :embedding-model "nomic-embed-text"
-			       :default-chat-temperature 0.1
-			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "qwen2:7b-instruct-q8_0"
+  ;; 			       :embedding-model "nomic-embed-text"
+  ;; 			       :default-chat-temperature 0.1
+  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 65536))))
+  (setopt elisa-chat-provider
+	  (make-llm-ollama
+	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params '(("num_ctx" . 8192)
+					       ("stop" . ("<eot>"
+							  "<end_of_turn>"
+							  "<start_of_turn>")))))
+  ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "llama3-chatqa:8b-v1.5-q8_0"
+  ;; 			       :embedding-model "nomic-embed-text"
+  ;; 			       :default-chat-temperature 0.1
+  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "CognitiveComputations/dolphin-2.9.2-qwen2-7b:Q6_K"
+  ;; 			       :embedding-model "nomic-embed-text"
+  ;; 			       :default-chat-temperature 0.1))
   (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
   ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "phi3:14b-medium-128k-instruct-q6_K"
@@ -1954,7 +1993,6 @@ This is used by Delve debugger."
   (breadcrumb-mode))
 
 (use-package conda
-  :disabled t
   :commands (conda-env-autoactivate-mode conda-env-activate-for-buffer)
   :demand t
   :preface
@@ -1976,6 +2014,9 @@ This is used by Delve debugger."
     (bind-key
      (kbd "C-c C-c")
      #'my-make python-mode-map)))
+
+(use-package ob-ipython
+  :demand t)
 
 (use-package envrc
   :commands envrc-global-mode
