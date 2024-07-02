@@ -1992,16 +1992,6 @@ This is used by Delve debugger."
   :init
   (breadcrumb-mode))
 
-(use-package conda
-  :commands (conda-env-autoactivate-mode conda-env-activate-for-buffer)
-  :demand t
-  :preface
-  (setopt conda-anaconda-home "/opt/homebrew/anaconda3")
-  :config
-  (conda-env-autoactivate-mode t)
-  (add-hook 'find-file-hook (lambda () (when (bound-and-true-p conda-project-env-path)
-                                         (conda-env-activate-for-buffer)))))
-
 (use-package python-mode
   :defines (python-mode-map python-ts-mode-map)
   :preface
