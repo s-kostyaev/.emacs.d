@@ -32,8 +32,29 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-src-lang-modes
+   '(("jupyter-python" . python)
+     ("ipython" . python)
+     ("html-chrome" . html)
+     ("C" . c)
+     ("C++" . c++)
+     ("asymptote" . asy)
+     ("bash" . sh)
+     ("beamer" . latex)
+     ("calc" . fundamental)
+     ("cpp" . c++)
+     ("ditaa" . artist)
+     ("desktop" . conf-desktop)
+     ("dot" . fundamental)
+     ("elisp" . emacs-lisp)
+     ("ocaml" . tuareg)
+     ("screen" . shell-script)
+     ("shell" . sh)
+     ("sqlite" . sql)
+     ("toml" . conf-toml)
+     ("html" . web)))
  '(package-selected-packages
-   '(gotest ob-go pdf-tools casual code-cells elisa eglot cape tabby ellama dape envrc haskell-mode wgrep breadcrumb zenburn-theme xeft white-sand-theme web-beautify vterm-toggle vmd-mode visual-regexp treesit-auto timp tagedit symbol-overlay string-inflection spray speed-type speechd-el spacious-padding spacemacs-theme solarized-theme smart-shift rust-playground rust-mode reverse-im restclient-jq rainbow-mode pyenv-mode pulsar protobuf-mode prism poly-markdown plz pkgbuild-mode pass pandoc-mode package-lint-flymake org-mind-map ocp-indent nova-theme nov noflet multiple-cursors monokai-theme merlin marginalia magit-todos keycast key-chord kaolin-themes jsonian json-snatcher json-rpc ibuffer-vc hungry-delete highlight-indentation hercules haskell-snippets go-tag go-snippets go-impl go-gen-test go-fill-struct git-timemachine gif-screencast frimacs flymake-quickdef flymake-proselint flymake-go-staticcheck flx feature-mode fb2-reader expand-region embark-consult elisp-benchmarks ein eglot-fsharp ef-themes edit-server edit-indirect eat dune dumb-jump dtrt-indent dotnet dockerfile-mode docker-compose-mode denote dash-functional dart-mode corfu consult-dash composable comment-tags cl-libify chocolate-theme cask-mode cargo bash-completion auto-yasnippet apparmor-mode ample-theme aggressive-indent ace-link))
+   '(web-mode gotest ob-go pdf-tools casual code-cells elisa eglot cape tabby ellama dape envrc haskell-mode wgrep breadcrumb zenburn-theme xeft white-sand-theme web-beautify vterm-toggle vmd-mode visual-regexp treesit-auto timp tagedit symbol-overlay string-inflection spray speed-type speechd-el spacious-padding spacemacs-theme solarized-theme smart-shift rust-playground rust-mode reverse-im restclient-jq rainbow-mode pyenv-mode pulsar protobuf-mode prism poly-markdown plz pkgbuild-mode pass pandoc-mode package-lint-flymake org-mind-map ocp-indent nova-theme nov noflet multiple-cursors monokai-theme merlin marginalia magit-todos keycast key-chord kaolin-themes jsonian json-snatcher json-rpc ibuffer-vc hungry-delete highlight-indentation hercules haskell-snippets go-tag go-snippets go-impl go-gen-test go-fill-struct git-timemachine gif-screencast frimacs flymake-quickdef flymake-proselint flymake-go-staticcheck flx feature-mode fb2-reader expand-region embark-consult elisp-benchmarks ein eglot-fsharp ef-themes edit-server edit-indirect eat dune dumb-jump dtrt-indent dotnet dockerfile-mode docker-compose-mode denote dash-functional dart-mode corfu consult-dash composable comment-tags cl-libify chocolate-theme cask-mode cargo bash-completion auto-yasnippet apparmor-mode ample-theme aggressive-indent ace-link))
  '(package-vc-selected-packages
    '((elisa :vc-backend Git :url "https://github.com/s-kostyaev/elisa")
      (tabby :vc-backend Git :url "https://www.github.com/alan-w-255/tabby.el")))

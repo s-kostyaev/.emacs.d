@@ -2010,10 +2010,13 @@ This is used by Delve debugger."
 
 (defun my-post-tangle-hook ()
   "My post tangle hook."
-  (when (eq major-mode 'mhtml-mode)
+  (when (or (eq major-mode 'mhtml-mode)
+	    (eq major-mode 'web-mode))
     (browse-url (buffer-file-name))))
 
 (add-hook 'org-babel-post-tangle-hook 'my-post-tangle-hook)
+
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (use-package envrc
   :commands envrc-global-mode
