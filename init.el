@@ -1827,6 +1827,11 @@ Select it interactively otherwise."
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
+(defun my-update-flymake-load-path ()
+  "Update flymake load path."
+  (interactive)
+  (setopt elisp-flymake-byte-compile-load-path load-path))
+
 (use-package dape
   :commands (go-func-name-at-point dape-read-pid)
   :defines (dape-repl-use-shorthand dape-cwd-fn dape-configs)
