@@ -2005,8 +2005,15 @@ This is used by Delve debugger."
      (kbd "C-c C-c")
      #'my-make python-mode-map)))
 
-(use-package ob-ipython
-  :demand t)
+(require 'ob-python)
+(setopt org-babel-default-header-args:python '((:results . "output")))
+
+(defun my-post-tangle-hook ()
+  "My post tangle hook."
+  (when (eq major-mode 'mhtml-mode)
+    (browse-url (buffer-file-name))))
+
+(add-hook 'org-babel-post-tangle-hook 'my-post-tangle-hook)
 
 (use-package envrc
   :commands envrc-global-mode
