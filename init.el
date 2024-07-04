@@ -1825,6 +1825,16 @@ Select it interactively otherwise."
   :config
   (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
 
+(use-package ready-player
+  :demand t
+  :init
+  (my-vc-install :name "ready-player" :host "github" :repo "xenodium/ready-player")
+  :config
+  (ready-player-add-to-auto-mode-alist)
+  (setopt ready-player-play-icon "⏵")
+  (setopt ready-player-stop-icon "■")
+  (setopt ready-player-open-externally-icon "➦"))
+
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
 (defun my-update-flymake-load-path ()
