@@ -1801,6 +1801,22 @@ Select it interactively otherwise."
   ;; 			       :default-chat-temperature 0.1
   ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
   ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "llama3:8b-instruct-q8_0"
+  ;; 			       :embedding-model "nomic-embed-text"
+  ;; 			       :default-chat-temperature 0.1
+  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "internlm2:7b-chat-v2.5-q8_0"
+  ;; 			       :embedding-model "nomic-embed-text"
+  ;; 			       :default-chat-temperature 0.1
+  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider (make-llm-ollama
+  ;; 			       :chat-model "yi:9b-chat-v1.5-q8_0"
+  ;; 			       :embedding-model "nomic-embed-text"
+  ;; 			       :default-chat-temperature 0.1
+  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  (setopt elisa-reranker-enabled t)
+  ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "CognitiveComputations/dolphin-2.9.2-qwen2-7b:Q6_K"
   ;; 			       :embedding-model "nomic-embed-text"
   ;; 			       :default-chat-temperature 0.1))
