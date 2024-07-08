@@ -1728,7 +1728,7 @@ Select it interactively otherwise."
 					  "<start_of_turn>")))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2:1.5b" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("stop" . ("\n")))))
+	   :chat-model "phi3" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("stop" . ("\n")))))
   (require 'llm-openai)
   (setq llm-warn-on-nonfree nil)
   ;; (setopt ellama-naming-provider
