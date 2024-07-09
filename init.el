@@ -1723,31 +1723,21 @@ Select it interactively otherwise."
 	   :chat-model "gemma2:9b-instruct-q6_K"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
-	   '(("num_ctx" . 8192)("stop" . ("<eot>"
-					  "<end_of_turn>"
-					  "<start_of_turn>")))))
+	   '(("num_ctx" . 8192))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "phi3" :embedding-model "nomic-embed-text" :default-chat-non-standard-params '(("stop" . ("\n")))))
+	   :chat-model "phi3"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (require 'llm-openai)
   (setq llm-warn-on-nonfree nil)
-  ;; (setopt ellama-naming-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
-  ;; 	   :embedding-model "nomic-embed-text"
-  ;; 	   :default-chat-non-standard-params '(("stop" . (
-  ;; 							  "<eot>"
-  ;; 							  "<end_of_turn>"
-  ;; 							  "<start_of_turn>")))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider
 	  (make-llm-ollama
 	   :chat-model "gemma2:9b-instruct-q6_K"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
-	   '(("num_ctx" . 8192)("stop" . ("<eot>"
-					  "<end_of_turn>"
-					  "<start_of_turn>")))))
+	   '(("num_ctx" . 8192))))
   ;; (setopt ellama-translation-provider (make-llm-ollama
   ;; 				       :chat-model "qwen2:7b-instruct-q8_0"
   ;; 				       :embedding-model "nomic-embed-text"))
@@ -1782,24 +1772,11 @@ Select it interactively otherwise."
 (use-package elisa
   :init
   (require 'llm-ollama)
-  ;; (setopt elisa-chat-provider (make-llm-ollama
-  ;; 			       :chat-model "qwen2:7b-instruct-q8_0"
-  ;; 			       :embedding-model "nomic-embed-text"
-  ;; 			       :default-chat-temperature 0.1
-  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 65536))))
   (setopt elisa-chat-provider
 	  (make-llm-ollama
 	   :chat-model "gemma2:9b-instruct-q6_K"
 	   :embedding-model "nomic-embed-text"
-	   :default-chat-non-standard-params '(("num_ctx" . 8192)
-					       ("stop" . ("<eot>"
-							  "<end_of_turn>"
-							  "<start_of_turn>")))))
-  ;; (setopt elisa-chat-provider (make-llm-ollama
-  ;; 			       :chat-model "llama3-chatqa:8b-v1.5-q8_0"
-  ;; 			       :embedding-model "nomic-embed-text"
-  ;; 			       :default-chat-temperature 0.1
-  ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
+	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
   ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "llama3:8b-instruct-q8_0"
   ;; 			       :embedding-model "nomic-embed-text"
@@ -1816,10 +1793,6 @@ Select it interactively otherwise."
   ;; 			       :default-chat-temperature 0.1
   ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
   (setopt elisa-reranker-enabled t)
-  ;; (setopt elisa-chat-provider (make-llm-ollama
-  ;; 			       :chat-model "CognitiveComputations/dolphin-2.9.2-qwen2-7b:Q6_K"
-  ;; 			       :embedding-model "nomic-embed-text"
-  ;; 			       :default-chat-temperature 0.1))
   (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
   ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "phi3:14b-medium-128k-instruct-q6_K"
