@@ -1788,7 +1788,7 @@ Select it interactively otherwise."
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "llama3.1:8b-instruct-q6_K"
   ;; 	   :embedding-model "nomic-embed-text"
-  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-temperature 0
   ;; 	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
   ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "llama3:8b-instruct-q8_0"
