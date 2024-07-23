@@ -848,6 +848,12 @@ The optional argument IGNORED is not used."
   (key-chord-define-global "zj" 'er/expand-region)
   (key-chord-define-global "zk" 'er/contract-region))
 
+(use-package expandreg
+  :disabled
+  :preface
+  (key-chord-define-global "zj" 'expreg-expand)
+  (key-chord-define-global "zk" 'expreg-contract))
+
 (use-package multiple-cursors
   :commands (multiple-cursors-hydra/body
 	     mc/edit-lines
@@ -888,17 +894,17 @@ The optional argument IGNORED is not used."
    :transient t
    :keymap 'my-mc-map
    :show-funs '(mc/edit-lines
-	     mc/mark-all-like-this
-	     mc/mark-all-words-like-this
-	     mc/mark-next-like-this
-	     mc/skip-to-next-like-this
-	     mc/unmark-next-like-this
-	     mc/mark-previous-like-this
-	     mc/skip-to-previous-like-this
-	     mc/unmark-previous-like-this
-	     mc/mark-previous-word-like-this
-	     mc/mark-next-word-like-this
-	     mc-hide-unmatched-lines-mode)
+		mc/mark-all-like-this
+		mc/mark-all-words-like-this
+		mc/mark-next-like-this
+		mc/skip-to-next-like-this
+		mc/unmark-next-like-this
+		mc/mark-previous-like-this
+		mc/skip-to-previous-like-this
+		mc/unmark-previous-like-this
+		mc/mark-previous-word-like-this
+		mc/mark-next-word-like-this
+		mc-hide-unmatched-lines-mode)
    :hide-funs '(mc/mark-all-in-region-regexp
 		ace-mc-add-multiple-cursors
 		ace-mc-add-single-cursor)))
@@ -1776,7 +1782,14 @@ Select it interactively otherwise."
 	  (make-llm-ollama
 	   :chat-model "gemma2:9b-instruct-q6_K"
 	   :embedding-model "nomic-embed-text"
+	   :default-chat-temperature 0.1
 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "llama3.1:8b-instruct-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
   ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "llama3:8b-instruct-q8_0"
   ;; 			       :embedding-model "nomic-embed-text"
