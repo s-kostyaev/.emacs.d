@@ -1751,7 +1751,7 @@ Select it interactively otherwise."
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider
 	  (make-llm-ollama
-	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
+	   :chat-model "gemma2:9b-instruct-q6_K"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 8192))))
@@ -1789,9 +1789,15 @@ Select it interactively otherwise."
 (use-package elisa
   :init
   (require 'llm-ollama)
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
   (setopt elisa-chat-provider
 	  (make-llm-ollama
-	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
+	   :chat-model "gemma2:9b-instruct-q6_K"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-temperature 0.1
 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
