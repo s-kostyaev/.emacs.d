@@ -1833,6 +1833,7 @@ Select it interactively otherwise."
   (setopt elisa-web-search-function 'elisa-search-searxng))
 
 (use-package tabby
+  :disabled t
   :bind (("C-'" . tabby-complete))
   :commands (tabby-accept-completion)
   :defines (taby-mode-map tabby--ongoing-request-id)
