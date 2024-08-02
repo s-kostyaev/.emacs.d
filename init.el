@@ -1847,8 +1847,6 @@ Select it interactively otherwise."
 
 (use-package ready-player
   :demand t
-  :init
-  (my-vc-install :name "ready-player" :host "github" :repo "xenodium/ready-player")
   :config
   (ready-player-add-to-auto-mode-alist)
   (setopt ready-player-play-icon "⏵")
