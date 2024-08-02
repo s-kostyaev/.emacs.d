@@ -1726,13 +1726,24 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-naming-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "phi3"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "phi3"
+	   :chat-model "gemma2:2b-instruct-q8_0"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (require 'llm-openai)
@@ -1740,14 +1751,14 @@ Select it interactively otherwise."
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider
 	  (make-llm-ollama
-	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 8192))))
   ;; (setopt ellama-translation-provider (make-llm-ollama
   ;; 				       :chat-model "qwen2:7b-instruct-q8_0"
   ;; 				       :embedding-model "nomic-embed-text"))
-  (setopt ellama-show-quotes t)
+  (setopt ellama-show-quotes nil)
   :config
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
@@ -1780,10 +1791,16 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt elisa-chat-provider
 	  (make-llm-ollama
-	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-temperature 0.1
 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
   ;; (setopt elisa-chat-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "llama3.1:8b-instruct-q6_K"
