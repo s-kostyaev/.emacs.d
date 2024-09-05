@@ -1602,40 +1602,18 @@ Select it interactively otherwise."
 		(my-opam-env)
 		(eglot-ensure))))
 
-(use-package haskell-mode
-  :disabled t
-  :defines (interactive-haskell-mode-map)
-  :commands (dumb-jump-go dumb-jump-back)
+(use-package haskell-ts-mode
+  :bind ((:map haskell-ts-mode-map
+	       ("M-." . dumb-jump-go)
+	       ("M-," . dumb-jump-back)))
+  :demand t
   :preface
-  (require 'haskell-interactive-mode)
   (defun my-haskell-setup ()
     "Setup haskell mode by hook."
-    (defun my-send-region-to-haskell-interactive ()
-      "Send region to haskell interactive."
-      (interactive)
-      (save-mark-and-excursion
-	(when (not (region-active-p))
-	  (move-end-of-line nil)
-	  (set-mark-command nil)
-	  (backward-sentence))
-	(let ((content
-	       (buffer-substring-no-properties
-		(region-beginning) (region-end))))
-	  (if (fboundp 'haskell-interactive-switch)
-	      (haskell-interactive-switch))
-	  (goto-char (point-max))
-	  (insert content)
-	  (if (fboundp 'haskell-interactive-mode-return)
-	      (haskell-interactive-mode-return))
-	  (if (fboundp 'haskell-interactive-switch-back)
-	      (haskell-interactive-switch-back)))))
+    (haskell-ts-setup-eglot)
     (eglot-ensure))
-  (add-hook 'haskell-mode-hook 'my-haskell-setup)
-  :bind ((:map haskell-mode-map
-	       ("C-c C-e" . my-send-region-to-haskell-interactive)
-	       :map interactive-haskell-mode-map
-	       ("M-." . dumb-jump-go)
-	       ("M-," . dumb-jump-back))))
+
+  (add-hook 'haskell-ts-mode-hook 'my-haskell-setup))
 
 (use-package denote
   :commands denote-dired-mode
