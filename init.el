@@ -1697,9 +1697,10 @@ Select it interactively otherwise."
 (use-package ellama
   :demand t
   :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
+  :bind ("C-c e" . ellama-transient-main-menu)
   :init
   (setopt ellama-auto-scroll t)
-  (setopt ellama-keymap-prefix "C-c e")
+  ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
   (setopt ellama-provider
@@ -1714,6 +1715,36 @@ Select it interactively otherwise."
   ;; 	   :embedding-model "nomic-embed-text"
   ;; 	   :default-chat-non-standard-params
   ;; 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma2:9b-instruct-q8_0"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "mistral-nemo:12b-instruct-2407-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "yi:34b-chat-v1.5-q4_K_M"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "phi3.5:3.8b-mini-instruct-q8_0"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "command-r:35b-08-2024-q4_0"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 4096))))
   ;; (setopt ellama-naming-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "phi3"
