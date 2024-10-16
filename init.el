@@ -1690,7 +1690,9 @@ Select it interactively otherwise."
 
 (use-package restclient
   :mode ((".rest$" . restclient-mode)
-	 (".http$" . restclient-mode)))
+	 (".http$" . restclient-mode))
+  :config
+  (require 'restclient-jq))
 
 (bind-key* (kbd "C-o") 'other-window)
 
