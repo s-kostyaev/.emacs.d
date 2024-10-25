@@ -1705,12 +1705,30 @@ Select it interactively otherwise."
   ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen2.5:3b"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "llama3.2"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
+	   :chat-model "qwen2.5:14b-instruct-q8_0"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
@@ -1754,18 +1772,36 @@ Select it interactively otherwise."
   ;; 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "gemma2:2b-instruct-q8_0"
+	   :chat-model "qwen2.5:3b"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
+  ;; (setopt ellama-summarization-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "llama3.2"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
+  (setopt ellama-summarization-provider
+	  (make-llm-ollama
+	   :chat-model "qwen2.5:3b"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 32768))))
   (require 'llm-openai)
   (setq llm-warn-on-nonfree nil)
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider
 	  (make-llm-ollama
-	   :chat-model "gemma2:9b-instruct-q6_K"
+	   :chat-model "qwen2.5:3b"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
-	   '(("num_ctx" . 8192))))
+	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-translation-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
   ;; (setopt ellama-translation-provider (make-llm-ollama
   ;; 				       :chat-model "qwen2:7b-instruct-q8_0"
   ;; 				       :embedding-model "nomic-embed-text"))
@@ -1803,6 +1839,18 @@ Select it interactively otherwise."
   ;; (setopt elisa-chat-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "mistral-nemo:12b-instruct-2407-q6_K"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen2.5:14b-instruct-q8_0"
   ;; 	   :embedding-model "nomic-embed-text"
   ;; 	   :default-chat-temperature 0.1
   ;; 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
