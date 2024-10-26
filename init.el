@@ -1705,24 +1705,24 @@ Select it interactively otherwise."
   ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (require 'llm-ollama)
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "qwen2.5:3b"
-  ;; 	   :embedding-model "nomic-embed-text"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
+  (setopt ellama-provider
+	  (make-llm-ollama
+	   :chat-model "qwen2.5:3b"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 32768))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "llama3.2"
   ;; 	   :embedding-model "nomic-embed-text"
   ;; 	   :default-chat-non-standard-params
   ;; 	   '(("num_ctx" . 32768))))
-  (setopt ellama-provider
-	  (make-llm-ollama
-	   :chat-model "qwen2.5:14b-instruct-q8_0"
-	   :embedding-model "nomic-embed-text"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 8192))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen2.5:14b-instruct-q8_0"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 8192))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "mannix/gemma2-9b-simpo:q6_k"
