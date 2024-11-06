@@ -1850,16 +1850,22 @@ Select it interactively otherwise."
   ;; 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
   ;; (setopt elisa-chat-provider
   ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "qwen2.5:14b-instruct-q8_0"
+  ;; 	   :chat-model "llama3.2"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
+  (setopt elisa-chat-provider
+	  (make-llm-ollama
+	   :chat-model "qwen2.5:3b"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-temperature 0.1
+	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
   ;; 	   :embedding-model "nomic-embed-text"
   ;; 	   :default-chat-temperature 0.1
   ;; 	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
-  (setopt elisa-chat-provider
-	  (make-llm-ollama
-	   :chat-model "gemma2:9b-instruct-q6_K"
-	   :embedding-model "nomic-embed-text"
-	   :default-chat-temperature 0.1
-	   :default-chat-non-standard-params '(("num_ctx" . 8192))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
@@ -1911,12 +1917,7 @@ Select it interactively otherwise."
   (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
 
 (use-package ready-player
-  :demand t
-  :config
-  (ready-player-add-to-auto-mode-alist)
-  (setopt ready-player-play-icon "⏵")
-  (setopt ready-player-stop-icon "■")
-  (setopt ready-player-open-externally-icon "➦"))
+  :demand t)
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
