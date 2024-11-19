@@ -1787,8 +1787,14 @@ Select it interactively otherwise."
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
-  (require 'llm-openai)
-  (setq llm-warn-on-nonfree nil)
+  (setopt ellama-coding-provider
+	  (make-llm-ollama
+	   :chat-model "qwen2.5-coder:14b-instruct-q6_K"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 6000))))
+  ;; (require 'llm-openai)
+  ;; (setq llm-warn-on-nonfree nil)
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-translation-provider
 	  (make-llm-ollama
