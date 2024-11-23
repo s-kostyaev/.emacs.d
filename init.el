@@ -1707,10 +1707,16 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2.5:3b"
+	   :chat-model "vanilj/supernova-medius:q6_k_l"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
+	   '(("num_ctx" . 10000))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen2.5:3b"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "llama3.2"
@@ -1866,12 +1872,24 @@ Select it interactively otherwise."
   ;; 	   :embedding-model "nomic-embed-text"
   ;; 	   :default-chat-temperature 0.1
   ;; 	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen2.5:3b"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
   (setopt elisa-chat-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2.5:3b"
+	   :chat-model "vanilj/supernova-medius:q6_k_l"
 	   :embedding-model "nomic-embed-text"
-	   :default-chat-temperature 0.1
-	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 10000))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "tulu3"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-temperature 0.1
+  ;; 	   :default-chat-non-standard-params '(("num_ctx" . 16384))))
   ;; (setopt elisa-chat-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "gemma2:9b-instruct-q6_K"
