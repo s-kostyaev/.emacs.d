@@ -1947,6 +1947,16 @@ Select it interactively otherwise."
   :config
   (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
 
+(use-package outline-indent
+  :custom
+  (outline-indent-ellipsis " ▼ ")
+  :init
+  (define-global-minor-mode
+    my-global-outline-indent-minor-mode
+    outline-indent-minor-mode
+    (lambda () (outline-indent-minor-mode 1)))
+  (my-global-outline-indent-minor-mode))
+
 (use-package ready-player
   :demand t)
 
