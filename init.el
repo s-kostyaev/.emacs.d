@@ -1707,10 +1707,16 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "vanilj/supernova-medius:q6_k_l"
+	   :chat-model "sskostyaev/virtuoso-small:q6_k_l"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 10000))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "vanilj/supernova-medius:q6_k_l"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 10000))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "qwen2.5:3b"
@@ -1880,10 +1886,16 @@ Select it interactively otherwise."
   ;; 	   :default-chat-non-standard-params '(("num_ctx" . 32768))))
   (setopt elisa-chat-provider
 	  (make-llm-ollama
-	   :chat-model "vanilj/supernova-medius:q6_k_l"
+	   :chat-model "sskostyaev/virtuoso-small:q6_k_l"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 10000))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "vanilj/supernova-medius:q6_k_l"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 10000))))
   ;; (setopt elisa-chat-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "tulu3"
