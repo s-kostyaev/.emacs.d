@@ -1831,6 +1831,7 @@ Select it interactively otherwise."
   ;; 				       :embedding-model "nomic-embed-text"))
   (setopt ellama-show-quotes nil)
   :config
+  (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
     (interactive)
