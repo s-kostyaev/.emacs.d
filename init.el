@@ -1938,7 +1938,8 @@ Select it interactively otherwise."
   ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
   (setopt elisa-reranker-enabled t)
   (setopt elisa-batch-embeddings-enabled nil) ; disable while https://github.com/ollama/ollama/issues/3554 not fixed
-  (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
+  (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "snowflake-arctic-embed2"))
+  ;; (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
   ;; (setopt elisa-chat-provider (make-llm-ollama
   ;; 			       :chat-model "phi3:14b-medium-128k-instruct-q6_K"
   ;; 			       :embedding-model "chatfire/bge-m3:q8_0"
