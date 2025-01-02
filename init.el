@@ -425,6 +425,11 @@ named arguments:
 (defclass eglot-sqls (eglot-lsp-server) ())
 (add-to-list 'eglot-server-programs '(sql-mode . (eglot-sqls "sqls")))
 
+(defclass eglot-mpls (eglot-lsp-server) ())
+(add-to-list 'eglot-server-programs '(markdown-mode . (eglot-mpls "mpls")))
+
+(add-hook 'markdown-mode-hook #'eglot-ensure)
+
 (cl-defmethod eglot-execute
   :around
   ((server eglot-sqls) action)
