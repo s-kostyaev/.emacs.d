@@ -1937,7 +1937,8 @@ Select it interactively otherwise."
   ;; 			       :default-chat-temperature 0.1
   ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
   (setopt elisa-reranker-enabled t)
-  (setopt elisa-batch-embeddings-enabled nil) ; disable while https://github.com/ollama/ollama/issues/3554 not fixed
+  ;; works with unquantized embedding models
+  (setopt elisa-batch-embeddings-enabled t) ; disable while https://github.com/ollama/ollama/issues/3554 not fixed
   (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "snowflake-arctic-embed2"))
   ;; (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
   ;; (setopt elisa-chat-provider (make-llm-ollama
