@@ -38,6 +38,7 @@ named arguments:
       (package-vc-install uri rev backend))))
 
 (setopt use-package-always-defer t)
+(setopt package-install-upgrade-built-in t)
 
 (setopt native-comp-deferred-compilation t)
 (setopt native-compile-prune-cache t)
