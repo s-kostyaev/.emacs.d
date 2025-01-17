@@ -495,7 +495,8 @@ named arguments:
 			     "/opt/homebrew/bin"
 			     "/opt/homebrew/Cellar/libpq/15.2/bin"
 			     "/opt/homebrew/anaconda3/bin"
-			     "~/.ghcup/bin"))
+			     "~/.ghcup/bin"
+			     "/usr/local/texlive/2024/bin/universal-darwin/"))
 		   exec-path))
   (setenv "PATH"
 	  (string-join exec-path ":")))
