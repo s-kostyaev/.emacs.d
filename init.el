@@ -1847,7 +1847,7 @@ Select it interactively otherwise."
   ;; 				       :embedding-model "nomic-embed-text"))
   (setopt ellama-show-quotes nil)
   (setopt ellama-extraction-provider (make-llm-ollama
-				      :chat-model "qwen2.5:3b"
+				      :chat-model "qwen2.5-coder:7b-instruct-q8_0"
 				      :embedding-model "nomic-embed-text"
 				      :default-chat-non-standard-params
 				      '(("num_ctx" . 32768))))
