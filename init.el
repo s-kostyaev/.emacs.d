@@ -1729,10 +1729,16 @@ Select it interactively otherwise."
   ;; 	   '(("num_ctx" . 10000))))
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "vanilj/supernova-medius:q6_k_l"
+	   :chat-model "mistral-small:24b"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "vanilj/supernova-medius:q6_k_l"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "qwen2.5:3b"
@@ -1920,10 +1926,16 @@ Select it interactively otherwise."
   ;; 	   '(("num_ctx" . 16384))))
   (setopt elisa-chat-provider
 	  (make-llm-ollama
-	   :chat-model "vanilj/supernova-medius:q6_k_l"
+	   :chat-model "mistral-small:24b"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
+  ;; (setopt elisa-chat-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "vanilj/supernova-medius:q6_k_l"
+  ;; 	   :embedding-model "nomic-embed-text"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
   ;; (setopt elisa-chat-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "tulu3"
