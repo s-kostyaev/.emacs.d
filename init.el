@@ -1986,7 +1986,7 @@ Select it interactively otherwise."
   ;; 			       :default-chat-temperature 0.1
   ;; 			       :default-chat-non-standard-params '(("num_ctx" . 8192))))
   :config
-  (setopt elisa-web-search-function 'elisa-search-searxng))
+  (setopt elisa-web-search-function 'elisa-search-duckduckgo))
 
 (use-package tabby
   :disabled t
