@@ -1929,6 +1929,7 @@ Select it interactively otherwise."
 	  (make-llm-ollama
 	   :chat-model "mistral-small:24b"
 	   :embedding-model "nomic-embed-text"
+	   :default-chat-temperature 0.15
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   ;; (setopt elisa-chat-provider
