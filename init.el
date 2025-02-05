@@ -2013,9 +2013,6 @@ Select it interactively otherwise."
     (lambda () (outline-indent-minor-mode 1)))
   (my-global-outline-indent-minor-mode))
 
-(use-package ready-player
-  :demand t)
-
 (setopt elisp-flymake-byte-compile-load-path load-path)
 
 (defun my-update-flymake-load-path ()
@@ -2243,3 +2240,4 @@ This is used by Delve debugger."
 
 (provide 'init)
 ;;; init.el ends here
+(put 'list-timers 'disabled nil)
