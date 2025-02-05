@@ -1117,7 +1117,9 @@ The optional argument IGNORED is not used."
 (put 'upcase-region 'disabled nil)
 
 (use-package comment-tags
-  :hook (prog-mode-hook))
+  :preface
+  (add-hook 'emacs-lisp-mode-hook #'comment-tags-mode)
+  (add-hook 'prog-mode-hook #'comment-tags-mode))
 
 (use-package eww-more-readable
   :preface
