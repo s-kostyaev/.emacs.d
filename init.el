@@ -1992,6 +1992,14 @@ Select it interactively otherwise."
   :config
   (setopt elisa-web-search-function 'elisa-search-duckduckgo))
 
+(use-package aider
+  :demand t
+  :init
+  (my-vc-install :name "aider" :host "github" :repo "tninja/aider.el")
+  :config
+  (setq aider-args '("--editor-model" "ollama/qwen2.5-coder:32b-instruct-q4_K_M" "--map-tokens" "3000" "--architect" "--model" "ollama/hf.co/bartowski/FuseO1-DeepSeekR1-QwQ-SkyT1-Flash-32B-Preview-GGUF:IQ4_XS" "--weak-model" "ollama/qwen2.5-coder:7b-instruct-q8_0"))
+  (global-set-key (kbd "C-c a") 'aider-transient-menu))
+
 (use-package tabby
   :disabled t
   :bind (("C-'" . tabby-complete))
