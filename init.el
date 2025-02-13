@@ -1783,6 +1783,8 @@ Select it interactively otherwise."
       (display-buffer new-buffer))))
 
 (use-package elisa
+  :preface
+  (add-to-list 'ellama-provider-list 'elisa-chat-provider)
   :init
   (require 'llm-ollama)
   (setopt elisa-chat-provider
@@ -1798,8 +1800,7 @@ Select it interactively otherwise."
   (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "snowflake-arctic-embed2"))
   ;; (setopt elisa-embeddings-provider (make-llm-ollama :embedding-model "chatfire/bge-m3:q8_0"))
   :config
-  (setopt elisa-web-search-function 'elisa-search-duckduckgo)
-  (add-to-list 'ellama-provider-list 'elisa-chat-provider))
+  (setopt elisa-web-search-function 'elisa-search-duckduckgo))
 
 (use-package aider
   :demand t
