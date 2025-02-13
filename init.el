@@ -1748,7 +1748,7 @@ Select it interactively otherwise."
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
-  (setopt ellama-show-quotes nil)
+  (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
 				      :chat-model "qwen2.5:7b"
 				      :embedding-model "nomic-embed-text"
