@@ -304,7 +304,8 @@ named arguments:
   (diminish 'auto-revert-mode)
   (diminish 'hungry-delete-mode)
   (diminish 'auto-fill-mode)
-  (diminish 'aggressive-indent-mode))
+  (diminish 'aggressive-indent-mode)
+  (diminish 'with-editor-mode))
 
 (use-package vc-mode
   :preface
