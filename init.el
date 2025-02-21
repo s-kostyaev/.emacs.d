@@ -290,8 +290,7 @@ named arguments:
 	       "] "))
 
 (use-package diminish
-  :demand t
-  :init
+  :preface
   (diminish 'org-mode)
   (diminish 'which-key-mode)
   (diminish 'elisp-mode)
