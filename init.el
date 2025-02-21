@@ -1775,6 +1775,7 @@ Select it interactively otherwise."
 				      :default-chat-non-standard-params
 				      '(("num_ctx" . 32768))))
   :config
+  (ellama-context-header-line-global-mode +1)
   (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
