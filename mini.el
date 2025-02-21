@@ -313,15 +313,16 @@ Select it interactively otherwise."
 	       "    "
 	       '(:eval (when (stringp vc-mode)
 			 vc-mode))
+	       "    "
+	       mode-line-modes
 	       ;; the current major mode for the buffer.
-	       "    ["
-
-	       '(:eval (propertize "%m" 'face 'font-lock-string-face
-				   'help-echo buffer-file-coding-system))
-	       "] "
+	       ;; "    ["
+	       ;; '(:eval (propertize "%m" 'face 'font-lock-string-face
+	       ;; 			   'help-echo buffer-file-coding-system))
+	       ;; "] "
 
 	       ;; flymake errors
-	       '(:eval (when flymake--state flymake-mode-line-format))
+	       ;; '(:eval (when flymake--state flymake-mode-line-format))
 
 	       ;; relative position, size of file
 	       "    ["

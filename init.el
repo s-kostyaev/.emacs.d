@@ -266,12 +266,14 @@ named arguments:
 	       "    "
 	       '(:eval (when (stringp vc-mode)
 			 vc-mode))
+	       "    "
+	       mode-line-modes
 	       ;; the current major mode for the buffer.
-	       "    ["
+	       ;; "    ["
 
-	       '(:eval (propertize "%m" 'face 'font-lock-string-face
-				   'help-echo buffer-file-coding-system))
-	       "] "
+	       ;; '(:eval (propertize "%m" 'face 'font-lock-string-face
+	       ;; 			   'help-echo buffer-file-coding-system))
+	       ;; "] "
 
 	       '("" mode-line-process)
 
@@ -284,6 +286,23 @@ named arguments:
 	       "/"
 	       (propertize "%I" 'face 'font-lock-constant-face) ;; size
 	       "] "))
+
+(use-package diminish
+  :demand t
+  :init
+  (diminish 'org-mode)
+  (diminish 'which-key-mode)
+  (diminish 'elisp-mode)
+  (diminish 'emacs-lisp-mode)
+  (diminish 'symbol-overlay-mode)
+  (diminish 'envrc-mode)
+  (diminish 'outline-indent-minor-mode)
+  (diminish 'outline-minor-mode)
+  (diminish 'eldoc-mode)
+  (diminish 'flymake-mode)
+  (diminish 'auto-revert-mode)
+  (diminish 'hungry-delete-mode)
+  (diminish 'auto-fill-mode))
 
 (use-package vc-mode
   :preface
@@ -1719,6 +1738,7 @@ Select it interactively otherwise."
   :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
   :bind ("C-c e" . ellama-transient-main-menu)
   :init
+  (setopt ellama-spinner-enabled nil)
   (setopt ellama-auto-scroll t)
   ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
