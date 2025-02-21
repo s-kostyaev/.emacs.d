@@ -304,7 +304,8 @@ named arguments:
   (diminish 'flymake-mode)
   (diminish 'auto-revert-mode)
   (diminish 'hungry-delete-mode)
-  (diminish 'auto-fill-mode))
+  (diminish 'auto-fill-mode)
+  (diminish 'aggressive-indent-mode))
 
 (use-package vc-mode
   :preface
