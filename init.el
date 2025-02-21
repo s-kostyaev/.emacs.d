@@ -1777,7 +1777,9 @@ Select it interactively otherwise."
 				      :embedding-model "nomic-embed-text"
 				      :default-chat-non-standard-params
 				      '(("num_ctx" . 32768))))
+  (setopt ellama-context-posframe-enabled nil)
   :config
+  (load-file "~/elisp/ellama/ellama.el")
   (ellama-context-header-line-global-mode +1)
   (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)
   (defun my-translate-md-file-to-org ()
