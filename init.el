@@ -45,6 +45,8 @@ named arguments:
 
 (setopt visible-bell t)
 
+(setopt fill-column 80)
+
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 
 (defun my-load-custom-file ()

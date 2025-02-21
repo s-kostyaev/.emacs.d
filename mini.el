@@ -492,6 +492,8 @@ Saves to a temp file."
 
 (setq ring-bell-function 'ignore)
 
+(setopt fill-column 80)
+
 (setopt x-hyper-keysym 'meta
 	mac-option-modifier 'none
 	mac-command-modifier 'meta
