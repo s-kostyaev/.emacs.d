@@ -291,21 +291,25 @@ named arguments:
 
 (use-package diminish
   :preface
-  (diminish 'org-mode)
-  (diminish 'which-key-mode)
-  (diminish 'elisp-mode)
-  (diminish 'emacs-lisp-mode)
-  (diminish 'symbol-overlay-mode)
-  (diminish 'envrc-mode)
-  (diminish 'outline-indent-minor-mode)
-  (diminish 'outline-minor-mode)
-  (diminish 'eldoc-mode)
-  (diminish 'flymake-mode)
-  (diminish 'auto-revert-mode)
-  (diminish 'hungry-delete-mode)
-  (diminish 'auto-fill-mode)
-  (diminish 'aggressive-indent-mode)
-  (diminish 'with-editor-mode))
+  (defun my-diminish-modes ()
+    "Hide noisy modes from mode line."
+    (interactive)
+    (diminish 'org-mode)
+    (diminish 'which-key-mode)
+    (diminish 'elisp-mode)
+    (diminish 'emacs-lisp-mode)
+    (diminish 'symbol-overlay-mode)
+    (diminish 'envrc-mode)
+    (diminish 'outline-indent-minor-mode)
+    (diminish 'outline-minor-mode)
+    (diminish 'eldoc-mode)
+    (diminish 'flymake-mode)
+    (diminish 'auto-revert-mode)
+    (diminish 'hungry-delete-mode)
+    (diminish 'auto-fill-mode)
+    (diminish 'aggressive-indent-mode)
+    (diminish 'with-editor-mode))
+  (add-hook 'after-init-hook #'my-diminish-modes))
 
 (use-package vc-mode
   :preface
