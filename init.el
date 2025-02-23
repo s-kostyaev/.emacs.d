@@ -1784,8 +1784,9 @@ Select it interactively otherwise."
   (setopt ellama-context-posframe-enabled nil)
   :config
   (load-file "~/elisp/ellama/ellama.el")
+  (load-file "~/elisp/ellama/ellama-community-prompts.el")
   (ellama-context-header-line-global-mode +1)
-  (add-hook 'org-ctrl-c-ctrl-c-hook #'ellama-chat-send-last-message)
+  (add-hook 'org-ctrl-c-ctrl-c-final-hook #'ellama-chat-send-last-message)
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
     (interactive)
