@@ -1744,6 +1744,7 @@ Select it interactively otherwise."
   :demand t
   :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
   :bind ("C-c e" . ellama-transient-main-menu)
+  :hook (org-ctrl-c-ctrl-c-final . ellama-chat-send-last-message)
   :init
   (setopt ellama-spinner-enabled nil)
   (setopt ellama-auto-scroll t)
@@ -1786,7 +1787,6 @@ Select it interactively otherwise."
   (load-file "~/elisp/ellama/ellama.el")
   (load-file "~/elisp/ellama/ellama-community-prompts.el")
   (ellama-context-header-line-global-mode +1)
-  (add-hook 'org-ctrl-c-ctrl-c-final-hook #'ellama-chat-send-last-message)
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
     (interactive)
