@@ -500,4 +500,12 @@ Saves to a temp file."
 	mac-command-key-is-meta 't
 	mac-option-key-is-meta nil)
 
+(use-package which-key
+  :commands which-key-mode
+  :demand t
+  :preface
+  (setq which-key-show-transient-maps 't)
+  :config
+  (which-key-mode t))
+
 (my-set-themes)
