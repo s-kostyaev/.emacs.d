@@ -1410,6 +1410,8 @@ If the current buffer is not visiting a file, prompt for a file name."
 	  (push "go build" targets)))
       (nreverse targets)))
 
+  (setopt compilation-scroll-output 'first-error)
+
   (defun my-make (arg)
     "Make current project with targets selection.
 Use project root as default directory if universal ARG is not set.
