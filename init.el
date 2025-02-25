@@ -311,7 +311,8 @@ named arguments:
     (diminish 'with-editor-mode)
     (diminish 'dtrt-indent-mode)
     (diminish 'yas-minor-mode)
-    (diminish 'which-key-mode))
+    (diminish 'which-key-mode)
+    (diminish 'symbol-overlay-mode))
   (add-hook 'after-init-hook #'my-diminish-modes))
 
 (use-package vc-mode
