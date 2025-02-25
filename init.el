@@ -308,7 +308,10 @@ named arguments:
     (diminish 'hungry-delete-mode)
     (diminish 'auto-fill-mode)
     (diminish 'aggressive-indent-mode)
-    (diminish 'with-editor-mode))
+    (diminish 'with-editor-mode)
+    (diminish 'dtrt-indent-mode)
+    (diminish 'yas-minor-mode)
+    (diminish 'which-key-mode))
   (add-hook 'after-init-hook #'my-diminish-modes))
 
 (use-package vc-mode
