@@ -46,6 +46,7 @@ named arguments:
 (setopt visible-bell t)
 
 (setopt fill-column 80)
+(global-visual-wrap-prefix-mode +1)
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 

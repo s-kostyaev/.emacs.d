@@ -493,6 +493,7 @@ Saves to a temp file."
 (setq ring-bell-function 'ignore)
 
 (setopt fill-column 80)
+(global-visual-wrap-prefix-mode +1)
 
 (setopt x-hyper-keysym 'meta
 	mac-option-modifier 'none
