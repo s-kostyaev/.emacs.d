@@ -47,6 +47,7 @@ named arguments:
 
 (setopt fill-column 80)
 (global-visual-wrap-prefix-mode +1)
+(kill-ring-deindent-mode +1)
 
 (setq custom-file "~/.emacs.d/emacs-customizations.el")
 

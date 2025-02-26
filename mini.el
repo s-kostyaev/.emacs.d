@@ -494,6 +494,7 @@ Saves to a temp file."
 
 (setopt fill-column 80)
 (global-visual-wrap-prefix-mode +1)
+(kill-ring-deindent-mode +1)
 
 (setopt x-hyper-keysym 'meta
 	mac-option-modifier 'none
