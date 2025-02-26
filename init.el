@@ -1861,9 +1861,10 @@ Select it interactively otherwise."
   (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
 
 (use-package outline-indent
+  :demand t
   :custom
   (outline-indent-ellipsis " ▼ ")
-  :init
+  :config
   (define-global-minor-mode
     my-global-outline-indent-minor-mode
     outline-indent-minor-mode
