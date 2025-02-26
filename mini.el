@@ -100,6 +100,19 @@
         (load-theme my-dark-theme t)
       (load-theme my-light-theme t))))
 
+(defun my-set-font ()
+  "Set font."
+  (interactive)
+  (set-frame-font (font-spec :size 15.0 :family "PT Mono") nil t))
+
+(my-set-font)
+
+(defun my-set-font--frame (_frame)
+  "Reload theme after make frame."
+  (my-set-font))
+
+(add-to-list 'after-make-frame-functions #'my-set-font--frame)
+
 ;; (progn ; my-gnome-night-light-light
 ;;   (require 'dbus)
 ;;   (defun my-gnome-night-light-internal-prop-change-listener (_name changed-props _)
