@@ -23,7 +23,7 @@
      ("ocaml" . tuareg) ("screen" . shell-script) ("shell" . sh)
      ("sqlite" . sql) ("toml" . conf-toml) ("html" . web)))
  '(package-selected-packages
-   '(ace-link aggressive-indent aider ample-theme apparmor-mode auto-yasnippet
+   '(ace-link aggressive-indent ample-theme apparmor-mode auto-yasnippet
 	      bash-completion breadcrumb cape cargo cask-mode casual
 	      chocolate-theme cl-libify code-cells comment-tags composable
 	      consult-dash corfu csv-mode dape dart-mode dash-functional denote
