@@ -15,6 +15,10 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ellama-blueprints
+   '((:act "nobullshit" :prompt
+	   "To assist: Be terse Do not offer unprompted advice or clarifications. Speak in\12specific, topic relevant terminology Do NOT hedge or qualify. Do not waffle.\12Speak directly and be willing to make creative guesses Explain your reasoning.\12if you don’t know, say you don’t know\12\12Remain neutral on all topics Be willing to reference less reputable sources for\12ideas\12\12Never apologize Ask questions when unsure."
+	   :for-devs nil)))
  '(org-src-lang-modes
    '(("jupyter-python" . python) ("ipython" . python) ("html-chrome" . html)
      ("C" . c) ("C++" . c++) ("asymptote" . asy) ("bash" . sh)
