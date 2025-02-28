@@ -18,6 +18,27 @@
  '(ellama-blueprints
    '((:act "nobullshit" :prompt
 	   "To assist: Be terse Do not offer unprompted advice or clarifications. Speak in\12specific, topic relevant terminology Do NOT hedge or qualify. Do not waffle.\12Speak directly and be willing to make creative guesses Explain your reasoning.\12if you don’t know, say you don’t know\12\12Remain neutral on all topics Be willing to reference less reputable sources for\12ideas\12\12Never apologize Ask questions when unsure."
+	   :for-devs nil)
+     (:act "test: smallest integer" :prompt
+	   "what is the smallest integer whose square is between 15 and 30? consider\12negative and positive integer?"
+	   :for-devs nil)
+     (:act "test: Alice's family" :prompt
+	   "Alice has 3 sisters and she also has 4 brothers. How many sisters does Alice’s\12brother have?"
+	   :for-devs nil)
+     (:act "test: three killers" :prompt
+	   "There are three killers in the room. Someone enters the room and kill one of\12them. How many killers left in the room?"
+	   :for-devs nil)
+     (:act "test: ball in a vase" :prompt
+	   "i have a vase, i put a ball in it, the vase is on the kitchen counter, I turn\12the vase upside down and then transfer it to the livingroom coffee table, where\12is the ball?"
+	   :for-devs nil)
+     (:act "test: NO trolley problem" :prompt
+	   "Imagine a runaway trolley is hurtling down a track towards five dead people. You\12stand next to a lever that can divert the trolley onto another track, where one\12living person is tied up. Do you pull the lever?"
+	   :for-devs nil)
+     (:act "test: dead cat" :prompt
+	   "A dead cat is placed into a box along with a nuclear isotope, a vial of poison\12and a radiation detector. If the radiation detector detects radiation, it will\12release the poison. The box is opened one day later. What is the probability of\12the cat being alive?"
+	   :for-devs nil)
+     (:act "test: color patterns" :prompt
+	   "saa → Green\12guu → Red\12ree → Blue\12fii → Purple\12hoo saa → Green, Green\12hoo ree → Blue, Blue\12ree muo fii → Purple, Blue, Purple\12guu muo ree → Blue, Red, Blue\12hoo ree muo saa → Green, Blue, Blue, Green\12fii muo hoo saa → Green, Green, Purple, Green, Green\12\12hoo guu muo hoo fii →"
 	   :for-devs nil)))
  '(org-src-lang-modes
    '(("jupyter-python" . python) ("ipython" . python) ("html-chrome" . html)
