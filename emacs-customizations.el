@@ -65,7 +65,7 @@
 	      multiple-cursors noflet nov nova-theme ob-go ocp-indent org
 	      org-mind-map outline-indent package-lint-flymake pandoc-mode pass
 	      pdf-tools pkgbuild-mode plz poly-markdown posframe prism project
-	      protobuf-mode pulsar pyenv-mode rainbow-mode restclient-jq
+	      protobuf-mode pulsar pyenv-mode python rainbow-mode restclient-jq
 	      reverse-im rust-mode rust-playground smart-shift soap-client
 	      solarized-theme spacemacs-theme spacious-padding speechd-el
 	      speed-type spray string-inflection symbol-overlay tabby tagedit
