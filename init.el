@@ -1769,12 +1769,12 @@ Select it interactively otherwise."
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2.5:3b"
+	   :chat-model "phi4-mini:3.8b-q8_0"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2.5:3b"
+	   :chat-model "phi4-mini:3.8b-q8_0"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
