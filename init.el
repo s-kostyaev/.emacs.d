@@ -1778,6 +1778,12 @@ Select it interactively otherwise."
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
+  (setopt ellama-completion-provider
+	  (make-llm-ollama
+	   :chat-model "phi4-mini:3.8b-q8_0"
+	   :embedding-model "nomic-embed-text"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 32768))))
   (setopt ellama-coding-provider
 	  (make-llm-ollama
 	   :chat-model "qwen2.5-coder:14b-instruct-q6_K"
