@@ -755,6 +755,7 @@ func main() {
   (setopt corfu-auto t)
   (setopt corfu-auto-delay 0.1)
   (setopt corfu-auto-prefix 1)
+  (setopt corfu-quit-no-match t)
   ;; (global-set-key (kbd "<tab>") 'indent-for-tab-command)
   (setopt tab-always-indent 'complete)
   (setopt tab-first-completion nil)
