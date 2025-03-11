@@ -75,10 +75,10 @@
 	      reverse-im rust-mode rust-playground smart-shift soap-client
 	      solarized-theme spacemacs-theme spacious-padding speechd-el
 	      speed-type spray string-inflection symbol-overlay tabby tagedit
-	      timp tramp transient treesit-auto treesit-fold ultra-scroll
-	      use-package verilog-mode visual-regexp vmd-mode vterm-toggle
-	      web-beautify web-mode wgrep which-key white-sand-theme
-	      window-tool-bar xeft xref zenburn-theme))
+	      timp track-changes tramp transient treesit-auto treesit-fold
+	      ultra-scroll use-package verilog-mode visual-regexp vmd-mode
+	      vterm-toggle web-beautify web-mode wgrep which-key
+	      white-sand-theme window-tool-bar xeft xref zenburn-theme))
  '(package-vc-selected-packages
    '((aider :vc-backend Git :url "https://www.github.com/tninja/aider.el")
      (ultra-scroll :vc-backend Git :url
