@@ -1781,7 +1781,7 @@ Select it interactively otherwise."
 	   '(("num_ctx" . 32768))))
   (setopt ellama-completion-provider
 	  (make-llm-ollama
-	   :chat-model "phi4-mini:3.8b-q8_0"
+	   :chat-model "qwen2.5:3b"
 	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
