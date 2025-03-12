@@ -1753,6 +1753,7 @@ Select it interactively otherwise."
 (use-package ellama
   :demand t
   :functions (make-llm-ollama ellama--translate-markdown-to-org-filter)
+  :commands (my-ollama-delete)
   :bind ("C-c e" . ellama-transient-main-menu)
   :hook (org-ctrl-c-ctrl-c-final . ellama-chat-send-last-message)
   :init
@@ -1812,6 +1813,12 @@ Select it interactively otherwise."
   (load-file "~/elisp/ellama/ellama-blueprint.el")
   (load-file "~/elisp/ellama/ellama-community-prompts.el")
   (ellama-context-header-line-global-mode +1)
+  (defun my-ollama-delete ()
+    "Remove ollama model."
+    (interactive)
+    (let ((model (completing-read "Select model to delete: " (ellama-get-ollama-model-names))))
+      (when (y-or-n-p (format "Delete %s?" model))
+	(shell-command (format "ollama rm %s" model)))))
   (defun my-translate-md-file-to-org ()
     "Translate markdown file to org."
     (interactive)
