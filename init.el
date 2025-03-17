@@ -1807,6 +1807,8 @@ Select it interactively otherwise."
 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
   :config
+  (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
+  (advice-add 'end-of-buffer :after #'ellama-enable-scroll)
   (load-file "~/elisp/ellama/ellama.el")
   (load-file "~/elisp/ellama/ellama-transient.el")
   (load-file "~/elisp/ellama/ellama-context.el")
@@ -2056,6 +2058,7 @@ This is used by Delve debugger."
   (spacious-padding-mode t))
 
 (use-package breadcrumb
+  :disabled t
   :commands breadcrumb-mode
   :demand t
   :init
