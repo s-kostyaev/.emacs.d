@@ -1781,11 +1781,7 @@ Select it interactively otherwise."
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-translation-provider
-	  (make-llm-ollama
-	   :chat-model "gemma3:4b"
-	   :embedding-model "nomic-embed-text"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
+	  ellama-provider)
   (setopt ellama-completion-provider
 	  (make-llm-ollama
 	   :chat-model "qwen2.5:3b"
