@@ -1764,8 +1764,7 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "mistral-small:24b"
-	   :default-chat-temperature 0.15
+	   :chat-model "qwen3:30b-a3b"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-provider
@@ -1774,7 +1773,7 @@ Select it interactively otherwise."
 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
-	   :chat-model "gemma3:4b"
+	   :chat-model "qwen3:4b"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-translation-provider
@@ -1792,7 +1791,7 @@ Select it interactively otherwise."
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
-				      :chat-model "qwen2.5:7b"
+				      :chat-model "qwen3:4b"
 				      :default-chat-non-standard-params
 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
