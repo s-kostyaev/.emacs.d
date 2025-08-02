@@ -1790,8 +1790,7 @@ Select it interactively otherwise."
 	   '(("num_ctx" . 32768))))
   (setopt ellama-coding-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2.5-coder:14b-instruct-q6_K"
-	   :embedding-model "nomic-embed-text"
+	   :chat-model "qwen3-coder"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
