@@ -45,7 +45,30 @@
 	   :for-devs nil)
      (:act "deep hermes 3 reasoning" :prompt
 	   "You are a deep thinking AI, you may use extremely long chains of thought to\12deeply consider the problem and deliberate with yourself via systematic\12reasoning processes to help come to a correct solution prior to answering. You\12should enclose your thoughts and internal monologue inside <think> </think>\12tags, and then provide your solution or response to the problem.\12"
-	   :for-devs nil)))
+	   :for-devs nil)
+     (:act "Idea honing" :prompt
+	   "Ask me one question at a time so we can develop a thorough, step-by-step spec\12for this idea. Each question should build on my previous answers, and our end\12goal is to have a detailed specification I can hand off to a developer. Let’s do\12this iteratively and dig into every relevant detail. Remember, only one question\12at a time.\12\12Here’s the idea:\12\12{idea}"
+	   :for-devs t)
+     (:act "Idea to spec" :prompt
+	   "Now that we’ve wrapped up the brainstorming process, can you compile our\12findings into a comprehensive, developer-ready specification? Include all\12relevant requirements, architecture choices, data handling details, error\12handling strategies, and a testing plan so a developer can immediately begin\12implementation."
+	   :for-devs t)
+     (:act "Planning TDD" :prompt
+	   "Draft a detailed, step-by-step blueprint for building this project. Then, once\12you have a solid plan, break it down into small, iterative chunks that build on\12each other. Look at these chunks and then go another round to break it into\12small steps. Review the results and make sure that the steps are small enough to\12be implemented safely with strong testing, but big enough to move the project\12forward. Iterate until you feel that the steps are right sized for this project.\12\12From here you should have the foundation to provide a series of prompts for a\12code-generation LLM that will implement each step in a test-driven manner.\12Prioritize best practices, incremental progress, and early testing, ensuring no\12big jumps in complexity at any stage. Make sure that each prompt builds on the\12previous prompts, and ends with wiring things together. There should be no\12hanging or orphaned code that isn't integrated into a previous step.\12\12Make sure and separate each prompt section. Use markdown. Each prompt should be\12tagged as text using code tags. The goal is to output prompts, but context, etc\12is important as well.\12\12{spec}"
+	   :for-devs t)
+     (:act "Planning non TDD" :prompt
+	   "Draft a detailed, step-by-step blueprint for building this project. Then, once\12you have a solid plan, break it down into small, iterative chunks that build on\12each other. Look at these chunks and then go another round to break it into\12small steps. review the results and make sure that the steps are small enough to\12be implemented safely, but big enough to move the project forward. Iterate until\12you feel that the steps are right sized for this project.\12\12From here you should have the foundation to provide a series of prompts for a\12code-generation LLM that will implement each step. Prioritize best practices,\12and incremental progress, ensuring no big jumps in complexity at any stage. Make\12sure that each prompt builds on the previous prompts, and ends with wiring\12things together. There should be no hanging or orphaned code that isn't\12integrated into a previous step.\12\12Make sure and separate each prompt section. Use markdown. Each prompt should be\12tagged as text using code tags. The goal is to output prompts, but context, etc\12is important as well.\12\12{spec}"
+	   :for-devs t)
+     (:act "Code review" :prompt
+	   "You are a senior developer. Your job is to do a thorough code review of this\12code. You should write it up and output markdown. Include line numbers, and\12contextual info. Your code review will be passed to another teammate, so be\12thorough. Think deeply before writing the code review. Review every part, and\12don't hallucinate."
+	   :for-devs t)
+     (:act "Create issue" :prompt
+	   "You are a senior developer. Your job is to review this code, and write out the\12top issues that you see with the code. It could be bugs, design choices, or code\12cleanliness issues. You should be specific, and be very good. Do Not\12Hallucinate. Think quietly to yourself, then act - write the issues. The issues\12will be given to a developer to executed on, so they should be in a format that\12is compatible with github issues"
+	   :for-devs t)
+     (:act "Missing tests" :prompt
+	   "You are a senior developer. Your job is to review this code, and write out a\12list of missing test cases, and code tests that should exist. You should be\12specific, and be very good. Do Not Hallucinate. Think quietly to yourself, then\12act - write the issues. The issues will be given to a developer to executed on,\12so they should be in a format that is compatible with github issues"
+	   :for-devs t)
+     (:act "test: contact rupture gestalt ru" :prompt
+	   "Расскажи мне про срыв контакта в Гештальт терапии" :for-devs nil)))
  '(org-src-lang-modes
    '(("jupyter-python" . python) ("ipython" . python) ("html-chrome" . html)
      ("C" . c) ("C++" . c++) ("asymptote" . asy) ("bash" . sh)
