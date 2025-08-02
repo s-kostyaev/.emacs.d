@@ -1765,19 +1765,16 @@ Select it interactively otherwise."
   (setopt ellama-provider
 	  (make-llm-ollama
 	   :chat-model "mistral-small:24b"
-	   :embedding-model "nomic-embed-text"
 	   :default-chat-temperature 0.15
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
 	   :chat-model "gemma3:4b"
-	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
 	   :chat-model "gemma3:4b"
-	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-translation-provider
@@ -1785,7 +1782,6 @@ Select it interactively otherwise."
   (setopt ellama-completion-provider
 	  (make-llm-ollama
 	   :chat-model "qwen2.5:3b"
-	   :embedding-model "nomic-embed-text"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-coding-provider
@@ -1797,7 +1793,6 @@ Select it interactively otherwise."
   (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
 				      :chat-model "qwen2.5:7b"
-				      :embedding-model "nomic-embed-text"
 				      :default-chat-non-standard-params
 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
