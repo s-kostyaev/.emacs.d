@@ -1764,23 +1764,23 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "qwen3:30b-a3b"
+	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "gemma3:4b"
+	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params '(("stop" . ("\n")))))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
-	   :chat-model "qwen3:4b"
+	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-translation-provider
 	  ellama-provider)
   (setopt ellama-completion-provider
 	  (make-llm-ollama
-	   :chat-model "qwen2.5:3b"
+	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-coding-provider
@@ -1791,7 +1791,7 @@ Select it interactively otherwise."
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
-				      :chat-model "qwen3:4b"
+				      :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 				      :default-chat-non-standard-params
 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
