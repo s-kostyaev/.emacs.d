@@ -83,7 +83,7 @@
 	      consult-dash corfu csv-mode dape dart-mode dash-functional denote
 	      difftastic diminish docker-compose-mode dockerfile-mode dotnet
 	      dtrt-indent dumb-jump dune eat edit-indirect edit-server
-	      editorconfig ef-themes eglot eglot-fsharp ein elisa
+	      editorconfig ef-themes eglot eglot-fsharp ein eldoc elisa
 	      elisp-benchmarks ellama embark-consult envrc erc expand-region
 	      expreg faceup fb2-reader feature-mode flx flymake
 	      flymake-go-staticcheck flymake-proselint flymake-quickdef frimacs

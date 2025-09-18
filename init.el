@@ -1333,8 +1333,7 @@ If the current buffer is not visiting a file, prompt for a file name."
 (use-package marginalia
   :commands marginalia-mode
   :init
-  (marginalia-mode +1)
-  (setopt marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light)))
+  (marginalia-mode +1))
 
 (use-package embark
   :disabled t
