@@ -1760,6 +1760,7 @@ Select it interactively otherwise."
   (setopt ellama-auto-scroll t)
   ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
+  (setopt ellama-response-process-method 30)
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
