@@ -82,7 +82,7 @@
 	      chocolate-theme cl-libify code-cells comment-tags composable
 	      consult-dash corfu csv-mode dape dart-mode dash-functional denote
 	      difftastic diminish docker-compose-mode dockerfile-mode dotnet
-	      dtrt-indent dumb-jump dune eat edit-indirect edit-server
+	      dtrt-indent dumb-jump dune eat eca edit-indirect edit-server
 	      editorconfig ef-themes eglot eglot-fsharp ein eldoc elisa
 	      elisp-benchmarks ellama embark-consult envrc erc expand-region
 	      expreg faceup fb2-reader feature-mode flx flymake
@@ -93,8 +93,8 @@
 	      json-snatcher jsonian jsonrpc key-chord keycast magit-todos
 	      marginalia merlin monokai-theme multiple-cursors noflet nov
 	      nova-theme ob-go ocp-indent org org-mind-map outline-indent
-	      package-lint-flymake pandoc-mode pass pdf-tools pkgbuild-mode plz
-	      poly-markdown posframe prism project protobuf-mode pulsar
+	      package-lint-flymake pandoc-mode pass pdf-tools peg pkgbuild-mode
+	      plz poly-markdown posframe prism project protobuf-mode pulsar
 	      pyenv-mode python rainbow-mode restclient-jq reverse-im rust-mode
 	      rust-playground smart-shift soap-client solarized-theme
 	      spacemacs-theme spacious-padding speechd-el speed-type spray

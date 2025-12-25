@@ -964,7 +964,7 @@ The optional argument IGNORED is not used."
       (yas-global-mode 1))))
 
 (setopt x-hyper-keysym 'meta
-	mac-option-modifier 'none
+	mac-option-modifier 'super
 	mac-command-modifier 'meta
 	mac-command-key-is-meta 't
 	mac-option-key-is-meta nil)
@@ -1760,11 +1760,12 @@ Select it interactively otherwise."
   (setopt ellama-auto-scroll t)
   ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
-  (setopt ellama-response-process-method 30)
+  (setopt ellama-response-process-method 10)
+  ;; (setopt ellama-response-process-method 'async)
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
+	   :chat-model "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-provider
