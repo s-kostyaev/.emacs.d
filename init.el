@@ -1758,6 +1758,7 @@ Select it interactively otherwise."
   :init
   (setopt ellama-spinner-enabled nil)
   (setopt ellama-auto-scroll t)
+  (setopt ellama-translate-italic nil)
   ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
