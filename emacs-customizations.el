@@ -71,7 +71,10 @@
 	   "Расскажи мне про срыв контакта в Гештальт терапии" :for-devs nil)
      (:act "Spec" :prompt
 	   "Ask me one question at a time so we can develop a thorough, step-by-step spec\12for this idea. Each question should build on my previous answers, and our end\12goal is to have a detailed specification I can hand off to a developer. Let’s do\12this iteratively and dig into every relevant detail. Remember, only one question\12at a time. Use ask_user tool to collect data. Use write_file, append_file,\12edit_file and read_file tools to write result to {result_file_path}\12\12Here’s the idea:\12\12{idea}"
-	   :for-devs t)))
+	   :for-devs t)
+     (:act "improve clarity" :prompt
+	   "Your GOAL is improve clarity.\12\12Read the document {path} using read_file tool. Use ask_user tool to improve\12clarity. Ask as many questions as needed until it will be crystal clear. Update\12the document using edit_file, append_file or write file tools."
+	   :for-devs nil)))
  '(org-src-lang-modes
    '(("jupyter-python" . python) ("ipython" . python) ("html-chrome" . html)
      ("C" . c) ("C++" . c++) ("asymptote" . asy) ("bash" . sh)
