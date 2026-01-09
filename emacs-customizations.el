@@ -74,7 +74,10 @@
 	   :for-devs t)
      (:act "improve clarity" :prompt
 	   "Your GOAL is improve clarity.\12\12Read the document {path} using read_file tool. Use ask_user tool to improve\12clarity. Ask as many questions as needed until it will be crystal clear. Update\12the document using edit_file, append_file or write file tools."
-	   :for-devs nil)))
+	   :for-devs nil)
+     (:act "spec to plan" :prompt
+	   "Your GOAL is create detailed implementation plan based on spec {path_to_spec}.\12Plan should be formatted as a markdown checklist. Ask user questions to\12crystallize user's intent for any major decisions using ask_user tool.\12Save result plan into {result_file_path}.\12"
+	   :for-devs t)))
  '(org-src-lang-modes
    '(("jupyter-python" . python) ("ipython" . python) ("html-chrome" . html)
      ("C" . c) ("C++" . c++) ("asymptote" . asy) ("bash" . sh)
