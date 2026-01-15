@@ -1764,11 +1764,18 @@ Select it interactively otherwise."
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
   (require 'llm-ollama)
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
+  (require 'llm-openai)
+  (setopt llm-warn-on-nonfree nil)
   (setopt ellama-provider
-	  (make-llm-ollama
-	   :chat-model "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
+	  (make-llm-openai-compatible
+	   :url "https://openrouter.ai/api/v1"
+	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
+	   :key (password-store-get "open-router-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
 	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
@@ -1785,11 +1792,12 @@ Select it interactively otherwise."
 	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768))))
-  (setopt ellama-coding-provider
-	  (make-llm-ollama
-	   :chat-model "qwen3-coder"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
+  (setopt ellama-coding-provider ellama-provider)
+  ;; (setopt ellama-coding-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen3-coder"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-llm)
   (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
