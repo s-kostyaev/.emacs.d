@@ -1847,10 +1847,30 @@ Select it interactively otherwise."
 	(save-buffer))
       (display-buffer new-buffer))))
 
+(use-package mcp
+  :demand t
+  :custom
+  (mcp-hub-servers
+   `(("ddg" . (:command "uvx"
+			:args
+			("duckduckgo-mcp-server")))
+     ;; see https://github.com/zerocore-ai/microsandbox/blob/main/MCP.md
+     ;; to start server call this command:
+     ;; msb server start --dev
+     ("microsandbox" . (:url "http://localhost:5555/mcp"))))
+  :config
+  (require 'mcp-hub)
+  (mcp-hub-start-all-server
+   (lambda ()
+     (let ((tools (mcp-hub-get-all-tool :asyncp t :categoryp t)))
+       (mapcar #'(lambda (tool)
+		   (apply #'ellama-tools-define-tool
+			  (list tool)))
+	       tools)))))
+
 (use-package elisa
-  :preface
-  (add-to-list 'ellama-provider-list 'elisa-chat-provider)
   :init
+  (add-to-list 'ellama-provider-list 'elisa-chat-provider)
   (require 'llm-ollama)
   (setopt elisa-chat-provider
 	  (make-llm-ollama
@@ -1892,6 +1912,9 @@ Select it interactively otherwise."
   (my-global-outline-indent-minor-mode))
 
 (setopt elisp-flymake-byte-compile-load-path load-path)
+(bind-key
+ (kbd "C-c C-c")
+ #'my-make emacs-lisp-mode-map)
 
 (defun my-update-flymake-load-path ()
   "Update flymake load path."
