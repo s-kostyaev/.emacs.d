@@ -1854,6 +1854,9 @@ Select it interactively otherwise."
    `(("ddg" . (:command "uvx"
 			:args
 			("duckduckgo-mcp-server")))
+     ("motherduck" . (:command "uvx"
+			       :args
+			       ("mcp-server-motherduck" "--db-path" ":memory:")))
      ;; see https://github.com/zerocore-ai/microsandbox/blob/main/MCP.md
      ;; to start server call this command:
      ;; msb server start --dev
