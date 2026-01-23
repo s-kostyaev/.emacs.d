@@ -1860,7 +1860,13 @@ Select it interactively otherwise."
      ;; see https://github.com/zerocore-ai/microsandbox/blob/main/MCP.md
      ;; to start server call this command:
      ;; msb server start --dev
-     ("microsandbox" . (:url "http://localhost:5555/mcp"))))
+     ;; ("microsandbox" . (:url "http://localhost:5555/mcp"))
+     ;; ("run-python" . (:command "uvx"
+     ;; 			       :args
+     ;; 			       ("mcp-run-python" "stdio")))
+     ("pyodide" . (:command "npx"
+			    :args
+			    ("-y" "mcp-pyodide")))))
   :config
   (require 'mcp-hub)
   (mcp-hub-start-all-server
