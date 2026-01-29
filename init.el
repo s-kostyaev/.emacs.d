@@ -1820,6 +1820,7 @@ Select it interactively otherwise."
   (load-file "~/elisp/ellama/ellama-context.el")
   (load-file "~/elisp/ellama/ellama-blueprint.el")
   (load-file "~/elisp/ellama/ellama-community-prompts.el")
+  (load-file "~/elisp/ellama/ellama-skills.el")
   (ellama-context-header-line-global-mode +1)
   (defun my-ollama-delete ()
     "Remove ollama model."
