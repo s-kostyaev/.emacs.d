@@ -1764,18 +1764,18 @@ Select it interactively otherwise."
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
   (require 'llm-ollama)
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
-  (require 'llm-openai)
-  (setopt llm-warn-on-nonfree nil)
   (setopt ellama-provider
-	  (make-llm-openai-compatible
-	   :url "https://openrouter.ai/api/v1"
-	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
-	   :key (password-store-get "open-router-key")))
+	  (make-llm-ollama
+	   :chat-model "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 32768))))
+  ;; (require 'llm-openai)
+  ;; (setopt llm-warn-on-nonfree nil)
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-openai-compatible
+  ;; 	   :url "https://openrouter.ai/api/v1"
+  ;; 	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
+  ;; 	   :key (password-store-get "open-router-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
 	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"

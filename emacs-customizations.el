@@ -111,7 +111,7 @@
 	      tramp transient treesit-auto treesit-fold ultra-scroll use-package
 	      verilog-mode visual-regexp vmd-mode vterm-toggle web-beautify
 	      web-mode wgrep which-key white-sand-theme window-tool-bar xeft
-	      xref zenburn-theme))
+	      xref yaml zenburn-theme))
  '(package-vc-selected-packages
    '((aider :vc-backend Git :url "https://www.github.com/tninja/aider.el")
      (ultra-scroll :vc-backend Git :url
