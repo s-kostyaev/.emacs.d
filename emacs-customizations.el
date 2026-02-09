@@ -101,17 +101,17 @@
 	      highlight-indentation hungry-delete ibuffer-vc idlwave json-rpc
 	      json-snatcher jsonian jsonrpc key-chord keycast magit-todos
 	      marginalia mcp merlin monokai-theme multiple-cursors noflet nov
-	      nova-theme ob-go ocp-indent org org-mind-map outline-indent
-	      package-lint-flymake pandoc-mode pass pdf-tools peg pkgbuild-mode
-	      plz poly-markdown posframe prism project protobuf-mode pulsar
-	      pyenv-mode python rainbow-mode restclient-jq reverse-im rust-mode
-	      rust-playground smart-shift soap-client solarized-theme
-	      spacemacs-theme spacious-padding speechd-el speed-type spray
-	      string-inflection symbol-overlay tabby tagedit timp track-changes
-	      tramp transient treesit-auto treesit-fold ultra-scroll use-package
-	      verilog-mode visual-regexp vmd-mode vterm-toggle web-beautify
-	      web-mode wgrep which-key white-sand-theme window-tool-bar xeft
-	      xref yaml zenburn-theme))
+	      nova-theme ob-go ocaml-ts-mode ocp-indent org org-mind-map
+	      outline-indent package-lint-flymake pandoc-mode pass pdf-tools peg
+	      pkgbuild-mode plz poly-markdown posframe prism project
+	      protobuf-mode pulsar pyenv-mode python rainbow-mode restclient-jq
+	      reverse-im rust-mode rust-playground smart-shift soap-client
+	      solarized-theme spacemacs-theme spacious-padding speechd-el
+	      speed-type spray string-inflection symbol-overlay tabby tagedit
+	      timp track-changes tramp transient treesit-auto treesit-fold
+	      ultra-scroll use-package verilog-mode visual-regexp vmd-mode
+	      vterm-toggle web-beautify web-mode wgrep which-key
+	      white-sand-theme window-tool-bar xeft xref yaml zenburn-theme))
  '(package-vc-selected-packages
    '((aider :vc-backend Git :url "https://www.github.com/tninja/aider.el")
      (ultra-scroll :vc-backend Git :url

@@ -1615,10 +1615,39 @@ Select it interactively otherwise."
   (add-hook 'csharp-mode-hook 'my-dotnet-project)
   (add-hook 'fsharp-mode-hook 'my-dotnet-project))
 
+;;; Ocaml
+
 (use-package dune
   :ensure t)
 
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line
+
+(setq auto-mode-alist
+      (append '(("\\.ml[ily]?$" . ocaml-ts-mode)
+		("\\.topml$" . ocaml-ts-mode))
+	      auto-mode-alist))
+
+(defun my-opam-env ()
+  "Set opam environment."
+  (interactive)
+  (dolist (var (car (read-from-string
+		     (shell-command-to-string "opam config env --sexp"))))
+    (setenv (car var) (cadr var))))
+
+(add-hook 'ocaml-ts-mode-hook
+	  #'(lambda ()
+	      (bind-key (kbd "C-c C-c") #'compile ocaml-ts-mode-map)
+	      (set (make-local-variable 'compile-command)
+		   (concat "dune build"))
+	      (set (make-local-variable 'compilation-read-command)
+		   nil)
+	      (my-opam-env)
+	      (eglot-ensure)))
+
 (use-package tuareg-mode
+  :disabled t
   :preface
   (let ((opam-share (ignore-errors (car (process-lines "opam" "var" "share")))))
     (when (and opam-share (file-directory-p opam-share))
@@ -1630,12 +1659,6 @@ Select it interactively otherwise."
 	    (append '(("\\.ml[ily]?$" . tuareg-mode)
 		      ("\\.topml$" . tuareg-mode))
 		    auto-mode-alist))))
-
-  (defun my-opam-env ()
-    (interactive nil)
-    (dolist (var (car (read-from-string
-		       (shell-command-to-string "opam config env --sexp"))))
-      (setenv (car var) (cadr var))))
 
   (add-hook 'tuareg-mode-hook
 	    #'(lambda ()
