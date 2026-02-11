@@ -1882,9 +1882,9 @@ Select it interactively otherwise."
   :demand t
   :custom
   (mcp-hub-servers
-   `(("ddg" . (:command "uvx"
-			:args
-			("duckduckgo-mcp-server")))
+   `(;; ("ddg" . (:command "uvx"
+     ;; 			:args
+     ;; 			("duckduckgo-mcp-server")))
      ("motherduck" . (:command "uvx"
 			       :args
 			       ("mcp-server-motherduck" "--db-path" ":memory:")))
