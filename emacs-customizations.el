@@ -96,8 +96,8 @@
 	      elisp-benchmarks ellama embark-consult envrc erc expand-region
 	      expreg faceup fb2-reader feature-mode flx flymake
 	      flymake-go-staticcheck flymake-proselint flymake-quickdef frimacs
-	      gif-screencast git-timemachine go-fill-struct go-gen-test go-impl
-	      go-snippets go-tag gotest haskell-ts-mode hercules
+	      futur gif-screencast git-timemachine go-fill-struct go-gen-test
+	      go-impl go-snippets go-tag gotest haskell-ts-mode hercules
 	      highlight-indentation hungry-delete ibuffer-vc idlwave json-rpc
 	      json-snatcher jsonian jsonrpc key-chord keycast magit-todos
 	      marginalia mcp merlin monokai-theme multiple-cursors noflet nov
