@@ -16,36 +16,36 @@ Capture web pages into local markdown, inspect structure with `mq`, and extract 
 1. Save the page as markdown (cleaned).
 
 ```bash
-npx -y url-to-markdown-cli-tool 'https://example.com' --clean-content > result.md
+npx -y url-to-markdown-cli-tool 'https://example.com' --clean-content > /tmp/result.md
 ```
 
 2. Inspect structure before reading content.
 
 ```bash
-mq result.md '.tree'
+mq /tmp/result.md '.tree'
 ```
 
 3. Extract only the needed sections.
 
 ```bash
-mq result.md '.section("Using Blueprints") | .text'
+mq /tmp/result.md '.section("Using Blueprints") | .text'
 ```
 
 4. Search when you are not sure where the content lives.
 
 ```bash
-mq result.md '.search("auth")'
+mq /tmp/result.md '.search("auth")'
 ```
 
 5. If the search returns a large subtree, narrow it by re-running `.tree` on the specific section(s), then extract `.text`.
 
 ## Query Patterns
 
-- View a fuller outline: `mq result.md '.tree("preview")'`
-- Get all headings: `mq result.md '.headings'`
-- Extract code blocks by language: `mq result.md '.code("bash")'`
-- List links: `mq result.md '.links'`
-- Extract a section: `mq result.md '.section("Name") | .text'`
+- View a fuller outline: `mq /tmp/result.md '.tree("preview")'`
+- Get all headings: `mq /tmp/result.md '.headings'`
+- Extract code blocks by language: `mq /tmp/result.md '.code("bash")'`
+- List links: `mq /tmp/result.md '.links'`
+- Extract a section: `mq /tmp/result.md '.section("Name") | .text'`
 
 ## Context Hygiene
 
