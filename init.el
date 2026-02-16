@@ -1907,7 +1907,9 @@ Select it interactively otherwise."
        (mapcar #'(lambda (tool)
 		   (apply #'ellama-tools-define-tool
 			  (list tool)))
-	       tools)))))
+	       tools)
+       (ellama-tools-enable-all)
+       nil))))
 
 (use-package elisa
   :init
