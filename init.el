@@ -1779,6 +1779,7 @@ Select it interactively otherwise."
   :bind ("C-c e" . ellama-transient-main-menu)
   :hook (org-ctrl-c-ctrl-c-final . ellama-chat-send-last-message)
   :init
+  (setopt ellama-session-auto-save nil)
   (setopt ellama-spinner-enabled nil)
   (setopt ellama-auto-scroll t)
   (setopt ellama-translate-italic nil)
@@ -1789,9 +1790,9 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
+	   :chat-model "gpt-oss:20b" ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768)
+	   '(("num_ctx" . 65536)
 	     ("keep_alive" . "1h"))))
   ;; (require 'llm-openai)
   ;; (setopt llm-warn-on-nonfree nil)
@@ -1802,9 +1803,10 @@ Select it interactively otherwise."
   ;; 	   :key (password-store-get "open-router-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
-	   ;; :default-chat-non-standard-params '(("stop" . ("\n")))
-	   ))
+	   ;; :chat-model "lfm2.5-thinking"
+	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
+	   :default-chat-non-standard-params '(("stop" . ("\n"))
+					       ("num_ctx" . 10000))))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
 	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
@@ -1826,9 +1828,8 @@ Select it interactively otherwise."
   ;; 	   :chat-model "qwen3-coder"
   ;; 	   :default-chat-non-standard-params
   ;; 	   '(("num_ctx" . 32768))))
-  (setopt ellama-naming-scheme 'ellama-generate-name-by-reasoning-llm
-	  ;; 'ellama-generate-name-by-llm
-	  )
+  (setopt ellama-naming-scheme ;; 'ellama-generate-name-by-reasoning-llm
+	  'ellama-generate-name-by-llm)
   (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
 				      :chat-model "qwen3:4b-instruct-2507-q4_K_M"
@@ -1887,7 +1888,7 @@ Select it interactively otherwise."
      ;; 			("duckduckgo-mcp-server")))
      ("motherduck" . (:command "uvx"
 			       :args
-			       ("mcp-server-motherduck" "--db-path" ":memory:")))
+			       ("mcp-server-motherduck" "--read-write" "--db-path" ":memory:")))
      ;; see https://github.com/zerocore-ai/microsandbox/blob/main/MCP.md
      ;; to start server call this command:
      ;; msb server start --dev
