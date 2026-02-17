@@ -1790,9 +1790,9 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "gpt-oss:20b" ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
+	   :chat-model "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
-	   '(("num_ctx" . 65536)
+	   '(("num_ctx" . 32768)
 	     ("keep_alive" . "1h"))))
   ;; (require 'llm-openai)
   ;; (setopt llm-warn-on-nonfree nil)
@@ -1803,10 +1803,11 @@ Select it interactively otherwise."
   ;; 	   :key (password-store-get "open-router-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
-	   ;; :chat-model "lfm2.5-thinking"
-	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
+	   :chat-model "lfm2.5-thinking"
+	   ;; :chat-model "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params '(("stop" . ("\n"))
-					       ("num_ctx" . 10000))))
+					       ;; ("num_ctx" . 10000)
+					       )))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
 	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
@@ -1828,8 +1829,9 @@ Select it interactively otherwise."
   ;; 	   :chat-model "qwen3-coder"
   ;; 	   :default-chat-non-standard-params
   ;; 	   '(("num_ctx" . 32768))))
-  (setopt ellama-naming-scheme ;; 'ellama-generate-name-by-reasoning-llm
-	  'ellama-generate-name-by-llm)
+  (setopt ellama-naming-scheme 'ellama-generate-name-by-reasoning-llm
+	  ;; 'ellama-generate-name-by-llm
+	  )
   (setopt ellama-show-quotes t)
   (setopt ellama-extraction-provider (make-llm-ollama
 				      :chat-model "qwen3:4b-instruct-2507-q4_K_M"
