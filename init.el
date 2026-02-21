@@ -1805,9 +1805,10 @@ Select it interactively otherwise."
 	  (make-llm-ollama
 	   :chat-model "lfm2.5-thinking"
 	   ;; :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-	   :default-chat-non-standard-params '(("stop" . ("\n"))
-					       ;; ("num_ctx" . 10000)
-					       )))
+	   ;; :default-chat-non-standard-params '(("stop" . ("\n"))
+	   ;; 				       ;; ("num_ctx" . 10000)
+	   ;; 				       )
+	   ))
   (setopt ellama-summarization-provider
 	  (make-llm-ollama
 	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
