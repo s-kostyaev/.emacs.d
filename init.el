@@ -1901,7 +1901,10 @@ Select it interactively otherwise."
      ;; 			       ("mcp-run-python" "stdio")))
      ("pyodide" . (:command "npx"
 			    :args
-			    ("-y" "mcp-pyodide")))))
+			    ("-y" "mcp-pyodide")))
+     ("textweb" . (:command "npx"
+			    :args
+			    ("-y" "--package" "textweb" "-c" "textweb-mcp")))))
   :config
   (require 'mcp-hub)
   (mcp-hub-start-all-server
