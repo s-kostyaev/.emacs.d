@@ -1787,6 +1787,7 @@ Select it interactively otherwise."
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
+  (setopt ellama-tools-use-srt t)
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
@@ -1801,6 +1802,11 @@ Select it interactively otherwise."
   ;; 	   :url "https://openrouter.ai/api/v1"
   ;; 	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
   ;; 	   :key (password-store-get "open-router-key")))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-openai-compatible
+  ;; 	   :url "http://127.0.0.1:8000/v1"
+  ;; 	   :chat-model "LFM2-24B-A2B-MLX-6bit"
+  ;; 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
 	   :chat-model "lfm2.5-thinking"
