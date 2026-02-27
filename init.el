@@ -1848,6 +1848,7 @@ Select it interactively otherwise."
   :config
   (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
   (advice-add 'end-of-buffer :after #'ellama-enable-scroll)
+  (load-file "~/elisp/ellama/ellama-tools-dlp.el")
   (load-file "~/elisp/ellama/ellama-tools.el")
   (load-file "~/elisp/ellama/ellama.el")
   (load-file "~/elisp/ellama/ellama-transient.el")
