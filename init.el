@@ -1791,12 +1791,21 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
+	   :chat-model "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
+	   ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768)
 	     ("keep_alive" . "1h"))))
   ;; (require 'llm-openai)
   ;; (setopt llm-warn-on-nonfree nil)
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-openai-compatible
+  ;; 	   :url "http://127.0.0.1:8080/v1"
+  ;; 	   :chat-model "unsloth/Qwen3.5-9B-GGUF:UD-Q8_K_XL"))
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-openai-compatible
+  ;; 	   :url "http://127.0.0.1:8080/v1"
+  ;; 	   :chat-model "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ3_S"))
   ;; (setopt ellama-provider
   ;; 	  (make-llm-openai-compatible
   ;; 	   :url "https://openrouter.ai/api/v1"
@@ -1805,7 +1814,7 @@ Select it interactively otherwise."
   ;; (setopt ellama-provider
   ;; 	  (make-llm-openai-compatible
   ;; 	   :url "http://127.0.0.1:8000/v1"
-  ;; 	   :chat-model "LFM2-24B-A2B-MLX-6bit"
+  ;; 	   :chat-model "Qwen3.5-27B-4bit"
   ;; 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
