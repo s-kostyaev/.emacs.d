@@ -1788,6 +1788,14 @@ Select it interactively otherwise."
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
   (setopt ellama-tools-use-srt t)
+  (setopt ellama-tools-dlp-enabled t)
+  (setopt ellama-tools-dlp-mode 'enforce)
+  (setopt ellama-tools-dlp-output-warn-behavior 'confirm)
+  (setopt ellama-tools-dlp-log-targets '(memory))
+  (setopt ellama-tools-dlp-input-default-action 'block)
+  (setopt ellama-tools-dlp-output-default-action 'redact)
+  (setopt ellama-tools-dlp-policy-overrides
+          '((:tool "read_file" :direction output :action warn)))
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
