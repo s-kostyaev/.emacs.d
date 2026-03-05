@@ -1909,42 +1909,43 @@ Select it interactively otherwise."
 	(delete-region (point-min) (point-max))
 	(insert new-content)
 	(save-buffer))
-      (display-buffer new-buffer))))
+      (display-buffer new-buffer)))
+  (ellama-tools-enable-all))
 
-(use-package mcp
-  :demand t
-  :custom
-  (mcp-hub-servers
-   `(;; ("ddg" . (:command "uvx"
-     ;; 			:args
-     ;; 			("duckduckgo-mcp-server")))
-     ("motherduck" . (:command "uvx"
-			       :args
-			       ("mcp-server-motherduck" "--read-write" "--db-path" ":memory:")))
-     ;; see https://github.com/zerocore-ai/microsandbox/blob/main/MCP.md
-     ;; to start server call this command:
-     ;; msb server start --dev
-     ;; ("microsandbox" . (:url "http://localhost:5555/mcp"))
-     ;; ("run-python" . (:command "uvx"
-     ;; 			       :args
-     ;; 			       ("mcp-run-python" "stdio")))
-     ("pyodide" . (:command "npx"
-			    :args
-			    ("-y" "mcp-pyodide")))
-     ("textweb" . (:command "npx"
-			    :args
-			    ("-y" "--package" "textweb" "-c" "textweb-mcp")))))
-  :config
-  (require 'mcp-hub)
-  (mcp-hub-start-all-server
-   (lambda ()
-     (let ((tools (mcp-hub-get-all-tool :asyncp t :categoryp t)))
-       (mapcar #'(lambda (tool)
-		   (apply #'ellama-tools-define-tool
-			  (list tool)))
-	       tools)
-       (ellama-tools-enable-all)
-       nil))))
+;; (use-package mcp
+;;   :demand t
+;;   :custom
+;;   (mcp-hub-servers
+;;    `(;; ("ddg" . (:command "uvx"
+;;      ;; 			:args
+;;      ;; 			("duckduckgo-mcp-server")))
+;;      ("motherduck" . (:command "uvx"
+;; 			       :args
+;; 			       ("mcp-server-motherduck" "--read-write" "--db-path" ":memory:")))
+;;      ;; see https://github.com/zerocore-ai/microsandbox/blob/main/MCP.md
+;;      ;; to start server call this command:
+;;      ;; msb server start --dev
+;;      ;; ("microsandbox" . (:url "http://localhost:5555/mcp"))
+;;      ;; ("run-python" . (:command "uvx"
+;;      ;; 			       :args
+;;      ;; 			       ("mcp-run-python" "stdio")))
+;;      ("pyodide" . (:command "npx"
+;; 			    :args
+;; 			    ("-y" "mcp-pyodide")))
+;;      ("textweb" . (:command "npx"
+;; 			    :args
+;; 			    ("-y" "--package" "textweb" "-c" "textweb-mcp")))))
+;;   :config
+;;   (require 'mcp-hub)
+;;   (mcp-hub-start-all-server
+;;    (lambda ()
+;;      (let ((tools (mcp-hub-get-all-tool :asyncp t :categoryp t)))
+;;        (mapcar #'(lambda (tool)
+;; 		   (apply #'ellama-tools-define-tool
+;; 			  (list tool)))
+;; 	       tools)
+;;        (ellama-tools-enable-all)
+;;        nil))))
 
 (use-package elisa
   :init
