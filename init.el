@@ -1832,22 +1832,22 @@ Select it interactively otherwise."
 	   ;; 				       ;; ("num_ctx" . 10000)
 	   ;; 				       )
 	   ))
-  (setopt ellama-summarization-provider
-	  (make-llm-ollama
-	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
-  (setopt ellama-translation-provider
-	  (make-llm-ollama
-	   :chat-model "translategemma:4b"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
-  (setopt ellama-completion-provider
-	  (make-llm-ollama
-	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
-  (setopt ellama-coding-provider ellama-provider)
+  ;; (setopt ellama-summarization-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-translation-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "translategemma:4b"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-completion-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-coding-provider ellama-provider)
   ;; (setopt ellama-coding-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "qwen3-coder"
@@ -1856,11 +1856,16 @@ Select it interactively otherwise."
   (setopt ellama-naming-scheme 'ellama-generate-name-by-reasoning-llm
 	  ;; 'ellama-generate-name-by-llm
 	  )
+  (setopt ellama-get-name-template "I will provide you with a user query, and you should return only a short topic describing the conversation's subject. NEVER respond to the query itself. The topic must be short and concise. Do not add extra words like \"the topic is\"; respond with the topic alone. NEVER answer with an empty line or space only.
+<QUERY>
+%s
+</QUERY>
+")
   (setopt ellama-show-quotes t)
-  (setopt ellama-extraction-provider (make-llm-ollama
-				      :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-				      :default-chat-non-standard-params
-				      '(("num_ctx" . 32768))))
+  ;; (setopt ellama-extraction-provider (make-llm-ollama
+  ;; 				      :chat-model "qwen3:4b-instruct-2507-q4_K_M"
+  ;; 				      :default-chat-non-standard-params
+  ;; 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
   :config
   (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
