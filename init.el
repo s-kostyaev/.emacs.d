@@ -1848,11 +1848,11 @@ Select it interactively otherwise."
   ;; 	   :default-chat-non-standard-params
   ;; 	   '(("num_ctx" . 32768))))
   ;; (setopt ellama-coding-provider ellama-provider)
-  ;; (setopt ellama-coding-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "qwen3-coder"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
+  (setopt ellama-coding-provider
+	  (make-llm-ollama
+	   :chat-model "carstenuhlig/omnicoder-9b:q8_0"
+	   :default-chat-non-standard-params
+	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-reasoning-llm
 	  ;; 'ellama-generate-name-by-llm
 	  )
