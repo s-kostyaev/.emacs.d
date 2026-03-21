@@ -102,8 +102,8 @@
 	      go-impl go-snippets go-tag gotest haskell-ts-mode hercules
 	      highlight-indentation hungry-delete ibuffer-vc idlwave json-rpc
 	      json-snatcher jsonian jsonrpc key-chord keycast magit-todos
-	      marginalia mcp merlin monokai-theme multiple-cursors noflet nov
-	      nova-theme ob-go ocaml-ts-mode ocp-indent org org-mind-map
+	      marginalia mcp merlin monokai-theme multiple-cursors neocaml
+	      noflet nov nova-theme ob-go ocp-indent org org-mind-map
 	      outline-indent package-lint-flymake pandoc-mode pass pdf-tools peg
 	      pkgbuild-mode plz poly-markdown posframe prism project
 	      protobuf-mode pulsar pyenv-mode python rainbow-mode restclient-jq

@@ -1625,9 +1625,11 @@ Select it interactively otherwise."
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
 (setq auto-mode-alist
-      (append '(("\\.ml[ily]?$" . ocaml-ts-mode)
-		("\\.topml$" . ocaml-ts-mode))
+      (append '(("\\.ml[ily]?$" . neocaml-mode)
+		("\\.topml$" . neocaml-mode))
 	      auto-mode-alist))
+
+(add-to-list 'eglot-server-programs '(neocaml-mode . ("ocamllsp")))
 
 (defun my-opam-env ()
   "Set opam environment."
@@ -1636,9 +1638,9 @@ Select it interactively otherwise."
 		     (shell-command-to-string "opam config env --sexp"))))
     (setenv (car var) (cadr var))))
 
-(add-hook 'ocaml-ts-mode-hook
+(add-hook 'neocaml-mode-hook
 	  #'(lambda ()
-	      (bind-key (kbd "C-c C-c") #'compile ocaml-ts-mode-map)
+	      (bind-key (kbd "C-c C-c") #'compile neocaml-mode-map)
 	      (set (make-local-variable 'compile-command)
 		   (concat "dune build"))
 	      (set (make-local-variable 'compilation-read-command)
