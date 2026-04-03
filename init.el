@@ -1864,10 +1864,10 @@ Select it interactively otherwise."
 </QUERY>
 ")
   (setopt ellama-show-quotes t)
-  (setopt ellama-extraction-provider (make-llm-ollama
-				      :chat-model "qwen3.5:0.8b"
-				      :default-chat-non-standard-params
-				      '(("num_ctx" . 32768))))
+  ;; (setopt ellama-extraction-provider (make-llm-ollama
+  ;; 				      :chat-model "qwen3.5:0.8b"
+  ;; 				      :default-chat-non-standard-params
+  ;; 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
   :config
   (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
