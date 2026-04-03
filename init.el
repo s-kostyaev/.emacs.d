@@ -1801,7 +1801,7 @@ Select it interactively otherwise."
   (require 'llm-ollama)
   (setopt ellama-provider
 	  (make-llm-ollama
-	   :chat-model "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
+	   :chat-model "gemma4:26b" ;; "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
 	   ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
 	   :default-chat-non-standard-params
 	   '(("num_ctx" . 32768)
@@ -1824,7 +1824,7 @@ Select it interactively otherwise."
   ;; (setopt ellama-provider
   ;; 	  (make-llm-openai-compatible
   ;; 	   :url "http://127.0.0.1:8000/v1"
-  ;; 	   :chat-model "Qwen3.5-27B-4bit"
+  ;; 	   :chat-model "Qwen3.5-9B-8bit" ;; "Qwen3.5-27B-4bit"
   ;; 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-ollama
@@ -1850,11 +1850,11 @@ Select it interactively otherwise."
   ;; 	   :default-chat-non-standard-params
   ;; 	   '(("num_ctx" . 32768))))
   ;; (setopt ellama-coding-provider ellama-provider)
-  (setopt ellama-coding-provider
-	  (make-llm-ollama
-	   :chat-model "carstenuhlig/omnicoder-9b:q8_0"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768))))
+  ;; (setopt ellama-coding-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "carstenuhlig/omnicoder-9b:q8_0"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-reasoning-llm
 	  ;; 'ellama-generate-name-by-llm
 	  )
@@ -1864,10 +1864,10 @@ Select it interactively otherwise."
 </QUERY>
 ")
   (setopt ellama-show-quotes t)
-  ;; (setopt ellama-extraction-provider (make-llm-ollama
-  ;; 				      :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-  ;; 				      :default-chat-non-standard-params
-  ;; 				      '(("num_ctx" . 32768))))
+  (setopt ellama-extraction-provider (make-llm-ollama
+				      :chat-model "qwen3.5:0.8b"
+				      :default-chat-non-standard-params
+				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
   :config
   (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
