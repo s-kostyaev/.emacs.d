@@ -1798,7 +1798,7 @@ Select it interactively otherwise."
   (setopt ellama-tools-dlp-output-default-action 'redact)
   (setopt ellama-tools-dlp-policy-overrides
           '((:tool "read_file" :direction output :action warn)))
-  (require 'llm-ollama)
+  ;; (require 'llm-ollama)
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "gemma4:26b" ;; "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
