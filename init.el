@@ -1799,15 +1799,15 @@ Select it interactively otherwise."
   (setopt ellama-tools-dlp-policy-overrides
           '((:tool "read_file" :direction output :action warn)))
   (require 'llm-ollama)
-  (setopt ellama-provider
-	  (make-llm-ollama
-	   :chat-model "gemma4:26b" ;; "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
-	   ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
-	   :default-chat-non-standard-params
-	   '(("num_ctx" . 32768)
-	     ("keep_alive" . "1h"))))
-  ;; (require 'llm-openai)
-  ;; (setopt llm-warn-on-nonfree nil)
+  ;; (setopt ellama-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "gemma4:26b" ;; "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
+  ;; 	   ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
+  ;; 	   :default-chat-non-standard-params
+  ;; 	   '(("num_ctx" . 32768)
+  ;; 	     ("keep_alive" . "1h"))))
+  (require 'llm-openai)
+  (setopt llm-warn-on-nonfree nil)
   ;; (setopt ellama-provider
   ;; 	  (make-llm-openai-compatible
   ;; 	   :url "http://127.0.0.1:8080/v1"
@@ -1821,19 +1821,24 @@ Select it interactively otherwise."
   ;; 	   :url "https://openrouter.ai/api/v1"
   ;; 	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
   ;; 	   :key (password-store-get "open-router-key")))
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-openai-compatible
-  ;; 	   :url "http://127.0.0.1:8000/v1"
-  ;; 	   :chat-model "Qwen3.5-9B-8bit" ;; "Qwen3.5-27B-4bit"
-  ;; 	   :key (password-store-get "omlx-key")))
+  (setopt ellama-provider
+	  (make-llm-openai-compatible
+	   :url "http://127.0.0.1:8000/v1"
+	   :chat-model "gemma-4-26b-a4b-it-mxfp4" ;; "Qwen3.5-9B-8bit" ;; "Qwen3.5-27B-4bit"
+	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
-	  (make-llm-ollama
-	   :chat-model "lfm2.5-thinking"
-	   ;; :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-	   ;; :default-chat-non-standard-params '(("stop" . ("\n"))
-	   ;; 				       ;; ("num_ctx" . 10000)
-	   ;; 				       )
-	   ))
+	  (make-llm-openai-compatible
+	   :url "http://127.0.0.1:8000/v1"
+	   :chat-model "LFM2.5-1.2B-Instruct-MLX-4bit"
+	   :key (password-store-get "omlx-key")))
+  ;; (setopt ellama-naming-provider
+  ;; 	  (make-llm-ollama
+  ;; 	   :chat-model "lfm2.5-thinking"
+  ;; 	   ;; :chat-model "qwen3:4b-instruct-2507-q4_K_M"
+  ;; 	   ;; :default-chat-non-standard-params '(("stop" . ("\n"))
+  ;; 	   ;; 				       ;; ("num_ctx" . 10000)
+  ;; 	   ;; 				       )
+  ;; 	   ))
   ;; (setopt ellama-summarization-provider
   ;; 	  (make-llm-ollama
   ;; 	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
