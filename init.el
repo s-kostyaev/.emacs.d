@@ -1789,15 +1789,23 @@ Select it interactively otherwise."
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
+  ;; Let clean calls run without repetitive prompts.
+  (setopt ellama-tools-allow-all t)
   (setopt ellama-tools-use-srt t)
   (setopt ellama-tools-dlp-enabled t)
   (setopt ellama-tools-dlp-mode 'enforce)
+  (setopt ellama-tools-dlp-input-fail-open nil)
+  (setopt ellama-tools-dlp-output-fail-open nil)
+  (setopt ellama-tools-dlp-scan-env-exact-secrets t)
+  (setopt ellama-tools-dlp-input-default-action 'warn)
+  (setopt ellama-tools-dlp-output-default-action 'warn)
   (setopt ellama-tools-dlp-output-warn-behavior 'confirm)
+  (setopt ellama-tools-irreversible-enabled t)
+  (setopt ellama-tools-irreversible-default-action 'warn)
+  (setopt ellama-tools-irreversible-require-typed-confirm t)
   (setopt ellama-tools-dlp-log-targets '(memory))
-  (setopt ellama-tools-dlp-input-default-action 'block)
-  (setopt ellama-tools-dlp-output-default-action 'redact)
-  (setopt ellama-tools-dlp-policy-overrides
-          '((:tool "read_file" :direction output :action warn)))
+  ;; (setopt ellama-tools-dlp-policy-overrides
+  ;;         '((:tool "read_file" :direction output :action warn)))
   ;; (require 'llm-ollama)
   ;; (setopt ellama-provider
   ;; 	  (make-llm-ollama
