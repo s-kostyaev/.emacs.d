@@ -1789,6 +1789,8 @@ Select it interactively otherwise."
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
+  (setopt ellama-session-auto-compact-token-threshold 20000)
+  (setopt ellama-display-session-buffer-on-generation t)
   ;; Let clean calls run without repetitive prompts.
   (setopt ellama-tools-allow-all t)
   (setopt ellama-tools-use-srt t)
@@ -1832,7 +1834,7 @@ Select it interactively otherwise."
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
-	   :chat-model "gemma-4-26b-a4b-it-mxfp4" ;; "Qwen3.5-9B-8bit" ;; "Qwen3.5-27B-4bit"
+	   :chat-model "gemma-4-26b-a4b-it-mxfp4" ;; "Qwen3.6-27B-4bit" ;; "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.5-9B-8bit" ;; "Qwen3.5-27B-4bit"
 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-openai-compatible
