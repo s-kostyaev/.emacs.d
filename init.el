@@ -1896,6 +1896,20 @@ Select it interactively otherwise."
   (load-file "~/elisp/ellama/ellama-community-prompts.el")
   (load-file "~/elisp/ellama/ellama-skills.el")
   (ellama-context-header-line-global-mode +1)
+  (llm-models-add
+   :name "Gemma 4"
+   :symbol 'gemma-4
+   :capabilities '(generation free-software tool-use image-input
+                              reasoning)
+   :context-length 65536
+   :regex "gemma-4")
+  (llm-models-add
+   :name "Qwen 3.6"
+   :symbol 'qwen-3.6
+   :capabilities '(generation free-software tool-use image-input
+			      reasoning)
+   :context-length 65536
+   :regex "Qwen-?3.6")
   (defun my-ollama-delete ()
     "Remove ollama model."
     (interactive)
