@@ -1790,6 +1790,7 @@ Select it interactively otherwise."
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
   (setopt ellama-session-auto-compact-token-threshold 20000)
+  (setopt ellama-session-auto-compact-keep-last-turns 1)
   (setopt ellama-display-session-buffer-on-generation t)
   ;; Let clean calls run without repetitive prompts.
   (setopt ellama-tools-allow-all t)
@@ -1831,6 +1832,7 @@ Select it interactively otherwise."
   ;; 	   :url "https://openrouter.ai/api/v1"
   ;; 	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
   ;; 	   :key (password-store-get "open-router-key")))
+  (setopt ellama-eval-timeout-seconds 300)
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
