@@ -1,0 +1,26 @@
+#!/bin/sh
+
+CHROME="$(
+  find "$HOME/.cache/puppeteer/chrome-headless-shell" \
+    -path '*/chrome-headless-shell-mac-arm64/chrome-headless-shell' \
+    -type f 2>/dev/null |
+    sort |
+    tail -n 1
+)"
+
+if [ -z "$CHROME" ]; then
+  echo "chrome-headless-shell not found under ~/.cache/puppeteer" >&2
+  exit 1
+fi
+
+exec "$CHROME" \
+  --single-process \
+  --no-zygote \
+  --no-sandbox \
+  --disable-setuid-sandbox \
+  --disable-crashpad \
+  --disable-crash-reporter \
+  --disable-breakpad \
+  --proxy-server=http://127.0.0.1:8888 \
+  --proxy-bypass-list= \
+  "$@"

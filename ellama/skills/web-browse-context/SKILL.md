@@ -16,7 +16,7 @@ Capture web pages into local markdown, inspect structure with `mq`, and extract 
 1. Save the page as markdown (cleaned).
 
 ```bash
-npx -y url-to-markdown-cli-tool 'https://example.com' --clean-content > /tmp/result.md
+./scripts/url-to-md 'https://example.com' --clean-content > /tmp/result.md
 ```
 
 2. Inspect structure before reading content.

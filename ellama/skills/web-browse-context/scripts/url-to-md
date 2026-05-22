@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+
+SCRIPT_DIR="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+CHROME_BROWSER="$SCRIPT_DIR/chrome-browser"
+
+if [ ! -x "$CHROME_BROWSER" ]; then
+  echo "Chrome browser wrapper is not executable: $CHROME_BROWSER" >&2
+  exit 1
+fi
+
+exec env \
+  PUPPETEER_EXECUTABLE_PATH="$CHROME_BROWSER" \
+  npx -y url-to-markdown-cli-tool "$@"
