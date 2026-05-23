@@ -1833,10 +1833,11 @@ Select it interactively otherwise."
   ;; 	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
   ;; 	   :key (password-store-get "open-router-key")))
   (setopt ellama-eval-timeout-seconds 300)
+  (setopt ellama-eval-default-max-steps 20)
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
-	   :chat-model "Qwen3.6-27B-MLX-4bit-MTP" ;; "Qwen3.6-35B-A3B-4bit" ;; "gemma-4-26b-a4b-it-4bit"
+	   :chat-model "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.6-27B-MLX-4bit-MTP" ;; "gemma-4-26b-a4b-it-4bit"
 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-openai-compatible
@@ -1897,6 +1898,7 @@ Select it interactively otherwise."
   (load-file "~/elisp/ellama/ellama-blueprint.el")
   (load-file "~/elisp/ellama/ellama-community-prompts.el")
   (load-file "~/elisp/ellama/ellama-skills.el")
+  (load-file "~/elisp/ellama/ellama-eval.el")
   (ellama-context-header-line-global-mode +1)
   (llm-models-add
    :name "Gemma 4"
