@@ -1789,7 +1789,7 @@ Select it interactively otherwise."
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
-  (setopt ellama-session-auto-compact-token-threshold 20000)
+  (setopt ellama-session-auto-compact-token-threshold 40000)
   (setopt ellama-session-auto-compact-keep-last-turns 1)
   (setopt ellama-display-session-buffer-on-generation t)
   ;; Let clean calls run without repetitive prompts.
@@ -1807,6 +1807,7 @@ Select it interactively otherwise."
   (setopt ellama-tools-irreversible-default-action 'warn)
   (setopt ellama-tools-irreversible-require-typed-confirm t)
   (setopt ellama-tools-dlp-log-targets '(memory))
+  (setopt ellama-tools-agent-default-max-steps 1000)
   ;; (setopt ellama-tools-dlp-policy-overrides
   ;;         '((:tool "read_file" :direction output :action warn)))
   ;; (require 'llm-ollama)
@@ -1837,7 +1838,7 @@ Select it interactively otherwise."
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
-	   :chat-model "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.6-27B-MLX-4bit-MTP" ;; "gemma-4-26b-a4b-it-4bit"
+	   :chat-model "Qwen3.6-35B-A3B-UD-MLX-3bit" ;; "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.6-27B-MLX-4bit-MTP" ;; "gemma-4-26b-a4b-it-4bit"
 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-openai-compatible
