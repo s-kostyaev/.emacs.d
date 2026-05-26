@@ -1,0 +1,4 @@
+interface:
+  display_name: "Code Review"
+  short_description: "Review diffs with focused subagents"
+  default_prompt: "Use $code-review to review the current code changes and report the highest-risk findings."
