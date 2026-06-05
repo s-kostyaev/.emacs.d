@@ -1838,7 +1838,7 @@ Select it interactively otherwise."
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
-	   :chat-model "Qwopus3.6-35B-A3B-v1-MLX-3bit-mixed_3_6" ;; "Qwen3.6-27B-Abliterated-Heretic-Uncensored-MLX-3bit" ;; "Qwen3.6-35B-A3B-UD-MLX-3bit" ;; "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.6-27B-MLX-4bit-MTP" ;; "gemma-4-26b-a4b-it-4bit"
+	   :chat-model "Qwen3.5-9B-8bit" ;; "Qwopus3.6-35B-A3B-v1-MLX-3bit-mixed_3_6" ;; "Qwen3.6-27B-Abliterated-Heretic-Uncensored-MLX-3bit" ;; "Qwen3.6-35B-A3B-UD-MLX-3bit" ;; "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.6-27B-MLX-4bit-MTP" ;; "gemma-4-26b-a4b-it-4bit"
 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-openai-compatible
