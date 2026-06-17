@@ -1804,7 +1804,7 @@ Select it interactively otherwise."
   (setopt ellama-tools-dlp-output-default-action 'warn)
   (setopt ellama-tools-dlp-output-warn-behavior 'confirm)
   (setopt ellama-tools-irreversible-enabled t)
-  (setopt ellama-tools-irreversible-default-action 'warn)
+  (setopt ellama-tools-irreversible-default-action 'block)
   (setopt ellama-tools-irreversible-require-typed-confirm t)
   (setopt ellama-tools-dlp-log-targets '(memory))
   (setopt ellama-tools-agent-default-max-steps 1000)
