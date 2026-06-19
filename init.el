@@ -1789,7 +1789,7 @@ Select it interactively otherwise."
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
   ;; (setopt ellama-response-process-method 'async)
-  (setopt ellama-session-auto-compact-token-threshold 35000)
+  (setopt ellama-session-auto-compact-token-threshold 27000)
   (setopt ellama-session-auto-compact-keep-last-turns 1)
   (setopt ellama-display-session-buffer-on-generation t)
   ;; Let clean calls run without repetitive prompts.
