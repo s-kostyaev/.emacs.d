@@ -1904,10 +1904,10 @@ Select it interactively otherwise."
   (llm-models-add
    :name "Gemma 4"
    :symbol 'gemma-4
-   :capabilities '(generation free-software tool-use image-input
+   :capabilities '(generation free-software tool-use image-input audio-input
                               reasoning)
    :context-length 65536
-   :regex "gemma-4")
+   :regex "gemma-?4")
   (llm-models-add
    :name "Qwen 3.6"
    :symbol 'qwen-3.6
