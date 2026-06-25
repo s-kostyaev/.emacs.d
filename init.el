@@ -1785,10 +1785,8 @@ Select it interactively otherwise."
   (setopt ellama-spinner-enabled nil)
   (setopt ellama-auto-scroll t)
   (setopt ellama-translate-italic nil)
-  ;; (setopt ellama-keymap-prefix "C-c e")
   (setopt ellama-language "Russian")
   (setopt ellama-response-process-method 10)
-  ;; (setopt ellama-response-process-method 'async)
   (setopt ellama-session-auto-compact-token-threshold 27000)
   (setopt ellama-session-auto-compact-keep-last-turns 1)
   (setopt ellama-display-session-buffer-on-generation t)
@@ -1808,72 +1806,20 @@ Select it interactively otherwise."
   (setopt ellama-tools-irreversible-require-typed-confirm t)
   (setopt ellama-tools-dlp-log-targets '(memory))
   (setopt ellama-tools-agent-default-max-steps 1000)
-  ;; (setopt ellama-tools-dlp-policy-overrides
-  ;;         '((:tool "read_file" :direction output :action warn)))
-  ;; (require 'llm-ollama)
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "gemma4:26b" ;; "qwen3.5:9b-q8_0" ;; "qwen3.5:35b-a3b" ;; "qwen3.5:27b-q4_K_M"
-  ;; 	   ;; "glm-4.7-flash" ;; "nemotron-3-nano:30b" ;; "qwen3:4b-instruct-2507-q4_K_M"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768)
-  ;; 	     ("keep_alive" . "1h"))))
   (require 'llm-openai)
   (setopt llm-warn-on-nonfree nil)
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-openai-compatible
-  ;; 	   :url "http://127.0.0.1:8080/v1"
-  ;; 	   :chat-model "unsloth/Qwen3.5-9B-GGUF:UD-Q8_K_XL"))
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-openai-compatible
-  ;; 	   :url "http://127.0.0.1:8080/v1"
-  ;; 	   :chat-model "unsloth/Qwen3.5-35B-A3B-GGUF:UD-IQ3_S"))
-  ;; (setopt ellama-provider
-  ;; 	  (make-llm-openai-compatible
-  ;; 	   :url "https://openrouter.ai/api/v1"
-  ;; 	   :chat-model "nvidia/nemotron-3-nano-30b-a3b:free"
-  ;; 	   :key (password-store-get "open-router-key")))
   (setopt ellama-eval-timeout-seconds 300)
   (setopt ellama-eval-default-max-steps 20)
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
-	   :chat-model "Qwen3.6-35B-A3B-UD-MLX-3bit" ;; "Qwen3.5-9B-8bit" ;; "Qwopus3.6-35B-A3B-v1-MLX-3bit-mixed_3_6" ;; "Qwen3.6-27B-Abliterated-Heretic-Uncensored-MLX-3bit" ;; "Qwen3.6-35B-A3B-4bit" ;; "Qwen3.6-27B-MLX-4bit-MTP" ;; "gemma-4-26b-a4b-it-4bit"
+	   :chat-model "Qwen3.6-35B-A3B-UD-MLX-3bit"
 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
 	   :chat-model "LFM2.5-1.2B-Instruct-MLX-4bit"
 	   :key (password-store-get "omlx-key")))
-  ;; (setopt ellama-naming-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "lfm2.5-thinking"
-  ;; 	   ;; :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-  ;; 	   ;; :default-chat-non-standard-params '(("stop" . ("\n"))
-  ;; 	   ;; 				       ;; ("num_ctx" . 10000)
-  ;; 	   ;; 				       )
-  ;; 	   ))
-  ;; (setopt ellama-summarization-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "lfm2.5-thinking" ;; "qwen3:4b-instruct-2507-q4_K_M"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
-  ;; (setopt ellama-translation-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "translategemma:4b"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
-  ;; (setopt ellama-completion-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "qwen3:4b-instruct-2507-q4_K_M"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
-  ;; (setopt ellama-coding-provider ellama-provider)
-  ;; (setopt ellama-coding-provider
-  ;; 	  (make-llm-ollama
-  ;; 	   :chat-model "carstenuhlig/omnicoder-9b:q8_0"
-  ;; 	   :default-chat-non-standard-params
-  ;; 	   '(("num_ctx" . 32768))))
   (setopt ellama-naming-scheme 'ellama-generate-name-by-reasoning-llm
 	  ;; 'ellama-generate-name-by-llm
 	  )
@@ -1883,10 +1829,6 @@ Select it interactively otherwise."
 </QUERY>
 ")
   (setopt ellama-show-quotes t)
-  ;; (setopt ellama-extraction-provider (make-llm-ollama
-  ;; 				      :chat-model "qwen3.5:0.8b"
-  ;; 				      :default-chat-non-standard-params
-  ;; 				      '(("num_ctx" . 32768))))
   (setopt ellama-context-posframe-enabled nil)
   :config
   (advice-add 'pixel-scroll-precision :before #'ellama-disable-scroll)
@@ -1901,20 +1843,6 @@ Select it interactively otherwise."
   (load-file "~/elisp/ellama/ellama-skills.el")
   (load-file "~/elisp/ellama/ellama-eval.el")
   (ellama-context-header-line-global-mode +1)
-  (llm-models-add
-   :name "Gemma 4"
-   :symbol 'gemma-4
-   :capabilities '(generation free-software tool-use image-input audio-input
-                              reasoning)
-   :context-length 65536
-   :regex "gemma-?4")
-  (llm-models-add
-   :name "Qwen 3.6"
-   :symbol 'qwen-3.6
-   :capabilities '(generation free-software tool-use image-input
-			      reasoning)
-   :context-length 65536
-   :regex "Qwen-?3.6")
   (defun my-ollama-delete ()
     "Remove ollama model."
     (interactive)
