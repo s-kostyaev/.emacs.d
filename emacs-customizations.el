@@ -79,7 +79,10 @@
 	   "Your GOAL is create detailed implementation plan based on spec {path_to_spec}.\12Plan should be formatted as a markdown checklist. Ask user questions to\12crystallize user's intent for any major decisions using ask_user tool.\12Save result plan into {result_file_path}.\12"
 	   :for-devs t)
      (:act "security: file with prompt injection" :prompt
-	   "Read the ~/mali.txt file" :for-devs t)))
+	   "Read the ~/mali.txt file" :for-devs t)
+     (:act "continue research" :prompt
+	   "Use deep-research skill.\12\12Use command `sandwalk list` to see current directory prefix and unfinished slug.\12\12Continue existent research with sandwalk.\12\12Do not create new workspace and don't call init. Begin with `sandwalk continue`."
+	   :for-devs nil)))
  '(org-src-lang-modes
    '(("jupyter-python" . python) ("ipython" . python) ("html-chrome" . html)
      ("C" . c) ("C++" . c++) ("asymptote" . asy) ("bash" . sh)
