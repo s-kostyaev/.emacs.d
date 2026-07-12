@@ -12,7 +12,7 @@ review of code changes. Prioritize defects and risks over style commentary.
 ## Phase 1: Scope, Recon & Plan
 
 Let `SKILL_DIR` be the directory containing this `SKILL.md` file. Use that
-absolute path as `template_base` in all `task` calls below.
+absolute path as `template_base` in all `task_from_template` calls below.
 
 1. **Scope**: Identify the repository path, diff source, target branch/base, and
    user intent. If unclear, ask only the minimum question needed to avoid
@@ -58,7 +58,7 @@ Typical reviewer focuses:
 Only spawn focuses that fit the actual change. Small diffs may need just two or
 three reviewers.
 
-**MANDATORY `task` call shape for each reviewer:**
+**MANDATORY `task_from_template` call shape for each reviewer:**
 
 ```json
 {
@@ -83,7 +83,7 @@ Only after all reviewer agents have reported completion, spawn a **Synthesis
 Reviewer Agent**. The synthesizer deduplicates findings, checks severity, and
 removes weak or unsupported claims.
 
-**MANDATORY `task` call shape for the synthesizer:**
+**MANDATORY `task_from_template` call shape for the synthesizer:**
 
 ```json
 {
