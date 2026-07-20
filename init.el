@@ -399,34 +399,6 @@ named arguments:
 
 (bind-key (kbd "C-x t") 'my-toggle-window-split)
 
-(use-package hydra
-  :disabled t
-  :bind (("C-x t" . my-toggle-window-split)
-         ;; ("C-x o" . hydra-cycle-windows/body)
-	 )
-  :config
-  ;; (defhydra hydra-cycle-windows
-  ;;   (:body-pre
-  ;;    (other-window 1))
-  ;;   "Windows"
-  ;;   ("o"
-  ;;    (other-window 1)
-  ;;    "Next")
-  ;;   ("O"
-  ;;    (other-window -1)
-  ;;    "Previous")
-  ;;   ("t" my-toggle-window-split "Toggle split")
-  ;;   ("]" enlarge-window-horizontally "Enlarge horizontal")
-  ;;   ("[" shrink-window-horizontally "Shrink horizontal")
-  ;;   ("=" enlarge-window "Enlarge vertival")
-  ;;   ("-" shrink-window "Shrink vertical")
-  ;;   ("b" balance-windows "Balance windows")
-  ;;   ("m" delete-other-windows "Maximize window")
-  ;;   ("n" split-window-below "New window")
-  ;;   ("c" delete-window "Close window")
-  ;;   ("q" nil "quit"))
-  )
-
 (use-package eglot
   :commands eglot-code-actions
   :demand t
