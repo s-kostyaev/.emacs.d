@@ -74,7 +74,7 @@ named arguments:
   (defvar my-need-theme-reload)
   (if (eq system-type 'darwin)
       ;; (setq my-font (font-spec :size 15.0 :family "Go Mono"))
-      (setq my-font (font-spec :size 15.0 :family "Iosevka Comfy Motion"))
+      (setq my-font (font-spec :size 15.0 :family "Aporetic Serif Mono"))
     (setq my-font (font-spec :size 13.0 :family "PT Mono")))
   (setq my-light-theme 'ef-duo-light
 	my-dark-theme 'ef-cherie
