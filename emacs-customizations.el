@@ -96,7 +96,7 @@
 	      chocolate-theme cl-libify code-cells comment-tags compat
 	      composable consult-dash corfu csv-mode dape dart-mode
 	      dash-functional denote difftastic diminish docker-compose-mode
-	      dockerfile-mode dotnet dtrt-indent dumb-jump dune eat eca
+	      dockerfile-mode dotnet dtrt-indent dumb-jump dune eat
 	      edit-indirect edit-server editorconfig ef-themes eglot
 	      eglot-fsharp ein eldoc elisa elisp-benchmarks ellama
 	      embark-consult envrc erc expand-region expreg faceup fb2-reader
