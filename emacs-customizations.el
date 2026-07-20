@@ -113,7 +113,7 @@
 	      rainbow-mode restclient-jq reverse-im rust-mode rust-playground
 	      smart-shift soap-client solarized-theme spacemacs-theme
 	      spacious-padding speechd-el speed-type spray string-inflection
-	      symbol-overlay tabby tagedit timp track-changes tramp transient
+	      symbol-overlay tagedit timp track-changes tramp transient
 	      treesit-auto treesit-fold ultra-scroll use-package verilog-mode
 	      visual-regexp vmd-mode web-beautify web-mode wgrep which-key
 	      white-sand-theme window-tool-bar xeft xref yaml zenburn-theme))

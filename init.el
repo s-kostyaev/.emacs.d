@@ -1898,19 +1898,6 @@ Select it interactively otherwise."
   :config
   (setopt elisa-web-search-function 'elisa-search-duckduckgo))
 
-(use-package tabby
-  :disabled t
-  :bind (("C-'" . tabby-complete))
-  :commands (tabby-accept-completion)
-  :defines (taby-mode-map tabby--ongoing-request-id)
-  :init
-  (my-vc-install :name "tabby" :host "github" :repo "alan-w-255/tabby.el")
-  (add-hook 'go-ts-mode-hook 'tabby-mode)
-  (add-hook 'tuareg-mode-hook 'tabby-mode)
-  (add-hook 'haskell-mode-hook 'tabby-mode)
-  :config
-  (bind-key (kbd "M-<RET>") #'tabby-accept-completion tabby-mode-map))
-
 (use-package outline-indent
   :demand t
   :custom
