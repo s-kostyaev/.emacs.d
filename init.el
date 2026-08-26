@@ -788,9 +788,15 @@ The optional argument IGNORED is not used."
   :mode ("/PKGBUILD$"))
 
 (use-package poly-markdown
+  :disabled t
   :mode ("\\.text\\'"
          ("\\.md$" . poly-gfm-mode)
          "\\.markdown$"))
+
+(use-package md-mode
+  :mode ("\\.text\\'"
+	 ("\\.md$" . md-mode)
+	 "\\.markdown$"))
 
 (use-package flymake-proselint
   :hook ((markdown-mode-hook . flymake-proselint-setup)
