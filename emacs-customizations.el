@@ -1,4 +1,4 @@
-;;; emacs-customizations --- File for store emacs customize.
+;;; emacs-customizations.el --- File for store emacs customize.  -*- lexical-binding: t; -*-
 
 ;;; Commentary:
 
@@ -94,31 +94,33 @@
    '(ace-link aggressive-indent ample-theme apparmor-mode auto-yasnippet
 	      bash-completion breadcrumb cape cargo cask-mode casual
 	      chocolate-theme cl-libify code-cells comment-tags compat
-	      composable consult-dash corfu csv-mode dape dart-mode
-	      dash-functional denote difftastic diminish docker-compose-mode
-	      dockerfile-mode dotnet dtrt-indent dumb-jump dune eat
-	      edit-indirect edit-server editorconfig ef-themes eglot
-	      eglot-fsharp ein eldoc elisa elisp-benchmarks ellama
+	      composable consult-dash corfu csharp-mode csv-mode dape dart-mode
+	      dash-functional denote dictionary difftastic diminish
+	      docker-compose-mode dockerfile-mode dotnet dtrt-indent dumb-jump
+	      dune eat edit-indirect edit-server editorconfig ef-themes eglot
+	      eglot-fsharp ein elisa elisp-benchmarks elixir-ts-mode ellama
 	      embark-consult envrc erc expand-region expreg faceup fb2-reader
 	      feature-mode flx flymake flymake-go-staticcheck flymake-proselint
 	      flymake-quickdef frimacs futur ghostel gif-screencast
 	      git-timemachine go-fill-struct go-gen-test go-impl go-snippets
 	      go-tag gotest haskell-ts-mode hercules highlight-indentation
 	      hungry-delete ibuffer-vc idlwave json-rpc json-snatcher jsonian
-	      jsonrpc key-chord keycast magit-todos marginalia mcp merlin
+	      jsonrpc key-chord keycast less-css-mode lua-mode magit-todos
+	      marginalia markdown-ts-mode mcp md-mode "md-mode" merlin
 	      monokai-theme multiple-cursors neocaml noflet nov nova-theme ob-go
-	      ocp-indent org org-mind-map outline-indent package-lint-flymake
+	      ocp-indent org-mind-map outline-indent package-lint-flymake
 	      pandoc-mode pass pdf-tools peg pkgbuild-mode plz poly-markdown
 	      posframe prism project protobuf-mode pulsar pyenv-mode python
 	      rainbow-mode restclient-jq reverse-im rust-mode rust-playground
 	      smart-shift soap-client solarized-theme spacemacs-theme
 	      spacious-padding speechd-el speed-type spray string-inflection
-	      symbol-overlay tagedit timp track-changes tramp transient
+	      symbol-overlay tagedit timeout timp track-changes tramp transient
 	      treesit-auto treesit-fold ultra-scroll use-package verilog-mode
-	      visual-regexp vmd-mode web-beautify web-mode wgrep which-key
-	      white-sand-theme window-tool-bar xeft xref yaml zenburn-theme))
+	      visual-regexp vmd-mode wallpaper web-beautify web-mode wgrep
+	      which-key white-sand-theme window-tool-bar xeft xref yaml
+	      zenburn-theme))
  '(package-vc-selected-packages
-   '((aider :vc-backend Git :url "https://www.github.com/tninja/aider.el")
+   '((md-mode :vc-backend Git :url "https://github.com/yibie/md-mode")
      (ultra-scroll :vc-backend Git :url
 		   "https://www.github.com/jdtsmith/ultra-scroll")
      (ready-player :vc-backend Git :url

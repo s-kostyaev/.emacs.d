@@ -14,7 +14,7 @@
   (setq gc-cons-threshold (* 8 1024 1024)))
 
 (add-hook 'after-init-hook #'my-reset-gc-settings)
-(setopt package-enable-at-startup nil)
+(setopt package-quickstart nil)
 
 (provide 'early-init)
 

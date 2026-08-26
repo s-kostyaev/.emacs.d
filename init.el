@@ -38,7 +38,6 @@ named arguments:
       (package-vc-install uri rev backend))))
 
 (setopt use-package-always-defer t)
-(setopt package-install-upgrade-built-in t)
 
 (setopt native-comp-deferred-compilation t)
 (setopt native-compile-prune-cache t)
@@ -63,8 +62,7 @@ named arguments:
   (setopt package-quickstart nil)
   :config
   (defvar package-archives)
-  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-  (package-initialize))
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 
 
 (progn ; my-themes
@@ -1596,7 +1594,7 @@ Select it interactively otherwise."
 ;;; Ocaml
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
 (setq auto-mode-alist
@@ -2118,6 +2116,7 @@ This is used by Delve debugger."
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 (use-package envrc
+  :disabled t
   :commands envrc-global-mode
   :demand t
   :init
