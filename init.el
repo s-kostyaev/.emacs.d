@@ -1785,7 +1785,7 @@ Select it interactively otherwise."
   (setopt ellama-provider
 	  (make-llm-openai-compatible
 	   :url "http://127.0.0.1:8000/v1"
-	   :chat-model "Qwen3.6-35B-A3B-UD-MLX-3bit"
+	   :chat-model "Qwen3.6-35B-A3B-4bit"
 	   :key (password-store-get "omlx-key")))
   (setopt ellama-naming-provider
 	  (make-llm-openai-compatible
