@@ -153,6 +153,8 @@
  '(trusted-content '("~/elisp/"))
  '(warning-suppress-types
    '((defvaralias losing-value eglot-confirm-server-edits)
+     (defvaralias losing-value eglot-confirm-server-edits)
+     (defvaralias losing-value eglot-confirm-server-edits)
      (defvaralias losing-value eglot-confirm-server-edits))))
 
 (provide 'emacs-customizations)
