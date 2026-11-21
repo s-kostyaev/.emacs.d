@@ -73,6 +73,11 @@ Read only the file needed for the current decision:
   small/local models.
 - `references/porting-codex-skills.md`: How to port Codex/OpenAI skills to
   Ellama without copying incompatible assumptions.
+- `references/deepseek-harness-skills.md`: Where DeepSeek Harness stores and
+  discovers skills, its scanned roots and priority order, and how Ellama
+  skills are exposed to it via symlinks in `~/.dsh/skills/`. Read it when the
+  target agent is DeepSeek Harness or when deciding where to place or link a
+  skill for DSH.
 
 ## Output Shape
 
